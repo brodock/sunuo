@@ -201,11 +201,17 @@ a reboot.
 
 ** Making customized houses work **
 
-RunUO imports code from "zlib.dll" on windows. On Linux, library names
-are different, it is named "libz.so" there. To make that work, create
-a symbolic link with RunUO's favorite name:
+RunUO imports code from "zlib.dll" on windows. This is done in a
+non-portable way. SunUO contains a workaround which must be activated
+in ./etc/sunuo.xml:
 
- ln -s /usr/lib/libz.so.1 /opt/sunuo/libzlib.so
+ <libraries>
+   <library name="legacy">
+     <ignore-source name="Misc/ZLib.cs"/>
+   </library>
+ </libraries>
+
+The "System.DllNotFoundException: zlib" go away now.
 
 
 Compiling SunUO
