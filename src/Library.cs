@@ -121,7 +121,7 @@ namespace Server {
 			ArrayList invoke = new ArrayList();
 
 			foreach (Type type in types) {
-				MethodInfo m = type.GetMethod("Initialized", BindingFlags.Static | BindingFlags.Public);
+				MethodInfo m = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
 				if (m != null)
 					invoke.Add(m);
 			}
