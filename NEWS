@@ -6,7 +6,7 @@ sunuo (0.1.2) unstable; urgency=low
   * added BINFMT_MISC instructions, thanks to Wulf Krueger
   * added Mono 1.1 installation instructions
 
- -- Max Kellermann <mke@cm4all.com>  Wed, 16 Feb 2005 23:20:34 +0100
+ -- Max Kellermann <max@duempel.org>  Wed, 16 Feb 2005 23:20:34 +0100
 
 sunuo (0.1.1) unstable; urgency=low
 
