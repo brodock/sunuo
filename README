@@ -90,7 +90,8 @@ name.
 In RunUO, much of the configuration is done by editing the ./Scripts/
 source codes. That makes upgrading a nightmare. SunUO tries to put as
 much as possible into the file ./etc/sunuo.xml, although this is
-limited currently, because compatibility with RunUO is important.
+limited currently, because compatibility with RunUO is
+important. SunUO creates this file on its first run.
 
 
 Advanced
@@ -136,6 +137,13 @@ are compatible. Just execute SunUO.exe instead of RunUO.exe.
 There are a few minor changes regarding script compilation and
 backups, which are meant to be improvements; please read the
 "Features" section thoroughly, to find out more about this.
+
+
+Installing a new shard with SunUO
+---------------------------------
+
+Unzip the RunUO binary distribution. Then copy SunUO.exe in the main
+directory. Start SunUO.exe.
 
 
 Compiling SunUO
