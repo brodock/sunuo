@@ -30,7 +30,6 @@ using System.Threading;
 using System.Reflection;
 using System.Collections;
 using System.Diagnostics;
-using System.Xml;
 using Server;
 using Server.Network;
 using Server.Accounting;
@@ -48,14 +47,13 @@ namespace Server
 		private static DirectoryInfo m_BaseDirectoryInfo;
 		private static DirectoryInfo m_CacheDirectoryInfo;
 		private static string m_ExePath;
-		private static ArrayList m_DataDirectories = new ArrayList();
 		private static Assembly m_Assembly;
 		private static Process m_Process;
 		private static Thread m_Thread;
 		private static bool m_Service;
 		private static MultiTextWriter m_MultiConOut;
 
-		private static XmlDocument configuration;
+		private static Config config;
 
 		private static bool m_AOS;
 		private static bool m_SE;
@@ -103,7 +101,9 @@ namespace Server
 		}
 
 		public static bool Service{ get{ return m_Service; } }
-		public static ArrayList DataDirectories{ get{ return m_DataDirectories; } }
+		public static ArrayList DataDirectories {
+			get { return config.DataDirectories; }
+		}
 		public static Assembly Assembly{ get{ return m_Assembly; } set{ m_Assembly = value; } }
 		public static Process Process{ get{ return m_Process; } }
 		public static Thread Thread{ get{ return m_Thread; } }
@@ -111,12 +111,8 @@ namespace Server
 
 		public static string FindDataFile( string path )
 		{
-			if ( m_DataDirectories.Count == 0 )
-				throw new InvalidOperationException( "Attempted to FindDataFile before DataDirectories list has been filled." );
-
-			for ( int i = 0; i < m_DataDirectories.Count; ++i )
-			{
-				string fullPath = Path.Combine( (string)m_DataDirectories[i], path );
+			foreach (string dir in config.DataDirectories) {
+				string fullPath = Path.Combine(dir, path);
 
 				if ( File.Exists( fullPath ) )
 					return fullPath;
@@ -125,8 +121,8 @@ namespace Server
 			/* workaround for insane filename case */
 			if (path.IndexOf('/') == -1) {
 				string lp = path.ToLower();
-				for (int i = 0; i < m_DataDirectories.Count; i++) {
-					DirectoryInfo di = new DirectoryInfo((string)m_DataDirectories[i]);
+				foreach (string dir in config.DataDirectories) {
+					DirectoryInfo di = new DirectoryInfo(dir);
 					foreach (FileInfo fi in di.GetFiles()) {
 						if (fi.Name.ToLower() == lp)
 							return fi.FullName;
@@ -236,6 +232,10 @@ namespace Server
 			}
 		}
 
+		public static Config Config {
+			get { return config; }
+		}
+
 		private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
 			Console.WriteLine( e.IsTerminating ? "Error:" : "Warning:" );
@@ -294,84 +294,6 @@ namespace Server
 			Console.WriteLine( "done" );
 		}
 
-		public static XmlElement GetConfiguration(string path) {
-			XmlElement el = configuration.DocumentElement;
-
-			foreach (string seg in path.Split('/')) {
-				XmlElement child = (XmlElement)el.SelectSingleNode(seg);
-				if (child == null) {
-					child = configuration.CreateElement(seg);
-					el.AppendChild(child);
-				}
-				el = child;
-			}
-
-			return el;
-		}
-
-		protected static void LoadConfiguration() {
-			DirectoryInfo etcDirectoryInfo = BaseDirectoryInfo
-				.CreateSubdirectory("etc");
-			string filename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.xml");
-
-			configuration = new XmlDocument();
-
-			if (!File.Exists(filename)) {
-				configuration.AppendChild(configuration.CreateElement("sunuo-config"));
-				return;
-			}
-
-			XmlTextReader reader = new XmlTextReader(filename);
-			try {
-				configuration = new XmlDocument();
-				configuration.Load(reader);
-			} finally {
-				reader.Close();
-			}
-
-			XmlElement locations = GetConfiguration("locations");
-			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
-				string path = dp.InnerText;
-				if (Directory.Exists(path))
-					m_DataDirectories.Add(path);
-			}
-		}
-
-		protected static void SaveConfiguration() {
-			DirectoryInfo etcDirectoryInfo = BaseDirectoryInfo
-				.CreateSubdirectory("etc");
-			string filename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.xml");
-			string tempFilename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.new");
-
-			XmlElement locations = GetConfiguration("locations");
-			XmlNodeList nl = locations.GetElementsByTagName("data-path");
-			XmlNode[] children = new XmlNode[nl.Count];
-			for (int i = 0; i < children.Length; i++)
-				children[i] = nl.Item(i);
-			foreach (XmlElement dp in children)
-				dp.ParentNode.RemoveChild(dp);
-
-			foreach (string path in	m_DataDirectories) {
-				XmlElement el = configuration.CreateElement("data-path");
-				el.InnerText = path;
-				locations.AppendChild(el);
-			}
-
-			XmlTextWriter writer = new XmlTextWriter(tempFilename, System.Text.Encoding.UTF8);
-			writer.Formatting = Formatting.Indented;
-
-			try {
-				configuration.Save(writer);
-				writer.Close();
-				File.Delete(filename);
-				File.Move(tempFilename, filename);
-			} catch {
-				writer.Close();
-				File.Delete(tempFilename);
-				throw;
-			}
-		}
-
 		public static void Main( string[] args )
 		{
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
@@ -389,7 +311,7 @@ namespace Server
 					Profiling = true;
 			}
 
-			LoadConfiguration();
+			config = new Config(Path.Combine(BaseDirectoryInfo.CreateSubdirectory("etc").FullName, "sunuo.xml"));
 
 			try
 			{
@@ -455,7 +377,7 @@ namespace Server
 				return;
 			}
 
-			SaveConfiguration();
+			config.Save();
 
 			World.Load();
 
