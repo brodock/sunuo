@@ -139,13 +139,6 @@ backups, which are meant to be improvements; please read the
 "Features" section thoroughly, to find out more about this.
 
 
-Installing a new shard with SunUO
----------------------------------
-
-Unzip the RunUO binary distribution. Then copy SunUO.exe in the main
-directory. Start SunUO.exe.
-
-
 Compiling SunUO
 ---------------
 
