@@ -158,6 +158,19 @@ by:
  Process.Start( "mono", Core.ExePath );
 
 
+** Making [restart work, with BINFMT_MISC **
+
+If your linux kernel supports BINFMT_MISC (check if the file
+/proc/sys/fs/binfmt_misc/register exists), you don't need to edit
+scripts. The following command activates BINFMT_MISC for Mono:
+
+ echo ':CLR:M::MZ::/usr/local/bin/mono:' > /proc/sys/fs/binfmt_misc/register
+
+You may have to change the path to the mono binary. You should add
+this command to your startup scripts, because the change is gone after
+a reboot.
+
+
 Compiling SunUO
 ---------------
 

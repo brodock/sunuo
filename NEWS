@@ -3,6 +3,7 @@ sunuo (0.1.2) unstable; urgency=low
   * another Mono bug workaround: pointer increments are 8 byte aligned,
     although Pack=1 is specified in the structure
   * exit on compiler error, don't allow the user to retry compilation
+  * added BINFMT_MISC instructions, thanks to Wulf Krueger
 
  --
 
