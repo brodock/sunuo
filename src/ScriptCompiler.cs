@@ -96,6 +96,22 @@ namespace Server
 				return null;
 			}
 
+#if MONO
+			string tempFile = Path.GetTempFileName();
+			if (tempFile != String.Empty) {
+				/* to prevent an "argument list too long" error, we
+				   write a list of file names to a temporary file
+				   and add them with @filename */
+				StreamWriter w = new StreamWriter(tempFile, false);
+				foreach (string file in files) {
+					w.Write("\"" + file + "\" ");
+				}
+				w.Close();
+
+				files = new string[]{"@" + tempFile};
+			}
+#endif
+
 			string path = GetUnusedPath( "Scripts.CS" );
 
 			CompilerParameters parms = new CompilerParameters( GetReferenceAssemblies(), path, debug );
@@ -104,6 +120,11 @@ namespace Server
 				parms.CompilerOptions = "/debug- /optimize+"; // doesn't seem to have any effect
 
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( parms, files );
+
+#if MONO
+			if (tempFile != String.Empty)
+				File.Delete(tempFile);
+#endif
 
 			m_AdditionalReferences.Add( path );
 
