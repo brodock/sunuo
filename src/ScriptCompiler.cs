@@ -41,9 +41,7 @@ namespace Server
 		{
 			get
 			{
-				Assembly[] v = new Assembly[m_Assemblies.Count];
-				m_Assemblies.CopyTo(v, 0);
-				return v;
+				return (Assembly[])m_Assemblies.ToArray(typeof(Assembly));
 			}
 		}
 
@@ -74,11 +72,6 @@ namespace Server
 			list.AddRange( m_AdditionalReferences );
 
 			return (string[])list.ToArray( typeof( string ) );
-		}
-
-		private static CompilerResults CompileCSScripts()
-		{
-			return CompileCSScripts( false );
 		}
 
 		private static CompilerResults CompileCSScripts( bool debug )
@@ -155,11 +148,6 @@ namespace Server
 			}
 
 			return results;
-		}
-
-		private static CompilerResults CompileVBScripts()
-		{
-			return CompileVBScripts( false );
 		}
 
 		private static CompilerResults CompileVBScripts( bool debug )
