@@ -3,13 +3,13 @@ include $(TOPDIR)/config.mk
 
 SOURCES := $(shell find . -name "*.cs" )
 
-all: Server.exe
+all: SunUO.exe
 
 clean:
-	rm -f Server.exe
+	rm -f SunUO.exe
 
 install: all
-	install -m 0755 Server.exe $(RUNUO_BASE)/
+	install -m 0755 SunUO.exe $(RUNUO_BASE)/
 
-Server.exe: $(SOURCES)
+SunUO.exe: $(SOURCES)
 	$(MCS) $(MCS_FLAGS) -o $@ $(SOURCES)

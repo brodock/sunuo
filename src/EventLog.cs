@@ -31,15 +31,15 @@ namespace Server
 	{
 		static EventLog()
 		{
-			if ( !DiagELog.SourceExists( "RunUO" ) )
+			if ( !DiagELog.SourceExists( "SunUO" ) )
 			{
-				DiagELog.CreateEventSource( "RunUO", "Application" );
+				DiagELog.CreateEventSource( "SunUO", "Application" );
 			}
 		}
 
 		public static void Error( int eventID, string text )
 		{
-			DiagELog.WriteEntry( "RunUO", text, EventLogEntryType.Error, eventID );
+			DiagELog.WriteEntry( "SunUO", text, EventLogEntryType.Error, eventID );
 		}
 
 		public static void Error( int eventID, string format, params object[] args )
@@ -49,7 +49,7 @@ namespace Server
 
 		public static void Warning( int eventID, string text )
 		{
-			DiagELog.WriteEntry( "RunUO", text, EventLogEntryType.Warning, eventID );
+			DiagELog.WriteEntry( "SunUO", text, EventLogEntryType.Warning, eventID );
 		}
 
 		public static void Warning( int eventID, string format, params object[] args )
@@ -59,7 +59,7 @@ namespace Server
 
 		public static void Inform( int eventID, string text )
 		{
-			DiagELog.WriteEntry( "RunUO", text, EventLogEntryType.Information, eventID );
+			DiagELog.WriteEntry( "SunUO", text, EventLogEntryType.Information, eventID );
 		}
 
 		public static void Inform( int eventID, string format, params object[] args )

@@ -3,7 +3,8 @@
  *                            -------------------
  *   begin                : May 1, 2002
  *   copyright            : (C) The RunUO Software Team
- *   email                : info@runuo.com
+ *                          (C) 2005 Max Kellermann <max@duempel.org>
+ *   email                : max@duempel.org
  *
  *   $Id: Main.cs,v 1.8 2005/01/22 04:25:04 krrios Exp $
  *   $Author: krrios $
@@ -326,7 +327,8 @@ namespace Server
 			Version ver = m_Assembly.GetName().Version;
 
 			// Added to help future code support on forums, as a 'check' people can ask for to it see if they recompiled core or not
-			Console.WriteLine( "RunUO - [www.runuo.com] Version {0}.{1}.{3}, Build {2}", ver.Major, ver.Minor, ver.Revision, ver.Build );
+			Console.WriteLine("SunUO Version {0}.{1}.{3} (build {2}) http://max.kellermann.name/projects/sunuo/",
+							  ver.Major, ver.Minor, ver.Revision, ver.Build);
 
 			while ( !ScriptCompiler.Compile( debug ) )
 			{
