@@ -111,19 +111,28 @@ namespace Server
 			if ( m_DataDirectories.Count == 0 )
 				throw new InvalidOperationException( "Attempted to FindDataFile before DataDirectories list has been filled." );
 
-			string fullPath = null;
-
 			for ( int i = 0; i < m_DataDirectories.Count; ++i )
 			{
-				fullPath = Path.Combine( (string)m_DataDirectories[i], path );
+				string fullPath = Path.Combine( (string)m_DataDirectories[i], path );
 
 				if ( File.Exists( fullPath ) )
-					break;
-
-				fullPath = null;
+					return fullPath;
 			}
 
-			return fullPath;
+			/* workaround for insane filename case */
+			if (path.IndexOf('/') == -1) {
+				string lp = path.ToLower();
+				for (int i = 0; i < m_DataDirectories.Count; i++) {
+					DirectoryInfo di = new DirectoryInfo((string)m_DataDirectories[i]);
+					foreach (FileInfo fi in di.GetFiles()) {
+						if (fi.Name.ToLower() == lp)
+							return fi.FullName;
+					}
+				}
+			}
+
+			Console.WriteLine("Warning: data file {0} not found", path);
+			return null;
 		}
 
 		public static string FindDataFile( string format, params object[] args )

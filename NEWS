@@ -20,5 +20,6 @@ sunuo (0.1.0) unstable; urgency=low
     to prevent the server from crashing on a
   * catch exceptions from Core.VerifySerialization(); dump
     LoaderExceptions
+  * ignore case on data file names
 
  --
