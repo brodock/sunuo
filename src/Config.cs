@@ -143,16 +143,15 @@ namespace Server {
 			dataDirectories = new ArrayList();
 			libraryConfig = new Hashtable();
 
-			if (!File.Exists(filename)) {
+			if (File.Exists(filename)) {
+				XmlTextReader reader = new XmlTextReader(filename);
+				try {
+					document.Load(reader);
+				} finally {
+					reader.Close();
+				}
+			} else {
 				document.AppendChild(document.CreateElement("sunuo-config"));
-				return;
-			}
-
-			XmlTextReader reader = new XmlTextReader(filename);
-			try {
-				document.Load(reader);
-			} finally {
-				reader.Close();
 			}
 
 			XmlElement locations = GetConfiguration("locations");
