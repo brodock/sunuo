@@ -369,9 +369,12 @@ namespace Server
 			string tempFilename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.new");
 
 			XmlElement locations = GetConfiguration("locations");
-			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
+			XmlNodeList nl = locations.GetElementsByTagName("data-path");
+			XmlNode[] children = new XmlNode[nl.Count];
+			for (int i = 0; i < children.Length; i++)
+				children[i] = nl.Item(i);
+			foreach (XmlElement dp in children)
 				dp.ParentNode.RemoveChild(dp);
-			}
 
 			foreach (string path in	m_DataDirectories) {
 				XmlElement el = configuration.CreateElement("data-path");
