@@ -205,6 +205,14 @@ namespace Server
 			}
 		}
 
+		public static DirectoryInfo LogDirectoryInfo {
+			get {
+				return BaseDirectoryInfo
+					.CreateSubdirectory("var")
+					.CreateSubdirectory("log");
+			}
+		}
+
 		public static DirectoryInfo CacheDirectoryInfo {
 			get {
 				if (m_CacheDirectoryInfo == null)
@@ -318,16 +326,12 @@ namespace Server
 
 			try
 			{
-				if ( m_Service )
-				{
-					if ( !Directory.Exists( "Logs" ) )
-						Directory.CreateDirectory( "Logs" );
+				m_MultiConOut = new MultiTextWriter(Console.Out);
+				Console.SetOut(m_MultiConOut);
 
-					Console.SetOut( m_MultiConOut = new MultiTextWriter( Console.Out, new FileLogger( "Logs/Console.log" ) ) );
-				}
-				else
-				{
-					Console.SetOut(  m_MultiConOut = new MultiTextWriter( Console.Out ) );
+				if (m_Service) {
+					string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
+					m_MultiConOut.Add(new FileLogger(filename));
 				}
 			}
 			catch
