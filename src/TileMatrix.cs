@@ -473,12 +473,6 @@ namespace Server
 		private DateTime m_NextStaticWarning;
 		private DateTime m_NextLandWarning;
 
-		public void Force()
-		{
-			if ( ScriptCompiler.Assemblies == null || ScriptCompiler.Assemblies.Length == 0 )
-				throw new Exception();
-		}
-
 		private unsafe Tile[] ReadLandBlock( int x, int y )
 		{
 			try

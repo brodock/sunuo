@@ -352,9 +352,6 @@ namespace Server
 
 			timerThread.Start();
 
-			for ( int i = 0; i < Map.AllMaps.Count; ++i )
-				((Map)Map.AllMaps[i]).Tiles.Force();
-
 			NetState.Initialize();
 
 			EventSink.InvokeServerStarted();
