@@ -17,7 +17,8 @@ sunuo (0.1.0) unstable; urgency=low
     them is built into a separate DLL
   * log to ./var/log/console.log instead of ./Logs/Console.log
   * implemented a lot of exception handlers in Network/PacketHandlers.cs,
-    to prevent the server from crashing on a
+    to prevent the server from crashing when an exception in a script
+    occurs
   * catch exceptions from Core.VerifySerialization(); dump
     LoaderExceptions
   * ignore case on data file names
