@@ -72,7 +72,7 @@ Example:
  RunUO base scripts: ./Scripts/
  custom library 1: ./local/src/foo/
  custom library 2: ./local/src/bar/
- custom library 3: ./local/lib/test.dll
+ custom binary library: ./local/lib/test.dll
 
 The compiled .DLL files are written to ./var/cache/lib/ - SunUO will
 not recompile if it finds a compiled .DLL file and no script has been
