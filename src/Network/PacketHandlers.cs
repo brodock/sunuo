@@ -2317,7 +2317,12 @@ namespace Server.Network
 		{
 			ServerListEventArgs e = new ServerListEventArgs( state, state.Account );
 
-			EventSink.InvokeServerList( e );
+			try {
+				EventSink.InvokeServerList(e);
+			} catch (Exception ex) {
+				Console.WriteLine("Exception disarmed in ServerList: {0}", ex);
+				e.Rejected = true;
+			}
 
 			if ( e.Rejected )
 			{
