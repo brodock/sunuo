@@ -208,8 +208,14 @@ namespace Server
 				return false;
 			}
 
-			string csFile = Path.Combine(cache.FullName, name + "-cs.dll");
+			string oldFile = Path.Combine(cache.FullName, name + "-cs.dll");
+			string csFile = Path.Combine(cache.FullName, name + ".dll");
 			if (File.Exists(csFile)) {
+				m_Assemblies.Add(Assembly.LoadFrom(csFile));
+				m_AdditionalReferences.Add(csFile);
+			} else if (File.Exists(oldFile)) {
+				/* old style file name, rename that */
+				File.Move(oldFile, csFile);
 				m_Assemblies.Add(Assembly.LoadFrom(csFile));
 				m_AdditionalReferences.Add(csFile);
 			} else {
