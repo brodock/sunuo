@@ -5,6 +5,7 @@ sunuo (0.1.1) unstable; urgency=low
     SunUO
   * recompile libraries automatically when a file has been changed,
     deleted or added added
+  * added documentation for [restart workaround
 
  --
 

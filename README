@@ -138,6 +138,27 @@ There are a few minor changes regarding script compilation and
 backups, which are meant to be improvements; please read the
 "Features" section thoroughly, to find out more about this.
 
+** Making [restart work **
+
+On Unix / Linux, server restart does not work. This is because .NET
+assemblies cannot be run directly, you have to call the "mono" wrapper
+("mono SunUO.exe"), unless you have BINFMT_MISC configured correctly,
+but that's a solution for the Linux wizards.
+
+Solution: edit the following files:
+
+ ./Scripts/Misc/CrashGuard.cs
+ ./Scripts/Misc/AutoRestart.cs
+ ./Scripts/Gumps/AdminGump.cs
+
+And replace:
+
+ Process.Start( Core.ExePath );
+
+by:
+
+ Process.Start( "mono", Core.ExePath );
+
 
 Compiling SunUO
 ---------------
