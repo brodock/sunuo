@@ -881,7 +881,7 @@ namespace Server.Network
 							menu.OnCancel( state );
 					} catch (Exception e) {
 						Console.WriteLine("Exception disarmed in menu response {0} > {1}[index]: {2}",
-										  state.Mobile, menu, index);
+										  state.Mobile, menu, e);
 					}
 
 					state.RemoveMenu( i );
