@@ -1,6 +1,6 @@
 sunuo (0.1.5) unstable; urgency=low
 
-  * 
+  * now really fixed a null cast in ScriptCompiler.CheckStamps()
 
  --
 

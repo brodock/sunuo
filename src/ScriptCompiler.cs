@@ -145,11 +145,11 @@ namespace Server
 			IDictionaryEnumerator e = files.GetEnumerator();
 			while (e.MoveNext()) {
 				string filename = (string)e.Key;
-				DateTime oldStamp = (DateTime)stamps[filename];
 				if (!stamps.ContainsKey(filename))
 					return false;
 
 				DateTime newStamp = (DateTime)e.Value;
+				DateTime oldStamp = (DateTime)stamps[filename];
 
 				if (oldStamp != newStamp)
 					return false;
