@@ -80,6 +80,34 @@ recompile the "bar" library, shut down SunUO and execute:
 SunUO recreates the files on the next startup.
 
 
+** Single configuration file **
+
+In RunUO, much of the configuration is done by editing the ./Scripts/
+source codes. That makes upgrading a nightmare. SunUO tries to put as
+much as possible into the file ./etc/sunuo.xml, although this is
+limited currently, because compatibility with RunUO is important.
+
+
+Advanced
+--------
+
+** Excluding source codes and classes **
+
+If you want to disable some items or source codes, you can use the
+following configuration in ./etc/sunuo.xml:
+
+ <libraries>
+   <library name="foo">
+     <ignore-type name="Bar.cs"/>
+     <ignore-type name="Blubb"/>
+   </library>
+ </libraries>
+
+This tells SunUO not to compile the file "Bar.cs", and to ignore the
+type "Blubb". You can use this to disable commands or to disable items
+in the game.
+
+
 Porting a shard to SunUO
 ------------------------
 
