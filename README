@@ -43,6 +43,19 @@ SunUO has the following new features compared to RunUO:
 SunUO runs with Mono, e.g. on Linux. RunUO has a lot of bugs which
 prevent this.
 
+** New directory structure **
+
+SunUO tries to manage its files better; this development is far from
+finished, and mimics the FHS:
+
+ ./etc          configuration files, managed by the administrator
+ ./local        local (customized?) data for this shard, e.g. scripts
+ ./var          files which are managed and modified by SunUO
+ ./var/log      log files
+ ./var/cache    cache, e.g. precompiled script libraries
+ ./var/backup   world saves
+
+
 ** Multiple script libraries **
 
 Every directory below ./local/src/ may contain a separate script
@@ -65,3 +78,35 @@ recompile the "bar" library, shut down SunUO and execute:
  rm -r ./var/lib/foo
 
 SunUO recreates the files on the next startup.
+
+
+Porting a shard to SunUO
+------------------------
+
+You can seamlessly port your shard from RunUO to SunUO and back, they
+are compatible. Just execute SunUO.exe instead of RunUO.exe.
+
+There are a few minor changes regarding script compilation and
+backups, which are meant to be improvements; please read the
+"Features" section thoroughly, to find out more about this.
+
+
+Legal
+-----
+
+Copyright 2005 Max Kellermann <max@duempel.org>
+based on RunUO (C) The RunUO Software Team
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
