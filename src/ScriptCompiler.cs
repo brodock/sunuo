@@ -226,16 +226,8 @@ namespace Server
 				return false;
 			}
 
-			string oldFile = Path.Combine(cache.FullName, name + "-cs.dll");
 			string csFile = Path.Combine(cache.FullName, name + ".dll");
 			if (File.Exists(csFile)) {
-				libraries.Add(new Library(libConfig, name,
-										  Assembly.LoadFrom(csFile)));
-				m_AdditionalReferences.Add(csFile);
-				Console.Write("{0}. ", name);
-			} else if (File.Exists(oldFile)) {
-				/* old style file name, rename that */
-				File.Move(oldFile, csFile);
 				libraries.Add(new Library(libConfig, name,
 										  Assembly.LoadFrom(csFile)));
 				m_AdditionalReferences.Add(csFile);
