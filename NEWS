@@ -9,5 +9,6 @@ sunuo (0.1.0) unstable; urgency=low
   * pass script file names in a temporary files, to go around the
     "argument too long" limitation on most POSIX systems
   * moved the World.Load() call from ScriptCompiler to Main
+  * ScriptCompiler.m_Assemblies converted to ArrayList
 
  --

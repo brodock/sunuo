@@ -35,17 +35,15 @@ namespace Server
 {
 	public class ScriptCompiler
 	{
-		private static Assembly[] m_Assemblies;
+		private static ArrayList m_Assemblies = new ArrayList();
 
 		public static Assembly[] Assemblies
 		{
 			get
 			{
-				return m_Assemblies;
-			}
-			set
-			{
-				m_Assemblies = value;
+				Assembly[] v = new Assembly[m_Assemblies.Count];
+				m_Assemblies.CopyTo(v, 0);
+				return v;
 			}
 		}
 
@@ -273,17 +271,11 @@ namespace Server
 				(vbResults == null && csResults == null))
 				return false;
 
-			int a = 0;
-			if ( csResults == null || vbResults == null )
-				m_Assemblies = new Assembly[1];
-			else
-				m_Assemblies = new Assembly[2];
-
 			if ( csResults != null )
-				m_Assemblies[a++] = csResults.CompiledAssembly;
+				m_Assemblies.Add(csResults.CompiledAssembly);
 
 			if ( vbResults != null )
-				m_Assemblies[a++] = vbResults.CompiledAssembly;
+				m_Assemblies.Add(vbResults.CompiledAssembly);
 
 			Console.Write( "Scripts: Verifying..." );
 			Core.VerifySerialization();
@@ -295,9 +287,8 @@ namespace Server
 		public static void Configure() {
 			ArrayList invoke = new ArrayList();
 
-			for (int a=0;a<m_Assemblies.Length;++a)
-			{
-				Type[] types = m_Assemblies[a].GetTypes();
+			foreach (Assembly a in m_Assemblies) {
+				Type[] types = a.GetTypes();
 
 				for ( int i = 0; i < types.Length; ++i )
 				{
@@ -318,9 +309,8 @@ namespace Server
 		public static void Initialize() {
 			ArrayList invoke = new ArrayList();
 
-			for (int a=0;a<m_Assemblies.Length;++a)
-			{
-				Type[] types = m_Assemblies[a].GetTypes();
+			foreach (Assembly a in m_Assemblies) {
+				Type[] types = a.GetTypes();
 
 				for ( int i = 0; i < types.Length; ++i )
 				{
@@ -366,15 +356,13 @@ namespace Server
 
 		public static Type FindTypeByFullName( string fullName, bool ignoreCase )
 		{
-			Type type = null;
+			foreach (Assembly a in m_Assemblies) {
+				Type type = GetTypeCache(a).GetTypeByFullName( fullName, ignoreCase );
+				if (type != null)
+					return type;
+			}
 
-			for ( int i = 0; type == null && i < m_Assemblies.Length; ++i )
-				type = GetTypeCache( m_Assemblies[i] ).GetTypeByFullName( fullName, ignoreCase );
-
-			if ( type == null )
-				type = GetTypeCache( Core.Assembly ).GetTypeByFullName( fullName, ignoreCase );
-
-			return type;
+			return GetTypeCache( Core.Assembly ).GetTypeByFullName( fullName, ignoreCase );
 		}
 
 		public static Type FindTypeByName( string name )
@@ -384,15 +372,13 @@ namespace Server
 
 		public static Type FindTypeByName( string name, bool ignoreCase )
 		{
-			Type type = null;
+			foreach (Assembly a in m_Assemblies) {
+				Type type = GetTypeCache(a).GetTypeByName( name, ignoreCase );
+				if (type != null)
+					return type;
+			}
 
-			for ( int i = 0; type == null && i < m_Assemblies.Length; ++i )
-				type = GetTypeCache( m_Assemblies[i] ).GetTypeByName( name, ignoreCase );
-
-			if ( type == null )
-				type = GetTypeCache( Core.Assembly ).GetTypeByName( name, ignoreCase );
-
-			return type;
+			return GetTypeCache( Core.Assembly ).GetTypeByName( name, ignoreCase );
 		}
 
 		private static void EnsureDirectory( string dir )
