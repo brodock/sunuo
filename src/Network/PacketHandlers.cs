@@ -3,11 +3,12 @@
  *                            -------------------
  *   begin                : May 1, 2002
  *   copyright            : (C) The RunUO Software Team
- *   email                : info@runuo.com
+ *                          (C) 2005 Max Kellermann <max@duempel.org>
+ *   email                : max@duempel.org
  *
- *   $Id: PacketHandlers.cs,v 1.11 2005/01/22 04:25:04 krrios Exp $
- *   $Author: krrios $
- *   $Date: 2005/01/22 04:25:04 $
+ *   $Id$
+ *   $Author$
+ *   $Date$
  *
  *
  ***************************************************************************/
@@ -719,7 +720,12 @@ namespace Server.Network
 					try{ skillIndex = Convert.ToInt32( command.Split( ' ' )[0] ); }
 					catch{ break; }
 
-					Skills.UseSkill( m, skillIndex );
+					try {
+						Skills.UseSkill( m, skillIndex );
+					} catch (Exception e) {
+						Console.WriteLine("Exception disarmed in UseSkill {0} > {1}: {2}",
+										  state.Mobile, skillIndex, e);
+					}
 
 					break;
 				}
@@ -743,14 +749,24 @@ namespace Server.Network
 						int spellID = Utility.ToInt32( split[0] ) - 1;
 						int serial = split.Length > 1 ? Utility.ToInt32( split[1] ) : -1;
 
-						EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, World.FindItem( serial ) ) );
+						try {
+							EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, World.FindItem( serial ) ) );
+						} catch (Exception e) {
+							Console.WriteLine("Exception disarmed in CastSpell I {0}, spell {1}: {2}",
+											  state.Mobile, spellID, e);
+						}
 					}
 
 					break;
 				}
 				case 0x58: // Open door
 				{
-					EventSink.InvokeOpenDoorMacroUsed( new OpenDoorMacroEventArgs( m ) );
+					try {
+						EventSink.InvokeOpenDoorMacroUsed( new OpenDoorMacroEventArgs( m ) );
+					} catch (Exception e) {
+						Console.WriteLine("Exception disarmed in OpenDoor {0}: {1}",
+										  state.Mobile, e);
+					}
 
 					break;
 				}
@@ -758,7 +774,12 @@ namespace Server.Network
 				{
 					int spellID = Utility.ToInt32( command ) - 1;
 
-					EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, null ) );
+					try {
+						EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, null ) );
+					} catch (Exception e) {
+						Console.WriteLine("Exception disarmed in CastSpell II {0}, spell {1}: {2}",
+										  state.Mobile, spellID, e);
+					}
 
 					break;
 				}
@@ -795,10 +816,15 @@ namespace Server.Network
 			{
 				from.Prompt = null;
 
-				if ( type == 0 )
-					p.OnCancel( from );
-				else
-					p.OnResponse( from, text );
+				try {
+					if ( type == 0 )
+						p.OnCancel( from );
+					else
+						p.OnResponse( from, text );
+				} catch (Exception e) {
+					Console.WriteLine("Exception disarmed in AsciiPrompt response {0}, type {1}: {2}",
+									  state.Mobile, type, e);
+				}
 			}
 		}
 
@@ -820,10 +846,15 @@ namespace Server.Network
 			{
 				from.Prompt = null;
 
-				if ( type == 0 )
-					p.OnCancel( from );
-				else
-					p.OnResponse( from, text );
+				try {
+					if ( type == 0 )
+						p.OnCancel( from );
+					else
+						p.OnResponse( from, text );
+				} catch (Exception e) {
+					Console.WriteLine("Exception disarmed in UnicodePrompt response {0}, type {1}: {2}",
+									  state.Mobile, type, e);
+				}
 			}
 		}
 
@@ -843,10 +874,15 @@ namespace Server.Network
 
 				if ( menu.Serial == serial )
 				{
-					if ( index > 0 && index <= menu.EntryLength )
-						menu.OnResponse( state, index - 1 );
-					else
-						menu.OnCancel( state );
+					try {
+						if ( index > 0 && index <= menu.EntryLength )
+							menu.OnResponse( state, index - 1 );
+						else
+							menu.OnCancel( state );
+					} catch (Exception e) {
+						Console.WriteLine("Exception disarmed in menu response {0} > {1}[index]: {2}",
+										  state.Mobile, menu, index);
+					}
 
 					state.RemoveMenu( i );
 
@@ -905,7 +941,12 @@ namespace Server.Network
 			bool rejected;
 			LRReason reject;
 
-			state.Mobile.Lift( item, amount, out rejected, out reject );
+			try {
+				state.Mobile.Lift( item, amount, out rejected, out reject );
+			} catch (Exception e) {
+				Console.WriteLine("Exception disarmed in lift {0}, {1} x {2}: {3}",
+								  state.Mobile, item, amount, e);
+			}
 		}
 
 		public static void EquipReq( NetState state, PacketReader pvSrc )
@@ -924,8 +965,18 @@ namespace Server.Network
 			if ( to == null )
 				to = from;
 
-			if ( !to.AllowEquipFrom( from ) || !to.EquipItem( item ) )
-				item.Bounce( from );
+			bool success = false;
+
+			try {
+				if (to.AllowEquipFrom(from))
+					success = to.EquipItem(item);
+			} catch (Exception e) {
+				Console.WriteLine("Exception disarmed in equip {0} < {1}: {2}",
+								  to, item, e);
+			}
+
+			if (!success)
+				item.Bounce(from);
 
 			item.ClearBounce();
 		}
@@ -942,12 +993,27 @@ namespace Server.Network
 
 			Mobile from = state.Mobile;
 
-			if ( dest.IsMobile )
-				from.Drop( World.FindMobile( dest ), loc );
-			else if ( dest.IsItem )
-				from.Drop( World.FindItem( dest ), loc );
-			else
-				from.Drop( loc );
+			if (dest.IsMobile) {
+				Mobile m = World.FindMobile(dest);
+				try {
+					if (m != null)
+						from.Drop(m, loc);
+				} catch (Exception e) {
+					Console.WriteLine("Exception disarmed in drop {0} > {1}: {2}",
+									  from, m, e);
+				}
+			} else if (dest.IsItem) {
+				Item i = World.FindItem(dest);
+				try {
+					if (i != null)
+						from.Drop(i, loc);
+				} catch (Exception e) {
+					Console.WriteLine("Exception disarmed in drop {0} > {1}: {2}",
+									  from, i, e);
+				}
+			} else {
+				from.Drop(loc);
+			}
 		}
 
 		public static void ConfigurationFile( NetState state, PacketReader pvSrc )
@@ -1049,7 +1115,12 @@ namespace Server.Network
 						return;
 					}
 
-					t.Invoke( from, toTarget );
+					try {
+						t.Invoke( from, toTarget );
+					} catch (Exception e) {
+						Console.WriteLine("Exception disarmed in target {0} > {1} > {2}: {3}",
+										  from, t, toTarget, e);
+					}
 				}
 			}
 		}
@@ -1105,7 +1176,13 @@ namespace Server.Network
 						textEntries[j] = new TextRelay( entryID, text );
 					}
 
-					gump.OnResponse( state, new RelayInfo( buttonID, switches, textEntries ) );
+					try {
+						gump.OnResponse( state, new RelayInfo( buttonID, switches, textEntries ) );
+					} catch (Exception e) {
+						Console.WriteLine("Exception disarmed in gump response of {0}: {1}",
+										  gump, e);
+					}
+
 					state.RemoveGump( i );
 					return;
 				}
@@ -1264,15 +1341,25 @@ namespace Server.Network
 					{
 						Mobile m = World.FindMobile( s );
 
-						if ( m != null && !m.Deleted )
-							from.Use( m );
+						try {
+							if ( m != null && !m.Deleted )
+								from.Use( m );
+						} catch (Exception e) {
+							Console.WriteLine("Exception disarmed in use {0} > {1}: {2}",
+											  from, m, e);
+						}
 					}
 					else if ( s.IsItem )
 					{
 						Item item = World.FindItem( s );
 
-						if ( item != null && !item.Deleted )
-							from.Use( item );
+						try {
+							if ( item != null && !item.Deleted )
+								from.Use( item );
+						} catch (Exception e) {
+							Console.WriteLine("Exception disarmed in use {0} > {1}: {2}",
+											  from, item, e);
+						}
 					}
 				}
 
