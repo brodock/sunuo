@@ -30,12 +30,12 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SunUO")]
+[assembly: AssemblyDescription("a free Ultima Online server")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("Max Kellermann <max@duempel.org> http://max.kellermann.name/")]
+[assembly: AssemblyProduct("SunUO http://max.kellermann.name/projects/sunuo/")]
+[assembly: AssemblyCopyright("(c) 2005 Max Kellermann <max@duempel.org>")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
