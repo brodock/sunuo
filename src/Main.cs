@@ -356,8 +356,8 @@ namespace Server
 			Version ver = m_Assembly.GetName().Version;
 
 			// Added to help future code support on forums, as a 'check' people can ask for to it see if they recompiled core or not
-			Console.WriteLine("SunUO Version {0}.{1}.{3} (build {2}) http://max.kellermann.name/projects/sunuo/",
-							  ver.Major, ver.Minor, ver.Revision, ver.Build);
+			Console.WriteLine("SunUO Version {0}.{1}.{2} http://max.kellermann.name/projects/sunuo/",
+							  ver.Major, ver.Minor, ver.Revision);
 
 			while ( !ScriptCompiler.Compile( debug ) )
 			{
