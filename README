@@ -75,16 +75,12 @@ Example:
  custom library 3: ./local/lib/test.dll
 
 The compiled .DLL files are written to ./var/cache/lib/ - SunUO will
-not recompile if it finds a compiled .DLL file. If you want SunUO to
-recompile the "bar" library, shut down SunUO and execute:
-
- rm -r ./var/lib/foo
-
-SunUO recreates the files on the next startup.
+not recompile if it finds a compiled .DLL file and no script has been
+modified since the last compilation.
 
 The script library located in ./Scripts is internally named "legacy",
-and the core library is called "core". No other libraries may use this
-name.
+and the core library is called "core". No other libraries may use
+these names.
 
 
 ** Single configuration file **
