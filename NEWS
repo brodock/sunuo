@@ -30,4 +30,4 @@ sunuo (0.1.0) unstable; urgency=low
   * added option to ignore AuthID
   * use string.Intern() to save memory
 
- --
+ -- Max Kellermann <max@duempel.org>  Sat,  5 Feb 2005 01:55:03 +0100
