@@ -1,5 +1,7 @@
 sunuo (0.1.3) unstable; urgency=low
 
+  * work around mono-mcs 1.1.4 bug #72771: "Response file specified
+    multiple times"
   * removed "/debug /optimize" parameters from ScriptCompiler
   * added zlib instructions
 

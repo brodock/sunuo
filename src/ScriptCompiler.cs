@@ -186,10 +186,12 @@ namespace Server
 				}
 				w.Close();
 
-				files = new string[]{"@" + tempFile};
+				files = new string[0];
 			}
 
 			CompilerParameters parms = new CompilerParameters( GetReferenceAssemblies(), assemblyFile, debug );
+			if (tempFile != null)
+				parms.CompilerOptions += "@" + tempFile;
 
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( parms, files );
 
