@@ -74,20 +74,19 @@ namespace Server
 			return (string[])list.ToArray( typeof( string ) );
 		}
 
-		private static CompilerResults CompileCSScripts(string sourcePath,
+		private static CompilerResults CompileCSScripts(string name,
+														string sourcePath,
 														string assemblyFile,
 														bool debug) {
 			CSharpCodeProvider provider = new CSharpCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
-			Console.Write( "Scripts: Compiling C# scripts..." );
 			string[] files = GetScripts(sourcePath, "*.cs");
 
 			if ( files.Length == 0 )
-			{
-				Console.WriteLine( "no files found." );
 				return null;
-			}
+
+			Console.Write("{0}[C#,{1}", name, files.Length);
 
 #if MONO
 			string tempFile = Path.GetTempFileName();
@@ -131,6 +130,7 @@ namespace Server
 						++errorCount;
 				}
 
+				Console.WriteLine();
 				if ( errorCount > 0 )
 					Console.WriteLine( "failed ({0} errors, {1} warnings)", errorCount, warningCount );
 				else
@@ -143,26 +143,25 @@ namespace Server
 			}
 			else
 			{
-				Console.WriteLine( "done (0 errors, 0 warnings)" );
+				Console.Write("] ");
 			}
 
 			return results;
 		}
 
-		private static CompilerResults CompileVBScripts(string sourcePath,
+		private static CompilerResults CompileVBScripts(string name,
+														string sourcePath,
 														string assemblyFile,
 														bool debug) {
 			VBCodeProvider provider = new VBCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
-			Console.Write( "Scripts: Compiling VB.net scripts..." );
 			string[] files = GetScripts(sourcePath, "*.vb");
 
 			if ( files.Length == 0 )
-			{
-				Console.WriteLine( "no files found." );
 				return null;
-			}
+
+			Console.Write("{0}[VB,{1}", name, files.Length);
 
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( new CompilerParameters( GetReferenceAssemblies(), assemblyFile, true ), files );
 
@@ -180,6 +179,7 @@ namespace Server
 						++errorCount;
 				}
 
+				Console.WriteLine();
 				if ( errorCount > 0 )
 					Console.WriteLine( "failed ({0} errors, {1} warnings)", errorCount, warningCount );
 				else
@@ -192,7 +192,7 @@ namespace Server
 			}
 			else
 			{
-				Console.WriteLine( "done (0 errors, 0 warnings)" );
+				Console.Write("] ");
 			}
 
 			return results;
@@ -213,13 +213,16 @@ namespace Server
 			if (File.Exists(csFile)) {
 				m_Assemblies.Add(Assembly.LoadFrom(csFile));
 				m_AdditionalReferences.Add(csFile);
+				Console.Write("{0}. ", name);
 			} else if (File.Exists(oldFile)) {
 				/* old style file name, rename that */
 				File.Move(oldFile, csFile);
 				m_Assemblies.Add(Assembly.LoadFrom(csFile));
 				m_AdditionalReferences.Add(csFile);
+				Console.Write("{0}. ", name);
 			} else {
-				CompilerResults results = CompileCSScripts(path, csFile, debug);
+				CompilerResults results = CompileCSScripts(name, path, csFile,
+														   debug);
 				if (results != null) {
 					if (results.Errors.HasErrors)
 						return false;
@@ -231,8 +234,9 @@ namespace Server
 			if (File.Exists(vbFile)) {
 				m_Assemblies.Add(Assembly.LoadFrom(vbFile));
 				m_AdditionalReferences.Add(vbFile);
+				Console.Write("{0}/VB. ", name);
 			} else {
-				CompilerResults results = CompileVBScripts(path, vbFile, debug);
+				CompilerResults results = CompileVBScripts(name, path, vbFile, debug);
 				if (results != null) {
 					if (results.Errors.HasErrors)
 						return false;
@@ -250,6 +254,8 @@ namespace Server
 
 		public static bool Compile( bool debug )
 		{
+			Console.Write("Compiling scripts: ");
+
 			if ( m_AdditionalReferences.Count > 0 )
 				m_AdditionalReferences.Clear();
 
@@ -269,6 +275,8 @@ namespace Server
 				if (!result)
 					return false;
 			}
+
+			Console.WriteLine();
 
 			Console.Write( "Scripts: Verifying..." );
 			Core.VerifySerialization();
