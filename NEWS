@@ -1,5 +1,6 @@
 sunuo (0.1.3) unstable; urgency=low
 
+  * removed "/debug /optimize" parameters from ScriptCompiler
   * added zlib instructions
 
  --

@@ -191,9 +191,6 @@ namespace Server
 
 			CompilerParameters parms = new CompilerParameters( GetReferenceAssemblies(), assemblyFile, debug );
 
-			if ( !debug )
-				parms.CompilerOptions = "/debug- /optimize+"; // doesn't seem to have any effect
-
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( parms, files );
 
 			if (tempFile != null)
