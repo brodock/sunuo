@@ -241,7 +241,6 @@ namespace Server.Network
 			}
 
 			int bound = m_Index + fixedLength;
-			int end   = bound;
 
 			if ( bound > m_Size )
 				bound = m_Size;

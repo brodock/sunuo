@@ -635,7 +635,7 @@ namespace Server
 
 					for ( int i = 0; i < regionCount; ++i )
 					{
-						int typeID = idxReader.ReadInt32();
+						idxReader.ReadInt32(); /* typeID */
 						int serial = idxReader.ReadInt32();
 						long pos = idxReader.ReadInt64();
 						int length = idxReader.ReadInt32();
@@ -1059,8 +1059,6 @@ namespace Server
 			idx.Write( (int) m_Mobiles.Count );
 			foreach ( Mobile m in m_Mobiles.Values )
 			{
-				Type t = m.GetType();
-
 				long start = bin.Position;
 
 				idx.Write( (int) m.m_TypeRef );

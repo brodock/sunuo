@@ -387,7 +387,7 @@ namespace Server
 				.CreateSubdirectory("lib");
 			foreach (DirectoryInfo sub in cacheDir.GetDirectories()) {
 				string libName = sub.Name.ToLower();
-				if (GetLibrary(sub.Name) == null)
+				if (GetLibrary(libName) == null)
 					sub.Delete(true);
 			}
 

@@ -3616,9 +3616,6 @@ namespace Server
 				Item item = (Item)items[i];
 				ItemData id = item.ItemData;
 
-				int checkZ = item.Z;
-				int checkTop = checkZ + id.CalcHeight;
-
 				if ( (item.Z + id.CalcHeight) > z && (z + height) > item.Z )
 					return false;
 			}

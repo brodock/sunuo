@@ -391,7 +391,7 @@ namespace Server
 
 			Region.Load();
 
-			MessagePump ms = m_MessagePump = new MessagePump( new Listener( Listener.Port ) );
+			m_MessagePump = new MessagePump( new Listener( Listener.Port ) );
 
 			timerThread.Start();
 

@@ -183,7 +183,7 @@ namespace Server
 
 								Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
 
-								StaticTile *pStart = pTiles, pEnd = pTiles + tileCount;
+								StaticTile *pStart = pTiles;
 
 								for (int j = 0; j < tileCount; j++)
 								{

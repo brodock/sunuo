@@ -349,7 +349,7 @@ namespace Server.Network
 				ArrayList buyList = new ArrayList( msgSize/7 );
 				for ( ;msgSize>0;msgSize-=7)
 				{
-					byte layer = pvSrc.ReadByte();
+					/*byte layer = */pvSrc.ReadByte();
 					Serial serial = pvSrc.ReadInt32();
 					int amount = pvSrc.ReadInt16();
 				
@@ -463,8 +463,8 @@ namespace Server.Network
 			Mobile from = state.Mobile;
 
 			Serial serial = pvSrc.ReadInt32();
-			int unk = pvSrc.ReadByte();
-			string lang = pvSrc.ReadString( 3 );
+			/*int unk = */pvSrc.ReadByte();
+			/*string lang = */pvSrc.ReadString( 3 );
 
 			if ( serial.IsItem )
 			{
@@ -492,8 +492,8 @@ namespace Server.Network
 
 		public static void RequestScrollWindow( NetState state, PacketReader pvSrc )
 		{
-			int lastTip = pvSrc.ReadInt16();
-			int type = pvSrc.ReadByte();
+			/*int lastTip = */pvSrc.ReadInt16();
+			/*int type = */pvSrc.ReadByte();
 		}
 
 		public static void AttackReq( NetState state, PacketReader pvSrc )
@@ -508,7 +508,7 @@ namespace Server.Network
 		public static void HuePickerResponse( NetState state, PacketReader pvSrc )
 		{
 			int serial = pvSrc.ReadInt32();
-			int value = pvSrc.ReadInt16();
+			/*int value = */pvSrc.ReadInt16();
 			int hue = pvSrc.ReadInt16() & 0x3FFF;
 
 			hue = Utility.ClipDyedHue( hue );
@@ -533,7 +533,7 @@ namespace Server.Network
 		public static void TripTime( NetState state, PacketReader pvSrc )
 		{
 			int unk1 = pvSrc.ReadByte();
-			int unk2 = pvSrc.ReadInt32();
+			/*int unk2 = */pvSrc.ReadInt32();
 
 			state.Send( new TripTimeResponse( unk1 ) );
 		}
@@ -541,7 +541,7 @@ namespace Server.Network
 		public static void UTripTime( NetState state, PacketReader pvSrc )
 		{
 			int unk1 = pvSrc.ReadByte();
-			int unk2 = pvSrc.ReadInt32();
+			/*int unk2 = */pvSrc.ReadInt32();
 
 			state.Send( new UTripTimeResponse( unk1 ) );
 		}
@@ -560,18 +560,18 @@ namespace Server.Network
 
 		public static void SystemInfo( NetState state, PacketReader pvSrc )
 		{
-			int v1 = pvSrc.ReadByte();
-			int v2 = pvSrc.ReadUInt16();
-			int v3 = pvSrc.ReadByte();
-			string s1 = pvSrc.ReadString( 32 );
-			string s2 = pvSrc.ReadString( 32 );
-			string s3 = pvSrc.ReadString( 32 );
-			string s4 = pvSrc.ReadString( 32 );
-			int v4 = pvSrc.ReadUInt16();
-			int v5 = pvSrc.ReadUInt16();
-			int v6 = pvSrc.ReadInt32();
-			int v7 = pvSrc.ReadInt32();
-			int v8 = pvSrc.ReadInt32();
+			/*int v1 = */pvSrc.ReadByte();
+			/*int v2 = */pvSrc.ReadUInt16();
+			/*int v3 = */pvSrc.ReadByte();
+			/*string s1 = */pvSrc.ReadString( 32 );
+			/*string s2 = */pvSrc.ReadString( 32 );
+			/*string s3 = */pvSrc.ReadString( 32 );
+			/*string s4 = */pvSrc.ReadString( 32 );
+			/*int v4 = */pvSrc.ReadUInt16();
+			/*int v5 = */pvSrc.ReadUInt16();
+			/*int v6 = */pvSrc.ReadInt32();
+			/*int v7 = */pvSrc.ReadInt32();
+			/*int v8 = */pvSrc.ReadInt32();
 		}
 
 		public static void Edit( NetState state, PacketReader pvSrc )
@@ -631,19 +631,19 @@ namespace Server.Network
 			if ( VerifyGC( state ) )
 			{
 				string name = pvSrc.ReadString( 40 );
-				int unk = pvSrc.ReadInt32();
-				int x = pvSrc.ReadInt16();
-				int y = pvSrc.ReadInt16();
-				int width = pvSrc.ReadInt16();
-				int height = pvSrc.ReadInt16();
-				int zStart = pvSrc.ReadInt16();
-				int zEnd = pvSrc.ReadInt16();
+				/*int unk = */pvSrc.ReadInt32();
+				/*int x = */pvSrc.ReadInt16();
+				/*int y = */pvSrc.ReadInt16();
+				/*int width = */pvSrc.ReadInt16();
+				/*int height = */pvSrc.ReadInt16();
+				/*int zStart = */pvSrc.ReadInt16();
+				/*int zEnd = */pvSrc.ReadInt16();
 				string desc = pvSrc.ReadString( 40 );
-				int soundFX = pvSrc.ReadInt16();
-				int music = pvSrc.ReadInt16();
-				int nightFX = pvSrc.ReadInt16();
-				int dungeon = pvSrc.ReadByte();
-				int light = pvSrc.ReadInt16();
+				/*int soundFX = */pvSrc.ReadInt16();
+				/*int music = */pvSrc.ReadInt16();
+				/*int nightFX = */pvSrc.ReadInt16();
+				/*int dungeon = */pvSrc.ReadByte();
+				/*int light = */pvSrc.ReadInt16();
 
 				Console.WriteLine( "God Client: {0}: New Region '{1}' ('{2}')", state, name, desc );
 			}
@@ -833,7 +833,7 @@ namespace Server.Network
 			int serial = pvSrc.ReadInt32();
 			int prompt = pvSrc.ReadInt32();
 			int type = pvSrc.ReadInt32();
-			string lang = pvSrc.ReadString( 4 );
+			/*string lang = */pvSrc.ReadString( 4 );
 			string text = pvSrc.ReadUnicodeStringLESafe();
 
 			if ( text.Length > 128 )
@@ -861,10 +861,10 @@ namespace Server.Network
 		public static void MenuResponse( NetState state, PacketReader pvSrc )
 		{
 			int serial = pvSrc.ReadInt32();
-			int menuID = pvSrc.ReadInt16(); // unused in our implementation
+			/*int menuID = */pvSrc.ReadInt16(); // unused in our implementation
 			int index  = pvSrc.ReadInt16();
-			int itemID = pvSrc.ReadInt16();
-			int hue    = pvSrc.ReadInt16();
+			/*int itemID = */pvSrc.ReadInt16();
+			/*int hue    = */pvSrc.ReadInt16();
 
 			MenuCollection menus = state.Menus;
 
@@ -929,7 +929,7 @@ namespace Server.Network
 
 		public static void Disconnect( NetState state, PacketReader pvSrc )
 		{
-			int minusOne = pvSrc.ReadInt32();
+			/*int minusOne = */pvSrc.ReadInt32();
 		}
 
 		public static void LiftReq( NetState state, PacketReader pvSrc )
@@ -1041,8 +1041,8 @@ namespace Server.Network
 		public static void TargetResponse( NetState state, PacketReader pvSrc )
 		{
 			int type = pvSrc.ReadByte();
-			int targetID = pvSrc.ReadInt32();
-			int flags = pvSrc.ReadByte();
+			/*int targetID = */pvSrc.ReadInt32();
+			/*int flags = */pvSrc.ReadByte();
 			Serial serial = pvSrc.ReadInt32();
 			int x = pvSrc.ReadInt16(), y = pvSrc.ReadInt16(), z = pvSrc.ReadInt16();
 			int graphic = pvSrc.ReadInt16();
@@ -1440,7 +1440,7 @@ namespace Server.Network
 		{
 			Direction dir = (Direction)pvSrc.ReadByte();
 			int seq = pvSrc.ReadByte();
-			int key = pvSrc.ReadInt32();
+			/*int key = */pvSrc.ReadInt32();
 
 			Mobile m = state.Mobile;
 
@@ -1699,8 +1699,8 @@ namespace Server.Network
 
 		public static void ScreenSize( NetState state, PacketReader pvSrc )
 		{
-			int width = pvSrc.ReadInt32();
-			int unk = pvSrc.ReadInt32();
+			/*int width = */pvSrc.ReadInt32();
+			/*int unk = */pvSrc.ReadInt32();
 		}
 
 		public static void ContextMenuResponse( NetState state, PacketReader pvSrc )
@@ -1787,7 +1787,7 @@ namespace Server.Network
 
 		public static void CloseStatus( NetState state, PacketReader pvSrc )
 		{
-			Serial serial = pvSrc.ReadInt32();
+			/*Serial serial = */pvSrc.ReadInt32();
 		}
 
 		public static void Language( NetState state, PacketReader pvSrc )
@@ -1800,8 +1800,8 @@ namespace Server.Network
 
 		public static void AssistVersion( NetState state, PacketReader pvSrc )
 		{
-			int unk = pvSrc.ReadInt32();
-			string av = pvSrc.ReadString();
+			/*int unk = */pvSrc.ReadInt32();
+			/*string av = */pvSrc.ReadString();
 		}
 
 		public static void ClientVersion( NetState state, PacketReader pvSrc )
@@ -1912,14 +1912,14 @@ namespace Server.Network
 		{
 			pvSrc.ReadInt32(); // 0xEDEDEDED
 
-			string name = pvSrc.ReadString( 30 );
+			/*string name = */pvSrc.ReadString( 30 );
 
 			pvSrc.Seek( 2, SeekOrigin.Current );
 			int flags = pvSrc.ReadInt32();
 			pvSrc.Seek( 24, SeekOrigin.Current );
 
 			int charSlot = pvSrc.ReadInt32();
-			int clientIP = pvSrc.ReadInt32();
+			/*int clientIP = */pvSrc.ReadInt32();
 
 			IAccount a = state.Account;
 
@@ -2020,9 +2020,9 @@ namespace Server.Network
 
 		public static void CreateCharacter( NetState state, PacketReader pvSrc )
 		{
-			int unk1 = pvSrc.ReadInt32();
-			int unk2 = pvSrc.ReadInt32();
-			int unk3 = pvSrc.ReadByte();
+			/*int unk1 = */pvSrc.ReadInt32();
+			/*int unk2 = */pvSrc.ReadInt32();
+			/*int unk3 = */pvSrc.ReadByte();
 			string name = pvSrc.ReadString( 30 );
 
 			pvSrc.Seek( 2, SeekOrigin.Current );
@@ -2048,8 +2048,8 @@ namespace Server.Network
 			int hairHuef= pvSrc.ReadInt16();
 			pvSrc.ReadByte();
 			int cityIndex = pvSrc.ReadByte();
-			int charSlot = pvSrc.ReadInt32();
-			int clientIP = pvSrc.ReadInt32();
+			/*int charSlot = */pvSrc.ReadInt32();
+			/*int clientIP = */pvSrc.ReadInt32();
 			int shirtHue = pvSrc.ReadInt16();
 			int pantsHue = pvSrc.ReadInt16();
 

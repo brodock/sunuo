@@ -5571,8 +5571,6 @@ namespace Server
 			{
 				item.SendRemovePacket();
 
-				int oldCount = m_Items.Count;
-
 				m_Items.Remove( item );
 
 				if ( !(item is BankBox) )

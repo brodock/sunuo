@@ -1,6 +1,6 @@
 sunuo (0.1.4) unstable; urgency=low
 
-  * 
+  * fixed a lot of C# compiler warnings
 
  --
 

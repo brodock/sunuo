@@ -108,7 +108,7 @@ namespace Server
 							int index = bin.ReadInt32();
 							int lookup = bin.ReadInt32();
 							int length = bin.ReadInt32();
-							int extra = bin.ReadInt32();
+							/*int extra = */bin.ReadInt32();
 
 							if ( file == 14 && index >= 0 && index < m_Components.Length && lookup >= 0 && length > 0 )
 							{

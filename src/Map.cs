@@ -1739,7 +1739,6 @@ namespace Server
 			if ( !Utility.InRange( org, dest, m_MaxLOSDistance ) )
 				return false;
 
-			Point3D start = org;
 			Point3D finsh = dest;
 
 			if ( org.X > dest.X || (org.X == dest.X && org.Y > dest.Y) || (org.X == dest.X && org.Y == dest.Y && org.Z > dest.Z) )

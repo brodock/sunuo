@@ -154,7 +154,7 @@ namespace Server
 
 		public virtual void Deserialize( GenericReader reader )
 		{
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public virtual void MakeGuard( Mobile focus )
