@@ -4,7 +4,7 @@ sunuo (0.1.2) unstable; urgency=low
     although Pack=1 is specified in the structure
   * exit on compiler error, don't allow the user to retry compilation
 
- --
+ -- Max Kellermann <max@duempel.org>  Wed, 16 Feb 2005 23:06:56 +0100
 
 sunuo (0.1.1) unstable; urgency=low
 
