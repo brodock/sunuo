@@ -1992,7 +1992,7 @@ namespace Server
 						m_Layer = (Layer)reader.ReadByte();
 
 					if ( GetSaveFlag( flags, SaveFlag.Name ) )
-						m_Name = reader.ReadString();
+						m_Name = string.Intern(reader.ReadString());
 
 					if ( GetSaveFlag( flags, SaveFlag.Parent ) )
 					{
@@ -2094,7 +2094,7 @@ namespace Server
 						m_Layer = (Layer)reader.ReadByte();
 
 					if ( GetSaveFlag( flags, SaveFlag.Name ) )
-						m_Name = reader.ReadString();
+						m_Name = string.Intern(reader.ReadString());
 
 					if ( GetSaveFlag( flags, SaveFlag.Parent ) )
 					{
@@ -2176,6 +2176,8 @@ namespace Server
 					m_Amount = reader.ReadInt();
 					m_Layer = (Layer) reader.ReadByte();
 					m_Name = reader.ReadString();
+					if (m_Name != null)
+						m_Name = string.Intern(m_Name);
 
 					Serial parent = reader.ReadInt();
 
@@ -3213,6 +3215,8 @@ namespace Server
 			set
 			{
 				m_Name = value;
+				if (m_Name != null)
+					m_Name = string.Intern(m_Name);
 				InvalidateProperties();
 			}
 		}

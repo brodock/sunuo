@@ -365,7 +365,7 @@ namespace Server
 		public StatMod( StatType type, string name, int offset, TimeSpan duration )
 		{
 			m_Type = type;
-			m_Name = name;
+			m_Name = string.Intern(name);
 			m_Offset = offset;
 			m_Duration = duration;
 			m_Added = DateTime.Now;
@@ -5014,6 +5014,8 @@ namespace Server
 					m_Location = reader.ReadPoint3D();
 					m_Body = new Body( reader.ReadInt() );
 					m_Name = reader.ReadString();
+					if (m_Name != null)
+						m_Name = string.Intern(m_Name);
 					m_GuildTitle = reader.ReadString();
 					m_Criminal = reader.ReadBool();
 					m_Kills = reader.ReadInt();
@@ -5022,6 +5024,8 @@ namespace Server
 					m_WhisperHue = reader.ReadInt();
 					m_YellHue = reader.ReadInt();
 					m_Language = reader.ReadString();
+					if (m_Language != null)
+						m_Language = string.Intern(m_Language);
 					m_Female = reader.ReadBool();
 					m_Warmode = reader.ReadBool();
 					m_Hidden = reader.ReadBool();
@@ -5055,6 +5059,8 @@ namespace Server
 
 					m_Player = reader.ReadBool();
 					m_Title = reader.ReadString();
+					if (m_Title != null)
+						m_Title = string.Intern(m_Title);
 					m_Profile = reader.ReadString();
 					m_ProfileLocked = reader.ReadBool();
 					if ( version <= 18 )
@@ -5409,6 +5415,8 @@ namespace Server
 			set
 			{
 				m_Title = value;
+				if (m_Title != null)
+					m_Title = string.Intern(m_Title);
 				InvalidateProperties();
 			}
 		}
@@ -7446,6 +7454,8 @@ namespace Server
 			set
 			{
 				m_Language = value;
+				if (m_Language != null)
+					m_Language = string.Intern(m_Language);
 			}
 		}
 
@@ -7615,6 +7625,8 @@ namespace Server
 				if ( m_Name != value ) // I'm leaving out the && m_NameMod == null
 				{
 					m_Name = value;
+					if (m_Name != null)
+						m_Name = string.Intern(m_Name);
 					Delta( MobileDelta.Name );
 					InvalidateProperties();
 				}

@@ -28,5 +28,6 @@ sunuo (0.1.0) unstable; urgency=low
   * wrap a script library in the new Library class
   * World.Load() dumps exceptions
   * added option to ignore AuthID
+  * use string.Intern() to save memory
 
  --
