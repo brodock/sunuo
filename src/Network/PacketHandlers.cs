@@ -2243,12 +2243,6 @@ namespace Server.Network
 					state.Dispose();
 					return;
 				}
-				if (state.CityInfo == null) {
-					Console.WriteLine("BUG: GameLogin state.CityInfo==null (username {0})",
-									  username);
-					state.Dispose();
-					return;
-				}
 
 				state.CityInfo = e.CityInfo;
 				state.CompressionEnabled = true;
