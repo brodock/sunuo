@@ -30,6 +30,7 @@ using System.Threading;
 using System.Reflection;
 using System.Collections;
 using System.Diagnostics;
+using System.Xml;
 using Server;
 using Server.Network;
 using Server.Accounting;
@@ -316,6 +317,65 @@ namespace Server
 			Console.WriteLine( "done" );
 		}
 
+		protected static void LoadConfiguration() {
+			DirectoryInfo etcDirectoryInfo = BaseDirectoryInfo
+				.CreateSubdirectory("etc");
+			string filename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.xml");
+
+			if (!File.Exists(filename))
+				return;
+
+			XmlTextReader reader = new XmlTextReader(filename);
+
+			try {
+				while (!reader.EOF) {
+					if (reader.MoveToContent() == XmlNodeType.Element) {
+						if (reader.Name == "data-path") {
+							string path = reader.ReadElementString();
+							if (Directory.Exists(path))
+								m_DataDirectories.Add(path);
+							continue;
+						}
+					}
+
+					reader.Read();
+				}
+			} finally {
+				if (reader != null)
+					reader.Close();
+			}
+		}
+
+		protected static void SaveConfiguration() {
+			DirectoryInfo etcDirectoryInfo = BaseDirectoryInfo
+				.CreateSubdirectory("etc");
+			string filename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.xml");
+			string tempFilename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.new");
+
+			XmlTextWriter writer = new XmlTextWriter(tempFilename, System.Text.Encoding.UTF8);
+			writer.Formatting = Formatting.Indented;
+
+			try {
+				writer.WriteStartDocument(true);
+				writer.WriteComment(" This is the SunUO configuration file. http://max.kellermann.name/projects/sunuo/ ");
+				writer.WriteStartElement(null, "sunuo-config", null);
+				writer.WriteStartElement(null, "locations", null);
+				writer.WriteComment("the element 'data-path' sets the UO client directory");
+				foreach (string path in DataDirectories) {
+					writer.WriteElementString("data-path", path);
+				}
+				writer.WriteEndElement();
+				writer.WriteEndElement();
+				writer.Close();
+				File.Delete(filename);
+				File.Move(tempFilename, filename);
+			} catch {
+				writer.Close();
+				File.Delete(tempFilename);
+				throw;
+			}
+		}
+
 		public static void Main( string[] args )
 		{
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
@@ -332,6 +392,8 @@ namespace Server
 				else if ( Insensitive.Equals( args[i], "-profile" ) )
 					Profiling = true;
 			}
+
+			LoadConfiguration();
 
 			try
 			{
@@ -383,6 +445,7 @@ namespace Server
 			}
 
 			ScriptCompiler.Configure();
+			SaveConfiguration();
 
 			World.Load();
 
