@@ -1,0 +1,33 @@
+SunUO README
+============
+
+(c) 2005 Max Kellermann <max@duempel.org>
+
+
+What is SunUO?
+--------------
+
+SunUO is a free Ultima Online server, based on RunUO.
+
+
+Getting SunUO
+-------------
+
+You can download SunUO on the home page:
+
+ http://max.kellermann.name/projects/sunuo/
+
+
+Installing SunUO
+----------------
+
+Download and install the binary RunUO package, version 1.0.0:
+
+ http://www.runuo.com/downloads/files/runuo-releases/RunUO-1.0.0.zip
+
+Unzip it somewhere, and copy the file SunUO.exe into the same
+directory. Now run:
+
+ mono SunUO.exe
+
+SunUO and RunUO are binary compatible, the configuration is the same.
