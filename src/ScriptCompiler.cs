@@ -286,56 +286,58 @@ namespace Server
 				Core.VerifySerialization();
 				Console.WriteLine( "done ({0} items, {1} mobiles)", Core.ScriptItems, Core.ScriptMobiles );
 
-				ArrayList invoke = new ArrayList();
-
-				for (a=0;a<m_Assemblies.Length;++a)
-				{
-					Type[] types = m_Assemblies[a].GetTypes();
-
-					for ( int i = 0; i < types.Length; ++i )
-					{
-						MethodInfo m = types[i].GetMethod( "Configure", BindingFlags.Static | BindingFlags.Public );
-
-						if ( m != null )
-							invoke.Add( m );
-							//m.Invoke( null, null );
-					}
-				}
-
-				invoke.Sort( new CallPriorityComparer() );
-
-				for ( int i = 0; i < invoke.Count; ++i )
-					((MethodInfo)invoke[i]).Invoke( null, null );
-
-				invoke.Clear();
-
-				World.Load();
-
-				for (a=0;a<m_Assemblies.Length;++a)
-				{
-					Type[] types = m_Assemblies[a].GetTypes();
-
-					for ( int i = 0; i < types.Length; ++i )
-					{
-						MethodInfo m = types[i].GetMethod( "Initialize", BindingFlags.Static | BindingFlags.Public );
-
-						if ( m != null )
-							invoke.Add( m );
-							//m.Invoke( null, null );
-					}
-				}
-
-				invoke.Sort( new CallPriorityComparer() );
-
-				for ( int i = 0; i < invoke.Count; ++i )
-					((MethodInfo)invoke[i]).Invoke( null, null );
-
 				return true;
 			}
 			else
 			{
 				return false;
 			}
+		}
+
+		public static void Configure() {
+			ArrayList invoke = new ArrayList();
+
+			for (int a=0;a<m_Assemblies.Length;++a)
+			{
+				Type[] types = m_Assemblies[a].GetTypes();
+
+				for ( int i = 0; i < types.Length; ++i )
+				{
+					MethodInfo m = types[i].GetMethod( "Configure", BindingFlags.Static | BindingFlags.Public );
+
+					if ( m != null )
+						invoke.Add( m );
+					//m.Invoke( null, null );
+				}
+			}
+
+			invoke.Sort( new CallPriorityComparer() );
+
+			for ( int i = 0; i < invoke.Count; ++i )
+				((MethodInfo)invoke[i]).Invoke( null, null );
+		}
+
+		public static void Initialize() {
+			ArrayList invoke = new ArrayList();
+
+			for (int a=0;a<m_Assemblies.Length;++a)
+			{
+				Type[] types = m_Assemblies[a].GetTypes();
+
+				for ( int i = 0; i < types.Length; ++i )
+				{
+					MethodInfo m = types[i].GetMethod( "Initialize", BindingFlags.Static | BindingFlags.Public );
+
+					if ( m != null )
+						invoke.Add( m );
+					//m.Invoke( null, null );
+				}
+			}
+
+			invoke.Sort( new CallPriorityComparer() );
+
+			for ( int i = 0; i < invoke.Count; ++i )
+				((MethodInfo)invoke[i]).Invoke( null, null );
 		}
 
 		private static Hashtable m_TypeCaches = new Hashtable();

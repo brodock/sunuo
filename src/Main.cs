@@ -340,6 +340,12 @@ namespace Server
 					return;
 			}
 
+			ScriptCompiler.Configure();
+
+			World.Load();
+
+			ScriptCompiler.Initialize();
+
 			Region.Load();
 
 			MessagePump ms = m_MessagePump = new MessagePump( new Listener( Listener.Port ) );
