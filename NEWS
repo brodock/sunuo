@@ -2,6 +2,8 @@ sunuo (0.1.1) unstable; urgency=low
 
   * removed several compatibility fixes for old pre-0.1.0 versions of
     SunUO
+  * recompile libraries automatically when a file has been changed,
+    deleted or added added
 
  --
 

@@ -89,31 +89,99 @@ namespace Server
 			return (string[])list.ToArray( typeof( string ) );
 		}
 
+		private static Hashtable ReadStampFile(string filename) {
+			if (!File.Exists(filename))
+				return null;
+
+			FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+			BinaryReader br = new BinaryReader(fs);
+			int version = br.ReadInt32();
+			if (version != 1)
+				return null;
+
+			Hashtable stamps = new Hashtable();
+
+			uint count = br.ReadUInt32();
+			for (uint i = 0; i < count; i++) {
+				string fn = br.ReadString();
+				long ticks = br.ReadInt64();
+				stamps[fn] = new DateTime(ticks);
+			}
+
+			br.Close();
+			fs.Close();
+
+			return stamps;
+		}
+
+		private static void WriteStampFile(string filename, Hashtable stamps) {
+			FileStream fs = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
+			BinaryWriter bw = new BinaryWriter(fs);
+			bw.Write((int)1);
+
+			/*Version ver = Core.Assembly.GetName().Version;
+			bw.Write(ver.Major);
+			bw.Write(ver.Minor);
+			bw.Write(ver.Build);
+			bw.Write(ver.Revision);*/
+
+			bw.Write((uint)stamps.Count);
+			IDictionaryEnumerator e = stamps.GetEnumerator();
+			while (e.MoveNext()) {
+				bw.Write((string)e.Key);
+				bw.Write((long)((DateTime)e.Value).Ticks);
+			}
+
+			bw.Close();
+			fs.Close();
+		}
+
+		private static bool CheckStamps(Hashtable files,
+										string stampFile) {
+			Hashtable stamps = ReadStampFile(stampFile);
+			if (stamps == null)
+				return false;
+
+			IDictionaryEnumerator e = files.GetEnumerator();
+			while (e.MoveNext()) {
+				string filename = (string)e.Key;
+				DateTime newStamp = (DateTime)e.Value;
+				DateTime oldStamp = (DateTime)stamps[filename];
+
+				if (oldStamp != newStamp)
+					return false;
+
+				stamps.Remove(filename);
+			}
+
+			return stamps.Count == 0;
+		}
+
 		private static CompilerResults CompileCSScripts(string name,
-														string sourcePath,
+														ICollection fileColl,
 														string assemblyFile,
 														LibraryConfig libConfig,
 														bool debug) {
 			CSharpCodeProvider provider = new CSharpCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
-			string[] files = GetScripts(libConfig, sourcePath, "*.cs");
+			string[] files;
 
-			if ( files.Length == 0 )
-				return null;
-
-			Console.Write("{0}[C#,{1}", name, files.Length);
+			Console.Write("{0}[C#,{1}", name, fileColl.Count);
 
 			string tempFile = compiler.GetType().FullName == "Mono.CSharp.CSharpCodeCompiler"
 				? Path.GetTempFileName() : null;
 			if (tempFile == String.Empty)
 				tempFile = null;
-			if (tempFile != null) {
+			if (tempFile == null) {
+				files = new string[fileColl.Count];
+				fileColl.CopyTo(files, 0);
+			} else {
 				/* to prevent an "argument list too long" error, we
 				   write a list of file names to a temporary file
 				   and add them with @filename */
 				StreamWriter w = new StreamWriter(tempFile, false);
-				foreach (string file in files) {
+				foreach (string file in fileColl) {
 					w.Write("\"" + file + "\" ");
 				}
 				w.Close();
@@ -172,10 +240,12 @@ namespace Server
 			VBCodeProvider provider = new VBCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
-			string[] files = GetScripts(libConfig, sourcePath, "*.vb");
-
-			if ( files.Length == 0 )
+			ICollection fileColl = GetScripts(libConfig, sourcePath, "*.vb");
+			if (fileColl.Count == 0)
 				return null;
+
+			string[] files = new string[fileColl.Count];
+			fileColl.CopyTo(files, 0);
 
 			Console.Write("{0}[VB,{1}", name, files.Length);
 
@@ -227,20 +297,26 @@ namespace Server
 			}
 
 			string csFile = Path.Combine(cache.FullName, name + ".dll");
-			if (File.Exists(csFile)) {
-				libraries.Add(new Library(libConfig, name,
-										  Assembly.LoadFrom(csFile)));
-				m_AdditionalReferences.Add(csFile);
-				Console.Write("{0}. ", name);
-			} else {
-				CompilerResults results = CompileCSScripts(name, path, csFile,
-														   libConfig,
-														   debug);
-				if (results != null) {
-					if (results.Errors.HasErrors)
-						return false;
+			Hashtable files = GetScripts(libConfig, path, "*.cs");
+			if (files.Count > 0) {
+				string stampFile = Path.Combine(cache.FullName, name + ".stm");
+				if (File.Exists(csFile) && CheckStamps(files, stampFile)) {
 					libraries.Add(new Library(libConfig, name,
-											  results.CompiledAssembly));
+											  Assembly.LoadFrom(csFile)));
+					m_AdditionalReferences.Add(csFile);
+					Console.Write("{0}. ", name);
+				} else {
+					CompilerResults results = CompileCSScripts(name, files.Keys,
+															   csFile,
+															   libConfig,
+															   debug);
+					if (results != null) {
+						if (results.Errors.HasErrors)
+							return false;
+						libraries.Add(new Library(libConfig, name,
+												  results.CompiledAssembly));
+						WriteStampFile(stampFile, files);
+					}
 				}
 			}
 
@@ -425,24 +501,24 @@ namespace Server
 			return null;
 		}
 
-		private static string[] GetScripts(LibraryConfig libConfig,
-										   string path, string type) {
-			ArrayList list = new ArrayList();
+		private static Hashtable GetScripts(LibraryConfig libConfig,
+											string path, string type) {
+			Hashtable list = new Hashtable();
 
 			GetScripts(libConfig, list, path, type);
 
-			return (string[])list.ToArray( typeof( string ) );
+			return list;
 		}
 
 		private static void GetScripts(LibraryConfig libConfig,
-									   ArrayList list, string path, string type) {
+									   Hashtable list, string path, string type) {
 			foreach ( string dir in Directory.GetDirectories( path ) )
 				GetScripts(libConfig, list, dir, type);
 
 			foreach (string filename in Directory.GetFiles(path, type)) {
 				/* XXX: pass relative filename only */
 				if (libConfig == null || !libConfig.GetIgnoreSource(filename))
-					list.Add(filename);
+					list[filename] = File.GetLastWriteTime(filename);
 			}
 		}
 	}
