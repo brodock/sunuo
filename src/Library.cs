@@ -82,6 +82,59 @@ namespace Server {
 			get { return typesByFullName; }
 		}
 
+		public void Verify(ref int itemCount, ref int mobileCount) {
+			Type[] ctorTypes = new Type[]{ typeof(Serial) };
+
+			foreach (Type t in types) {
+				bool isItem = t.IsSubclassOf(typeof(Item));
+				bool isMobile = t.IsSubclassOf(typeof(Mobile));
+
+				if (isItem || isMobile) {
+					if (isItem)
+						++itemCount;
+					else
+						++mobileCount;
+
+					bool warned = false;
+
+					try {
+						if ( t.GetConstructor( ctorTypes ) == null )
+						{
+							if ( !warned )
+								Console.WriteLine( "Warning: {0}", t );
+
+							warned = true;
+							Console.WriteLine( "       - No serialization constructor" );
+						}
+
+						if ( t.GetMethod( "Serialize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly ) == null )
+						{
+							if ( !warned )
+								Console.WriteLine( "Warning: {0}", t );
+
+							warned = true;
+							Console.WriteLine( "       - No Serialize() method" );
+						}
+
+						if ( t.GetMethod( "Deserialize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly ) == null )
+						{
+							if ( !warned )
+								Console.WriteLine( "Warning: {0}", t );
+
+							warned = true;
+							Console.WriteLine( "       - No Deserialize() method" );
+						}
+
+						if ( warned )
+							Console.WriteLine();
+					}
+					catch
+					{
+					}
+				}
+			}
+		}
+
 		public void Configure() {
 			if (name == "core") {
 				configured = true;

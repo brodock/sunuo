@@ -520,72 +520,12 @@ namespace Server
 		public static int ScriptItems { get { return m_ItemCount; } }
 		public static int ScriptMobiles { get { return m_MobileCount; } }
 
-		public static void VerifySerialization()
-		{
+		public static void VerifySerialization() {
 			m_ItemCount = 0;
 			m_MobileCount = 0;
 
-			VerifySerialization( Assembly.GetCallingAssembly() );
-
-			for (int a=0;a<ScriptCompiler.Assemblies.Length;++a)
-				VerifySerialization( ScriptCompiler.Assemblies[a] );
-		}
-
-		private static void VerifySerialization( Assembly a )
-		{
-			if ( a == null ) return;
-
-			Type[] ctorTypes = new Type[]{ typeof( Serial ) };
-
-			foreach ( Type t in a.GetTypes() )
-			{
-				bool isItem = t.IsSubclassOf( typeof( Item ) );
-
-				if ( isItem || t.IsSubclassOf( typeof( Mobile ) ) )
-				{
-					if ( isItem )
-						++m_ItemCount;
-					else
-						++m_MobileCount;
-
-					bool warned = false;
-
-					try
-					{
-						if ( t.GetConstructor( ctorTypes ) == null )
-						{
-							if ( !warned )
-								Console.WriteLine( "Warning: {0}", t );
-
-							warned = true;
-							Console.WriteLine( "       - No serialization constructor" );
-						}
-
-						if ( t.GetMethod( "Serialize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly ) == null )
-						{
-							if ( !warned )
-								Console.WriteLine( "Warning: {0}", t );
-
-							warned = true;
-							Console.WriteLine( "       - No Serialize() method" );
-						}
-
-						if ( t.GetMethod( "Deserialize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly ) == null )
-						{
-							if ( !warned )
-								Console.WriteLine( "Warning: {0}", t );
-
-							warned = true;
-							Console.WriteLine( "       - No Deserialize() method" );
-						}
-
-						if ( warned )
-							Console.WriteLine();
-					}
-					catch
-					{
-					}
-				}
+			foreach (Library l in ScriptCompiler.Libraries) {
+				l.Verify(ref m_ItemCount, ref m_MobileCount);
 			}
 		}
 	}
