@@ -2008,7 +2008,12 @@ namespace Server.Network
 			state.Send( SeasonChange.Instantiate( m.GetSeason(), true ) );
 			state.Send( new MapChange( m ) );
 
-			EventSink.InvokeLogin( new LoginEventArgs( m ) );
+			try {
+				EventSink.InvokeLogin(new LoginEventArgs(m));
+			} catch (Exception ex) {
+				Console.WriteLine("Exception disarmed in Login: {0}",
+								  ex);
+			}
 
 			m.ClearFastwalkStack();
 		}
@@ -2092,7 +2097,12 @@ namespace Server.Network
 
 				state.BlockAllPackets = true;
 
-				EventSink.InvokeCharacterCreated( args );
+				try {
+					EventSink.InvokeCharacterCreated(args);
+				} catch (Exception ex) {
+					Console.WriteLine("Exception disarmed in CharacterCreated {0}: {1}",
+									  name, ex);
+				}
 
 				Mobile m = args.Mobile;
 
@@ -2218,7 +2228,12 @@ namespace Server.Network
 
 			GameLoginEventArgs e = new GameLoginEventArgs( state, username, password );
 
-			EventSink.InvokeGameLogin( e );
+			try {
+				EventSink.InvokeGameLogin(e);
+			} catch (Exception ex) {
+				Console.WriteLine("Exception disarmed in GameLogin {0}: {1}",
+								  username, ex);
+			}
 
 			if ( e.Accepted )
 			{
@@ -2272,7 +2287,12 @@ namespace Server.Network
 
 			AccountLoginEventArgs e = new AccountLoginEventArgs( state, username, password );
 
-			EventSink.InvokeAccountLogin( e );
+			try {
+				EventSink.InvokeAccountLogin(e);
+			} catch (Exception ex) {
+				Console.WriteLine("Exception disarmed in AccountLogin {0}: {1}",
+								  username, ex);
+			}
 
 			if ( e.Accepted )
 				AccountLogin_ReplyAck( state );
