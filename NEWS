@@ -11,5 +11,7 @@ sunuo (0.1.0) unstable; urgency=low
   * moved the World.Load() call from ScriptCompiler to Main
   * ScriptCompiler.m_Assemblies converted to ArrayList
   * removed method TileMatrix.Force(), which was good for nothing
+  * added Core.BaseDirectoryInfo, Core.CacheDirectoryInfo,
+    Core.LocalDirectoryInfo
 
  --
