@@ -5,7 +5,7 @@ sunuo (0.1.3) unstable; urgency=low
   * removed "/debug /optimize" parameters from ScriptCompiler
   * added a hack to work around the zlib portability bugs in the scripts
 
- --
+ -- Max Kellermann <max@duempel.org>  Sun, 20 Feb 2005 19:53:46 +0100
 
 sunuo (0.1.2) unstable; urgency=low
 
