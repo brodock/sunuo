@@ -5,7 +5,7 @@ sunuo (0.1.4) unstable; urgency=low
     alphabetically sorted directory entries; ScriptCompiler.cs now sorts
     filenames before passing them to the compiler
 
- --
+ -- Max Kellermann <max@duempel.org>  Thu,  3 Mar 2005 20:44:54 +0100
 
 sunuo (0.1.3) unstable; urgency=low
 
