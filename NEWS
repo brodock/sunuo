@@ -23,5 +23,6 @@ sunuo (0.1.0) unstable; urgency=low
     LoaderExceptions
   * ignore case on data file names
   * implemented the configuration file "./etc/sunuo.xml"
+  * wrap a script library in the new Library class
 
  --

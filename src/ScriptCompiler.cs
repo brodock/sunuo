@@ -35,13 +35,23 @@ namespace Server
 {
 	public class ScriptCompiler
 	{
-		private static ArrayList m_Assemblies = new ArrayList();
+		private static ArrayList libraries;
+
+		private static Library[] Libraries {
+			get {
+				return (Library[])libraries.ToArray(typeof(Library));
+			}
+		}
 
 		public static Assembly[] Assemblies
 		{
 			get
 			{
-				return (Assembly[])m_Assemblies.ToArray(typeof(Assembly));
+				ArrayList assemblies = new ArrayList(libraries.Count);
+				foreach (Library l in libraries) {
+					assemblies.Add(l.Assembly);
+				}
+				return (Assembly[])assemblies.ToArray(typeof(Assembly));
 			}
 		}
 
@@ -210,13 +220,13 @@ namespace Server
 			string oldFile = Path.Combine(cache.FullName, name + "-cs.dll");
 			string csFile = Path.Combine(cache.FullName, name + ".dll");
 			if (File.Exists(csFile)) {
-				m_Assemblies.Add(Assembly.LoadFrom(csFile));
+				libraries.Add(new Library(name, Assembly.LoadFrom(csFile)));
 				m_AdditionalReferences.Add(csFile);
 				Console.Write("{0}. ", name);
 			} else if (File.Exists(oldFile)) {
 				/* old style file name, rename that */
 				File.Move(oldFile, csFile);
-				m_Assemblies.Add(Assembly.LoadFrom(csFile));
+				libraries.Add(new Library(name, Assembly.LoadFrom(csFile)));
 				m_AdditionalReferences.Add(csFile);
 				Console.Write("{0}. ", name);
 			} else {
@@ -225,13 +235,13 @@ namespace Server
 				if (results != null) {
 					if (results.Errors.HasErrors)
 						return false;
-					m_Assemblies.Add(results.CompiledAssembly);
+					libraries.Add(new Library(name, results.CompiledAssembly));
 				}
 			}
 
 			string vbFile = Path.Combine(cache.FullName, name + "-vb.dll");
 			if (File.Exists(vbFile)) {
-				m_Assemblies.Add(Assembly.LoadFrom(vbFile));
+				libraries.Add(new Library(name, Assembly.LoadFrom(vbFile)));
 				m_AdditionalReferences.Add(vbFile);
 				Console.Write("{0}/VB. ", name);
 			} else {
@@ -239,7 +249,7 @@ namespace Server
 				if (results != null) {
 					if (results.Errors.HasErrors)
 						return false;
-					m_Assemblies.Add(results.CompiledAssembly);
+					libraries.Add(new Library(name, results.CompiledAssembly));
 				}
 			}
 
@@ -254,6 +264,8 @@ namespace Server
 		public static bool Compile( bool debug )
 		{
 			Console.Write("Compiling scripts: ");
+
+			libraries = new ArrayList();
 
 			if ( m_AdditionalReferences.Count > 0 )
 				m_AdditionalReferences.Clear();
@@ -299,47 +311,13 @@ namespace Server
 		}
 
 		public static void Configure() {
-			ArrayList invoke = new ArrayList();
-
-			foreach (Assembly a in m_Assemblies) {
-				Type[] types = a.GetTypes();
-
-				for ( int i = 0; i < types.Length; ++i )
-				{
-					MethodInfo m = types[i].GetMethod( "Configure", BindingFlags.Static | BindingFlags.Public );
-
-					if ( m != null )
-						invoke.Add( m );
-					//m.Invoke( null, null );
-				}
-			}
-
-			invoke.Sort( new CallPriorityComparer() );
-
-			for ( int i = 0; i < invoke.Count; ++i )
-				((MethodInfo)invoke[i]).Invoke( null, null );
+			foreach (Library l in libraries)
+				l.Configure();
 		}
 
 		public static void Initialize() {
-			ArrayList invoke = new ArrayList();
-
-			foreach (Assembly a in m_Assemblies) {
-				Type[] types = a.GetTypes();
-
-				for ( int i = 0; i < types.Length; ++i )
-				{
-					MethodInfo m = types[i].GetMethod( "Initialize", BindingFlags.Static | BindingFlags.Public );
-
-					if ( m != null )
-						invoke.Add( m );
-					//m.Invoke( null, null );
-				}
-			}
-
-			invoke.Sort( new CallPriorityComparer() );
-
-			for ( int i = 0; i < invoke.Count; ++i )
-				((MethodInfo)invoke[i]).Invoke( null, null );
+			foreach (Library l in libraries)
+				l.Initialize();
 		}
 
 		private static Hashtable m_TypeCaches = new Hashtable();
@@ -370,8 +348,8 @@ namespace Server
 
 		public static Type FindTypeByFullName( string fullName, bool ignoreCase )
 		{
-			foreach (Assembly a in m_Assemblies) {
-				Type type = GetTypeCache(a).GetTypeByFullName( fullName, ignoreCase );
+			foreach (Library l in libraries) {
+				Type type = GetTypeCache(l.Assembly).GetTypeByFullName(fullName, ignoreCase);
 				if (type != null)
 					return type;
 			}
@@ -386,8 +364,8 @@ namespace Server
 
 		public static Type FindTypeByName( string name, bool ignoreCase )
 		{
-			foreach (Assembly a in m_Assemblies) {
-				Type type = GetTypeCache(a).GetTypeByName( name, ignoreCase );
+			foreach (Library l in libraries) {
+				Type type = GetTypeCache(l.Assembly).GetTypeByName(name, ignoreCase);
 				if (type != null)
 					return type;
 			}
