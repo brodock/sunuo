@@ -104,7 +104,7 @@ following configuration in ./etc/sunuo.xml:
 
  <libraries>
    <library name="foo">
-     <ignore-type name="Bar.cs"/>
+     <ignore-source name="Bar.cs"/>
      <ignore-type name="Blubb"/>
    </library>
  </libraries>
