@@ -199,6 +199,15 @@ this command to your startup scripts, because the change is gone after
 a reboot.
 
 
+** Making customized houses work **
+
+RunUO imports code from "zlib.dll" on windows. On Linux, library names
+are different, it is named "libz.so" there. To make that work, create
+a symbolic link with RunUO's favorite name:
+
+ ln -s /usr/lib/libz.so.1 /opt/sunuo/libzlib.so
+
+
 Compiling SunUO
 ---------------
 
