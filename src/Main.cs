@@ -355,15 +355,8 @@ namespace Server
 			timerThread = new Thread( new ThreadStart( ttObj.TimerMain ) );
 			timerThread.Name = "Timer Thread";
 
-			while ( !ScriptCompiler.Compile( debug ) )
-			{
-				Console.WriteLine( "Scripts: One or more scripts failed to compile or no script files were found." );
-				Console.WriteLine( " - Press return to exit, or R to try again." );
-
-				string line = Console.ReadLine();
-				if ( line == null || line.ToLower() != "r" )
-					return;
-			}
+			if (!ScriptCompiler.Compile(debug))
+				return;
 
 			Console.Write("Verifying scripts:");
 			m_ItemCount = 0;
