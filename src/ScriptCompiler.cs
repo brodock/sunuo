@@ -65,8 +65,7 @@ namespace Server
 
 		private static ArrayList m_AdditionalReferences;
 
-		public static string[] GetReferenceAssemblies()
-		{
+		private static string[] GetReferenceAssemblies() {
 			ArrayList list = new ArrayList();
 
 			string path = Path.Combine( Core.BaseDirectory, "Data/Assemblies.cfg" );
@@ -272,11 +271,6 @@ namespace Server
 			}
 
 			return true;
-		}
-
-		public static bool Compile()
-		{
-			return Compile( false );
 		}
 
 		public static bool Compile( bool debug )
