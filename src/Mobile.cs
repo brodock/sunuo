@@ -3,11 +3,12 @@
  *                            -------------------
  *   begin                : May 1, 2002
  *   copyright            : (C) The RunUO Software Team
- *   email                : info@runuo.com
+ *                          (C) 2005 Max Kellermann <max@duempel.org>
+ *   email                : max@duempel.org
  *
- *   $Id: Mobile.cs,v 1.18 2005/01/22 04:25:04 krrios Exp $
- *   $Author: krrios $
- *   $Date: 2005/01/22 04:25:04 $
+ *   $Id$
+ *   $Author$
+ *   $Date$
  *
  *
  ***************************************************************************/
@@ -9225,8 +9226,16 @@ namespace Server
 			int count = m_DeltaQueue.Count;
 			int index = 0;
 
-			while ( m_DeltaQueue.Count > 0 && index++ < count )
-				((Mobile)m_DeltaQueue.Dequeue()).ProcessDelta();
+			while ( m_DeltaQueue.Count > 0 && index++ < count ) {
+				Mobile mobile = (Mobile)m_DeltaQueue.Dequeue();
+
+				try {
+					mobile.ProcessDelta();
+				} catch (Exception e) {
+					Console.WriteLine("Exception disarmed in Mobile.ProcessDeltaQueue in {0}: {1}",
+									  mobile, e);
+				}
+			}
 		}
 
 		[CommandProperty( AccessLevel.Counselor, AccessLevel.GameMaster )]

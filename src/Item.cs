@@ -3,11 +3,12 @@
  *                            -------------------
  *   begin                : May 1, 2002
  *   copyright            : (C) The RunUO Software Team
- *   email                : info@runuo.com
+ *                          (C) 2005 Max Kellermann <max@duempel.org>
+ *   email                : max@duempel.org
  *
- *   $Id: Item.cs,v 1.9 2005/01/22 04:25:04 krrios Exp $
- *   $Author: krrios $
- *   $Date: 2005/01/22 04:25:04 $
+ *   $Id$
+ *   $Author$
+ *   $Date$
  *
  *
  ***************************************************************************/
@@ -2837,7 +2838,14 @@ namespace Server
 
 			for ( int i = 0; i < m_DeltaQueue.Count; ++i )
 			{
-				((Item)m_DeltaQueue[i]).ProcessDelta();
+				Item item = (Item)m_DeltaQueue[i];
+
+				try {
+					item.ProcessDelta();
+				} catch (Exception e) {
+					Console.WriteLine("Exception disarmed in Item.ProcessDeltaQueue in {0}: {1}",
+									  item, e);
+				}
 
 				if ( i >= count )
 					break;
