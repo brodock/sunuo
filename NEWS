@@ -3,7 +3,9 @@ sunuo (0.1.0) unstable; urgency=low
   * imported RunUO 1.0.0 sources, fork is called SunUO 0.1.0
   * wrote Makefile
   * some minor mono-mcs compilation fixes
-  * repaired pointer arithmetic in Serialization.cs
+  * replaced the overcomplex mono-compatibility unsafe code in
+    TileMatrix.cs by a simple Marshal.Copy
+  * repaired pointer arithmetic in Serialization.cs and TileMatrix.cs
   * pass script file names in a temporary files, to go around the
     "argument too long" limitation on most POSIX systems
 

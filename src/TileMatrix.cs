@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Server
 {
@@ -420,15 +421,7 @@ namespace Server
 
 						m_Statics.Read( m_Buffer, 0, length );
 
-						fixed ( byte *pbBuffer = m_Buffer )
-						{
-							StaticTile *pCopyBuffer = (StaticTile *)pbBuffer;
-							StaticTile *pCopyEnd = pCopyBuffer + count;
-							StaticTile *pCopyCur = pTiles;
-
-							while ( pCopyBuffer < pCopyEnd )
-								*pCopyCur++ = *pCopyBuffer++;
-						}
+						Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
 #endif
 
 						if ( m_Lists == null )
@@ -446,12 +439,9 @@ namespace Server
 
 						TileList[][] lists = m_Lists;
 
-						StaticTile *pCur = pTiles, pEnd = pTiles + count;
-
-						while ( pCur < pEnd )
-						{
+						for (int i = 0; i < count; i++) {
+							StaticTile *pCur = pTiles + i;
 							lists[pCur->m_X & 0x7][pCur->m_Y & 0x7].Add( (short)((pCur->m_ID & 0x3FFF) + 0x4000), pCur->m_Z );
-							++pCur;
 						}
 
 						Tile[][][] tiles = new Tile[8][][];
@@ -507,15 +497,7 @@ namespace Server
 
 					m_Map.Read( m_Buffer, 0, 192 );
 
-					fixed ( byte *pbBuffer = m_Buffer )
-					{
-						Tile *pBuffer = (Tile *)pbBuffer;
-						Tile *pEnd = pBuffer + 64;
-						Tile *pCur = pTiles;
-
-						while ( pBuffer < pEnd )
-							*pCur++ = *pBuffer++;
-					}
+					Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), 192);
 #endif
 				}
 
