@@ -278,7 +278,21 @@ namespace Server
 			Console.WriteLine();
 
 			Console.Write( "Scripts: Verifying..." );
-			Core.VerifySerialization();
+			try {
+				Core.VerifySerialization();
+			} catch (ReflectionTypeLoadException e) {
+				Console.WriteLine(" error: {0}", e);
+				Console.WriteLine("dumping some of the LoaderExceptions:");
+				int i = 0;
+				foreach (Exception e2 in e.LoaderExceptions) {
+					if (i++ < 4)
+						Console.WriteLine("LoaderException[{0}] = {1}", i, e2);
+				}
+				return false;
+			} catch (Exception e) {
+				Console.WriteLine(" error: {0}", e);
+				return false;
+			}
 			Console.WriteLine( "done ({0} items, {1} mobiles)", Core.ScriptItems, Core.ScriptMobiles );
 
 			return true;

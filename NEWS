@@ -18,5 +18,7 @@ sunuo (0.1.0) unstable; urgency=low
   * log to ./var/log/console.log instead of ./Logs/Console.log
   * implemented a lot of exception handlers in Network/PacketHandlers.cs,
     to prevent the server from crashing on a
+  * catch exceptions from Core.VerifySerialization(); dump
+    LoaderExceptions
 
  --
