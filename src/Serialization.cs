@@ -398,7 +398,7 @@ namespace Server
 				Flush();
 
 			fixed ( byte *pBuffer = m_Buffer )
-				*((double *)(&pBuffer[m_Index])) = value;
+				*((double *)(pBuffer + m_Index)) = value;
 
 			m_Index += 8;
 		}
@@ -409,7 +409,7 @@ namespace Server
 				Flush();
 
 			fixed ( byte *pBuffer = m_Buffer )
-				*((float *)(&pBuffer[m_Index])) = value;
+				*((float *)(pBuffer + m_Index)) = value;
 
 			m_Index += 4;
 		}
