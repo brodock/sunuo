@@ -462,6 +462,19 @@ namespace Server
 					return;
 			}
 
+			Console.Write("Verifying scripts:");
+			m_ItemCount = 0;
+			m_MobileCount = 0;
+			foreach (Library l in ScriptCompiler.Libraries) {
+				int itemCount = 0, mobileCount = 0;
+				Console.Write(" {0}[", l.Name);
+				l.Verify(ref itemCount, ref mobileCount);
+				Console.Write("{0} items, {1} mobiles]", itemCount, mobileCount);
+				m_ItemCount += itemCount;
+				m_MobileCount += mobileCount;
+			}
+			Console.WriteLine(" - done ({0} items, {1} mobiles)", m_ItemCount, m_MobileCount);
+
 			ScriptCompiler.Configure();
 			SaveConfiguration();
 
@@ -519,15 +532,6 @@ namespace Server
 
 		public static int ScriptItems { get { return m_ItemCount; } }
 		public static int ScriptMobiles { get { return m_MobileCount; } }
-
-		public static void VerifySerialization() {
-			m_ItemCount = 0;
-			m_MobileCount = 0;
-
-			foreach (Library l in ScriptCompiler.Libraries) {
-				l.Verify(ref m_ItemCount, ref m_MobileCount);
-			}
-		}
 	}
 
 	public class FileLogger : TextWriter, IDisposable
