@@ -80,6 +80,10 @@ recompile the "bar" library, shut down SunUO and execute:
 
 SunUO recreates the files on the next startup.
 
+The script library located in ./Scripts is internally named "legacy",
+and the core library is called "core". No other libraries may use this
+name.
+
 
 ** Single configuration file **
 
