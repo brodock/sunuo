@@ -1,5 +1,6 @@
 sunuo (0.1.1) unstable; urgency=low
 
+  * show operating system and runtime version in start banner
   * removed several compatibility fixes for old pre-0.1.0 versions of
     SunUO
   * recompile libraries automatically when a file has been changed,

@@ -346,6 +346,11 @@ namespace Server
 			// Added to help future code support on forums, as a 'check' people can ask for to it see if they recompiled core or not
 			Console.WriteLine("SunUO Version {0}.{1}.{2} http://max.kellermann.name/projects/sunuo/",
 							  ver.Major, ver.Minor, ver.Revision);
+			Console.WriteLine("  on {0}, runtime {1}",
+							  Environment.OSVersion, Environment.Version);
+
+			//if (Environment.Version);
+			//Console.WriteLine("sysdir={0} ver={1} os={2}", Environment.SystemDirectory, Environment.Version, );
 
 			while ( !ScriptCompiler.Compile( debug ) )
 			{
