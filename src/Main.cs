@@ -55,6 +55,8 @@ namespace Server
 		private static bool m_Service;
 		private static MultiTextWriter m_MultiConOut;
 
+		private static XmlDocument configuration;
+
 		private static bool m_AOS;
 		private static bool m_SE;
 
@@ -317,32 +319,46 @@ namespace Server
 			Console.WriteLine( "done" );
 		}
 
+		public static XmlElement GetConfiguration(string path) {
+			XmlElement el = configuration.DocumentElement;
+
+			foreach (string seg in path.Split('/')) {
+				XmlElement child = (XmlElement)el.SelectSingleNode(seg);
+				if (child == null) {
+					child = configuration.CreateElement(seg);
+					el.AppendChild(child);
+				}
+				el = child;
+			}
+
+			return el;
+		}
+
 		protected static void LoadConfiguration() {
 			DirectoryInfo etcDirectoryInfo = BaseDirectoryInfo
 				.CreateSubdirectory("etc");
 			string filename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.xml");
 
-			if (!File.Exists(filename))
+			configuration = new XmlDocument();
+
+			if (!File.Exists(filename)) {
+				configuration.AppendChild(configuration.CreateElement("sunuo-config"));
 				return;
+			}
 
 			XmlTextReader reader = new XmlTextReader(filename);
-
 			try {
-				while (!reader.EOF) {
-					if (reader.MoveToContent() == XmlNodeType.Element) {
-						if (reader.Name == "data-path") {
-							string path = reader.ReadElementString();
-							if (Directory.Exists(path))
-								m_DataDirectories.Add(path);
-							continue;
-						}
-					}
-
-					reader.Read();
-				}
+				configuration = new XmlDocument();
+				configuration.Load(reader);
 			} finally {
-				if (reader != null)
-					reader.Close();
+				reader.Close();
+			}
+
+			XmlElement locations = GetConfiguration("locations");
+			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
+				string path = dp.InnerText;
+				if (Directory.Exists(path))
+					m_DataDirectories.Add(path);
 			}
 		}
 
@@ -352,20 +368,22 @@ namespace Server
 			string filename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.xml");
 			string tempFilename = Path.Combine(etcDirectoryInfo.FullName, "sunuo.new");
 
+			XmlElement locations = GetConfiguration("locations");
+			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
+				dp.ParentNode.RemoveChild(dp);
+			}
+
+			foreach (string path in	m_DataDirectories) {
+				XmlElement el = configuration.CreateElement("data-path");
+				el.InnerText = path;
+				locations.AppendChild(el);
+			}
+
 			XmlTextWriter writer = new XmlTextWriter(tempFilename, System.Text.Encoding.UTF8);
 			writer.Formatting = Formatting.Indented;
 
 			try {
-				writer.WriteStartDocument(true);
-				writer.WriteComment(" This is the SunUO configuration file. http://max.kellermann.name/projects/sunuo/ ");
-				writer.WriteStartElement(null, "sunuo-config", null);
-				writer.WriteStartElement(null, "locations", null);
-				writer.WriteComment("the element 'data-path' sets the UO client directory");
-				foreach (string path in DataDirectories) {
-					writer.WriteElementString("data-path", path);
-				}
-				writer.WriteEndElement();
-				writer.WriteEndElement();
+				configuration.Save(writer);
 				writer.Close();
 				File.Delete(filename);
 				File.Move(tempFilename, filename);
