@@ -6,9 +6,9 @@
  *                          (C) 2005 Max Kellermann <max@duempel.org>
  *   email                : max@duempel.org
  *
- *   $Id: ScriptCompiler.cs,v 1.4 2005/01/22 04:25:04 krrios Exp $
- *   $Author: krrios $
- *   $Date: 2005/01/22 04:25:04 $
+ *   $Id$
+ *   $Author$
+ *   $Date$
  *
  *
  ***************************************************************************/
