@@ -3,11 +3,12 @@
  *                            -------------------
  *   begin                : May 1, 2002
  *   copyright            : (C) The RunUO Software Team
- *   email                : info@runuo.com
+ *                          (C) 2005 Max Kellermann <max@duempel.org>
+ *   email                : max@duempel.org
  *
- *   $Id: TileMatrixPatch.cs,v 1.3 2005/01/22 04:25:04 krrios Exp $
- *   $Author: krrios $
- *   $Date: 2005/01/22 04:25:04 $
+ *   $Id$
+ *   $Author$
+ *   $Date$
  *
  *
  ***************************************************************************/
@@ -24,6 +25,7 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace Server
 {
@@ -115,15 +117,7 @@ namespace Server
 
 							fsData.Read( m_Buffer, 0, 192 );
 
-							fixed ( byte *pbBuffer = m_Buffer )
-							{
-								Tile *pBuffer = (Tile *)pbBuffer;
-								Tile *pEnd = pBuffer + 64;
-								Tile *pCur = pTiles;
-
-								while ( pBuffer < pEnd )
-									*pCur++ = *pBuffer++;
-							}
+							Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), 192);
 #endif
 						}
 
@@ -201,15 +195,7 @@ namespace Server
 
 								fsData.Read( m_Buffer, 0, length );
 
-								fixed ( byte *pbBuffer = m_Buffer )
-								{
-									StaticTile *pCopyBuffer = (StaticTile *)pbBuffer;
-									StaticTile *pCopyEnd = pCopyBuffer + tileCount;
-									StaticTile *pCopyCur = pTiles;
-
-									while ( pCopyBuffer < pCopyEnd )
-										*pCopyCur++ = *pCopyBuffer++;
-								}
+								Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
 #endif
 
 								StaticTile *pCur = pTiles, pEnd = pTiles + tileCount;

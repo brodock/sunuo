@@ -4,7 +4,7 @@ sunuo (0.1.0) unstable; urgency=low
   * wrote Makefile
   * some minor mono-mcs compilation fixes
   * replaced the overcomplex mono-compatibility unsafe code in
-    TileMatrix.cs by a simple Marshal.Copy
+    TileMatrix.cs and TileMatrixPatch.cs by a simple Marshal.Copy
   * repaired pointer arithmetic in Serialization.cs and TileMatrix.cs
   * pass script file names in a temporary files, to go around the
     "argument too long" limitation on most POSIX systems
