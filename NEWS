@@ -13,8 +13,8 @@ sunuo (0.1.0) unstable; urgency=low
   * removed method TileMatrix.Force(), which was good for nothing
   * added Core.BaseDirectoryInfo, Core.CacheDirectoryInfo,
     Core.LocalDirectoryInfo
-  * support for multiple script directories in ./local/src/, every one of
-    them is built into a separate DLL
+  * support for multiple script libraries in ./local/src/ and
+    ./local/lib/, every one of them is built into a separate DLL
   * log to ./var/log/console.log instead of ./Logs/Console.log
   * implemented a lot of exception handlers in Network/PacketHandlers.cs,
     to prevent the server from crashing when an exception in a script

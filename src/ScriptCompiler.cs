@@ -43,6 +43,14 @@ namespace Server
 			}
 		}
 
+		/** find a loaded library by its name */
+		public static Library GetLibrary(string name) {
+			foreach (Library l in libraries)
+				if (l.Name == name)
+					return l;
+			return null;
+		}
+
 		public static Assembly[] Assemblies
 		{
 			get
@@ -305,6 +313,32 @@ namespace Server
 					return false;
 			}
 
+			/* delete unused cache directories */
+			DirectoryInfo cacheDir = Core.CacheDirectoryInfo
+				.CreateSubdirectory("lib");
+			foreach (DirectoryInfo sub in cacheDir.GetDirectories()) {
+				if (GetLibrary(sub.Name) == null)
+					sub.Delete(true);
+			}
+
+			/* load libraries from ./local/lib/ */
+			DirectoryInfo libDir = Core.LocalDirectoryInfo
+				.CreateSubdirectory("lib");
+			foreach (FileInfo libFile in libDir.GetFiles("*.dll")) {
+				string fileName = libFile.Name;
+				string libName = fileName.Substring(0, fileName.Length - 4);
+				if (GetLibrary(libName) != null) {
+					Console.WriteLine("Warning: duplicate library '{0}' in ./local/src/{1}/ and ./local/lib/{2}",
+									  libName, libName, fileName);
+					continue;
+				}
+
+				libraries.Add(new Library(Core.Config.GetLibraryConfig(libName),
+										  libName,
+										  Assembly.LoadFrom(libFile.FullName)));
+			}
+
+			/* done */
 			Console.WriteLine();
 
 			return true;
