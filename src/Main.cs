@@ -349,6 +349,9 @@ namespace Server
 			Console.WriteLine("  on {0}, runtime {1}",
 							  Environment.OSVersion, Environment.Version);
 
+			if ((int)Environment.OSVersion.Platform == 128)
+				Console.WriteLine("Please make sure you have Mono 1.1.3 or newer! (mono -V)");
+
 			while ( !ScriptCompiler.Compile( debug ) )
 			{
 				Console.WriteLine( "Scripts: One or more scripts failed to compile or no script files were found." );
