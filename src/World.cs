@@ -685,6 +685,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
+								Console.WriteLine("failed to load mobile: {0}", e);
 								mobiles.RemoveAt( i );
 
 								failed = e;
@@ -727,6 +728,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
+								Console.WriteLine("failed to load item: {0}", e);
 								items.RemoveAt( i );
 
 								failed = e;
@@ -770,6 +772,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
+								Console.WriteLine("failed to load guild: {0}", e);
 								guilds.RemoveAt( i );
 
 								failed = e;
@@ -811,6 +814,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
+								Console.WriteLine("failed to load region: {0}", e);
 								regions.RemoveAt( i );
 
 								failed = e;
