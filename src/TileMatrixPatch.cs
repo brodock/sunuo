@@ -47,11 +47,6 @@ namespace Server
 			}
 		}
 
-#if !MONO
-		[System.Runtime.InteropServices.DllImport( "Kernel32" )]
-		private unsafe static extern int _lread( IntPtr hFile, void *lpBuffer, int wBytes );
-#endif
-
 		public int LandBlocks
 		{
 			get
@@ -109,16 +104,12 @@ namespace Server
 
 						fixed ( Tile *pTiles = tiles )
 						{
-#if !MONO
-							_lread( fsData.Handle, pTiles, 192 );
-#else
 							if ( m_Buffer == null || 192 > m_Buffer.Length )
 								m_Buffer = new byte[192];
 
 							fsData.Read( m_Buffer, 0, 192 );
 
 							Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), 192);
-#endif
 						}
 
 						matrix.SetLandBlock( x, y, tiles );
@@ -131,9 +122,7 @@ namespace Server
 			}
 		}
 
-#if MONO
 		private static byte[] m_Buffer;
-#endif
 
 		private static StaticTile[] m_TileBuffer = new StaticTile[128];
 
@@ -187,16 +176,12 @@ namespace Server
 
 							fixed ( StaticTile *pTiles = staTiles )
 							{
-#if !MONO
-								_lread( fsData.Handle, pTiles, length );
-#else
 								if ( m_Buffer == null || length > m_Buffer.Length )
 									m_Buffer = new byte[length];
 
 								fsData.Read( m_Buffer, 0, length );
 
 								Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
-#endif
 
 								StaticTile *pCur = pTiles, pEnd = pTiles + tileCount;
 

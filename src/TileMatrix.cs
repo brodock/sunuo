@@ -54,11 +54,6 @@ namespace Server
 		private int[][] m_StaticPatches;
 		private int[][] m_LandPatches;
 
-#if !MONO
-		[System.Runtime.InteropServices.DllImport( "Kernel32" )]
-		private unsafe static extern int _lread( IntPtr hFile, void *lpBuffer, int wBytes );
-#endif
-
 		public Map Owner
 		{
 			get
@@ -382,9 +377,7 @@ namespace Server
 
 		private static TileList[][] m_Lists;
 
-#if MONO
 		private static byte[] m_Buffer;
-#endif
 
 		private static StaticTile[] m_TileBuffer = new StaticTile[128];
 
@@ -414,16 +407,12 @@ namespace Server
 
 					fixed ( StaticTile *pTiles = staTiles )
 					{
-#if !MONO
-						_lread( m_Statics.Handle, pTiles, length );
-#else
 						if ( m_Buffer == null || length > m_Buffer.Length )
 							m_Buffer = new byte[length];
 
 						m_Statics.Read( m_Buffer, 0, length );
 
 						Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
-#endif
 
 						if ( m_Lists == null )
 						{
@@ -484,16 +473,12 @@ namespace Server
 
 				fixed ( Tile *pTiles = tiles )
 				{
-#if !MONO
-					_lread( m_Map.Handle, pTiles, 192 );
-#else
 					if ( m_Buffer == null || 192 > m_Buffer.Length )
 						m_Buffer = new byte[192];
 
 					m_Map.Read( m_Buffer, 0, 192 );
 
 					Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), 192);
-#endif
 				}
 
 				return tiles;

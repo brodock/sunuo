@@ -269,31 +269,6 @@ namespace Server
 			}
 		}
 
-#if !MONO
-		private enum ConsoleEventType
-		{
-			CTRL_C_EVENT,
-			CTRL_BREAK_EVENT,
-			CTRL_CLOSE_EVENT, 
-			CTRL_LOGOFF_EVENT = 5,
-			CTRL_SHUTDOWN_EVENT
-		}
-
-		private delegate bool ConsoleEventHandler( ConsoleEventType type );
-		private static ConsoleEventHandler m_ConsoleEventHandler;
-
-		[System.Runtime.InteropServices.DllImport( "Kernel32.dll" )]
-		private static extern bool SetConsoleCtrlHandler( ConsoleEventHandler callback, bool add );
-
-		private static bool OnConsoleEvent( ConsoleEventType type )
-		{
-			if ( World.Saving )
-				return true;
-
-			return false;
-		}
-#endif
-
 		private static void CurrentDomain_ProcessExit( object sender, EventArgs e )
 		{
 			HandleClosed();
@@ -429,11 +404,6 @@ namespace Server
 			catch
 			{
 			}
-
-#if !MONO 
-			m_ConsoleEventHandler = new ConsoleEventHandler( OnConsoleEvent );
-			SetConsoleCtrlHandler( m_ConsoleEventHandler, true );
-#endif
 
 			m_Thread = Thread.CurrentThread;
 			m_Process = Process.GetCurrentProcess();
