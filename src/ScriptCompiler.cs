@@ -301,7 +301,15 @@ namespace Server
 					m_AdditionalReferences.Add(csFile);
 					Console.Write("{0}. ", name);
 				} else {
-					CompilerResults results = CompileCSScripts(name, files.Keys,
+					/* work around a serious faction bug: the factions
+					   code (Reflector.cs) assumes alphabetical
+					   directory entry order; simulate this by sorting
+					   the array. See my bug report:
+					   http://www.runuo.com/forum/showthread.php?p=373540 */
+					ArrayList sorted = new ArrayList(files.Keys);
+					sorted.Sort();
+
+					CompilerResults results = CompileCSScripts(name, sorted,
 															   csFile,
 															   libConfig,
 															   debug);
@@ -325,7 +333,11 @@ namespace Server
 					m_AdditionalReferences.Add(vbFile);
 					Console.Write("{0}/VB. ", name);
 				} else {
-					CompilerResults results = CompileVBScripts(name, files.Keys, vbFile,
+					/* workaround again */
+					ArrayList sorted = new ArrayList(files.Keys);
+					sorted.Sort();
+
+					CompilerResults results = CompileVBScripts(name, sorted, vbFile,
 															   libConfig,
 															   debug);
 					if (results != null) {

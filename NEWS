@@ -1,6 +1,9 @@
 sunuo (0.1.4) unstable; urgency=low
 
   * fixed a lot of C# compiler warnings
+  * workaround for the RunUO faction bug: Reflection.cs assumes
+    alphabetically sorted directory entries; ScriptCompiler.cs now sorts
+    filenames before passing them to the compiler
 
  --
 
