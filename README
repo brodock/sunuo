@@ -138,6 +138,21 @@ backups, which are meant to be improvements; please read the
 "Features" section thoroughly, to find out more about this.
 
 
+Compiling SunUO
+---------------
+
+If you are on Unix with Mono, edit the file config.mk and change the
+paths. Then type:
+
+ make
+
+Note that the resulting executable does not work on Windows. I am yet
+unsure if this is a Mono MCS bug or a Microsoft.NET bug. On windows,
+run the file "compile.bat". If that does not work, edit "compile.bat"
+and check if the "csc.exe" location is correct. The executable
+compiled on Windows also runs on Mono.
+
+
 Legal
 -----
 
