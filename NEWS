@@ -22,7 +22,9 @@ sunuo (0.1.0) unstable; urgency=low
   * catch exceptions from Core.VerifySerialization(); dump
     LoaderExceptions
   * ignore case on data file names
-  * implemented the configuration file "./etc/sunuo.xml"
+  * implemented the configuration file "./etc/sunuo.xml", class
+    Server.Config
+  * added source and type ignores in LibraryConfig
   * wrap a script library in the new Library class
   * World.Load() dumps exceptions
 

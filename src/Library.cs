@@ -34,11 +34,16 @@ namespace Server {
 		private bool configured, initialized;
 		private TypeCache typeCache;
 
-		public Library(string _name, Assembly _assembly) {
+		public Library(LibraryConfig libConfig, string _name, Assembly _assembly) {
 			name = _name;
 			assembly = _assembly;
-			types = assembly.GetTypes();
-			/* XXX: type ignores from Core.Configuration? */
+
+			ArrayList typeList = new ArrayList();
+			foreach (Type type in assembly.GetTypes()) {
+				if (libConfig == null || !libConfig.GetIgnoreType(type))
+					typeList.Add(type);
+			}
+			types = (Type[])typeList.ToArray(typeof(Type));
 
 			typesByName = new TypeTable(types.Length);
 			typesByFullName = new TypeTable(types.Length);

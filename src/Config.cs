@@ -29,19 +29,56 @@ using System.Xml;
 namespace Server {
 	public class LibraryConfig {
 		private string name;
+		private string[] ignoreSources;
+		private string[] ignoreTypes;
 
 		public LibraryConfig(XmlElement libConfigEl) {
 			name = libConfigEl.GetAttribute("name");
+
+			ArrayList al = new ArrayList();
+			foreach (XmlElement el in libConfigEl.GetElementsByTagName("ignore-source")) {
+				string n = el.GetAttribute("name");
+				if (n != null)
+					al.Add(n);
+			}
+
+			if (al.Count > 0)
+				ignoreSources = (string[])al.ToArray(typeof(string));
+
+			al = new ArrayList();
+			foreach (XmlElement el in libConfigEl.GetElementsByTagName("ignore-type")) {
+				string n = el.GetAttribute("name");
+				if (n != null)
+					al.Add(n);
+			}
+
+			if (al.Count > 0)
+				ignoreTypes = (string[])al.ToArray(typeof(string));
 		}
 
 		public string Name {
 			get { return name; }
 		}
 
-		public bool IgnoreSource(string filename) {
+		public bool GetIgnoreSource(string filename) {
+			if (ignoreSources == null)
+				return false;
+
+			foreach (string ign in ignoreSources)
+				/* XXX: better check */
+				if (filename.EndsWith(ign))
+					return true;
+
 			return false;
 		}
-		public bool IgnoreType(Type type) {
+		public bool GetIgnoreType(Type type) {
+			if (ignoreTypes == null)
+				return false;
+
+			foreach (string ign in ignoreTypes)
+				if (ign == type.FullName)
+					return true;
+
 			return false;
 		}
 	}

@@ -87,11 +87,12 @@ namespace Server
 		private static CompilerResults CompileCSScripts(string name,
 														string sourcePath,
 														string assemblyFile,
+														LibraryConfig libConfig,
 														bool debug) {
 			CSharpCodeProvider provider = new CSharpCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
-			string[] files = GetScripts(sourcePath, "*.cs");
+			string[] files = GetScripts(libConfig, sourcePath, "*.cs");
 
 			if ( files.Length == 0 )
 				return null;
@@ -161,11 +162,12 @@ namespace Server
 		private static CompilerResults CompileVBScripts(string name,
 														string sourcePath,
 														string assemblyFile,
+														LibraryConfig libConfig,
 														bool debug) {
 			VBCodeProvider provider = new VBCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
-			string[] files = GetScripts(sourcePath, "*.vb");
+			string[] files = GetScripts(libConfig, sourcePath, "*.vb");
 
 			if ( files.Length == 0 )
 				return null;
@@ -207,7 +209,9 @@ namespace Server
 			return results;
 		}
 
-		private static bool Compile(string name, string path, bool debug) {
+		private static bool Compile(string name, string path,
+									LibraryConfig libConfig,
+									bool debug) {
 			DirectoryInfo cache = Core.CacheDirectoryInfo
 				.CreateSubdirectory("lib")
 				.CreateSubdirectory(name);
@@ -220,36 +224,44 @@ namespace Server
 			string oldFile = Path.Combine(cache.FullName, name + "-cs.dll");
 			string csFile = Path.Combine(cache.FullName, name + ".dll");
 			if (File.Exists(csFile)) {
-				libraries.Add(new Library(name, Assembly.LoadFrom(csFile)));
+				libraries.Add(new Library(libConfig, name,
+										  Assembly.LoadFrom(csFile)));
 				m_AdditionalReferences.Add(csFile);
 				Console.Write("{0}. ", name);
 			} else if (File.Exists(oldFile)) {
 				/* old style file name, rename that */
 				File.Move(oldFile, csFile);
-				libraries.Add(new Library(name, Assembly.LoadFrom(csFile)));
+				libraries.Add(new Library(libConfig, name,
+										  Assembly.LoadFrom(csFile)));
 				m_AdditionalReferences.Add(csFile);
 				Console.Write("{0}. ", name);
 			} else {
 				CompilerResults results = CompileCSScripts(name, path, csFile,
+														   libConfig,
 														   debug);
 				if (results != null) {
 					if (results.Errors.HasErrors)
 						return false;
-					libraries.Add(new Library(name, results.CompiledAssembly));
+					libraries.Add(new Library(libConfig, name,
+											  results.CompiledAssembly));
 				}
 			}
 
 			string vbFile = Path.Combine(cache.FullName, name + "-vb.dll");
 			if (File.Exists(vbFile)) {
-				libraries.Add(new Library(name, Assembly.LoadFrom(vbFile)));
+				libraries.Add(new Library(libConfig, name,
+										  Assembly.LoadFrom(vbFile)));
 				m_AdditionalReferences.Add(vbFile);
 				Console.Write("{0}/VB. ", name);
 			} else {
-				CompilerResults results = CompileVBScripts(name, path, vbFile, debug);
+				CompilerResults results = CompileVBScripts(name, path, vbFile,
+														   libConfig,
+														   debug);
 				if (results != null) {
 					if (results.Errors.HasErrors)
 						return false;
-					libraries.Add(new Library(name, results.CompiledAssembly));
+					libraries.Add(new Library(libConfig, name,
+											  results.CompiledAssembly));
 				}
 			}
 
@@ -266,7 +278,8 @@ namespace Server
 			Console.Write("Compiling scripts: ");
 
 			libraries = new ArrayList();
-			libraries.Add(new Library("core", Core.Assembly));
+			libraries.Add(new Library(Core.Config.GetLibraryConfig("core"),
+									  "core", Core.Assembly));
 
 			if ( m_AdditionalReferences.Count > 0 )
 				m_AdditionalReferences.Clear();
@@ -274,7 +287,9 @@ namespace Server
 			/* first compile ./Scripts/ for RunUO compatibility */
 			string compatScripts = Path.Combine(Core.BaseDirectory, "Scripts");
 			if (Directory.Exists(compatScripts)) {
-				bool result = Compile("runuo_compat", compatScripts, debug);
+				bool result = Compile("runuo_compat", compatScripts,
+									  Core.Config.GetLibraryConfig("runuo_compat"),
+									  debug);
 				if (!result)
 					return false;
 			}
@@ -283,7 +298,9 @@ namespace Server
 			DirectoryInfo srcDir = Core.LocalDirectoryInfo
 				.CreateSubdirectory("src");
 			foreach (DirectoryInfo sub in srcDir.GetDirectories()) {
-				bool result = Compile(sub.Name, sub.FullName, debug);
+				bool result = Compile(sub.Name, sub.FullName,
+									  Core.Config.GetLibraryConfig(sub.Name),
+									  debug);
 				if (!result)
 					return false;
 			}
@@ -371,20 +388,25 @@ namespace Server
 			return null;
 		}
 
-		private static string[] GetScripts(string path, string type) {
+		private static string[] GetScripts(LibraryConfig libConfig,
+										   string path, string type) {
 			ArrayList list = new ArrayList();
 
-			GetScripts(list, path, type);
+			GetScripts(libConfig, list, path, type);
 
 			return (string[])list.ToArray( typeof( string ) );
 		}
 
-		private static void GetScripts( ArrayList list, string path, string type )
-		{
+		private static void GetScripts(LibraryConfig libConfig,
+									   ArrayList list, string path, string type) {
 			foreach ( string dir in Directory.GetDirectories( path ) )
-				GetScripts( list, dir, type );
+				GetScripts(libConfig, list, dir, type);
 
-			list.AddRange( Directory.GetFiles( path, type ) );
+			foreach (string filename in Directory.GetFiles(path, type)) {
+				/* XXX: pass relative filename only */
+				if (libConfig == null || !libConfig.GetIgnoreSource(filename))
+					list.Add(filename);
+			}
 		}
 	}
 
