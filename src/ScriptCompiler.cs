@@ -268,30 +268,28 @@ namespace Server
 			if ( csResults == null || !csResults.Errors.HasErrors )
 				vbResults = CompileVBScripts( debug );
 			
-			if ( ( csResults == null || !csResults.Errors.HasErrors ) && ( vbResults == null || !vbResults.Errors.HasErrors ) && ( vbResults != null || csResults != null ) )
-			{
-				int a = 0;
-				if ( csResults == null || vbResults == null )
-					m_Assemblies = new Assembly[1];
-				else
-					m_Assemblies = new Assembly[2];
-
-				if ( csResults != null )
-					m_Assemblies[a++] = csResults.CompiledAssembly;
-
-				if ( vbResults != null )
-					m_Assemblies[a++] = vbResults.CompiledAssembly;
-
-				Console.Write( "Scripts: Verifying..." );
-				Core.VerifySerialization();
-				Console.WriteLine( "done ({0} items, {1} mobiles)", Core.ScriptItems, Core.ScriptMobiles );
-
-				return true;
-			}
-			else
-			{
+			if ((csResults != null && csResults.Errors.HasErrors) ||
+				(vbResults != null && vbResults.Errors.HasErrors) ||
+				(vbResults == null && csResults == null))
 				return false;
-			}
+
+			int a = 0;
+			if ( csResults == null || vbResults == null )
+				m_Assemblies = new Assembly[1];
+			else
+				m_Assemblies = new Assembly[2];
+
+			if ( csResults != null )
+				m_Assemblies[a++] = csResults.CompiledAssembly;
+
+			if ( vbResults != null )
+				m_Assemblies[a++] = vbResults.CompiledAssembly;
+
+			Console.Write( "Scripts: Verifying..." );
+			Core.VerifySerialization();
+			Console.WriteLine( "done ({0} items, {1} mobiles)", Core.ScriptItems, Core.ScriptMobiles );
+
+			return true;
 		}
 
 		public static void Configure() {
