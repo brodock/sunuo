@@ -108,6 +108,20 @@ type "Blubb". You can use this to disable commands or to disable items
 in the game.
 
 
+** Separate login server from shard server **
+
+To make SunUO ignore the AuthID, configure:
+
+ <login>
+   <ignore-auth-id/>
+ </login>
+
+This allows you to run the login server and the shard server on
+different machines. This is safe, because both check the password
+independently. It is however important that the account databases on
+both servers are the same.
+
+
 Porting a shard to SunUO
 ------------------------
 

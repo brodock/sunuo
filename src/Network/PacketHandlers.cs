@@ -2131,6 +2131,13 @@ namespace Server.Network
 			if ( Utility.RandomBool() )
 				authID |= 1<<31;
 
+			AddAuthID(authID);
+
+			return authID;
+		}
+
+		private static void AddAuthID(int authID)
+		{
 			bool wasSet = false;
 			DateTime oldest = DateTime.MaxValue;
 			int oldestIndex = 0;
@@ -2156,8 +2163,6 @@ namespace Server.Network
 				m_AuthIDWindow[oldestIndex] = authID;
 				m_AuthIDWindowAge[oldestIndex] = DateTime.Now;
 			}
-
-			return authID;
 		}
 
 		private static bool IsValidAuthID( int authID )
@@ -2185,6 +2190,9 @@ namespace Server.Network
 			state.SentFirstPacket = true;
 
 			int authID = pvSrc.ReadInt32();
+
+			if (Core.Config.LoginConfig.IgnoreAuthID)
+				AddAuthID(authID);
 
 			if ( !IsValidAuthID( authID ) )
 			{

@@ -83,11 +83,27 @@ namespace Server {
 		}
 	}
 
+	public class LoginConfig {
+		private bool ignoreAuthID;
+
+		public LoginConfig() {
+		}
+
+		public LoginConfig(XmlElement el) {
+			ignoreAuthID = el.GetElementsByTagName("ignore-auth-id").Count > 0;
+		}
+
+		public bool IgnoreAuthID {
+			get { return ignoreAuthID; }
+		}
+	}
+
 	public class Config {
 		private string filename;
 		private XmlDocument document;
 		private ArrayList dataDirectories;
 		private Hashtable libraryConfig;
+		private LoginConfig loginConfig;
 
 		public Config(string _filename) {
 			filename = _filename;
@@ -101,6 +117,10 @@ namespace Server {
 
 		public LibraryConfig GetLibraryConfig(string name) {
 			return (LibraryConfig)libraryConfig[name];
+		}
+
+		public LoginConfig LoginConfig {
+			get { return loginConfig; }
 		}
 
 		public XmlElement GetConfiguration(string path) {
@@ -148,6 +168,11 @@ namespace Server {
 				if (lc.Name != null)
 					libraryConfig[lc.Name] = lc;
 			}
+
+			XmlElement loginEl = GetConfiguration("login");
+			loginConfig = loginEl == null
+				? new LoginConfig()
+				: new LoginConfig(loginEl);
 		}
 
 		public void Save() {

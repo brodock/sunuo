@@ -27,5 +27,6 @@ sunuo (0.1.0) unstable; urgency=low
   * added source and type ignores in LibraryConfig
   * wrap a script library in the new Library class
   * World.Load() dumps exceptions
+  * added option to ignore AuthID
 
  --
