@@ -1815,7 +1815,7 @@ namespace Server
 			Map map = m_Map;
 
 			if ( map == null )
-				return Map.NullEnumerable.Instance;
+				return Server.Map.NullEnumerable.Instance;
 
 			if ( m_Parent == null )
 				return map.GetObjectsInRange( m_Location, range );
@@ -1828,7 +1828,7 @@ namespace Server
 			Map map = m_Map;
 
 			if ( map == null )
-				return Map.NullEnumerable.Instance;
+				return Server.Map.NullEnumerable.Instance;
 
 			if ( m_Parent == null )
 				return map.GetItemsInRange( m_Location, range );
@@ -1841,7 +1841,7 @@ namespace Server
 			Map map = m_Map;
 
 			if ( map == null )
-				return Map.NullEnumerable.Instance;
+				return Server.Map.NullEnumerable.Instance;
 
 			if ( m_Parent == null )
 				return map.GetMobilesInRange( m_Location, range );
@@ -1854,7 +1854,7 @@ namespace Server
 			Map map = m_Map;
 
 			if ( map == null )
-				return Map.NullEnumerable.Instance;
+				return Server.Map.NullEnumerable.Instance;
 
 			if ( m_Parent == null )
 				return map.GetClientsInRange( m_Location, range );
