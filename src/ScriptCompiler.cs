@@ -324,20 +324,36 @@ namespace Server
 		private static Hashtable m_TypeCaches = new Hashtable();
 		private static TypeCache m_NullCache;
 
+		private static Library findLibrary(Assembly asm) {
+			foreach (Library l in libraries) {
+				if (l.Assembly == asm)
+					return l;
+			}
+
+			return null;
+		}
+
 		public static TypeCache GetTypeCache( Assembly asm )
 		{
 			if ( asm == null )
 			{
 				if ( m_NullCache == null )
-					m_NullCache = new TypeCache( null );
+					m_NullCache = new TypeCache(Type.EmptyTypes,
+												new TypeTable(0),
+												new TypeTable(0));
 
 				return m_NullCache;
 			}
 
 			TypeCache c = (TypeCache)m_TypeCaches[asm];
 
-			if ( c == null )
-				m_TypeCaches[asm] = c = new TypeCache( asm );
+			if (c == null) {
+				Library l = findLibrary(asm);
+				if (l == null)
+					throw new ApplicationException("Invalid assembly");
+				Console.WriteLine("GetTypeCache {0}", l.Name);
+				m_TypeCaches[asm] = c = l.TypeCache;
+			}
 
 			return c;
 		}
@@ -410,41 +426,10 @@ namespace Server
 			return m_FullNames.Get( fullName, ignoreCase );
 		}
 
-		public TypeCache( Assembly asm )
-		{
-			if ( asm == null )
-				m_Types = Type.EmptyTypes;
-			else
-				m_Types = asm.GetTypes();
-
-			m_Names = new TypeTable( m_Types.Length );
-			m_FullNames = new TypeTable( m_Types.Length );
-
-			Type typeofTypeAliasAttribute = typeof( TypeAliasAttribute );
-
-			for ( int i = 0; i < m_Types.Length; ++i )
-			{
-				Type type = m_Types[i];
-
-				m_Names.Add( type.Name, type );
-				m_FullNames.Add( type.FullName, type );
-
-				if ( type.IsDefined( typeofTypeAliasAttribute, false ) )
-				{
-					object[] attrs = type.GetCustomAttributes( typeofTypeAliasAttribute, false );
-
-					if ( attrs != null && attrs.Length > 0 )
-					{
-						TypeAliasAttribute attr = attrs[0] as TypeAliasAttribute;
-
-						if ( attr != null )
-						{
-							for ( int j = 0; j < attr.Aliases.Length; ++j )
-								m_FullNames.Add( attr.Aliases[j], type );
-						}
-					}
-				}
-			}
+		public TypeCache(Type[] types, TypeTable names, TypeTable fullNames) {
+			m_Types = types;
+			m_Names = names;
+			m_FullNames = fullNames;
 		}
 	}
 

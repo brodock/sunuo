@@ -30,6 +30,7 @@ namespace Server {
 		private string name;
 		private Assembly assembly;
 		private Type[] types;
+		private TypeTable typesByName, typesByFullName;
 		private bool configured, initialized;
 		private TypeCache typeCache;
 
@@ -38,7 +39,28 @@ namespace Server {
 			assembly = _assembly;
 			types = assembly.GetTypes();
 			/* XXX: type ignores from Core.Configuration? */
-			typeCache = new TypeCache(assembly);
+
+			typesByName = new TypeTable(types.Length);
+			typesByFullName = new TypeTable(types.Length);
+
+			Type typeofTypeAliasAttribute = typeof(TypeAliasAttribute);
+
+			foreach (Type type in types) {
+				typesByName.Add(type.Name, type);
+				typesByFullName.Add(type.FullName, type);
+
+				if (type.IsDefined(typeofTypeAliasAttribute, false)) {
+					object[] attrs = type.GetCustomAttributes(typeofTypeAliasAttribute, false);
+
+					if (attrs != null && attrs.Length > 0 && attrs[0] != null) {
+						TypeAliasAttribute attr = attrs[0] as TypeAliasAttribute;
+						foreach (string alias in attr.Aliases)
+							typesByFullName.Add(alias, type);
+					}
+				}
+			}
+
+			typeCache = new TypeCache(types, typesByName, typesByFullName);
 		}
 
 		public string Name {
@@ -49,6 +71,15 @@ namespace Server {
 		}
 		public TypeCache TypeCache {
 			get { return typeCache; }
+		}
+		public Type[] Types {
+			get { return types; }
+		}
+		public TypeTable TypesByName {
+			get { return typesByName; }
+		}
+		public TypeTable TypesByFullName {
+			get { return typesByFullName; }
 		}
 
 		public void Configure() {
@@ -102,5 +133,14 @@ namespace Server {
 
 			initialized = true;
 		}
+
+		public Type GetTypeByName(string name, bool ignoreCase) {
+			return typesByName.Get(name, ignoreCase);
+		}
+
+		public Type GetTypeByFullName(string fullName, bool ignoreCase) {
+			return typesByFullName.Get(fullName, ignoreCase);
+		}
+
 	}
 }
