@@ -294,7 +294,7 @@ namespace Server
 				.CreateSubdirectory("src");
 			foreach (DirectoryInfo sub in srcDir.GetDirectories()) {
 				string libName = sub.Name.ToLower();
-				if (libName == "core" || libName == "legacy" || libName == "runuo_compat") {
+				if (libName == "core" || libName == "legacy") {
 					Console.WriteLine("Warning: the library name '{0}' is invalid",
 									  libName);
 					continue;
@@ -323,7 +323,7 @@ namespace Server
 				string fileName = libFile.Name;
 				string libName = fileName.Substring(0, fileName.Length - 4).ToLower();
 
-				if (libName == "core" || libName == "legacy" || libName == "runuo_compat") {
+				if (libName == "core" || libName == "legacy") {
 					Console.WriteLine("Warning: the library name '{0}' is invalid",
 									  libName);
 					continue;
