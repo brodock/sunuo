@@ -6,7 +6,7 @@ sunuo (0.1.4) unstable; urgency=low
     filenames before passing them to the compiler
   * fixed a null cast in ScriptCompiler.CheckStamps()
 
- --
+ -- Max Kellermann <max@duempel.org>  Thu,  3 Mar 2005 21:04:41 +0100
 
 sunuo (0.1.3) unstable; urgency=low
 
