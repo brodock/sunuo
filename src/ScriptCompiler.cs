@@ -318,8 +318,15 @@ namespace Server
 			DirectoryInfo srcDir = Core.LocalDirectoryInfo
 				.CreateSubdirectory("src");
 			foreach (DirectoryInfo sub in srcDir.GetDirectories()) {
-				bool result = Compile(sub.Name.ToLower(), sub.FullName,
-									  Core.Config.GetLibraryConfig(sub.Name),
+				string libName = sub.Name.ToLower();
+				if (libName == "core" || libName == "legacy" || libName == "runuo_compat") {
+					Console.WriteLine("Warning: the library name '{0}' is invalid",
+									  libName);
+					continue;
+				}
+
+				bool result = Compile(libName, sub.FullName,
+									  Core.Config.GetLibraryConfig(libName),
 									  debug);
 				if (!result)
 					return false;
@@ -327,6 +334,7 @@ namespace Server
 
 			/* delete unused cache directories */
 			foreach (DirectoryInfo sub in cacheDir.GetDirectories()) {
+				string libName = sub.Name.ToLower();
 				if (GetLibrary(sub.Name) == null)
 					sub.Delete(true);
 			}
@@ -336,7 +344,14 @@ namespace Server
 				.CreateSubdirectory("lib");
 			foreach (FileInfo libFile in libDir.GetFiles("*.dll")) {
 				string fileName = libFile.Name;
-				string libName = fileName.Substring(0, fileName.Length - 4);
+				string libName = fileName.Substring(0, fileName.Length - 4).ToLower();
+
+				if (libName == "core" || libName == "legacy" || libName == "runuo_compat") {
+					Console.WriteLine("Warning: the library name '{0}' is invalid",
+									  libName);
+					continue;
+				}
+
 				if (GetLibrary(libName) != null) {
 					Console.WriteLine("Warning: duplicate library '{0}' in ./local/src/{1}/ and ./local/lib/{2}",
 									  libName, libName, fileName);
