@@ -74,13 +74,14 @@ namespace Server
 			return (string[])list.ToArray( typeof( string ) );
 		}
 
-		private static CompilerResults CompileCSScripts( bool debug )
-		{
+		private static CompilerResults CompileCSScripts(string sourcePath,
+														string assemblyFile,
+														bool debug) {
 			CSharpCodeProvider provider = new CSharpCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
 			Console.Write( "Scripts: Compiling C# scripts..." );
-			string[] files = GetScripts( "*.cs" );
+			string[] files = GetScripts(sourcePath, "*.cs");
 
 			if ( files.Length == 0 )
 			{
@@ -104,9 +105,7 @@ namespace Server
 			}
 #endif
 
-			string path = GetUnusedPath( "Scripts.CS" );
-
-			CompilerParameters parms = new CompilerParameters( GetReferenceAssemblies(), path, debug );
+			CompilerParameters parms = new CompilerParameters( GetReferenceAssemblies(), assemblyFile, debug );
 
 			if ( !debug )
 				parms.CompilerOptions = "/debug- /optimize+"; // doesn't seem to have any effect
@@ -118,7 +117,7 @@ namespace Server
 				File.Delete(tempFile);
 #endif
 
-			m_AdditionalReferences.Add( path );
+			m_AdditionalReferences.Add(assemblyFile);
 
 			if ( results.Errors.Count > 0 )
 			{
@@ -150,13 +149,14 @@ namespace Server
 			return results;
 		}
 
-		private static CompilerResults CompileVBScripts( bool debug )
-		{
+		private static CompilerResults CompileVBScripts(string sourcePath,
+														string assemblyFile,
+														bool debug) {
 			VBCodeProvider provider = new VBCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
 
 			Console.Write( "Scripts: Compiling VB.net scripts..." );
-			string[] files = GetScripts( "*.vb" );
+			string[] files = GetScripts(sourcePath, "*.vb");
 
 			if ( files.Length == 0 )
 			{
@@ -164,11 +164,9 @@ namespace Server
 				return null;
 			}
 
-			string path = GetUnusedPath( "Scripts.VB" );
+			CompilerResults results = compiler.CompileAssemblyFromFileBatch( new CompilerParameters( GetReferenceAssemblies(), assemblyFile, true ), files );
 
-			CompilerResults results = compiler.CompileAssemblyFromFileBatch( new CompilerParameters( GetReferenceAssemblies(), path, true ), files );
-
-			m_AdditionalReferences.Add( path );
+			m_AdditionalReferences.Add(assemblyFile);
 
 			if ( results.Errors.Count > 0 )
 			{
@@ -200,31 +198,43 @@ namespace Server
 			return results;
 		}
 
-		private static string GetUnusedPath( string name )
-		{
-			string path = Path.Combine( Core.BaseDirectory, String.Format( "Scripts/Output/{0}.dll", name ) );
+		private static bool Compile(string name, string path, bool debug) {
+			DirectoryInfo cache = Core.CacheDirectoryInfo
+				.CreateSubdirectory("lib")
+				.CreateSubdirectory(name);
 
-			for ( int i = 2; File.Exists( path ) && i <= 1000; ++i )
-				path = Path.Combine( Core.BaseDirectory, String.Format( "Scripts/Output/{0}.{1}.dll", name, i ) );
+			if (!cache.Exists) {
+				Console.WriteLine("Failed to create directory {0}", cache.FullName);
+				return false;
+			}
 
-			return path;
-		}
-
-		private static void DeleteFiles( string mask )
-		{
-			try
-			{
-				string[] files = Directory.GetFiles( Path.Combine( Core.BaseDirectory, "Scripts/Output" ), mask );
-
-				foreach ( string file in files )
-				{
-					try{ File.Delete( file ); }
-					catch{}
+			string csFile = Path.Combine(cache.FullName, name + "-cs.dll");
+			if (File.Exists(csFile)) {
+				m_Assemblies.Add(Assembly.LoadFrom(csFile));
+				m_AdditionalReferences.Add(csFile);
+			} else {
+				CompilerResults results = CompileCSScripts(path, csFile, debug);
+				if (results != null) {
+					if (results.Errors.HasErrors)
+						return false;
+					m_Assemblies.Add(results.CompiledAssembly);
 				}
 			}
-			catch
-			{
+
+			string vbFile = Path.Combine(cache.FullName, name + "-vb.dll");
+			if (File.Exists(vbFile)) {
+				m_Assemblies.Add(Assembly.LoadFrom(vbFile));
+				m_AdditionalReferences.Add(vbFile);
+			} else {
+				CompilerResults results = CompileVBScripts(path, vbFile, debug);
+				if (results != null) {
+					if (results.Errors.HasErrors)
+						return false;
+					m_Assemblies.Add(results.CompiledAssembly);
+				}
 			}
+
+			return true;
 		}
 
 		public static bool Compile()
@@ -234,36 +244,25 @@ namespace Server
 
 		public static bool Compile( bool debug )
 		{
-			EnsureDirectory( "Scripts/" );
-			EnsureDirectory( "Scripts/Output/" );
-
-			//m_Assemblies = new Assembly[]
-			//	{ Assembly.LoadFile( Path.Combine( Core.BaseDirectory, "Scripts/Output/Scripts.CS.dll" ) ) };
-
-			DeleteFiles( "Scripts.CS*.dll" );
-			DeleteFiles( "Scripts.VB*.dll" );
-			DeleteFiles( "Scripts*.dll" );
-
 			if ( m_AdditionalReferences.Count > 0 )
 				m_AdditionalReferences.Clear();
 
-			CompilerResults csResults = null, vbResults = null;
+			/* first compile ./Scripts/ for RunUO compatibility */
+			string compatScripts = Path.Combine(Core.BaseDirectory, "Scripts");
+			if (Directory.Exists(compatScripts)) {
+				bool result = Compile("runuo_compat", compatScripts, debug);
+				if (!result)
+					return false;
+			}
 
-			csResults = CompileCSScripts( debug );
-
-			if ( csResults == null || !csResults.Errors.HasErrors )
-				vbResults = CompileVBScripts( debug );
-			
-			if ((csResults != null && csResults.Errors.HasErrors) ||
-				(vbResults != null && vbResults.Errors.HasErrors) ||
-				(vbResults == null && csResults == null))
-				return false;
-
-			if ( csResults != null )
-				m_Assemblies.Add(csResults.CompiledAssembly);
-
-			if ( vbResults != null )
-				m_Assemblies.Add(vbResults.CompiledAssembly);
+			/* now compile all libraries in ./local/src/ */
+			DirectoryInfo srcDir = Core.LocalDirectoryInfo
+				.CreateSubdirectory("src");
+			foreach (DirectoryInfo sub in srcDir.GetDirectories()) {
+				bool result = Compile(sub.Name, sub.FullName, debug);
+				if (!result)
+					return false;
+			}
 
 			Console.Write( "Scripts: Verifying..." );
 			Core.VerifySerialization();
@@ -369,19 +368,10 @@ namespace Server
 			return GetTypeCache( Core.Assembly ).GetTypeByName( name, ignoreCase );
 		}
 
-		private static void EnsureDirectory( string dir )
-		{
-			string path = Path.Combine( Core.BaseDirectory, dir );
-
-			if ( !Directory.Exists( path ) )
-				Directory.CreateDirectory( path );
-		}
-
-		private static string[] GetScripts( string type )
-		{
+		private static string[] GetScripts(string path, string type) {
 			ArrayList list = new ArrayList();
 
-			GetScripts( list, Path.Combine( Core.BaseDirectory, "Scripts" ), type );
+			GetScripts(list, path, type);
 
 			return (string[])list.ToArray( typeof( string ) );
 		}

@@ -13,5 +13,7 @@ sunuo (0.1.0) unstable; urgency=low
   * removed method TileMatrix.Force(), which was good for nothing
   * added Core.BaseDirectoryInfo, Core.CacheDirectoryInfo,
     Core.LocalDirectoryInfo
+  * support for multiple script directories in ./local/src/, every one of
+    them is built into a separate DLL
 
  --
