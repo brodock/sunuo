@@ -211,7 +211,7 @@ in ./etc/sunuo.xml:
    </library>
  </libraries>
 
-The "System.DllNotFoundException: zlib" go away now.
+The "System.DllNotFoundException: zlib" should go away now.
 
 
 Compiling SunUO
