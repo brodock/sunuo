@@ -88,9 +88,11 @@ namespace Server
 
 			Console.Write("{0}[C#,{1}", name, files.Length);
 
-#if MONO
-			string tempFile = Path.GetTempFileName();
-			if (tempFile != String.Empty) {
+			string tempFile = compiler.GetType().FullName == "Mono.CSharp.CSharpCodeCompiler"
+				? Path.GetTempFileName() : null;
+			if (tempFile == String.Empty)
+				tempFile = null;
+			if (tempFile != null) {
 				/* to prevent an "argument list too long" error, we
 				   write a list of file names to a temporary file
 				   and add them with @filename */
@@ -102,7 +104,6 @@ namespace Server
 
 				files = new string[]{"@" + tempFile};
 			}
-#endif
 
 			CompilerParameters parms = new CompilerParameters( GetReferenceAssemblies(), assemblyFile, debug );
 
@@ -111,10 +112,8 @@ namespace Server
 
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( parms, files );
 
-#if MONO
-			if (tempFile != String.Empty)
+			if (tempFile != null)
 				File.Delete(tempFile);
-#endif
 
 			m_AdditionalReferences.Add(assemblyFile);
 
