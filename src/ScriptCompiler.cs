@@ -293,9 +293,16 @@ namespace Server
 			string compatDir = Path.Combine(cacheDir.FullName, "runuo_compat");
 			if (Directory.Exists(compatDir)) {
 				string newDir = Path.Combine(cacheDir.FullName, "legacy");
-				File.Move(Path.Combine(compatDir, "runuo_compat.dll"),
-						  Path.Combine(compatDir, "legacy.dll"));
-				Directory.Move(compatDir, newDir);
+				if (Directory.Exists(newDir)) {
+					/* "legacy" already exists, so runuo_compat is
+					   redundant */
+					Directory.Delete(compatDir, true);
+				} else {
+					/* rename to "legacy" */
+					File.Move(Path.Combine(compatDir, "runuo_compat.dll"),
+							  Path.Combine(compatDir, "legacy.dll"));
+					Directory.Move(compatDir, newDir);
+				}
 			}
 
 			/* first compile ./Scripts/ for RunUO compatibility */
