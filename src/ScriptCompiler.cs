@@ -37,7 +37,7 @@ namespace Server
 	{
 		private static ArrayList libraries;
 
-		private static Library[] Libraries {
+		public static Library[] Libraries {
 			get {
 				return (Library[])libraries.ToArray(typeof(Library));
 			}
@@ -351,7 +351,6 @@ namespace Server
 				Library l = findLibrary(asm);
 				if (l == null)
 					throw new ApplicationException("Invalid assembly");
-				Console.WriteLine("GetTypeCache {0}", l.Name);
 				m_TypeCaches[asm] = c = l.TypeCache;
 			}
 
