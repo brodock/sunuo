@@ -35,6 +35,34 @@ directory. Now run:
 SunUO and RunUO are compatible.
 
 
+Installing Mono 1.1.3
+---------------------
+
+Most linux distributions don't have Mono 1.1 yet. Mono 1.0 is not
+stable enough for SunUO. Manual installation is not hard; you need:
+
+- gcc
+- GNU make
+- glib 2.0 (development files)
+- wget
+
+On Debian, the following command installs everything you need:
+
+ apt-get install gcc make libglib2.0-dev wget
+
+The Mono installation can now be performed:
+
+ wget http://www.go-mono.com/archive/1.1.3/mono-1.1.3.tar.gz
+ tar xzf mono-1.1.3.tar.gz
+ cd mono-1.1.3
+ ./configure --prefix=/usr/local
+ make
+ make install
+
+If nothing went wrong, Mono is now installed in /usr/local/bin/mono,
+and is ready to power SunUO.
+
+
 Features
 --------
 
