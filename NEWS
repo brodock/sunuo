@@ -1,6 +1,7 @@
 sunuo (0.1.1) unstable; urgency=low
 
-  * 
+  * removed several compatibility fixes for old pre-0.1.0 versions of
+    SunUO
 
  --
 

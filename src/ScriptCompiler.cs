@@ -279,24 +279,6 @@ namespace Server
 									  "core", Core.Assembly));
 			m_AdditionalReferences.Add(Core.ExePath);
 
-			/* rename old files for backwards compatibility */
-			DirectoryInfo cacheDir = Core.CacheDirectoryInfo
-				.CreateSubdirectory("lib");
-			string compatDir = Path.Combine(cacheDir.FullName, "runuo_compat");
-			if (Directory.Exists(compatDir)) {
-				string newDir = Path.Combine(cacheDir.FullName, "legacy");
-				if (Directory.Exists(newDir)) {
-					/* "legacy" already exists, so runuo_compat is
-					   redundant */
-					Directory.Delete(compatDir, true);
-				} else {
-					/* rename to "legacy" */
-					File.Move(Path.Combine(compatDir, "runuo_compat.dll"),
-							  Path.Combine(compatDir, "legacy.dll"));
-					Directory.Move(compatDir, newDir);
-				}
-			}
-
 			/* first compile ./Scripts/ for RunUO compatibility */
 			string compatScripts = Path.Combine(Core.BaseDirectory, "Scripts");
 			if (Directory.Exists(compatScripts)) {
@@ -326,6 +308,8 @@ namespace Server
 			}
 
 			/* delete unused cache directories */
+			DirectoryInfo cacheDir = Core.CacheDirectoryInfo
+				.CreateSubdirectory("lib");
 			foreach (DirectoryInfo sub in cacheDir.GetDirectories()) {
 				string libName = sub.Name.ToLower();
 				if (GetLibrary(sub.Name) == null)
