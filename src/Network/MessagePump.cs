@@ -234,7 +234,13 @@ namespace Server.Network
 
 							PacketReader r =  new PacketReader( packetBuffer, packetLength, handler.Length != 0 );
 
-							handler.OnReceive( ns, r );
+							try {
+								handler.OnReceive( ns, r );
+							} catch (Exception e) {
+								Console.WriteLine("Exception disarmed in HandleReceive from {0}: {1}",
+												  ns.Address, e);
+							}
+
 							length = buffer.Length;
 
 							if ( BufferSize >= packetLength )
