@@ -266,6 +266,7 @@ namespace Server
 			Console.Write("Compiling scripts: ");
 
 			libraries = new ArrayList();
+			libraries.Add(new Library("core", Core.Assembly));
 
 			if ( m_AdditionalReferences.Count > 0 )
 				m_AdditionalReferences.Clear();
@@ -354,7 +355,7 @@ namespace Server
 					return type;
 			}
 
-			return GetTypeCache( Core.Assembly ).GetTypeByFullName( fullName, ignoreCase );
+			return null;
 		}
 
 		public static Type FindTypeByName( string name )
@@ -370,7 +371,7 @@ namespace Server
 					return type;
 			}
 
-			return GetTypeCache( Core.Assembly ).GetTypeByName( name, ignoreCase );
+			return null;
 		}
 
 		private static string[] GetScripts(string path, string type) {

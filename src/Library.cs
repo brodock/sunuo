@@ -52,6 +52,11 @@ namespace Server {
 		}
 
 		public void Configure() {
+			if (name == "core") {
+				configured = true;
+				return;
+			}
+
 			if (configured)
 				throw new ApplicationException("already configured");
 
@@ -72,6 +77,11 @@ namespace Server {
 		}
 
 		public void Initialize() {
+			if (name == "core") {
+				initialized = true;
+				return;
+			}
+
 			if (!configured)
 				throw new ApplicationException("not configured yet");
 			if (initialized)
