@@ -296,6 +296,21 @@ namespace Server
 
 		public static void Main( string[] args )
 		{
+			m_Assembly = Assembly.GetEntryAssembly();
+
+			/* print a banner */
+			Version ver = m_Assembly.GetName().Version;
+			Console.WriteLine("SunUO Version {0}.{1}.{2} http://max.kellermann.name/projects/sunuo/",
+							  ver.Major, ver.Minor, ver.Revision);
+			Console.WriteLine("  on {0}, runtime {1}",
+							  Environment.OSVersion, Environment.Version);
+
+			if ((int)Environment.OSVersion.Platform == 128)
+				Console.WriteLine("Please make sure you have Mono 1.1.3 or newer! (mono -V)");
+
+			Console.WriteLine();
+
+			/* prepare SunUO */
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler( CurrentDomain_ProcessExit );
 
@@ -329,7 +344,6 @@ namespace Server
 
 			m_Thread = Thread.CurrentThread;
 			m_Process = Process.GetCurrentProcess();
-			m_Assembly = Assembly.GetEntryAssembly();
 
 			if ( m_Thread != null )
 				m_Thread.Name = "Core Thread";
@@ -340,17 +354,6 @@ namespace Server
 			Timer.TimerThread ttObj = new Timer.TimerThread();
 			timerThread = new Thread( new ThreadStart( ttObj.TimerMain ) );
 			timerThread.Name = "Timer Thread";
-
-			Version ver = m_Assembly.GetName().Version;
-
-			// Added to help future code support on forums, as a 'check' people can ask for to it see if they recompiled core or not
-			Console.WriteLine("SunUO Version {0}.{1}.{2} http://max.kellermann.name/projects/sunuo/",
-							  ver.Major, ver.Minor, ver.Revision);
-			Console.WriteLine("  on {0}, runtime {1}",
-							  Environment.OSVersion, Environment.Version);
-
-			if ((int)Environment.OSVersion.Platform == 128)
-				Console.WriteLine("Please make sure you have Mono 1.1.3 or newer! (mono -V)");
 
 			while ( !ScriptCompiler.Compile( debug ) )
 			{
