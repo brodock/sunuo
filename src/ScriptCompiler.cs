@@ -63,7 +63,7 @@ namespace Server
 			}
 		}
 
-		private static ArrayList m_AdditionalReferences = new ArrayList();
+		private static ArrayList m_AdditionalReferences;
 
 		public static string[] GetReferenceAssemblies()
 		{
@@ -84,8 +84,6 @@ namespace Server
 					}
 				}
 			}
-
-			list.Add( Core.ExePath );
 
 			list.AddRange( m_AdditionalReferences );
 
@@ -285,12 +283,15 @@ namespace Server
 		{
 			Console.Write("Compiling scripts: ");
 
+			if (m_AdditionalReferences != null)
+				throw new ApplicationException("already compiled");
+
+			m_AdditionalReferences = new ArrayList();
+
 			libraries = new ArrayList();
 			libraries.Add(new Library(Core.Config.GetLibraryConfig("core"),
 									  "core", Core.Assembly));
-
-			if ( m_AdditionalReferences.Count > 0 )
-				m_AdditionalReferences.Clear();
+			m_AdditionalReferences.Add(Core.ExePath);
 
 			/* rename old files for backwards compatibility */
 			DirectoryInfo cacheDir = Core.CacheDirectoryInfo
@@ -345,6 +346,7 @@ namespace Server
 				libraries.Add(new Library(Core.Config.GetLibraryConfig(libName),
 										  libName,
 										  Assembly.LoadFrom(libFile.FullName)));
+				m_AdditionalReferences.Add(libFile.FullName);
 			}
 
 			/* done */
