@@ -31,3 +31,37 @@ directory. Now run:
  mono SunUO.exe
 
 SunUO and RunUO are binary compatible, the configuration is the same.
+
+
+Features
+--------
+
+SunUO has the following new features compared to RunUO:
+
+** Portability **
+
+SunUO runs with Mono, e.g. on Linux. RunUO has a lot of bugs which
+prevent this.
+
+** Multiple script libraries **
+
+Every directory below ./local/src/ may contain a separate script
+library. This splits up the base RunUO scripts from your own custom
+scripts.
+
+This has a big advantage if you are developing scripts: SunUO
+recompiles only the script library you selected. SunUO starts up much
+faster than RunUO for this reason.
+
+Example:
+ RunUO base scripts: ./Scripts/
+ custom library 1: ./local/src/foo/
+ custom library 2: ./local/src/bar/
+
+The compiled .DLL files are written to ./var/cache/lib/ - SunUO will
+not recompile if it finds a compiled .DLL file. If you want SunUO to
+recompile the "bar" library, shut down SunUO and execute:
+
+ rm -r ./var/lib/foo
+
+SunUO recreates the files on the next startup.
