@@ -233,16 +233,12 @@ namespace Server
 		}
 
 		private static CompilerResults CompileVBScripts(string name,
-														string sourcePath,
+														ICollection fileColl,
 														string assemblyFile,
 														LibraryConfig libConfig,
 														bool debug) {
 			VBCodeProvider provider = new VBCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
-
-			ICollection fileColl = GetScripts(libConfig, sourcePath, "*.vb");
-			if (fileColl.Count == 0)
-				return null;
 
 			string[] files = new string[fileColl.Count];
 			fileColl.CopyTo(files, 0);
@@ -321,20 +317,24 @@ namespace Server
 			}
 
 			string vbFile = Path.Combine(cache.FullName, name + "-vb.dll");
-			if (File.Exists(vbFile)) {
-				libraries.Add(new Library(libConfig, name,
-										  Assembly.LoadFrom(vbFile)));
-				m_AdditionalReferences.Add(vbFile);
-				Console.Write("{0}/VB. ", name);
-			} else {
-				CompilerResults results = CompileVBScripts(name, path, vbFile,
-														   libConfig,
-														   debug);
-				if (results != null) {
-					if (results.Errors.HasErrors)
-						return false;
+			files = GetScripts(libConfig, path, "*.vb");
+			if (files.Count > 0) {
+				string stampFile = Path.Combine(cache.FullName, name + "-vb.stm");
+				if (File.Exists(vbFile) && CheckStamps(files, stampFile)) {
 					libraries.Add(new Library(libConfig, name,
-											  results.CompiledAssembly));
+											  Assembly.LoadFrom(vbFile)));
+					m_AdditionalReferences.Add(vbFile);
+					Console.Write("{0}/VB. ", name);
+				} else {
+					CompilerResults results = CompileVBScripts(name, files.Keys, vbFile,
+															   libConfig,
+															   debug);
+					if (results != null) {
+						if (results.Errors.HasErrors)
+							return false;
+						libraries.Add(new Library(libConfig, name,
+												  results.CompiledAssembly));
+					}
 				}
 			}
 
