@@ -120,6 +120,24 @@ limited currently, because compatibility with RunUO is
 important. SunUO creates this file on its first run.
 
 
+** Workaround for the RunUO faction direntry order bug **
+
+I reported a bug to the RunUO forum:
+
+ http://www.runuo.com/forum/showthread.php?p=373540
+
+Basically, Reflector.cs in the faction scripts assumes that types in
+an assembly are sorted alphabetically, and uses array indices as an
+identification for factions and faction towns. These are broken when
+the order of source code on the hard disk changes, which can happen
+for many reasons (editing with an editor creating backupn files).
+
+SunUO 0.1.4 contains a workaround which sortes the list of file names
+before passing them to the compiler. Note that this is only a hack;
+you simply must not make any assumptions on the order of file names on
+the hard disk.
+
+
 Advanced
 --------
 
