@@ -478,12 +478,23 @@ namespace Server
 			}
 			Console.WriteLine(" - done ({0} items, {1} mobiles)", m_ItemCount, m_MobileCount);
 
-			ScriptCompiler.Configure();
+			try {
+				ScriptCompiler.Configure();
+			} catch (TargetInvocationException e) {
+				Console.WriteLine("Configure exception: {0}", e.InnerException);
+				return;
+			}
+
 			SaveConfiguration();
 
 			World.Load();
 
-			ScriptCompiler.Initialize();
+			try {
+				ScriptCompiler.Initialize();
+			} catch (TargetInvocationException e) {
+				Console.WriteLine("Initialize exception: {0}", e.InnerException);
+				return;
+			}
 
 			Region.Load();
 
