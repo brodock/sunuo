@@ -183,12 +183,12 @@ namespace Server
 
 								Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
 
-								StaticTile *pCur = pTiles, pEnd = pTiles + tileCount;
+								StaticTile *pStart = pTiles, pEnd = pTiles + tileCount;
 
-								while ( pCur < pEnd )
+								for (int j = 0; j < tileCount; j++)
 								{
+									StaticTile *pCur = pStart + j;
 									lists[pCur->m_X & 0x7][pCur->m_Y & 0x7].Add( (short)((pCur->m_ID & 0x3FFF) + 0x4000), pCur->m_Z );
-									++pCur;
 								}
 
 								Tile[][][] tiles = new Tile[8][][];
