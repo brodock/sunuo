@@ -32,28 +32,25 @@ namespace Server {
 		private string[] ignoreSources;
 		private string[] ignoreTypes;
 
+		private static string[] CollectStringArray(XmlElement parent,
+												   string tag, string attr) {
+			ArrayList al = new ArrayList();
+			foreach (XmlElement el in parent.GetElementsByTagName(tag)) {
+				string n = el.GetAttribute(attr);
+				if (n != null)
+					al.Add(n);
+			}
+
+			return al.Count == 0
+				? null
+				: (string[])al.ToArray(typeof(string));
+		}
+
 		public LibraryConfig(XmlElement libConfigEl) {
 			name = libConfigEl.GetAttribute("name");
 
-			ArrayList al = new ArrayList();
-			foreach (XmlElement el in libConfigEl.GetElementsByTagName("ignore-source")) {
-				string n = el.GetAttribute("name");
-				if (n != null)
-					al.Add(n);
-			}
-
-			if (al.Count > 0)
-				ignoreSources = (string[])al.ToArray(typeof(string));
-
-			al = new ArrayList();
-			foreach (XmlElement el in libConfigEl.GetElementsByTagName("ignore-type")) {
-				string n = el.GetAttribute("name");
-				if (n != null)
-					al.Add(n);
-			}
-
-			if (al.Count > 0)
-				ignoreTypes = (string[])al.ToArray(typeof(string));
+			ignoreSources = CollectStringArray(libConfigEl, "ignore-source", "name");
+			ignoreTypes = CollectStringArray(libConfigEl, "ignore-source", "name");
 		}
 
 		public string Name {
