@@ -285,6 +285,10 @@ namespace Server
 		private static bool Compile(string name, string path,
 									LibraryConfig libConfig,
 									bool debug) {
+			/* honor the Disabled flag */
+			if (libConfig.Disabled)
+				return true;
+
 			DirectoryInfo cache = Core.CacheDirectoryInfo
 				.CreateSubdirectory("lib")
 				.CreateSubdirectory(name);

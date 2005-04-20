@@ -29,6 +29,7 @@ using System.Xml;
 namespace Server {
 	public class LibraryConfig {
 		private string name;
+		private bool disabled = false;
 		private string[] ignoreSources;
 		private string[] ignoreTypes;
 
@@ -46,6 +47,10 @@ namespace Server {
 				: (string[])al.ToArray(typeof(string));
 		}
 
+		public LibraryConfig(string _name) {
+			name = _name;
+		}
+
 		public LibraryConfig(XmlElement libConfigEl) {
 			name = libConfigEl.GetAttribute("name");
 
@@ -55,6 +60,10 @@ namespace Server {
 
 		public string Name {
 			get { return name; }
+		}
+		public bool Disabled {
+			get { return disabled; }
+			set { disabled = value; }
 		}
 
 		public bool GetIgnoreSource(string filename) {
