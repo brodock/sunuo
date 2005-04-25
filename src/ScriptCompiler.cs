@@ -322,7 +322,7 @@ namespace Server
 			}
 
 			string csFile = Path.Combine(cache.FullName, libConfig.Name + ".dll");
-			Hashtable files = GetScripts(libConfig, libConfig.SourcePath.FullName, "*.cs");
+			Hashtable files = GetScripts(libConfig, "*.cs");
 			if (files.Count > 0) {
 				string stampFile = Path.Combine(cache.FullName, libConfig.Name + ".stm");
 				if (File.Exists(csFile) && CheckStamps(files, stampFile)) {
@@ -352,7 +352,7 @@ namespace Server
 			}
 
 			string vbFile = Path.Combine(cache.FullName, libConfig.Name + "-vb.dll");
-			files = GetScripts(libConfig, libConfig.SourcePath.FullName, "*.vb");
+			files = GetScripts(libConfig, "*.vb");
 			if (files.Count > 0) {
 				string stampFile = Path.Combine(cache.FullName, libConfig.Name + "-vb.stm");
 				if (File.Exists(vbFile) && CheckStamps(files, stampFile)) {
@@ -507,10 +507,10 @@ namespace Server
 		}
 
 		private static Hashtable GetScripts(LibraryConfig libConfig,
-											string path, string type) {
+											string type) {
 			Hashtable list = new Hashtable();
 
-			GetScripts(libConfig, list, path, type);
+			GetScripts(libConfig, list, libConfig.SourcePath.FullName, type);
 
 			return list;
 		}
