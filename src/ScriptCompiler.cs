@@ -283,11 +283,7 @@ namespace Server
 		}
 
 		private static bool Compile(LibraryConfig libConfig,
-                                            bool debug) {
-			string name = libConfig.Name;
-			string path = libConfig.SourcePath == null
-                            ? null : libConfig.SourcePath.FullName;
-
+									bool debug) {
 			/* honor the Disabled flag */
 			if (libConfig.Disabled)
 				return true;
@@ -320,22 +316,22 @@ namespace Server
 
 			DirectoryInfo cache = Core.CacheDirectoryInfo
 				.CreateSubdirectory("lib")
-				.CreateSubdirectory(name);
+				.CreateSubdirectory(libConfig.Name);
 
 			if (!cache.Exists) {
 				Console.WriteLine("Failed to create directory {0}", cache.FullName);
 				return false;
 			}
 
-			string csFile = Path.Combine(cache.FullName, name + ".dll");
-			Hashtable files = GetScripts(libConfig, path, "*.cs");
+			string csFile = Path.Combine(cache.FullName, libConfig.Name + ".dll");
+			Hashtable files = GetScripts(libConfig, libConfig.SourcePath.FullName, "*.cs");
 			if (files.Count > 0) {
-				string stampFile = Path.Combine(cache.FullName, name + ".stm");
+				string stampFile = Path.Combine(cache.FullName, libConfig.Name + ".stm");
 				if (File.Exists(csFile) && CheckStamps(files, stampFile)) {
-					libraries.Add(new Library(libConfig, name,
+					libraries.Add(new Library(libConfig, libConfig.Name,
 											  Assembly.LoadFrom(csFile)));
 					m_AdditionalReferences.Add(csFile);
-					Console.Write("{0}. ", name);
+					Console.Write("{0}. ", libConfig.Name);
 				} else {
 					/* work around a serious faction bug: the factions
 					   code (Reflector.cs) assumes alphabetical
@@ -345,41 +341,41 @@ namespace Server
 					ArrayList sorted = new ArrayList(files.Keys);
 					sorted.Sort();
 
-					CompilerResults results = CompileCSScripts(name, sorted,
+					CompilerResults results = CompileCSScripts(libConfig.Name, sorted,
 															   csFile,
 															   libConfig,
 															   debug);
 					if (results != null) {
 						if (results.Errors.HasErrors)
 							return false;
-						libraries.Add(new Library(libConfig, name,
+						libraries.Add(new Library(libConfig, libConfig.Name,
 												  results.CompiledAssembly));
 						WriteStampFile(stampFile, files);
 					}
 				}
 			}
 
-			string vbFile = Path.Combine(cache.FullName, name + "-vb.dll");
-			files = GetScripts(libConfig, path, "*.vb");
+			string vbFile = Path.Combine(cache.FullName, libConfig.Name + "-vb.dll");
+			files = GetScripts(libConfig, libConfig.SourcePath.FullName, "*.vb");
 			if (files.Count > 0) {
-				string stampFile = Path.Combine(cache.FullName, name + "-vb.stm");
+				string stampFile = Path.Combine(cache.FullName, libConfig.Name + "-vb.stm");
 				if (File.Exists(vbFile) && CheckStamps(files, stampFile)) {
-					libraries.Add(new Library(libConfig, name,
+					libraries.Add(new Library(libConfig, libConfig.Name,
 											  Assembly.LoadFrom(vbFile)));
 					m_AdditionalReferences.Add(vbFile);
-					Console.Write("{0}/VB. ", name);
+					Console.Write("{0}/VB. ", libConfig.Name);
 				} else {
 					/* workaround again */
 					ArrayList sorted = new ArrayList(files.Keys);
 					sorted.Sort();
 
-					CompilerResults results = CompileVBScripts(name, sorted, vbFile,
+					CompilerResults results = CompileVBScripts(libConfig.Name, sorted, vbFile,
 															   libConfig,
 															   debug);
 					if (results != null) {
 						if (results.Errors.HasErrors)
 							return false;
-						libraries.Add(new Library(libConfig, name,
+						libraries.Add(new Library(libConfig, libConfig.Name,
 												  results.CompiledAssembly));
 					}
 				}
