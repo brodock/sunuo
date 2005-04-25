@@ -30,6 +30,7 @@ namespace Server {
 	public class LibraryConfig {
 		private string name;
 		private DirectoryInfo sourcePath;
+		private FileInfo binaryPath;
 		private bool disabled = false;
 		private string[] ignoreSources;
 		private string[] ignoreTypes;
@@ -64,10 +65,22 @@ namespace Server {
 			sourcePath = _path;
 		}
 
+		public LibraryConfig(string _name, FileInfo _path) {
+			name = _name;
+			binaryPath = _path;
+		}
+
 		public void Load(XmlElement libConfigEl) {
 			string sourcePathString = GetElementString(libConfigEl, "path");
-			if (sourcePathString != null)
-				sourcePath = new DirectoryInfo(sourcePathString);
+			if (sourcePathString != null) {
+				if (sourcePathString.EndsWith(".dll")) {
+					sourcePath = null;
+					binaryPath = new FileInfo(sourcePathString);
+				} else {
+					sourcePath = new DirectoryInfo(sourcePathString);
+					binaryPath = null;
+				}
+			}
 
 			ignoreSources = CollectStringArray(libConfigEl, "ignore-source", "name");
 			ignoreTypes = CollectStringArray(libConfigEl, "ignore-source", "name");
@@ -79,8 +92,8 @@ namespace Server {
 		public DirectoryInfo SourcePath {
 			get { return sourcePath; }
 		}
-		public bool Exists {
-			get { return sourcePath != null && sourcePath.Exists; }
+		public FileInfo BinaryPath {
+			get { return binaryPath; }
 		}
 		public bool Disabled {
 			get { return disabled; }
@@ -170,7 +183,8 @@ namespace Server {
 		}
 
 		private void Defaults() {
-			libraryConfig["core"] = new LibraryConfig("core");
+			LibraryConfig coreConfig = new LibraryConfig("core");
+			libraryConfig["core"] = coreConfig;
 
 			LibraryConfig legacyConfig;
 			DirectoryInfo legacy = new DirectoryInfo(Path.Combine(Core.BaseDirectory,
@@ -180,8 +194,10 @@ namespace Server {
 				libraryConfig[legacyConfig.Name] = legacyConfig;
 			}
 
-			DirectoryInfo src = Core.BaseDirectoryInfo
-				.CreateSubdirectory("local")
+			DirectoryInfo local = Core.BaseDirectoryInfo
+				.CreateSubdirectory("local");
+
+			DirectoryInfo src = local
 				.CreateSubdirectory("src");
 			foreach (DirectoryInfo sub in src.GetDirectories()) {
 				string libName = sub.Name.ToLower();
@@ -192,6 +208,27 @@ namespace Server {
 				}
 
 				libraryConfig[libName] = new LibraryConfig(libName, sub);
+			}
+
+			DirectoryInfo lib = local
+				.CreateSubdirectory("lib");
+			foreach (FileInfo libFile in lib.GetFiles("*.dll")) {
+				string fileName = libFile.Name;
+				string libName = fileName.Substring(0, fileName.Length - 4).ToLower();
+
+				if (libName == "core" || libName == "legacy") {
+					Console.WriteLine("Warning: the library name '{0}' is invalid",
+									  libName);
+					continue;
+				}
+
+				if (libraryConfig.ContainsKey(libName)) {
+					Console.WriteLine("Warning: duplicate library '{0}' in '{1}'",
+									  libName, libFile);
+					continue;
+				}
+
+				libraryConfig[libName] = new LibraryConfig(libName, libFile);
 			}
 		}
 

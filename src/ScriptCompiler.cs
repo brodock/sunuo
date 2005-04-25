@@ -283,16 +283,37 @@ namespace Server
 		}
 
 		private static bool Compile(LibraryConfig libConfig,
-									bool debug) {
+                                            bool debug) {
 			string name = libConfig.Name;
-			string path = libConfig.SourcePath.FullName;
+			string path = libConfig.SourcePath == null
+                            ? null : libConfig.SourcePath.FullName;
 
 			/* honor the Disabled flag */
 			if (libConfig.Disabled)
 				return true;
 
-			/* check the Exists flag */
-			if (!libConfig.Exists) {
+			if (libConfig.Name == "core")
+				return true;
+
+			/* check if there is source code for this library */
+			if (libConfig.SourcePath == null) {
+				if (libConfig.BinaryPath == null) {
+					Console.WriteLine("Warning: library {0} does not exist",
+									  libConfig.Name);
+					return true;
+				} else if (!libConfig.BinaryPath.Exists) {
+					Console.WriteLine("Warning: library {0} does not exist: {1}",
+									  libConfig.Name, libConfig.BinaryPath);
+					return false;
+				}
+
+                                Console.Write("{0}", libConfig.Name);
+				libraries.Add(new Library(libConfig, libConfig.Name,
+                                                          Assembly.LoadFrom(libConfig.SourcePath.FullName)));
+                                m_AdditionalReferences.Add(libConfig.SourcePath.FullName);
+                                Console.Write(". ");
+                                return true;
+			} else if (!libConfig.SourcePath.Exists) {
 				Console.WriteLine("Warning: library {0} does not exist: {1}",
 								  libConfig.Name, libConfig.SourcePath);
 			}
@@ -383,7 +404,8 @@ namespace Server
 
 			/* first compile ./Scripts/ for RunUO compatibility */
 			LibraryConfig legacyConfig = Core.Config.GetLibraryConfig("legacy");
-			if (legacyConfig != null && legacyConfig.Exists) {
+			if (legacyConfig != null && legacyConfig.SourcePath != null &&
+                            legacyConfig.SourcePath.Exists) {
 				bool result = Compile(legacyConfig, debug);
 				if (!result)
 					return false;
@@ -391,7 +413,7 @@ namespace Server
 
 			/* now compile all libraries in ./local/src/ */
 			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
-				if (!libConfig.Exists || libConfig.Name == "legacy")
+				if (libConfig.Name == "legacy")
 					continue;
 
 				bool result = Compile(libConfig, debug);
@@ -406,31 +428,6 @@ namespace Server
 				string libName = sub.Name.ToLower();
 				if (GetLibrary(libName) == null)
 					sub.Delete(true);
-			}
-
-			/* load libraries from ./local/lib/ */
-			DirectoryInfo libDir = Core.LocalDirectoryInfo
-				.CreateSubdirectory("lib");
-			foreach (FileInfo libFile in libDir.GetFiles("*.dll")) {
-				string fileName = libFile.Name;
-				string libName = fileName.Substring(0, fileName.Length - 4).ToLower();
-
-				if (libName == "core" || libName == "legacy") {
-					Console.WriteLine("Warning: the library name '{0}' is invalid",
-									  libName);
-					continue;
-				}
-
-				if (GetLibrary(libName) != null) {
-					Console.WriteLine("Warning: duplicate library '{0}' in ./local/src/{1}/ and ./local/lib/{2}",
-									  libName, libName, fileName);
-					continue;
-				}
-
-				libraries.Add(new Library(Core.Config.GetLibraryConfig(libName),
-										  libName,
-										  Assembly.LoadFrom(libFile.FullName)));
-				m_AdditionalReferences.Add(libFile.FullName);
 			}
 
 			/* done */
