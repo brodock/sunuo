@@ -160,8 +160,7 @@ namespace Server
 			return stamps.Count == 0;
 		}
 
-		private static CompilerResults CompileCSScripts(string name,
-														ICollection fileColl,
+		private static CompilerResults CompileCSScripts(ICollection fileColl,
 														string assemblyFile,
 														LibraryConfig libConfig,
 														bool debug) {
@@ -170,7 +169,7 @@ namespace Server
 
 			string[] files;
 
-			Console.Write("{0}[C#,{1}", name, fileColl.Count);
+			Console.Write("{0}[C#,{1}", libConfig.Name, fileColl.Count);
 
 			string tempFile = compiler.GetType().FullName == "Mono.CSharp.CSharpCodeCompiler"
 				? Path.GetTempFileName() : null;
@@ -234,8 +233,7 @@ namespace Server
 			return results;
 		}
 
-		private static CompilerResults CompileVBScripts(string name,
-														ICollection fileColl,
+		private static CompilerResults CompileVBScripts(ICollection fileColl,
 														string assemblyFile,
 														LibraryConfig libConfig,
 														bool debug) {
@@ -245,7 +243,7 @@ namespace Server
 			string[] files = new string[fileColl.Count];
 			fileColl.CopyTo(files, 0);
 
-			Console.Write("{0}[VB,{1}", name, files.Length);
+			Console.Write("{0}[VB,{1}", libConfig.Name, files.Length);
 
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( new CompilerParameters( GetReferenceAssemblies(), assemblyFile, true ), files );
 
@@ -304,8 +302,8 @@ namespace Server
 				}
 
                                 Console.Write("{0}", libConfig.Name);
-				libraries.Add(new Library(libConfig, libConfig.Name,
-                                                          Assembly.LoadFrom(libConfig.SourcePath.FullName)));
+				libraries.Add(new Library(libConfig,
+										  Assembly.LoadFrom(libConfig.SourcePath.FullName)));
                                 m_AdditionalReferences.Add(libConfig.SourcePath.FullName);
                                 Console.Write(". ");
                                 return true;
@@ -328,8 +326,7 @@ namespace Server
 			if (files.Count > 0) {
 				string stampFile = Path.Combine(cache.FullName, libConfig.Name + ".stm");
 				if (File.Exists(csFile) && CheckStamps(files, stampFile)) {
-					libraries.Add(new Library(libConfig, libConfig.Name,
-											  Assembly.LoadFrom(csFile)));
+					libraries.Add(new Library(libConfig, Assembly.LoadFrom(csFile)));
 					m_AdditionalReferences.Add(csFile);
 					Console.Write("{0}. ", libConfig.Name);
 				} else {
@@ -341,15 +338,14 @@ namespace Server
 					ArrayList sorted = new ArrayList(files.Keys);
 					sorted.Sort();
 
-					CompilerResults results = CompileCSScripts(libConfig.Name, sorted,
+					CompilerResults results = CompileCSScripts(sorted,
 															   csFile,
 															   libConfig,
 															   debug);
 					if (results != null) {
 						if (results.Errors.HasErrors)
 							return false;
-						libraries.Add(new Library(libConfig, libConfig.Name,
-												  results.CompiledAssembly));
+						libraries.Add(new Library(libConfig, results.CompiledAssembly));
 						WriteStampFile(stampFile, files);
 					}
 				}
@@ -360,7 +356,7 @@ namespace Server
 			if (files.Count > 0) {
 				string stampFile = Path.Combine(cache.FullName, libConfig.Name + "-vb.stm");
 				if (File.Exists(vbFile) && CheckStamps(files, stampFile)) {
-					libraries.Add(new Library(libConfig, libConfig.Name,
+					libraries.Add(new Library(libConfig,
 											  Assembly.LoadFrom(vbFile)));
 					m_AdditionalReferences.Add(vbFile);
 					Console.Write("{0}/VB. ", libConfig.Name);
@@ -369,13 +365,13 @@ namespace Server
 					ArrayList sorted = new ArrayList(files.Keys);
 					sorted.Sort();
 
-					CompilerResults results = CompileVBScripts(libConfig.Name, sorted, vbFile,
+					CompilerResults results = CompileVBScripts(sorted, vbFile,
 															   libConfig,
 															   debug);
 					if (results != null) {
 						if (results.Errors.HasErrors)
 							return false;
-						libraries.Add(new Library(libConfig, libConfig.Name,
+						libraries.Add(new Library(libConfig,
 												  results.CompiledAssembly));
 					}
 				}
@@ -395,7 +391,7 @@ namespace Server
 
 			libraries = new ArrayList();
 			libraries.Add(new Library(Core.Config.GetLibraryConfig("core"),
-									  "core", Core.Assembly));
+									  Core.Assembly));
 			m_AdditionalReferences.Add(Core.ExePath);
 
 			/* first compile ./Scripts/ for RunUO compatibility */

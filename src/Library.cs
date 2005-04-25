@@ -34,8 +34,8 @@ namespace Server {
 		private bool configured, initialized;
 		private TypeCache typeCache;
 
-		public Library(LibraryConfig libConfig, string _name, Assembly _assembly) {
-			name = _name;
+		public Library(LibraryConfig libConfig, Assembly _assembly) {
+			name = libConfig.Name;
 			assembly = _assembly;
 
 			ArrayList typeList = new ArrayList();
