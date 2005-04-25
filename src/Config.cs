@@ -29,6 +29,7 @@ using System.Xml;
 namespace Server {
 	public class LibraryConfig {
 		private string name;
+		private DirectoryInfo sourcePath;
 		private bool disabled = false;
 		private string[] ignoreSources;
 		private string[] ignoreTypes;
@@ -38,7 +39,7 @@ namespace Server {
 			ArrayList al = new ArrayList();
 			foreach (XmlElement el in parent.GetElementsByTagName(tag)) {
 				string n = el.GetAttribute(attr);
-				if (n != null)
+				if (n != null && n != "")
 					al.Add(n);
 			}
 
@@ -47,12 +48,26 @@ namespace Server {
 				: (string[])al.ToArray(typeof(string));
 		}
 
+		private static string GetElementString(XmlElement parent, string tag) {
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return null;
+			return nl[0].InnerText;
+		}
+
 		public LibraryConfig(string _name) {
 			name = _name;
 		}
 
-		public LibraryConfig(XmlElement libConfigEl) {
-			name = libConfigEl.GetAttribute("name");
+		public LibraryConfig(string _name, DirectoryInfo _path) {
+			name = _name;
+			sourcePath = _path;
+		}
+
+		public void Load(XmlElement libConfigEl) {
+			string sourcePathString = GetElementString(libConfigEl, "path");
+			if (sourcePathString != null)
+				sourcePath = new DirectoryInfo(sourcePathString);
 
 			ignoreSources = CollectStringArray(libConfigEl, "ignore-source", "name");
 			ignoreTypes = CollectStringArray(libConfigEl, "ignore-source", "name");
@@ -60,6 +75,12 @@ namespace Server {
 
 		public string Name {
 			get { return name; }
+		}
+		public DirectoryInfo SourcePath {
+			get { return sourcePath; }
+		}
+		public bool Exists {
+			get { return sourcePath != null && sourcePath.Exists; }
 		}
 		public bool Disabled {
 			get { return disabled; }
@@ -108,12 +129,13 @@ namespace Server {
 		private string filename;
 		private XmlDocument document;
 		private ArrayList dataDirectories;
-		private Hashtable libraryConfig;
+		private Hashtable libraryConfig = new Hashtable();
 		private LoginConfig loginConfig;
 
 		public Config(string _filename) {
 			filename = _filename;
 
+			Defaults();
 			Load();
 		}
 
@@ -123,6 +145,9 @@ namespace Server {
 
 		public LibraryConfig GetLibraryConfig(string name) {
 			return (LibraryConfig)libraryConfig[name];
+		}
+		public ICollection Libraries {
+			get { return libraryConfig.Values; }
 		}
 
 		public LoginConfig LoginConfig {
@@ -144,10 +169,35 @@ namespace Server {
 			return el;
 		}
 
-		public void Load() {
+		private void Defaults() {
+			libraryConfig["core"] = new LibraryConfig("core");
+
+			LibraryConfig legacyConfig;
+			DirectoryInfo legacy = new DirectoryInfo(Path.Combine(Core.BaseDirectory,
+																  "Scripts"));
+			if (legacy.Exists) {
+				legacyConfig = new LibraryConfig("legacy", legacy);
+				libraryConfig[legacyConfig.Name] = legacyConfig;
+			}
+
+			DirectoryInfo src = Core.BaseDirectoryInfo
+				.CreateSubdirectory("local")
+				.CreateSubdirectory("src");
+			foreach (DirectoryInfo sub in src.GetDirectories()) {
+				string libName = sub.Name.ToLower();
+				if (libName == "core" || libName == "legacy") {
+					Console.WriteLine("Warning: the library name '{0}' is invalid",
+									  libName);
+					continue;
+				}
+
+				libraryConfig[libName] = new LibraryConfig(libName, sub);
+			}
+		}
+
+		private void Load() {
 			document = new XmlDocument();
 			dataDirectories = new ArrayList();
-			libraryConfig = new Hashtable();
 
 			if (File.Exists(filename)) {
 				XmlTextReader reader = new XmlTextReader(filename);
@@ -169,10 +219,21 @@ namespace Server {
 
 			XmlElement librariesEl = GetConfiguration("libraries");
 			foreach (XmlElement el in librariesEl.GetElementsByTagName("library")) {
-				LibraryConfig lc = new LibraryConfig(el);
-				if (lc.Name != null)
-					libraryConfig[lc.Name] = lc;
+				string name = el.GetAttribute("name");
+				if (name == null || name == "") {
+					Console.WriteLine("Warning: library element without name attribute");
+					continue;
+				}
+
+				LibraryConfig libConfig = (LibraryConfig)libraryConfig[name];
+				if (libConfig == null)
+					libraryConfig[name] = libConfig = new LibraryConfig(name);
+
+				libConfig.Load(el);
 			}
+
+			if (!libraryConfig.ContainsKey("legacy"))
+				libraryConfig["legacy"] = new LibraryConfig("legacy");
 
 			XmlElement loginEl = GetConfiguration("login");
 			loginConfig = loginEl == null

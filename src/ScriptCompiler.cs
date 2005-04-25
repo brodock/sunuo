@@ -282,12 +282,20 @@ namespace Server
 			return results;
 		}
 
-		private static bool Compile(string name, string path,
-									LibraryConfig libConfig,
+		private static bool Compile(LibraryConfig libConfig,
 									bool debug) {
+			string name = libConfig.Name;
+			string path = libConfig.SourcePath.FullName;
+
 			/* honor the Disabled flag */
 			if (libConfig.Disabled)
 				return true;
+
+			/* check the Exists flag */
+			if (!libConfig.Exists) {
+				Console.WriteLine("Warning: library {0} does not exist: {1}",
+								  libConfig.Name, libConfig.SourcePath);
+			}
 
 			DirectoryInfo cache = Core.CacheDirectoryInfo
 				.CreateSubdirectory("lib")
@@ -374,29 +382,19 @@ namespace Server
 			m_AdditionalReferences.Add(Core.ExePath);
 
 			/* first compile ./Scripts/ for RunUO compatibility */
-			string compatScripts = Path.Combine(Core.BaseDirectory, "Scripts");
-			if (Directory.Exists(compatScripts)) {
-				bool result = Compile("legacy", compatScripts,
-									  Core.Config.GetLibraryConfig("legacy"),
-									  debug);
+			LibraryConfig legacyConfig = Core.Config.GetLibraryConfig("legacy");
+			if (legacyConfig != null && legacyConfig.Exists) {
+				bool result = Compile(legacyConfig, debug);
 				if (!result)
 					return false;
 			}
 
 			/* now compile all libraries in ./local/src/ */
-			DirectoryInfo srcDir = Core.LocalDirectoryInfo
-				.CreateSubdirectory("src");
-			foreach (DirectoryInfo sub in srcDir.GetDirectories()) {
-				string libName = sub.Name.ToLower();
-				if (libName == "core" || libName == "legacy") {
-					Console.WriteLine("Warning: the library name '{0}' is invalid",
-									  libName);
+			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
+				if (!libConfig.Exists || libConfig.Name == "legacy")
 					continue;
-				}
 
-				bool result = Compile(libName, sub.FullName,
-									  Core.Config.GetLibraryConfig(libName),
-									  debug);
+				bool result = Compile(libConfig, debug);
 				if (!result)
 					return false;
 			}

@@ -158,6 +158,18 @@ type "Blubb". You can use this to disable commands or to disable items
 in the game.
 
 
+** Load scripts from another path **
+
+You can specify an arbitrary path where SunUO should compile sources
+from:
+
+ <libraries>
+   <library name="foo">
+     <path>/opt/sunuo/src/foo</path>
+   </library>
+ </libraries>
+
+
 ** Separate login server from shard server **
 
 To make SunUO ignore the AuthID, configure:

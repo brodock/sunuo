@@ -39,6 +39,7 @@ namespace Server {
 			assembly = _assembly;
 
 			ArrayList typeList = new ArrayList();
+			assembly.GetTypes();
 			foreach (Type type in assembly.GetTypes()) {
 				if (libConfig == null || !libConfig.GetIgnoreType(type))
 					typeList.Add(type);
