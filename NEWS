@@ -5,7 +5,7 @@ sunuo (0.1.6) unstable; urgency=low
   * dependencies for libraries
   * overlays for libraries
 
- --
+ -- Max Kellermann <max@duempel.org>  Thu,  5 May 2005 21:14:32 +0200
 
 sunuo (0.1.5) unstable; urgency=low
 
