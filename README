@@ -299,6 +299,15 @@ and check if the "csc.exe" location is correct. The executable
 compiled on Windows also runs on Mono.
 
 
+Bugs
+----
+
+** UO:3D client **
+
+The UO:3D client does not work, because its protocol is not yet
+explored. I do not plan to do that. Just use the old 2D client.
+
+
 Legal
 -----
 
