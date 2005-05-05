@@ -35,6 +35,7 @@ namespace Server {
 		private string[] ignoreSources;
 		private string[] ignoreTypes;
 		private string[] depends;
+		private string[] overlays;
 
 		private static string[] CollectStringArray(XmlElement parent,
 												   string tag, string attr) {
@@ -85,6 +86,7 @@ namespace Server {
 
 			ignoreSources = CollectStringArray(libConfigEl, "ignore-source", "name");
 			ignoreTypes = CollectStringArray(libConfigEl, "ignore-source", "name");
+			overlays = CollectStringArray(libConfigEl, "overlay", "name");
 			depends = CollectStringArray(libConfigEl, "depends", "name");
 		}
 
@@ -106,6 +108,9 @@ namespace Server {
 		public bool Disabled {
 			get { return disabled; }
 			set { disabled = value; }
+		}
+		public string[] Overlays {
+			get { return overlays; }
 		}
 		public string[] Depends {
 			get { return depends; }

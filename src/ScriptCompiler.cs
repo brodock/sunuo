@@ -280,6 +280,30 @@ namespace Server
 			return results;
 		}
 
+		private static void Overlay(string base1, Hashtable files1,
+									string base2, Hashtable files2) {
+			foreach (string filename in files2.Keys) {
+				files1.Remove(base1 + Path.DirectorySeparatorChar + filename.Substring(base2.Length + 1));
+				files1[filename] = files2[filename];
+			}
+		}
+
+		private static Hashtable GetScripts(LibraryConfig libConfig, IEnumerable overlays,
+											string type) {
+			Hashtable files = GetScripts(libConfig, type);
+
+			if (overlays != null) {
+				foreach (LibraryConfig overlay in overlays) {
+					Hashtable files2 = GetScripts(overlay, type);
+
+					Overlay(libConfig.SourcePath.FullName, files,
+							overlay.SourcePath.FullName, files2);
+				}
+			}
+
+			return files;
+		}
+
 		private static bool Compile(LibraryConfig libConfig,
 									bool debug) {
 			/* check if there is source code for this library */
@@ -314,8 +338,15 @@ namespace Server
 				return false;
 			}
 
+			ArrayList overlays = null;
+			if (libConfig.Overlays != null) {
+				overlays = new ArrayList();
+				foreach (string name in libConfig.Overlays)
+					overlays.Add(Core.Config.GetLibraryConfig(name));
+			}
+
 			string csFile = Path.Combine(cache.FullName, libConfig.Name + ".dll");
-			Hashtable files = GetScripts(libConfig, "*.cs");
+			Hashtable files = GetScripts(libConfig, overlays, "*.cs");
 			if (files.Count > 0) {
 				string stampFile = Path.Combine(cache.FullName, libConfig.Name + ".stm");
 				if (File.Exists(csFile) && CheckStamps(files, stampFile)) {
@@ -345,7 +376,7 @@ namespace Server
 			}
 
 			string vbFile = Path.Combine(cache.FullName, libConfig.Name + "-vb.dll");
-			files = GetScripts(libConfig, "*.vb");
+			files = GetScripts(libConfig, overlays, "*.vb");
 			if (files.Count > 0) {
 				string stampFile = Path.Combine(cache.FullName, libConfig.Name + "-vb.stm");
 				if (File.Exists(vbFile) && CheckStamps(files, stampFile)) {
@@ -465,6 +496,45 @@ namespace Server
 			libraries.Add(new Library(Core.Config.GetLibraryConfig("core"),
 									  Core.Assembly));
 			m_AdditionalReferences.Add(Core.ExePath);
+
+			/* prepare overlays */
+			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
+				if (libConfig.Overlays == null || !libConfig.Exists ||
+					libConfig.Name == "core")
+					continue;
+
+				if (libConfig.SourcePath == null) {
+					Console.WriteLine("Can't overlay the binary library {0}",
+									  libConfig.Name);
+					throw new ApplicationException();
+				}
+
+				foreach (string name in libConfig.Overlays) {
+					LibraryConfig overlay = Core.Config.GetLibraryConfig(name);
+					if (overlay == null || !overlay.Exists) {
+						Console.WriteLine("Can't overlay {0} with {1}, because it does not exist",
+										  libConfig.Name, overlay.Name);
+						throw new ApplicationException();
+					}
+
+					if (overlay.SourcePath == null) {
+						Console.WriteLine("Can't overlay {0} with {1}, because it is binary only",
+										  libConfig.Name, overlay.Name);
+						throw new ApplicationException();
+					}
+
+					overlay.Disabled = true;
+				}
+			}
+
+			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
+				if (libConfig.Overlays != null && libConfig.Exists &&
+					libConfig.Name != "core" && libConfig.Disabled) {
+					Console.WriteLine("Can't overlay library {0} which is already used as overlay for another library",
+									  libConfig.Name);
+					throw new ApplicationException();
+				}
+			}
 
 			/* collect LibraryConfig objects, sort them and compile */
 			ArrayList libConfigs = SortLibrariesByDepends();
