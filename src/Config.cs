@@ -34,6 +34,7 @@ namespace Server {
 		private bool disabled = false;
 		private string[] ignoreSources;
 		private string[] ignoreTypes;
+		private string[] depends;
 
 		private static string[] CollectStringArray(XmlElement parent,
 												   string tag, string attr) {
@@ -84,6 +85,7 @@ namespace Server {
 
 			ignoreSources = CollectStringArray(libConfigEl, "ignore-source", "name");
 			ignoreTypes = CollectStringArray(libConfigEl, "ignore-source", "name");
+			depends = CollectStringArray(libConfigEl, "depends", "name");
 		}
 
 		public string Name {
@@ -95,9 +97,18 @@ namespace Server {
 		public FileInfo BinaryPath {
 			get { return binaryPath; }
 		}
+		public bool Exists {
+			get {
+				return (sourcePath != null && sourcePath.Exists) ||
+					(binaryPath != null && binaryPath.Exists);
+			}
+		}
 		public bool Disabled {
 			get { return disabled; }
 			set { disabled = value; }
+		}
+		public string[] Depends {
+			get { return depends; }
 		}
 
 		public bool GetIgnoreSource(string filename) {

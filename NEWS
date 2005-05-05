@@ -2,6 +2,7 @@ sunuo (0.1.6) unstable; urgency=low
 
   * introduce the "path" element in the library configuration, allowing
     the administrator to specify arbitrary source paths
+  * dependencies for libraries
 
  --
 

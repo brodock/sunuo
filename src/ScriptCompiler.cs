@@ -380,6 +380,79 @@ namespace Server
 			return true;
 		}
 
+		/**
+		 * enqueue a library for compilation, resolving all
+		 * dependencies first
+		 *
+		 * @param dst this array will receive the libraries in the correct order
+		 * @param libs source libraries
+		 * @param queue somewhat like a stack of libraries currently waiting
+		 * @param libConfig the library to be added
+		 */
+		private static void EnqueueLibrary(ArrayList dst, ArrayList libs,
+										   Hashtable queue, LibraryConfig libConfig) {
+			string[] depends = libConfig.Depends;
+
+			if (libConfig.Name == "core") {
+				libs.Remove(libConfig);
+				return;
+			}
+
+			if (!libConfig.Exists) {
+				libs.Remove(libConfig);
+				Console.WriteLine("Warning: library {0} does not exist",
+								  libConfig.Name);
+				return;
+			}
+
+			/* first resolve dependencies */
+			if (depends != null) {
+				queue[libConfig.Name] = 1;
+
+				foreach (string depend in depends) {
+					/* if the depended library is already in the
+					 * queue, there is a circular dependency */
+					if (queue.ContainsKey(depend)) {
+						Console.WriteLine("Circular library dependency {0} on {1}",
+										  libConfig.Name, depend);
+						throw new ApplicationException();
+					}
+
+					LibraryConfig next = Core.Config.GetLibraryConfig(depend);
+					if (next == null || !next.Exists) {
+						Console.WriteLine("Unresolved library dependency: {0} depends on {1}",
+										  libConfig.Name, depend);
+						throw new ApplicationException();
+					}
+
+					if (!dst.Contains(next))
+						EnqueueLibrary(dst, libs, queue, next);
+				}
+
+				queue.Remove(libConfig.Name);
+			}
+
+			/* then add it to 'dst' */
+			dst.Add(libConfig);
+			libs.Remove(libConfig);
+		}
+
+		private static ArrayList SortLibrariesByDepends() {
+			ArrayList libs = new ArrayList(Core.Config.Libraries);
+			Hashtable queue = new Hashtable();
+			ArrayList dst = new ArrayList();
+
+			/* handle "./Scripts/" first, for most compatibility */
+			LibraryConfig libConfig = Core.Config.GetLibraryConfig("legacy");
+			if (libConfig != null)
+				EnqueueLibrary(dst, libs, queue, libConfig);
+
+			while (libs.Count > 0)
+				EnqueueLibrary(dst, libs, queue, (LibraryConfig)libs[0]);
+
+			return dst;
+		}
+
 		public static bool Compile( bool debug )
 		{
 			Console.Write("Compiling scripts: ");
@@ -394,20 +467,10 @@ namespace Server
 									  Core.Assembly));
 			m_AdditionalReferences.Add(Core.ExePath);
 
-			/* first compile ./Scripts/ for RunUO compatibility */
-			LibraryConfig legacyConfig = Core.Config.GetLibraryConfig("legacy");
-			if (legacyConfig != null && legacyConfig.SourcePath != null &&
-                            legacyConfig.SourcePath.Exists) {
-				bool result = Compile(legacyConfig, debug);
-				if (!result)
-					return false;
-			}
+			/* collect LibraryConfig objects, sort them and compile */
+			ArrayList libConfigs = SortLibrariesByDepends();
 
-			/* now compile all libraries in ./local/src/ */
-			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
-				if (libConfig.Name == "legacy")
-					continue;
-
+			foreach (LibraryConfig libConfig in libConfigs) {
 				bool result = Compile(libConfig, debug);
 				if (!result)
 					return false;

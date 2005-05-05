@@ -158,6 +158,28 @@ type "Blubb". You can use this to disable commands or to disable items
 in the game.
 
 
+** Library dependencies **
+
+In many cases, you want to use classes from another script library,
+but for doing this, the other library has to be loaded before the new
+library is compiled. To change the order in which libraries are
+compiled and loaded, you may declare library dependencies:
+
+ <libraries>
+   <library name="bar">
+     <depends name="foo"/>
+   </library>
+   <library name="foo">
+   </library>
+ </libraries>
+
+This tells SunUO that "bar" imports classes from "foo", and that "foo"
+has to be compiled and loaded first.
+
+If you do not use the "<depends/>" elemnt, libraries are loaded in
+random order.
+
+
 ** Load scripts from another path **
 
 You can specify an arbitrary path where SunUO should compile sources
