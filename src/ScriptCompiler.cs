@@ -282,13 +282,6 @@ namespace Server
 
 		private static bool Compile(LibraryConfig libConfig,
 									bool debug) {
-			/* honor the Disabled flag */
-			if (libConfig.Disabled)
-				return true;
-
-			if (libConfig.Name == "core")
-				return true;
-
 			/* check if there is source code for this library */
 			if (libConfig.SourcePath == null) {
 				if (libConfig.BinaryPath == null) {
@@ -393,7 +386,7 @@ namespace Server
 										   Hashtable queue, LibraryConfig libConfig) {
 			string[] depends = libConfig.Depends;
 
-			if (libConfig.Name == "core") {
+			if (libConfig.Name == "core" || libConfig.Disabled) {
 				libs.Remove(libConfig);
 				return;
 			}
@@ -420,7 +413,13 @@ namespace Server
 
 					LibraryConfig next = Core.Config.GetLibraryConfig(depend);
 					if (next == null || !next.Exists) {
-						Console.WriteLine("Unresolved library dependency: {0} depends on {1}",
+						Console.WriteLine("Unresolved library dependency: {0} depends on {1}, which does not exist",
+										  libConfig.Name, depend);
+						throw new ApplicationException();
+					}
+
+					if (next.Disabled) {
+						Console.WriteLine("Unresolved library dependency: {0} depends on {1}, which is disabled",
 										  libConfig.Name, depend);
 						throw new ApplicationException();
 					}
