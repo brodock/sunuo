@@ -1,6 +1,7 @@
 sunuo (0.1.7) unstable; urgency=low
 
-  * 
+  * wait for send transfers to be finished before killing the connection
+    in NetState.Dispose()
 
  --
 

@@ -439,6 +439,7 @@ namespace Server.Network
 					try
 					{
 						m_Socket.BeginSend( sendBuffer, 0, sendLength, SocketFlags.None, m_OnSend, null );
+						m_Sending = true;
 						//Console.WriteLine( "Send: {0}: Begin send of {1} bytes", this, sendLength );
 					}
 					catch // ( Exception ex )
@@ -486,6 +487,8 @@ namespace Server.Network
 				try
 				{
 					m_Socket.BeginSend( buffer, 0, length, SocketFlags.None, m_OnSend, null );
+					m_Sending = true;
+					//m_Socket.Send( buffer, 0, length, SocketFlags.None );
 					return true;
 					//Console.WriteLine( "Flush: {0}: Begin send of {1} bytes", this, length );
 				}
@@ -509,6 +512,8 @@ namespace Server.Network
 
 		private void OnSend( IAsyncResult asyncResult )
 		{
+			m_Sending = false;
+
 			if ( m_Socket == null )
 				return;
 
@@ -519,6 +524,11 @@ namespace Server.Network
 				if ( bytes <= 0 )
 				{
 					Dispose( false );
+					return;
+				}
+
+				if (m_Disposing && !m_DisposeFinished) {
+					FinishDispose();
 					return;
 				}
 
@@ -538,6 +548,7 @@ namespace Server.Network
 				if ( queued != null )
 				{
 					m_Socket.BeginSend( queued, 0, length, SocketFlags.None, m_OnSend, null );
+					m_Sending = true;
 					//Console.WriteLine( "OnSend: {0}: Begin send of {1} bytes", this, length );
 				}
 			}
@@ -649,7 +660,7 @@ namespace Server.Network
 			Dispose( true );
 		}
 
-		private bool m_Disposing;
+		private bool m_Disposing, m_DisposeFinished, m_Sending;
 
 		public void Dispose( bool flush )
 		{
@@ -660,6 +671,16 @@ namespace Server.Network
 
 			if ( flush )
 				flush = Flush();
+
+			if (!m_Sending)
+				FinishDispose();
+		}
+
+		public void FinishDispose() {
+			if (m_DisposeFinished)
+				return;
+
+			m_DisposeFinished = true;
 
 			try { m_Socket.Shutdown( SocketShutdown.Both ); }
 			catch {}
