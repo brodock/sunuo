@@ -1,5 +1,6 @@
 all clean install:
 	make -C src $@
+	make -C util $@
 
 export:
 	rm -rf /mnt/misc/sunuo /mnt/misc/runuo/SunUO.exe
