@@ -7,7 +7,7 @@ sunuo (0.1.7) unstable; urgency=low
   * Mono 1.1.7 is now recommended
   * moved documentation to doc/sunuo.xml in DocBook format
 
- --
+ -- Max Kellermann <max@duempel.org>  Sun,  8 May 2005 22:37:47 +0200
 
 sunuo (0.1.6) unstable; urgency=low
 
