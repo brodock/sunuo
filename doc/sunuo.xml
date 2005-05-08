@@ -1,0 +1,387 @@
+<?xml version='1.0' encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "docbook/dtd/xml/4.2/docbookx.dtd">
+<book>
+  <title>SunUO</title>
+
+  <bookinfo>
+    <author>
+      <firstname>Max</firstname>
+      <surname>Kellermann</surname>
+      <email>max@duempel.org</email>
+    </author>
+  </bookinfo>
+
+  <preface>
+    <title>
+      What is SunUO?
+    </title>
+    <para>
+      SunUO is a free <ulink url="http://www.uo.com/">Ultima
+        Online</ulink> server for Linux/Mono and Windows.NET, based on
+      <ulink url="http://www.runuo.com/">RunUO</ulink>.
+    </para>
+  </preface>
+
+  <chapter>
+    <title>Installation</title>
+    <section>
+      <title>Requirements</title>
+      <itemizedlist>
+        <listitem>
+          <para>
+            512 MB memory
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Microsoft .NET or <ulink
+              url="http://www.mono-project.org/">Mono 1.1.7</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink
+              url="http://www.runuo.com/downloads/files/runuo-releases/RunUO-1.0.0.zip">RunUO
+              1.0.0 binary distribution</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <ulink
+              url="http://max.kellermann.name/projects/sunuo/">SunUO
+              binary distribution</ulink>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Installing Mono</title>
+      <para>
+        Most linux distributions don't have Mono 1.1 yet. Mono 1.0 is
+        not stable enough for SunUO. Manual installation is not hard;
+        you need:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>gcc 3.3 or newer</para>
+        </listitem>
+        <listitem>
+          <para>GNU make</para>
+        </listitem>
+        <listitem>
+          <para>glib 2.0 (development files)</para>
+        </listitem>
+        <listitem>
+          <para>wget</para>
+        </listitem>
+      </itemizedlist>
+      <para>
+        On Debian, the following command installs everything you need:
+      </para>
+      <programlisting>apt-get install gcc make libglib2.0-dev wget</programlisting>
+      <para>The Mono installation can now be performed:</para>
+      <programlisting>wget http://www.go-mono.com/sources/mono-1.1/mono-1.1.7.tar.gz
+tar xzf mono-1.1.7.tar.gz
+cd mono-1.1.7
+./configure --prefix=/usr/local
+make
+make install</programlisting>
+      <para>
+        If nothing went wrong, Mono is now installed in
+        /usr/local/bin/mono, and is ready to power SunUO.
+      </para>
+    </section>
+
+    <section>
+      <title>Installing a new server</title>
+      <para>
+        Unzip RunUO 1.0.0 and SunUO, and copy
+        <filename>SunUO.exe</filename> to the RunUO directory:
+      </para>
+      <programlisting>unzip RunUO-1.0.0.zip
+unzip /tmp/sunuo/sunuo-0.1.7-bin.zip
+cp sunuo-0.1.7-bin/SunUO.exe "RunUO 1.0/"
+cd "RunUO 1.0"
+mono SunUO.exe</programlisting>
+      <para>
+        If you have got less than 512 MB of physical memory or a slow
+        CPU, the first script compilation can take 15 minutes or
+        longer.
+      </para>
+    </section>
+    <section>
+      <title>Upgrading a shard from RunUO</title>
+      <important>
+        Don't forget to back up your old server!
+      </important>
+      <para>
+        Shut down RunUO. Copy the file <filename>SunUO.exe</filename>
+        to your RunUO directory and run it.
+      </para>
+      <para>
+        Now it is time to enable the <link
+          linkend="working_around_runuo_bugs">RunUO bug
+          workarounds</link>.
+      </para>
+    </section>
+
+    <section>
+      <title>Compiling SunUO from the sources</title>
+      <para>
+        If you are on Unix with Mono, edit the file config.mk and
+        change the paths. Then type:
+      </para>
+      <programlisting>make</programlisting>
+      <para>
+        Note that the resulting executable does not work on Windows. I
+        am yet unsure if this is a Mono MCS bug or a Microsoft.NET
+        bug. On windows, run the file "compile.bat". If that does not
+        work, edit "compile.bat" and check if the "csc.exe" location
+        is correct. The executable compiled on Windows also runs on
+        Mono.
+      </para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Configuration</title>
+    <section>
+      <title>Basics</title>
+      <para>
+        In RunUO, much of the configuration is done by editing the
+        <filename>./Scripts/</filename> source codes. That makes
+        upgrading a nightmare. SunUO tries to put as much as possible
+        into the file <filename>./etc/sunuo.xml</filename>, although
+        this is limited currently, because compatibility with RunUO is
+        important. SunUO creates this file on its first run.
+      </para>
+    </section>
+
+    <section>
+      <title>Tricks</title>
+
+      <section>
+        <title>Separating login server from shard server</title>
+        <para>
+          To make SunUO ignore the AuthID, configure:
+        </para>
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;login&gt;
+    &lt;ignore-auth-id/&gt;
+  &lt;/login&gt;
+&lt;/sunuo-config&gt;</programlisting>
+        <para>
+          This allows you to run the login server and the shard server
+          on different machines. This is safe, because both check the
+          password independently. It is however important that the
+          account databases on both servers are the same.
+        </para>
+      </section>
+    </section>
+
+    <section>
+      <title>Working around RunUO bugs</title>
+      <anchor id="working_around_runuo_bugs"/>
+      <para>
+        Many scripts are written in a non-portable way, or just
+        buggy. This section is a collection of workarounds.
+      </para>
+
+      <section>
+        <title>Making <command>[restart</command> work</title>
+        <para>
+          On Unix / Linux, server restart does not work. This is
+          because .NET assemblies cannot be run directly, you have to
+          call the "<filename>mono</filename>" wrapper ("mono
+          SunUO.exe"), unless you have
+          <filename>BINFMT_MISC</filename> configured correctly, but
+          that's a solution for the Linux wizards.
+        </para>
+        <para>
+          Solution: edit the following files:
+        </para>
+        <programlisting>./Scripts/Misc/CrashGuard.cs
+./Scripts/Misc/AutoRestart.cs
+./Scripts/Gumps/AdminGump.cs</programlisting>
+        <para>
+          And replace:
+        </para>
+        <programlisting>Process.Start( Core.ExePath );</programlisting>
+        <para>
+          by:
+        </para>
+        <programlisting>Process.Start( "mono", Core.ExePath );</programlisting>
+      </section>
+
+      <section>
+        <title>Making <command>[restart</command> work with <filename>BINFMT_MISC</filename></title>
+        <para>
+          If your linux kernel supports
+          <filename>BINFMT_MISC</filename> (check if the file
+          /proc/sys/fs/binfmt_misc/register exists), you don't need to
+          edit scripts. The following command activates
+          <filename>BINFMT_MISC</filename> for Mono:
+        </para>
+        <programlisting>echo ':CLR:M::MZ::/usr/local/bin/mono:' > /proc/sys/fs/binfmt_misc/register</programlisting>
+        <para>
+          You may have to change the path to the mono binary. You
+          should add this command to your startup scripts, because the
+          change is gone after a reboot.
+        </para>
+      </section>
+
+      <section>
+        <title>Customized houses</title>
+        <para>
+          RunUO imports code from <filename>zlib.dll</filename> on
+          windows. This is done in a non-portable way. SunUO contains
+          a workaround which must be activated in
+          <filename>./etc/sunuo.xml</filename>:
+        </para>
+        <programlisting>&lt;libraries&gt;
+  &lt;library name="legacy"&gt;
+    &lt;ignore-source name="Misc/ZLib.cs"/&gt;
+  &lt;/library&gt;
+&lt;/libraries&gt;
+</programlisting>
+        <para>
+          The "System.DllNotFoundException: zlib" error message should
+          go away now.
+        </para>
+      </section>
+
+      <section>
+        <title>The RunUO faction direntry order bug</title>
+        <para>
+          I reported a bug to the RunUO bug tracker:
+        </para>
+        <para>
+          <ulink
+            url="http://www.runuo.com/bugs/bug_view_page.php?bug_id=0000304"></ulink>
+        </para>
+        <para>
+          Basically, Reflector.cs in the faction scripts assumes that
+          types in an assembly are sorted alphabetically, and uses
+          array indices as an identification for factions and faction
+          towns. These are broken when the order of source code on the
+          hard disk changes, which can happen for many reasons
+          (editing with an editor creating backupn files).
+        </para>
+        <para>
+          SunUO 0.1.4 introduced a workaround which sorts the list of
+          file names before passing them to the compiler. Note that
+          this is only a hack; you simply must not make any
+          assumptions on the order of file names on the hard disk.
+        </para>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Scripts</title>
+    <para>
+      SunUO consists of two parts: the core, and the scripts. Scripts
+      can be added at runtime. They are compiled when SunUO is
+      starting up to the temporary directory
+      <filename>./var/cache/lib/</filename>.
+    </para>
+    <para>
+      The RunUO base scripts are located in
+      <filename>./Scripts/</filename>. Additional script libraries can
+      be put into <filename>./local/src/NAME/</filename>, where "NAME"
+      is the name of your script library. Binary script libraries are
+      loaded from <filename>./local/lib/NAME.dll</filename>.
+    </para>
+    <para>
+      Librares can be configured in
+      <filename>./etc/sunuo.xml</filename>, e.g.:
+    </para>
+    <programlisting>&lt;sunuo-config&gt;
+  &lt;libraries&gt;
+    &lt;library name="foo"&gt;
+      &lt;!-- configuration goes here --&gt;
+    &lt;/library&gt;
+  &lt;libraries&gt;
+&lt;/sunuo-config&gt;</programlisting>
+
+    <section>
+      <title>Library path</title>
+      <para>
+        You can specify an arbitrary path where SunUO should compile
+        sources from:
+      </para>
+      <programlisting>&lt;library name="foo"&gt;
+  &lt;path&gt;/opt/sunuo/src/foo&lt;/path&gt;
+&lt;/library&gt;</programlisting>
+    </section>
+
+    <section>
+      <title>Excludes</title>
+    <programlisting>&lt;library name="foo"&gt;
+  &lt;ignore-source name="Bar.cs"/&gt;
+  &lt;ignore-type name="Blubb"/&gt;
+&lt;/library&gt;</programlisting>
+      <para>
+        This tells SunUO not to compile the file "Bar.cs", and to
+        ignore the type "Blubb". You can use this to disable commands
+        or to disable items in the game.
+      </para>
+    </section>
+
+    <section>
+      <title>Dependencies</title>
+      <para>
+        In many cases, you want to use classes from another script
+        library, but for doing this, the other library has to be
+        loaded before the new library is compiled. To change the order
+        in which libraries are compiled and loaded, you may declare
+        library dependencies:
+      </para>
+      <programlisting>&lt;libraries&gt;
+  &lt;library name="bar"&gt;
+    &lt;depends name="foo"/&gt;
+  &lt;/library&gt;
+  &lt;library name="foo"&gt;
+  &lt;/library&gt;
+&lt;/libraries&gt;</programlisting>
+
+      <para>
+        This tells SunUO that "bar" imports classes from "foo", and that "foo"
+        has to be compiled and loaded first.
+      </para>
+
+      <para>
+        If you do not use the "&lt;depends/&gt;" element, libraries
+        are loaded in random order.
+      </para>
+    </section>
+
+    <section>
+      <title>Overlays</title>
+      <para>
+        To configure RunUO, you need to edit the original RunUO
+        scripts (<filename>./Scripts/</filename>) often. However, for
+        easier upgrades, it is better to move edited files over to
+        another library and simply replace the files in
+        <filename>./Scripts/</filename> - this method is called
+        "overlay":
+      </para>
+      <programlisting>&lt;libraries&gt;
+  &lt;library name="legacy"&gt;
+    &lt;overlay name="bar"/&gt;
+  &lt;/library&gt;
+  &lt;library name="bar"/&gt;
+&lt;/libraries&gt;</programlisting>
+
+      <para>
+        Now you can edit the file
+        <filename>./local/src/bar/Misc/ServerList.cs</filename>, which
+        is then used instead of
+        <filename>./Scripts/Misc/ServerList.cs</filename>.
+      </para>
+      
+    </section>
+  </chapter>
+</book>
