@@ -17,9 +17,11 @@
       What is SunUO?
     </title>
     <para>
-      SunUO is a free <ulink url="http://www.uo.com/">Ultima
+      <ulink
+        url="http://max.kellermann.name/projects/sunuo/">SunUO</ulink>
+        is a free <ulink url="http://www.uo.com/">Ultima
         Online</ulink> server for Linux/Mono and Windows.NET, based on
-      <ulink url="http://www.runuo.com/">RunUO</ulink>.
+        <ulink url="http://www.runuo.com/">RunUO</ulink>.
     </para>
   </preface>
 
@@ -91,6 +93,16 @@ make install</programlisting>
       <para>
         If nothing went wrong, Mono is now installed in
         /usr/local/bin/mono, and is ready to power SunUO.
+      </para>
+    </section>
+
+    <section>
+      <title>Getting SunUO</title>
+      <para>
+        Visit the home page of SunUO: <ulink
+        url="http://max.kellermann.name/projects/sunuo/">http://max.kellermann.name/projects/sunuo/</ulink>.
+        It contains download links for both the SunUO core and the
+        RunUO scripts.
       </para>
     </section>
 
@@ -382,6 +394,21 @@ mono SunUO.exe</programlisting>
         <filename>./Scripts/Misc/ServerList.cs</filename>.
       </para>
       
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Troubleshooting</title>
+
+    <section>
+      <title>Getting help</title>
+      <para>
+        It is stronly recommended to join the SunUO mailing list. You
+        do this by sending an empty email to
+        <email>sunuo-users-subscribe@max.kellermann.name</email>.
+        Questions can then be directed at
+        <email>sunuo-users@max.kellermann.name</email>.
+      </para>
     </section>
   </chapter>
 </book>
