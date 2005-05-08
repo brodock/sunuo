@@ -15,7 +15,7 @@ export:
 	svn export . /mnt/misc/sunuo
 
 release: VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' NEWS |head -1)
-release: doc
+release: docs
 	rm -rf /tmp/sunuo
 	mkdir -p /tmp/sunuo
 	svn export . /tmp/sunuo/sunuo-$(VERSION)
@@ -25,3 +25,7 @@ release: doc
 	cp AUTHORS COPYING NEWS README doc/sunuo.html /tmp/sunuo/sunuo-$(VERSION)-bin
 	cp /mnt/misc/sunuo/src/SunUO.exe /mnt/misc/sunuo/util/UOGQuery.exe /tmp/sunuo/sunuo-$(VERSION)-bin
 	cd /tmp/sunuo && fakeroot zip -qr sunuo-$(VERSION)-bin.zip sunuo-$(VERSION)-bin
+
+upload: docs
+	scp README NEWS doc/sunuo.html max@duempel.org:/var/www/share/gzipped/download/sunuo/doc/
+	ssh max@duempel.org chmod a+rX -R /var/www/share/gzipped/download/sunuo/doc/
