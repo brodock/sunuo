@@ -12,4 +12,4 @@ install: all
 	install -m 0755 SunUO.exe $(RUNUO_BASE)/
 
 SunUO.exe: $(SOURCES)
-	$(MCS) $(MCS_FLAGS) -o $@ $(SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ $(SOURCES)
