@@ -5,6 +5,7 @@ sunuo (0.1.7) unstable; urgency=low
   * added test program "UOGQuery" which queries the UOGateway status of a
     freeshard
   * Mono 1.1.7 is now recommended
+  * moved documentation to doc/sunuo.xml in DocBook format
 
  --
 
