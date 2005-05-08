@@ -1,3 +1,9 @@
+sunuo (0.1.7) unstable; urgency=low
+
+  * 
+
+ --
+
 sunuo (0.1.6) unstable; urgency=low
 
   * introduce the "path" element in the library configuration, allowing
