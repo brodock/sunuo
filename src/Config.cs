@@ -146,7 +146,7 @@ namespace Server {
 		}
 
 		public LoginConfig(XmlElement el) {
-			ignoreAuthID = el.GetElementsByTagName("ignore-auth-id").Count > 0;
+			ignoreAuthID = Config.GetElementBool(el, "ignore-auth-id", false);
 		}
 
 		public bool IgnoreAuthID {
@@ -253,8 +253,8 @@ namespace Server {
 			}
 		}
 
-		private static bool GetElementBool(XmlElement parent, string tag,
-										   bool defaultValue) {
+		public static bool GetElementBool(XmlElement parent, string tag,
+										  bool defaultValue) {
 			if (parent == null)
 				return defaultValue;
 			XmlNodeList nl = parent.GetElementsByTagName(tag);

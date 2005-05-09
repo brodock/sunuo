@@ -197,7 +197,7 @@ mono SunUO.exe</programlisting>
         </para>
         <programlisting>&lt;sunuo-config&gt;
   &lt;login&gt;
-    &lt;ignore-auth-id/&gt;
+    &lt;ignore-auth-id value="on"/&gt;
   &lt;/login&gt;
 &lt;/sunuo-config&gt;</programlisting>
         <para>
