@@ -1,6 +1,6 @@
 sunuo (0.1.8) unstable; urgency=low
 
-  * 
+  * remove duplicate data directories
 
  --
 

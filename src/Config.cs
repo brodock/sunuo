@@ -310,7 +310,14 @@ namespace Server {
 			foreach (XmlElement dp in children)
 				dp.ParentNode.RemoveChild(dp);
 
+			Hashtable dirHash = new Hashtable();
+
 			foreach (string path in	dataDirectories) {
+				/* check for double path */
+				if (dirHash.ContainsKey(path))
+					continue;
+				dirHash[path] = true;
+
 				XmlElement el = document.CreateElement("data-path");
 				el.InnerText = path;
 				locations.AppendChild(el);
