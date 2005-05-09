@@ -369,6 +369,11 @@ namespace Server {
 				locations.AppendChild(el);
 			}
 
+			// section "login"
+			XmlElement login = GetConfiguration("login");
+
+			SetElementBool(login, "ignore-auth-id", loginConfig.IgnoreAuthID);
+
 			// write to file
 			XmlTextWriter writer = new XmlTextWriter(tempFilename, System.Text.Encoding.UTF8);
 			writer.Formatting = Formatting.Indented;
