@@ -266,6 +266,17 @@ namespace Server {
 			return value == "on" || value == "true" || value == "yes";
 		}
 
+		public static void RemoveElement(XmlElement parent, string tag) {
+			if (parent == null)
+				return;
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			XmlNode[] children = new XmlNode[nl.Count];
+			for (int i = 0; i < children.Length; i++)
+				children[i] = nl.Item(i);
+			foreach (XmlNode child in children)
+				parent.RemoveChild(child);
+		}
+
 		private void Load() {
 			document = new XmlDocument();
 			dataDirectories = new ArrayList();
@@ -285,7 +296,6 @@ namespace Server {
 			if (global != null) {
 				multiThreading = GetElementBool(global, "multi-threading", false);
 			}
-			Console.WriteLine("multithreading={0}", multiThreading);
 
 			XmlElement locations = GetConfiguration("locations");
 			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
@@ -327,12 +337,7 @@ namespace Server {
 			}
 
 			XmlElement locations = GetConfiguration("locations");
-			XmlNodeList nl = locations.GetElementsByTagName("data-path");
-			XmlNode[] children = new XmlNode[nl.Count];
-			for (int i = 0; i < children.Length; i++)
-				children[i] = nl.Item(i);
-			foreach (XmlElement dp in children)
-				dp.ParentNode.RemoveChild(dp);
+			RemoveElement(locations, "data-path");
 
 			Hashtable dirHash = new Hashtable();
 
