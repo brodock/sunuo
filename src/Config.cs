@@ -352,6 +352,7 @@ namespace Server {
 
 			SetElementBool(global, "multi-threading", multiThreading);
 
+			// section "locations"
 			XmlElement locations = GetConfiguration("locations");
 			RemoveElement(locations, "data-path");
 
@@ -368,6 +369,7 @@ namespace Server {
 				locations.AppendChild(el);
 			}
 
+			// write to file
 			XmlTextWriter writer = new XmlTextWriter(tempFilename, System.Text.Encoding.UTF8);
 			writer.Formatting = Formatting.Indented;
 
