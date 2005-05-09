@@ -303,11 +303,13 @@ namespace Server {
 				document.AppendChild(document.CreateElement("sunuo-config"));
 			}
 
+			// section "global"
 			XmlElement global = GetConfiguration("global");
 			if (global != null) {
 				multiThreading = GetElementBool(global, "multi-threading", false);
 			}
 
+			// section "locations"
 			XmlElement locations = GetConfiguration("locations");
 			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
 				string path = dp.InnerText;
@@ -315,6 +317,7 @@ namespace Server {
 					dataDirectories.Add(path);
 			}
 
+			// section "libraries"
 			XmlElement librariesEl = GetConfiguration("libraries");
 			foreach (XmlElement el in librariesEl.GetElementsByTagName("library")) {
 				string name = el.GetAttribute("name");
@@ -333,6 +336,7 @@ namespace Server {
 			if (!libraryConfig.ContainsKey("legacy"))
 				libraryConfig["legacy"] = new LibraryConfig("legacy");
 
+			// section "login"
 			XmlElement loginEl = GetConfiguration("login");
 			loginConfig = loginEl == null
 				? new LoginConfig()
