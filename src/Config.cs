@@ -277,6 +277,17 @@ namespace Server {
 				parent.RemoveChild(child);
 		}
 
+		public static void SetElementBool(XmlElement parent, string tag,
+										  bool value) {
+			XmlElement el;
+
+			RemoveElement(parent, tag);
+
+			el = parent.OwnerDocument.CreateElement(tag);
+			el.SetAttribute("value", value ? "on" : "off");
+			parent.AppendChild(el);
+		}
+
 		private void Load() {
 			document = new XmlDocument();
 			dataDirectories = new ArrayList();
@@ -335,6 +346,11 @@ namespace Server {
 			} else {
 				tempFilename = filename + ".new";
 			}
+
+			// section "global"
+			XmlElement global = GetConfiguration("global");
+
+			SetElementBool(global, "multi-threading", multiThreading);
 
 			XmlElement locations = GetConfiguration("locations");
 			RemoveElement(locations, "data-path");
