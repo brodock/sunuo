@@ -175,6 +175,22 @@ mono SunUO.exe</programlisting>
       <title>Tricks</title>
 
       <section>
+        <title>Multithreading</title>
+        <para>
+          If you have multiple CPUs (SMP), you can take advantage of
+          that by using multithreaded programs. SunUO is based on
+          RunUO, which is unfortunately not a thread safe code
+          base. However, during world save, it is possible to enable
+          multithreading:
+        </para>
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;global&gt;
+    &lt;multi-threading value="on"/&gt;
+  &lt;/login&gt;
+&lt;/sunuo-config&gt;</programlisting>
+      </section>
+
+      <section>
         <title>Separating login server from shard server</title>
         <para>
           To make SunUO ignore the AuthID, configure:

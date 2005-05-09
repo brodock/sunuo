@@ -5,6 +5,7 @@ sunuo (0.1.8) unstable; urgency=low
     - call FinishDispose() in CheckAlive()
   * remove duplicate data directories
   * replaced World.MultiProcessor by Core.Config.MultiThreading
+  * added configuration file option for Core.Config.MultiThreading
 
  --
 

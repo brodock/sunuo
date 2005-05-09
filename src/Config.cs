@@ -253,6 +253,19 @@ namespace Server {
 			}
 		}
 
+		private static bool GetElementBool(XmlElement parent, string tag,
+										   bool defaultValue) {
+			if (parent == null)
+				return defaultValue;
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return defaultValue;
+			string value = ((XmlElement)nl[0]).GetAttribute("value");
+			if (value == null || value == "")
+				return true;
+			return value == "on" || value == "true" || value == "yes";
+		}
+
 		private void Load() {
 			document = new XmlDocument();
 			dataDirectories = new ArrayList();
@@ -267,6 +280,12 @@ namespace Server {
 			} else {
 				document.AppendChild(document.CreateElement("sunuo-config"));
 			}
+
+			XmlElement global = GetConfiguration("global");
+			if (global != null) {
+				multiThreading = GetElementBool(global, "multi-threading", false);
+			}
+			Console.WriteLine("multithreading={0}", multiThreading);
 
 			XmlElement locations = GetConfiguration("locations");
 			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
