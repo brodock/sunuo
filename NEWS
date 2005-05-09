@@ -1,5 +1,8 @@
 sunuo (0.1.8) unstable; urgency=low
 
+  * more NetStat.Dispose() tweaks:
+    - a second Dispose() call continues with FinishDispose()
+    - call FinishDispose() in CheckAlive()
   * remove duplicate data directories
 
  --

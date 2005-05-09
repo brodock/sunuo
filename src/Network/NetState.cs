@@ -591,6 +591,11 @@ namespace Server.Network
 
 		public bool CheckAlive()
 		{
+			if (m_Disposing && !m_DisposeFinished) {
+				FinishDispose();
+				return false;
+			}
+
 			if ( m_Socket == null )
 				return false;
 
@@ -665,6 +670,12 @@ namespace Server.Network
 
 		public void Dispose( bool flush )
 		{
+			if (m_Disposing && !m_DisposeFinished) {
+				/* the second call forces disposal */
+				FinishDispose();
+				return;
+			}
+
 			if ( m_Socket == null || m_Disposing )
 				return;
 
@@ -673,6 +684,8 @@ namespace Server.Network
 			if ( flush )
 				flush = Flush();
 
+			/* if we're currently sending the last packet, schedule
+			   the "real" dispose for later */
 			if (!m_Sending)
 				FinishDispose();
 		}
