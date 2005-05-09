@@ -157,6 +157,7 @@ namespace Server {
 	public class Config {
 		private string filename;
 		private XmlDocument document;
+		private bool multiThreading;
 		private ArrayList dataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private LoginConfig loginConfig;
@@ -166,6 +167,10 @@ namespace Server {
 
 			Defaults();
 			Load();
+		}
+
+		public bool MultiThreading {
+			get { return multiThreading; }
 		}
 
 		public ArrayList DataDirectories {

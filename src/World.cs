@@ -963,10 +963,6 @@ namespace Server
 			Save( true );
 		}
 
-		private static bool m_MultiProcessor = false;
-
-		public static bool MultiProcessor{ get{ return m_MultiProcessor; } set{ m_MultiProcessor = value; } }
-
 		public static void Save( bool message )
 		{
 			if ( m_Saving || AsyncWriter.ThreadCount > 0 ) 
@@ -992,7 +988,7 @@ namespace Server
 			if ( !Directory.Exists( "Saves/Regions/" ) )
 				Directory.CreateDirectory( "Saves/Regions/" );
 
-			if ( m_MultiProcessor )
+			if (Core.Config.MultiThreading)
 			{
 				Thread saveThread = new Thread( new ThreadStart( SaveItems ) );
 
