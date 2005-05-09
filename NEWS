@@ -7,7 +7,7 @@ sunuo (0.1.8) unstable; urgency=low
   * replaced World.MultiProcessor by Core.Config.MultiThreading
   * added configuration file option for Core.Config.MultiThreading
 
- --
+ -- Max Kellermann <max@duempel.org>  Tue, 10 May 2005 00:23:05 +0200
 
 sunuo (0.1.7) unstable; urgency=low
 
