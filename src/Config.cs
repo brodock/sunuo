@@ -85,7 +85,7 @@ namespace Server {
 			}
 
 			ignoreSources = CollectStringArray(libConfigEl, "ignore-source", "name");
-			ignoreTypes = CollectStringArray(libConfigEl, "ignore-source", "name");
+			ignoreTypes = CollectStringArray(libConfigEl, "ignore-type", "name");
 			overlays = CollectStringArray(libConfigEl, "overlay", "name");
 			depends = CollectStringArray(libConfigEl, "depends", "name");
 		}

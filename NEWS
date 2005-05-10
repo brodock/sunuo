@@ -1,6 +1,6 @@
 sunuo (0.1.9) unstable; urgency=low
 
-  * 
+  * fixed typo in Config.cs which disabled <ignore-type/>
 
  --
 
