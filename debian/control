@@ -1,0 +1,14 @@
+Source: sunuo
+Section: games
+Priority: optional
+Maintainer: Max Kellermann <max@duempel.org>
+Standards-Version: 3.6.1
+Build-Depends-Indep: cdbs (>= 0.4.26), debhelper, mono-mcs
+
+Package: sunuo
+Architecture: all
+Depends: mono (>= 1.1.7)
+Description: free Ultima Online server
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ http://max.kellermann.name/projects/sunuo/

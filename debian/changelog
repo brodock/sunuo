@@ -1,0 +1,117 @@
+sunuo (0.1.9) unstable; urgency=low
+
+  * created debian package
+  * fixed typo in Config.cs which disabled <ignore-type/>
+
+ --
+
+sunuo (0.1.8) unstable; urgency=low
+
+  * more NetStat.Dispose() tweaks:
+    - a second Dispose() call continues with FinishDispose()
+    - call FinishDispose() in CheckAlive()
+  * remove duplicate data directories
+  * replaced World.MultiProcessor by Core.Config.MultiThreading
+  * added configuration file option for Core.Config.MultiThreading
+
+ -- Max Kellermann <max@duempel.org>  Tue, 10 May 2005 00:23:05 +0200
+
+sunuo (0.1.7) unstable; urgency=low
+
+  * wait for send transfers to be finished before killing the connection
+    in NetState.Dispose()
+  * added test program "UOGQuery" which queries the UOGateway status of a
+    freeshard
+  * Mono 1.1.7 is now recommended
+  * moved documentation to doc/sunuo.xml in DocBook format
+
+ -- Max Kellermann <max@duempel.org>  Sun,  8 May 2005 22:37:47 +0200
+
+sunuo (0.1.6) unstable; urgency=low
+
+  * introduce the "path" element in the library configuration, allowing
+    the administrator to specify arbitrary source paths
+  * dependencies for libraries
+  * overlays for libraries
+
+ -- Max Kellermann <max@duempel.org>  Thu,  5 May 2005 21:14:32 +0200
+
+sunuo (0.1.5) unstable; urgency=low
+
+  * now really fixed a null cast in ScriptCompiler.CheckStamps()
+
+ -- Max Kellermann <max@duempel.org>  Thu, 10 Mar 2005 21:48:12 +0100
+
+sunuo (0.1.4) unstable; urgency=low
+
+  * fixed a lot of C# compiler warnings
+  * workaround for the RunUO faction bug: Reflection.cs assumes
+    alphabetically sorted directory entries; ScriptCompiler.cs now sorts
+    filenames before passing them to the compiler
+  * fixed a null cast in ScriptCompiler.CheckStamps()
+
+ -- Max Kellermann <max@duempel.org>  Thu,  3 Mar 2005 21:04:41 +0100
+
+sunuo (0.1.3) unstable; urgency=low
+
+  * work around mono-mcs 1.1.4 bug #72771: "Response file specified
+    multiple times"
+  * removed "/debug /optimize" parameters from ScriptCompiler
+  * added a hack to work around the zlib portability bugs in the scripts
+
+ -- Max Kellermann <max@duempel.org>  Sun, 20 Feb 2005 19:53:46 +0100
+
+sunuo (0.1.2) unstable; urgency=low
+
+  * another Mono bug workaround: pointer increments are 8 byte aligned,
+    although Pack=1 is specified in the structure
+  * exit on compiler error, don't allow the user to retry compilation
+  * added BINFMT_MISC instructions, thanks to Wulf Krueger
+  * added Mono 1.1 installation instructions
+
+ -- Max Kellermann <max@duempel.org>  Wed, 16 Feb 2005 23:20:34 +0100
+
+sunuo (0.1.1) unstable; urgency=low
+
+  * show operating system and runtime version in start banner
+  * removed several compatibility fixes for old pre-0.1.0 versions of
+    SunUO
+  * recompile libraries automatically when a file has been changed,
+    deleted or added added
+  * added documentation for [restart workaround
+
+ -- Max Kellermann <max@duempel.org>  Mon, 14 Feb 2005 22:40:42 +0100
+
+sunuo (0.1.0) unstable; urgency=low
+
+  * imported RunUO 1.0.0 sources, fork is called SunUO 0.1.0
+  * wrote Makefile
+  * some minor mono-mcs compilation fixes
+  * replaced the overcomplex mono-compatibility unsafe code in
+    TileMatrix.cs and TileMatrixPatch.cs by a simple Marshal.Copy
+  * repaired pointer arithmetic in Serialization.cs and TileMatrix.cs
+  * pass script file names in a temporary files, to go around the
+    "argument too long" limitation on most POSIX systems
+  * moved the World.Load() call from ScriptCompiler to Main
+  * ScriptCompiler.m_Assemblies converted to ArrayList
+  * removed method TileMatrix.Force(), which was good for nothing
+  * added Core.BaseDirectoryInfo, Core.CacheDirectoryInfo,
+    Core.LocalDirectoryInfo
+  * support for multiple script libraries in ./local/src/ and
+    ./local/lib/, every one of them is built into a separate DLL
+  * log to ./var/log/console.log instead of ./Logs/Console.log
+  * implemented a lot of exception handlers in Network/PacketHandlers.cs,
+    Item.cs and Mobile.cs, to prevent the server from crashing when an
+    exception in a script occurs
+  * catch exceptions from Core.VerifySerialization(); dump
+    LoaderExceptions
+  * ignore case on data file names
+  * implemented the configuration file "./etc/sunuo.xml", class
+    Server.Config
+  * added source and type ignores in LibraryConfig
+  * wrap a script library in the new Library class
+  * World.Load() dumps exceptions
+  * added option to ignore AuthID
+  * use string.Intern() to save memory
+
+ -- Max Kellermann <max@duempel.org>  Sat,  5 Feb 2005 01:55:03 +0100
