@@ -423,7 +423,6 @@ namespace Server.Network
 					return;
 
 				int length = buffer.Length;
-				Console.WriteLine("SEND: {0}", buffer[0]);
 
 				if ( m_Encoder != null )
 					m_Encoder.EncodeOutgoingPacket( this, ref buffer, ref length );
