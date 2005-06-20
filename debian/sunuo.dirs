@@ -3,7 +3,6 @@ usr/share/sunuo
 usr/share/sunuo/lib
 usr/src/sunuo
 var/lib/sunuo/.wapi
-var/lib/sunuo/base/Scripts
 var/lib/sunuo/base/local
 var/lib/sunuo/base/var
 var/lib/sunuo/backups/Automatic
