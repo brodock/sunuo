@@ -1,4 +1,5 @@
 usr/share/sunuo
+usr/share/sunuo/lib
 usr/src/sunuo
 var/lib/sunuo/.wapi
 var/lib/sunuo/base/etc
