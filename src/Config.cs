@@ -169,6 +169,10 @@ namespace Server {
 			Load();
 		}
 
+		public bool Exists {
+			get { return File.Exists(filename); }
+		}
+
 		public bool MultiThreading {
 			get { return multiThreading; }
 		}
@@ -292,7 +296,7 @@ namespace Server {
 			document = new XmlDocument();
 			dataDirectories = new ArrayList();
 
-			if (File.Exists(filename)) {
+			if (Exists) {
 				XmlTextReader reader = new XmlTextReader(filename);
 				try {
 					document.Load(reader);

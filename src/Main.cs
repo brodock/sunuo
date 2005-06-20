@@ -378,7 +378,8 @@ namespace Server
 				return;
 			}
 
-			config.Save();
+			if (!config.Exists)
+				config.Save();
 
 			World.Load();
 
