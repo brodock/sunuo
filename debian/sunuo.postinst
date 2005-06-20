@@ -4,7 +4,11 @@ if [ "$1" = "configure" ]; then
     getent group sunuo >/dev/null || groupadd sunuo
     getent passwd sunuo >/dev/null || useradd -g sunuo -d /var/lib/sunuo -s /bin/false -c 'SunUO daemon user' sunuo
 
-    chown sunuo:sunuo /var/lib/sunuo/.wapi /var/lib/sunuo/base /var/cache/sunuo /var/lib/sunuo/backups /var/lib/sunuo/backups/Automatic
+    chown sunuo:sunuo /var/lib/sunuo/.wapi \
+        /var/lib/sunuo/base \
+        /var/cache/sunuo \
+        /var/lib/sunuo/backups /var/lib/sunuo/backups/Automatic /var/lib/sunuo/saves \
+        /var/log/sunuo
 fi
 
 #DEBHELPER#
