@@ -14,6 +14,17 @@ Description: free Ultima Online server
  .
  Home page: http://max.kellermann.name/projects/sunuo/
 
+Package: sunuo-dbg
+Architecture: all
+Depends: sunuo (= ${Source-Version})
+Enhances: sunuo (= ${Source-Version})
+Description: free Ultima Online server
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package contains the debug file.
+ .
+ Home page: http://max.kellermann.name/projects/sunuo/
+
 Package: sunuo-doc
 Section: doc
 Architecture: all
