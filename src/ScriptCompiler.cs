@@ -513,7 +513,7 @@ namespace Server
 					LibraryConfig overlay = Core.Config.GetLibraryConfig(name);
 					if (overlay == null || !overlay.Exists) {
 						Console.WriteLine("Can't overlay {0} with {1}, because it does not exist",
-										  libConfig.Name, overlay.Name);
+										  libConfig.Name, name);
 						throw new ApplicationException();
 					}
 
