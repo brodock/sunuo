@@ -1,3 +1,4 @@
+etc/sunuo var/lib/sunuo/base/etc
 usr/share/sunuo/SunUO.exe var/lib/sunuo/base/SunUO.exe
 usr/share/sunuo/lib var/lib/sunuo/base/local/lib
 usr/src/sunuo var/lib/sunuo/base/local/src
