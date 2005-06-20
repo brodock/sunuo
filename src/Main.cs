@@ -300,7 +300,7 @@ namespace Server
 
 			/* print a banner */
 			Version ver = m_Assembly.GetName().Version;
-			Console.WriteLine("SunUO Version {0}.{1}.{2} http://max.kellermann.name/projects/sunuo/",
+			Console.WriteLine("SunUO Version {0}.{1}.{2} http://www.sunuo.org/",
 							  ver.Major, ver.Minor, ver.Revision);
 			Console.WriteLine("  on {0}, runtime {1}",
 							  Environment.OSVersion, Environment.Version);
