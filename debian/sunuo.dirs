@@ -6,4 +6,5 @@ var/lib/sunuo/.wapi
 var/lib/sunuo/base/Scripts
 var/lib/sunuo/base/local
 var/lib/sunuo/base/var
+var/lib/sunuo/backups/Automatic
 var/cache/sunuo

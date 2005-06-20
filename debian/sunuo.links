@@ -4,3 +4,5 @@ usr/share/sunuo/lib var/lib/sunuo/base/local/lib
 usr/src/sunuo var/lib/sunuo/base/local/src
 usr/lib/libz.so.1 var/lib/sunuo/base/libz.so
 var/cache/sunuo var/lib/sunuo/base/var/cache
+var/lib/sunuo/backups var/lib/sunuo/base/Backups
+var/lib/sunuo/backups/Automatic var/lib/sunuo/base/Backups\Automatic
