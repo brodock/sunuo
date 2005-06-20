@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+if [ "$1" = "upgrade" -o "$1" = "remove" ]; then
+    # always remove temporary stuff
+    rm -rf /usr/share/sunuo/runuo/tmp /var/cache/sunuo/download/RunUO-1.0.0.zip.tmp
+fi
+
+if [ "$1" = "remove" ]; then
+    # remove data files when package removal is requested
+    rm -rf /usr/share/sunuo/runuo/Data /usr/share/sunuo/runuo/Scripts
+fi
+
+#DEBHELPER#

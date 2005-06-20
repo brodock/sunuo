@@ -8,6 +8,7 @@ Build-Depends-Indep: cdbs (>= 0.4.26), debhelper, cli-common (>= 0.1.3), mono-mc
 Package: sunuo
 Architecture: all
 Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7)
+Recommends: runuo-installer (= ${Source-Version})
 Suggests: sunuo-doc
 Description: free Ultima Online server
  SunUO is a free Ultima Online server, based on RunUO.
@@ -32,5 +33,18 @@ Description: free Ultima Online server
  SunUO is a free Ultima Online server, based on RunUO.
  .
  This package contains documentation.
+ .
+ Home page: http://www.sunuo.org/
+
+Package: runuo-installer
+Architecture: all
+Section: non-free/games
+Depends: sunuo (= ${Source-Version}), unzip
+Enhances: sunuo (= ${Source-Version})
+Description: free Ultima Online server
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package downloads and installs non-free stuff from the RunUO
+ binary distribution.
  .
  Home page: http://www.sunuo.org/
