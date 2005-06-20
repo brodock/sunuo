@@ -457,11 +457,10 @@ mono SunUO.exe</programlisting>
     <section>
       <title>Getting help</title>
       <para>
-        It is stronly recommended to join the SunUO mailing list. You
-        do this by sending an empty email to
-        <email>sunuo-users-subscribe@max.kellermann.name</email>.
-        Questions can then be directed at
-        <email>sunuo-users@max.kellermann.name</email>.
+        It is stronly recommended to join the SunUO <ulink
+        url="https://lists.berlios.de/mailman/listinfo/sunuo-users">mailing
+        list</ulink>. Questions can then be directed at
+        <email>sunuo-users@lists.berlios.de</email>.
       </para>
     </section>
   </chapter>
