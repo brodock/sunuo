@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This is the SunUO configuration file. http://www.sunuo.org/ -->
+
+<sunuo-config>
+  <locations>
+    <!--the element 'data-path' sets the UO client directory-->
+    <data-path>/usr/share/sunuo/data</data-path>
+  </locations>
+  <libraries>
+    <library name="legacy">
+      <ignore-source name="Misc/ZLib.cs" />
+    </library>
+  </libraries>
+  <login>
+    <ignore-auth-id value="off" />
+  </login>
+  <global>
+    <multi-threading value="off" />
+  </global>
+</sunuo-config>
