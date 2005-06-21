@@ -1,0 +1,9 @@
+Template: sunuo/please-configure-data-path
+Type: note
+Description: SunUO installation
+ Please note that for a properly running SunUO shard, you need the
+ RunUO 1.0.0 base scripts (package runuo-installer) and the data files
+ from the Ultima Online client (*.mul and *.idx).
+ .
+ After installation, please edit the file /etc/sunuo/sunuo.xml and
+ enter the correct data path.

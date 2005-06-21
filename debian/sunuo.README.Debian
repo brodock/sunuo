@@ -25,7 +25,9 @@ Maintaining SunUO on Debian
 
 - you can create new script libraries in /usr/src/sunuo/
 
-- It is highly recommended to not modify the RunUO 1.0.0 scripts. When
+- add binary script libraries to /usr/share/sunuo/lib/
+
+- it is highly recommended to not modify the RunUO 1.0.0 scripts. When
   you reinstall SunUO, these modifications may be lost. You should use
   an overlay library instead. Please see the SunUO documentation for
   details.

@@ -3,11 +3,11 @@ Section: games
 Priority: optional
 Maintainer: Max Kellermann <max@duempel.org>
 Standards-Version: 3.6.1
-Build-Depends-Indep: cdbs (>= 0.4.26), debhelper, cli-common (>= 0.1.3), mono-mcs (>= 1.1.7), xsltproc, docbook-xsl
+Build-Depends-Indep: cdbs (>= 0.4.26), debhelper (>= 4.9.1), cli-common (>= 0.1.3), mono-mcs (>= 1.1.7), xsltproc, docbook-xsl
 
 Package: sunuo
 Architecture: all
-Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7)
+Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7), debconf (>= 1.4.51)
 Recommends: runuo-installer (= ${Source-Version})
 Suggests: sunuo-doc
 Description: free Ultima Online server
