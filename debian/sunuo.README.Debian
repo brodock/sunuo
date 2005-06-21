@@ -1,0 +1,31 @@
+SunUO README.Debian
+===================
+
+Author: Max Kellermann <max@duempel.org>
+
+
+Installing SunUO on Debian
+--------------------------
+
+1. SunUO requires the UO client data files (*.mul and *.idx), so make
+   sure there is an UO client installed on your box
+
+2. apt-get install sunuo runuo-installer
+
+3. edit /etc/sunuo/sunuo.xml and enter the correct data-path location,
+   e.g. "/mnt/windows/uo"
+
+4. /etc/init.d/sunuo start
+
+
+Maintaining SunUO on Debian
+---------------------------
+
+- the script /etc/init.d/sunuo starts and stops SunUO
+
+- you can create new script libraries in /usr/src/sunuo/
+
+- It is highly recommended to not modify the RunUO 1.0.0 scripts. When
+  you reinstall SunUO, these modifications may be lost. You should use
+  an overlay library instead. Please see the SunUO documentation for
+  details.
