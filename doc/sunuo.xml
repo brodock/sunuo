@@ -313,6 +313,11 @@ mono SunUO.exe</programlisting>
 &lt;/libraries&gt;
 </programlisting>
         <para>
+          Now symlink <filename>libz.so.1</filename> into the SunUO
+          directory:
+        </para>
+        <programlisting>ln -s /usr/lib/libz.so.1 zlib.dll</programlisting>
+        <para>
           The "System.DllNotFoundException: zlib" error message should
           go away now.
         </para>
