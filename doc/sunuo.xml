@@ -319,6 +319,22 @@ mono SunUO.exe</programlisting>
       </section>
 
       <section>
+        <title>GDIPlus related crashes</title>
+        <para>
+          On many Mono installations, <filename>libgdiplus</filename>
+          is not properly installed. That means that the Reports
+          engine will crash the server. As a workaround, you should
+          turn off the Reports:
+        </para>
+        <programlisting>&lt;libraries&gt;
+  &lt;library name="legacy"&gt;
+    &lt;ignore-type name="Server.Engines.Reports.Reports"/&gt;
+  &lt;/library&gt;
+&lt;/libraries&gt;
+</programlisting>
+      </section>
+
+      <section>
         <title>The RunUO faction direntry order bug</title>
         <para>
           I reported a bug to the RunUO bug tracker:
