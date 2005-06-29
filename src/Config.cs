@@ -36,6 +36,7 @@ namespace Server {
 		private string[] ignoreTypes;
 		private string[] depends;
 		private string[] overlays;
+		private int warningLevel = -1;
 
 		private static string[] CollectStringArray(XmlElement parent,
 												   string tag, string attr) {
@@ -92,6 +93,10 @@ namespace Server {
 			string disabledString = libConfigEl.GetAttribute("disabled");
 			disabled = disabledString != null && disabledString != ""
 				&& Boolean.Parse(disabledString);
+
+			string warnString = libConfigEl.GetAttribute("warn");
+			if (warnString != null && warnString != "")
+				warningLevel = Int32.Parse(warnString);
 		}
 
 		public string Name {
@@ -112,6 +117,9 @@ namespace Server {
 		public bool Disabled {
 			get { return disabled; }
 			set { disabled = value; }
+		}
+		public int WarningLevel {
+			get { return warningLevel; }
 		}
 		public string[] Overlays {
 			get { return overlays; }

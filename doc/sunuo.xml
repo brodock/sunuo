@@ -398,7 +398,7 @@ mono SunUO.exe</programlisting>
 
     <section>
       <title>Disabling a library</title>
-    <programlisting>&lt;library name="foo" disabled="true"/&gt;</programlisting>
+      <programlisting>&lt;library name="foo" disabled="true"/&gt;</programlisting>
       <para>
         SunUO ignores libraries marked disabled. By default, if no
         explicit configuration is available, all libraries are
@@ -458,6 +458,22 @@ mono SunUO.exe</programlisting>
         <filename>./Scripts/Misc/ServerList.cs</filename>.
       </para>
       
+    </section>
+
+    <section>
+      <title>Taming the warnings</title>
+      <para>
+        It is obvious that you should pay attention to compiler
+        warnings, as they may reveal bugs which are otherwise hard to
+        find. However, if you are using code from others which emits
+        lots of warnings and the author won't fix them, you might want
+        to disable compiler warnings:
+      </para>
+      <programlisting>&lt;library name="legacy" warn="0"/&gt;</programlisting>
+      <para>
+        According to the Mono MCS manual, the default warning level is
+        2, and 4 is the highest level.
+      </para>
     </section>
   </chapter>
 

@@ -195,6 +195,9 @@ namespace Server
 			if (tempFile != null)
 				parms.CompilerOptions += "@" + tempFile;
 
+			if (libConfig.WarningLevel >= 0)
+				parms.WarningLevel = libConfig.WarningLevel;
+
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( parms, files );
 
 			if (tempFile != null)
