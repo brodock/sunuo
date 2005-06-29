@@ -397,6 +397,16 @@ mono SunUO.exe</programlisting>
     </section>
 
     <section>
+      <title>Disabling a library</title>
+    <programlisting>&lt;library name="foo" disabled="true"/&gt;</programlisting>
+      <para>
+        SunUO ignores libraries marked disabled. By default, if no
+        explicit configuration is available, all libraries are
+        enabled.
+      </para>
+    </section>
+
+    <section>
       <title>Dependencies</title>
       <para>
         In many cases, you want to use classes from another script

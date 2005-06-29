@@ -6,6 +6,7 @@ sunuo (0.1.9) unstable; urgency=low
   * fixed NullReferenceException in overlay error handler
   * home page changed to http://www.sunuo.org/
   * the mailing list is now hosted on BerliOS
+  * added option to disable a script library
 
  --
 

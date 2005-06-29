@@ -88,6 +88,10 @@ namespace Server {
 			ignoreTypes = CollectStringArray(libConfigEl, "ignore-type", "name");
 			overlays = CollectStringArray(libConfigEl, "overlay", "name");
 			depends = CollectStringArray(libConfigEl, "depends", "name");
+
+			string disabledString = libConfigEl.GetAttribute("disabled");
+			disabled = disabledString != null && disabledString != ""
+				&& Boolean.Parse(disabledString);
 		}
 
 		public string Name {
