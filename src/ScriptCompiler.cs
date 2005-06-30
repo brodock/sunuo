@@ -321,7 +321,7 @@ namespace Server
 					return false;
 				}
 
-                                Console.Write("{0}", libConfig.Name);
+				Console.Write("{0}", libConfig.Name);
 				libraries.Add(new Library(libConfig,
 										  Assembly.LoadFrom(libConfig.SourcePath.FullName)));
 				m_AdditionalReferences.Add(libConfig.SourcePath.FullName);
