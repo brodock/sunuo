@@ -323,8 +323,8 @@ namespace Server
 
 				Console.Write("{0}", libConfig.Name);
 				libraries.Add(new Library(libConfig,
-										  Assembly.LoadFrom(libConfig.SourcePath.FullName)));
-				m_AdditionalReferences.Add(libConfig.SourcePath.FullName);
+										  Assembly.LoadFrom(libConfig.BinaryPath.FullName)));
+				m_AdditionalReferences.Add(libConfig.BinaryPath.FullName);
 				Console.Write(". ");
 				return true;
 			} else if (!libConfig.SourcePath.Exists) {
