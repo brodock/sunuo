@@ -1,6 +1,6 @@
 sunuo (0.1.9) unstable; urgency=low
 
-  * created debian package
+  * created debian package (not yet done)
   * fixed typo in Config.cs which disabled <ignore-type/>
   * write etc/sunuo.xml only if it did not exist
   * fixed NullReferenceException in overlay error handler
