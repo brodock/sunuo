@@ -335,8 +335,7 @@ mono SunUO.exe</programlisting>
   &lt;library name="legacy"&gt;
     &lt;ignore-type name="Server.Engines.Reports.Reports"/&gt;
   &lt;/library&gt;
-&lt;/libraries&gt;
-</programlisting>
+&lt;/libraries&gt;</programlisting>
       </section>
 
       <section>
@@ -362,6 +361,73 @@ mono SunUO.exe</programlisting>
           this is only a hack; you simply must not make any
           assumptions on the order of file names on the hard disk.
         </para>
+      </section>
+
+      <section>
+        <title>Arya's auction</title>
+        <para>
+          Arya's auction was released in the <ulink
+          url="http://www.runuo.com/forum/showthread.php?t=37483&amp;page=1">RunUO
+          forum</ulink>. It is, unfortunately, yet another bugged
+          script library. The following instructions work around these
+          problems:
+        </para>
+        <orderedlist>
+          <listitem>
+            <para>
+              download the file <ulink
+                url="http://www.runuo.com/forum/attachment.php?attachmentid=4447"><filename>Auction.1.7.9.zip</filename></ulink>
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              unzip it in the script library directory:
+            </para>
+            <programlisting>cd local/src
+unzip /tmp/Auction.1.7.9.zip</programlisting>
+            <para>
+              This will create the directory
+              <filename>./local/src/Auction/</filename>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              the file
+              <filename>./local/src/Auction/AuctionItem.cs</filename>
+              is in an invalid text file format which confuses the
+              Mono C# compiler; fix that:
+            </para>
+            <programlisting>perl -pi -e 's,\r\n,\n,gs' local/src/Auction/AuctionItem.cs
+perl -pi -e 's,\r,\n,gs' local/src/Auction/AuctionItem.cs</programlisting>
+          </listitem>
+          <listitem>
+            <para>
+              the ZIP file ships the closed-source library
+              <filename>Ultima.dll</filename>; install this file as a
+              binary script library:
+            </para>
+            <programlisting>mv local/src/Auction/Ultima.dll local/lib/</programlisting>
+            <para>
+              Now set a dependency to enforce the correct loading
+              order:
+            </para>
+            <programlisting>&lt;libraries&gt;
+  &lt;library name="Auction"&gt;
+    &lt;depends name="Ultima"/&gt;
+  &lt;/library&gt;
+&lt;/libraries&gt;</programlisting>
+          </listitem>
+          <listitem>
+            <para>
+              Arya's code uses the type <type>IUsesRemaining</type>,
+              which is not marked as "public". Edit the file
+              <filename>./Scripts/Items/Skill Items/Harvest
+              Tools/BaseHarvestTool.cs</filename> and make the
+              interface public:
+            </para>
+            <programlisting>public interface IUsesRemaining</programlisting>
+          </listitem>
+        </orderedlist>
       </section>
     </section>
   </chapter>
