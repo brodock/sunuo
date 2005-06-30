@@ -14,7 +14,7 @@ export:
 	rm -rf /mnt/misc/sunuo /mnt/misc/runuo/SunUO.exe
 	svn export . /mnt/misc/sunuo
 
-release: VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' NEWS |head -1)
+release: VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
 release: docs
 	rm -rf /tmp/sunuo
 	mkdir -p /tmp/sunuo
@@ -23,6 +23,7 @@ release: docs
 	cd /tmp/sunuo && fakeroot tar cjf sunuo-$(VERSION).tar.bz2 sunuo-$(VERSION)
 	mkdir -p /tmp/sunuo/sunuo-$(VERSION)-bin
 	cp AUTHORS COPYING NEWS README doc/sunuo.html /tmp/sunuo/sunuo-$(VERSION)-bin
+	cp debian/changelog /tmp/sunuo/sunuo-$(VERSION)-bin/changelog
 	cp /mnt/misc/sunuo/src/SunUO.exe /mnt/misc/sunuo/util/UOGQuery.exe /tmp/sunuo/sunuo-$(VERSION)-bin
 	cd /tmp/sunuo && fakeroot zip -qr sunuo-$(VERSION)-bin.zip sunuo-$(VERSION)-bin
 
