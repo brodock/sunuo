@@ -9,6 +9,7 @@ sunuo (0.1.9) unstable; urgency=low
   * added option to disable a script library
   * added option to set the C# compiler's warning level
   * fixed NullReferenceException in binary library loader
+  * library names are case insensitive
 
  --
 

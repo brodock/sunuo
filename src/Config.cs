@@ -51,6 +51,16 @@ namespace Server {
 				? null
 				: (string[])al.ToArray(typeof(string));
 		}
+		private static string[] LowerStringArray(string[] src) {
+			if (src == null)
+				return null;
+
+			string[] dst = new string[src.Length];
+			for (uint i = 0; i < src.Length; i++)
+				dst[i] = src[i].ToLower();
+
+			return dst;
+		}
 
 		private static string GetElementString(XmlElement parent, string tag) {
 			XmlNodeList nl = parent.GetElementsByTagName(tag);
@@ -87,8 +97,8 @@ namespace Server {
 
 			ignoreSources = CollectStringArray(libConfigEl, "ignore-source", "name");
 			ignoreTypes = CollectStringArray(libConfigEl, "ignore-type", "name");
-			overlays = CollectStringArray(libConfigEl, "overlay", "name");
-			depends = CollectStringArray(libConfigEl, "depends", "name");
+			overlays = LowerStringArray(CollectStringArray(libConfigEl, "overlay", "name"));
+			depends = LowerStringArray(CollectStringArray(libConfigEl, "depends", "name"));
 
 			string disabledString = libConfigEl.GetAttribute("disabled");
 			disabled = disabledString != null && disabledString != ""
@@ -341,6 +351,8 @@ namespace Server {
 					Console.WriteLine("Warning: library element without name attribute");
 					continue;
 				}
+
+				name = name.ToLower();
 
 				LibraryConfig libConfig = (LibraryConfig)libraryConfig[name];
 				if (libConfig == null)
