@@ -99,9 +99,9 @@
       <para>
         First, let's install <filename>libgdiplus</filename>:
       </para>
-      <programlisting>wget http://go-mono.com/sources/libgdiplus-1.1/libgdiplus-1.1.7.tar.gz
-tar xzf libgdiplus-1.1.7.tar.gz
-cd libgdiplus-1.1.7
+      <programlisting>wget http://go-mono.com/sources/libgdiplus-1.1/libgdiplus-1.1.8.tar.gz
+tar xzf libgdiplus-1.1.8.tar.gz
+cd libgdiplus-1.1.8
 ./configure --prefix=/usr/local
 make
 make install
@@ -109,9 +109,9 @@ ldconfig</programlisting>
       <para>
         The Mono installation can now be performed:
       </para>
-      <programlisting>wget http://www.go-mono.com/sources/mono-1.1/mono-1.1.7.tar.gz
-tar xzf mono-1.1.7.tar.gz
-cd mono-1.1.7
+      <programlisting>wget http://www.go-mono.com/sources/mono-1.1/mono-1.1.8.tar.gz
+tar xzf mono-1.1.8.tar.gz
+cd mono-1.1.8
 ./configure --prefix=/usr/local
 make
 make install</programlisting>
