@@ -10,6 +10,7 @@ clean:
 
 install: all
 	install -m 0755 SunUO.exe $(RUNUO_BASE)/
+	-test -f SunUO.exe.mdb && install -m 0644 SunUO.exe.mdb $(RUNUO_BASE)/
 
 SunUO.exe: $(SOURCES)
 	$(MCS) $(MCS_FLAGS) -out:$@ $(SOURCES)
