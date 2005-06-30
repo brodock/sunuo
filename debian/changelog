@@ -12,7 +12,7 @@ sunuo (0.1.9) unstable; urgency=low
   * library names are case insensitive
   * added the --logfile option
 
- --
+ -- Max Kellermann <max@duempel.org>  Thu, 30 Jun 2005 23:55:12 +0200
 
 sunuo (0.1.8) unstable; urgency=low
 
