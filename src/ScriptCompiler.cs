@@ -324,9 +324,9 @@ namespace Server
                                 Console.Write("{0}", libConfig.Name);
 				libraries.Add(new Library(libConfig,
 										  Assembly.LoadFrom(libConfig.SourcePath.FullName)));
-                                m_AdditionalReferences.Add(libConfig.SourcePath.FullName);
-                                Console.Write(". ");
-                                return true;
+				m_AdditionalReferences.Add(libConfig.SourcePath.FullName);
+				Console.Write(". ");
+				return true;
 			} else if (!libConfig.SourcePath.Exists) {
 				Console.WriteLine("Warning: library {0} does not exist: {1}",
 								  libConfig.Name, libConfig.SourcePath);
