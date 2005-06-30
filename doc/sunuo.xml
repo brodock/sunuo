@@ -370,15 +370,16 @@ mono SunUO.exe</programlisting>
     <title>Scripts</title>
     <para>
       SunUO consists of two parts: the core, and the scripts. Scripts
-      can be added at runtime. They are compiled when SunUO is
-      starting up to the temporary directory
-      <filename>./var/cache/lib/</filename>.
+      can be added at runtime, and may contain features like new item
+      types, commands, gumps. They are compiled when SunUO is
+      starting.
     </para>
     <para>
       The RunUO base scripts are located in
-      <filename>./Scripts/</filename>. Additional script libraries can
-      be put into <filename>./local/src/NAME/</filename>, where "NAME"
-      is the name of your script library. Binary script libraries are
+      <filename>./Scripts/</filename>. SunUO further supports to
+      organize additional scripts in "script libraries". The directory
+      structure below <filename>./local/src/NAME/</filename> contains
+      the scripts of the library "NAME". Binary script libraries are
       loaded from <filename>./local/lib/NAME.dll</filename>.
     </para>
     <para>
@@ -392,6 +393,46 @@ mono SunUO.exe</programlisting>
     &lt;/library&gt;
   &lt;libraries&gt;
 &lt;/sunuo-config&gt;</programlisting>
+
+    <section>
+      <title>Why script libraries?</title>
+      <para>
+        Whether you use script libraries is a matter of taste. There
+        are good reasons for doing so:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            during script development, SunUO only compiles the
+            libraries which have been recently modified instead of
+            everything - which would be much slower
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            less memory is required for compilation
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            putting scripts from several authors into one directory
+            structure becomes a mess sooner or later
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            upgrading a single library to a new version is much
+            easier: delete old script library, unzip new library, done
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            every library can be compiled with its own set of compiler
+            flags, e.g. warning level
+          </para>
+        </listitem>
+      </itemizedlist>
+    </section>
 
     <section>
       <title>Library path</title>
