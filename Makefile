@@ -28,5 +28,5 @@ release: docs
 	cd /tmp/sunuo && fakeroot zip -qr sunuo-$(VERSION)-bin.zip sunuo-$(VERSION)-bin
 
 upload: docs
-	scp README NEWS doc/sunuo.html max@duempel.org:/var/www/share/gzipped/download/sunuo/doc/
+	scp README NEWS debian/changelog doc/sunuo.html max@duempel.org:/var/www/share/gzipped/download/sunuo/doc/
 	ssh max@duempel.org chmod a+rX -R /var/www/share/gzipped/download/sunuo/doc/
