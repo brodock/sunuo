@@ -224,7 +224,7 @@ mono SunUO.exe</programlisting>
         <programlisting>&lt;sunuo-config&gt;
   &lt;global&gt;
     &lt;multi-threading value="on"/&gt;
-  &lt;/login&gt;
+  &lt;/global&gt;
 &lt;/sunuo-config&gt;</programlisting>
       </section>
 
