@@ -207,6 +207,35 @@ mono SunUO.exe</programlisting>
         this is limited currently, because compatibility with RunUO is
         important. SunUO creates this file on its first run.
       </para>
+
+      <section>
+        <title>Encryption</title>
+        <para>
+          Starting with version 0.2.0, SunUO has out-of-the-box
+          support for encrypted clients, dropping the need to disable
+          encryption in all clients.
+        </para>
+
+        <para>
+          The element <varname>&lt;encryption&gt;</varname> in
+          <filename>etc/sunuo.xml</filename> is responsible for
+          configuration:
+        </para>
+
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;encryption&gt;
+    &lt;enabled value="yes"/&gt;
+    &lt;allow-unencrypted value="no"/&gt;
+  &lt;/encryption&gt;
+&lt;/sunuo-config&gt;</programlisting>
+
+        <para>
+          The variable <varname>enabled</varname> enables or disables
+          the encryption code.  By modifying
+          <varname>allow-unencrypted</varname>, you may command SunUO
+          to reject all clients without encryption.
+        </para>
+      </section>
     </section>
 
     <section>
