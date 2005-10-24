@@ -32,6 +32,7 @@ using System.Collections;
 using System.Diagnostics;
 using Server;
 using Server.Network;
+using Server.Network.Encryption;
 using Server.Accounting;
 using Server.Gumps;
 
@@ -404,6 +405,7 @@ namespace Server
 			timerThread.Start();
 
 			NetState.Initialize();
+			Encryption.Initialize();
 
 			EventSink.InvokeServerStarted();
 
