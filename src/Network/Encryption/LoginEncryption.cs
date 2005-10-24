@@ -49,14 +49,14 @@ namespace Server.Network.Encryption
 			uint orgTable1 = ( ( ( ~seed ) ^ 0x00001357 ) << 16 ) | ( ( seed ^ 0xffffaaaa ) & 0x0000ffff );
 			uint orgTable2 = ( ( seed ^ 0x43210000 ) >> 16 ) | ( ( ( ~seed ) ^ 0xabcdffff ) & 0xffff0000 );
 
-			for (int i = 0; i < Configuration.LoginKeys.Length; ++i)
+			foreach (LoginKey key in Configuration.LoginKeys)
 			{
 				// Check if this key works on this packet
 				Buffer.BlockCopy(buffer, offset, packet, 0, 62);
 				table1 = orgTable1;
 				table2 = orgTable2;
-				key1 = Configuration.LoginKeys[i].Key1;
-				key2 = Configuration.LoginKeys[i].Key2;
+				key1 = key.Key1;
+				key2 = key.Key2;
 
 				clientDecrypt( ref packet, packet.Length );
 
@@ -66,9 +66,9 @@ namespace Server.Network.Encryption
 					// Reestablish our current state
 					table1 = orgTable1;
 					table2 = orgTable2;
-					key1 = Configuration.LoginKeys[i].Key1;
-					key2 = Configuration.LoginKeys[i].Key2;
-					name = Configuration.LoginKeys[i].Name;
+					key1 = key.Key1;
+					key2 = key.Key2;
+					name = key.Name;
 					return true;
 				}
 			}
