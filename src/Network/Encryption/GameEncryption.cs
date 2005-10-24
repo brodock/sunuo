@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Security.Cryptography;
 
-namespace Network.Encryption
+namespace Server.Network.Encryption
 {
 	public class GameEncryption : IClientEncryption
 	{

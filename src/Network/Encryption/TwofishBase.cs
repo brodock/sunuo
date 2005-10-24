@@ -9,7 +9,7 @@ using System.Security.Cryptography;
  * http://www.codetools.com/csharp/twofish_csharp.asp
  */
 
-namespace Network.Encryption
+namespace Server.Network.Encryption
 {
 
 	/// <summary>

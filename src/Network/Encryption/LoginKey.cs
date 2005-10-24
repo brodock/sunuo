@@ -1,6 +1,6 @@
 using System;
 
-namespace Network.Encryption
+namespace Server.Network.Encryption
 {
 	public class LoginKey
 	{

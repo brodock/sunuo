@@ -6,7 +6,7 @@ using Server.Accounting;
 using Server;
 using Server.Network;
 
-namespace Network.Encryption
+namespace Server.Network.Encryption
 {
 	// This class handles OSI client encryption for clients newer than 2.0.3. (not including 2.0.3)
 	public class Encryption : IPacketEncoder

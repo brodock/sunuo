@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-namespace Network.Encryption 
+namespace Server.Network.Encryption 
 {
 	public class LoginEncryption : IClientEncryption 
 	{
