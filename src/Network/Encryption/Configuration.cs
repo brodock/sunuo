@@ -1,13 +1,29 @@
+using System.Xml;
+using Server;
 
 namespace Server.Network.Encryption 
 {
 	public class Configuration 
 	{
+		private static XmlElement MyConfig {
+			get {
+				return Core.Config.GetConfiguration("encryption");
+			}
+		}
+
 		// Set this to true to enable this subsystem.
-		public static bool Enabled = true;
+		public static bool Enabled {
+			get {
+				return Config.GetElementBool(MyConfig, "enabled", true);
+			}
+		}
 
 		// Set this to false to disconnect unencrypted connections.
-		public static bool AllowUnencryptedClients = true;
+		public static bool AllowUnencryptedClients {
+			get {
+				return Config.GetElementBool(MyConfig, "allow-unencrypted", true);
+			}
+		}
 
 		// This is the list of supported game encryption keys.
 		// You can use the utility found at http://www.hartte.de/ExtractKeys.exe
