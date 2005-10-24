@@ -5,9 +5,8 @@ using System.Collections;
 using Server.Accounting;
 using Server;
 using Server.Network;
-using Server.Misc;
 
-namespace Scripts.Engines.Encryption
+namespace Network.Encryption
 {
 	// This class handles OSI client encryption for clients newer than 2.0.3. (not including 2.0.3)
 	public class Encryption : IPacketEncoder

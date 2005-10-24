@@ -1,5 +1,5 @@
 
-namespace Scripts.Engines.Encryption 
+namespace Network.Encryption 
 {
 	public class NoEncryption : IClientEncryption
 	{
