@@ -226,6 +226,7 @@ mono SunUO.exe</programlisting>
   &lt;encryption&gt;
     &lt;enabled value="yes"/&gt;
     &lt;allow-unencrypted value="no"/&gt;
+    &lt;login-key name="6.5.4" key1="0xdeadbeef" key2="0xbeefdead"/&gt;
   &lt;/encryption&gt;
 &lt;/sunuo-config&gt;</programlisting>
 
@@ -234,6 +235,12 @@ mono SunUO.exe</programlisting>
           the encryption code.  By modifying
           <varname>allow-unencrypted</varname>, you may command SunUO
           to reject all clients without encryption.
+        </para>
+
+        <para>
+          Optionally, you may specify additional login keys with
+          <varname>login-key</varname>, one element per key.  A
+          number of those is already hard-coded in the sources.
         </para>
       </section>
     </section>

@@ -1,3 +1,6 @@
+using System;
+using System.Globalization;
+using System.Collections;
 using System.Xml;
 using Server;
 
@@ -28,7 +31,7 @@ namespace Server.Network.Encryption
 		// This is the list of supported game encryption keys.
 		// You can use the utility found at http://www.hartte.de/ExtractKeys.exe
 		// to extract the neccesary keys from any client version.
-		public static LoginKey[] LoginKeys = new LoginKey[]
+		public static LoginKey[] DefaultLoginKeys = new LoginKey[]
 		{
 			new LoginKey("5.0.1", 0x2eaba7ec, 0xa2417e7f),
 			new LoginKey("5.0.0", 0x2E93A5FC, 0xA25D527F),
@@ -49,5 +52,37 @@ namespace Server.Network.Encryption
 			new LoginKey("3.0.6", 0x2CC3ED9C, 0xA374227F),
 			new LoginKey("3.0.5", 0x2C8B97AC, 0xA350DE7F),
 		};
+
+		public static LoginKey[] LoginKeys {
+			get {
+				Hashtable keys = new Hashtable();
+				foreach (LoginKey key in DefaultLoginKeys) {
+					keys[key.Name] = key;
+				}
+
+				foreach (XmlElement el in MyConfig.GetElementsByTagName("login-key")) {
+					String name = el.GetAttribute("name");
+					String key1 = el.GetAttribute("key1");
+					String key2 = el.GetAttribute("key2");
+
+					if (name == null || key1 == null || key2 == null) {
+						Console.Error.WriteLine("login-key parameter missing");
+						continue;
+					}
+
+					if (!key1.StartsWith("0x") || !key2.StartsWith("0x")) {
+						Console.Error.WriteLine("login-key data must start with '0x', followed by hexadecimal digits");
+						continue;
+					}
+
+					uint key1b = UInt32.Parse(key1.Substring(2), NumberStyles.HexNumber);
+					uint key2b = UInt32.Parse(key2.Substring(2), NumberStyles.HexNumber);
+
+					keys[name] = new LoginKey(name, key1b, key2b);
+				}
+
+				return (LoginKey[])new ArrayList(keys.Values).ToArray(typeof(LoginKey));
+			}
+		}
 	}
 }
