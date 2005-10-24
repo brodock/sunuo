@@ -81,9 +81,9 @@ namespace Server.Network
 
 		private int m_Flags;
 
-		private static IPacketEncoder m_Encoder;
+		private IPacketEncoder m_Encoder;
 
-		public static IPacketEncoder PacketEncoder
+		public IPacketEncoder PacketEncoder
 		{
 			get{ return m_Encoder; }
 			set{ m_Encoder = value; }

@@ -1,6 +1,6 @@
 sunuo (0.1.10) unstable; urgency=low
 
-  * 
+  * make NetState.PacketEncoder non-static (patch from Sebastian Hartte)
 
  --
 
