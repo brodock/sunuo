@@ -15,7 +15,7 @@ export:
 	svn export . /mnt/misc/sunuo
 
 release: VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
-release: all
+release: all docs
 	rm -rf /tmp/sunuo
 	mkdir -p /tmp/sunuo
 	svn export . /tmp/sunuo/sunuo-$(VERSION)
