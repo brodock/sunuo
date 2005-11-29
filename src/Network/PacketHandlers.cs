@@ -2059,7 +2059,8 @@ namespace Server.Network
 			if ( info == null || a == null || cityIndex < 0 || cityIndex >= info.Length )
 			{
 				Console.WriteLine( cityIndex );
-				Console.WriteLine( info.Length );
+				if (info != null)
+					Console.WriteLine( info.Length );
 				state.Dispose();
 			}
 			else

@@ -2,6 +2,8 @@ sunuo (0.2.0) unstable; urgency=low
 
   * make NetState.PacketEncoder non-static (patch from Sebastian Hartte)
   * added RunUO-Encryption-2.1.zip to core (from Sebastian Hartte)
+  * fixed remote vulnerability in Network/PacketHandlers.cs, thanks to
+    Bakarat for reporting that
 
  --
 
