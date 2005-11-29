@@ -6,4 +6,6 @@ cd src
 cd ..\util
 %windir%\Microsoft.NET\Framework\v1.1.4322\csc.exe /nologo /out:UOGQuery.exe /unsafe UOGQuery.cs
 
+cd ..
+
 PAUSE
