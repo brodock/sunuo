@@ -1,3 +1,5 @@
+WINDOWS_CHECKOUT = /mnt/dafoe/svn/sunuo
+
 all install:
 	make -C src $@
 	make -C util $@
@@ -24,7 +26,7 @@ release: docs
 	mkdir -p /tmp/sunuo/sunuo-$(VERSION)-bin
 	cp AUTHORS COPYING NEWS README doc/sunuo.html /tmp/sunuo/sunuo-$(VERSION)-bin
 	cp debian/changelog /tmp/sunuo/sunuo-$(VERSION)-bin/changelog
-	cp /mnt/misc/sunuo/src/SunUO.exe /mnt/misc/sunuo/util/UOGQuery.exe /tmp/sunuo/sunuo-$(VERSION)-bin
+	cp $(WINDOWS_CHECKOUT)/src/SunUO.exe $(WINDOWS_CHECKOUT)/util/UOGQuery.exe /tmp/sunuo/sunuo-$(VERSION)-bin
 	cd /tmp/sunuo && fakeroot zip -qr sunuo-$(VERSION)-bin.zip sunuo-$(VERSION)-bin
 
 upload: docs
