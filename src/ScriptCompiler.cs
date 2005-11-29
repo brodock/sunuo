@@ -198,7 +198,24 @@ namespace Server
 			if (libConfig.WarningLevel >= 0)
 				parms.WarningLevel = libConfig.WarningLevel;
 
-			CompilerResults results = compiler.CompileAssemblyFromFileBatch( parms, files );
+			CompilerResults results = null;
+			try {
+				results = compiler.CompileAssemblyFromFileBatch( parms, files );
+			} catch (System.ComponentModel.Win32Exception e) {
+				/* from WinError.h:
+				 * #define ERROR_FILE_NOT_FOUND 2L
+				 * #define ERROR_PATH_NOT_FOUND 3L
+				 */
+				if (e.NativeErrorCode == 2 || e.NativeErrorCode == 3) {
+					Console.WriteLine();
+					Console.WriteLine();
+					Console.WriteLine("Could not find the compiler - are you sure MCS is installed?");
+					Console.WriteLine("On Debian, try: apt-get install mono-mcs");
+					Environment.Exit(2);
+				} else {
+					throw e;
+				}
+			}
 
 			if (tempFile != null)
 				File.Delete(tempFile);

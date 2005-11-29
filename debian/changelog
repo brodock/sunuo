@@ -4,6 +4,7 @@ sunuo (0.2.0) unstable; urgency=low
   * added RunUO-Encryption-2.1.zip to core (from Sebastian Hartte)
   * fixed remote vulnerability in Network/PacketHandlers.cs, thanks to
     Barakat for reporting that
+  * show a clear message when MCS is not installed
 
  --
 
