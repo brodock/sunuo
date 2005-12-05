@@ -6,7 +6,7 @@ sunuo (0.2.0) unstable; urgency=low
     Barakat for reporting that
   * show a clear message when MCS is not installed
 
- --
+ -- Max Kellermann <max@duempel.org>  Tue, 29 Nov 2005 15:45:18 +0100
 
 sunuo (0.1.9) unstable; urgency=low
 
