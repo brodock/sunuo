@@ -1,6 +1,7 @@
 sunuo (0.2.1) unstable; urgency=low
 
-  * 
+  * ignore misconfiguration in Scripts/Misc/DataPath.cs, just like RunUO
+    does
 
  --
 

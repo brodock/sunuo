@@ -124,6 +124,9 @@ namespace Server
 				string lp = path.ToLower();
 				foreach (string dir in config.DataDirectories) {
 					DirectoryInfo di = new DirectoryInfo(dir);
+					if (!di.Exists)
+						continue;
+
 					foreach (FileInfo fi in di.GetFiles()) {
 						if (fi.Name.ToLower() == lp)
 							return fi.FullName;
