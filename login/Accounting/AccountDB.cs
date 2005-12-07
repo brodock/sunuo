@@ -65,6 +65,10 @@ namespace Server.Accounting {
 				return banned;
 			}
 		}
+
+		public override string ToString() {
+			return name;
+		}
 	}
 
 	public class AccountDB {
