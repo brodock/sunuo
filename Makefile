@@ -1,9 +1,11 @@
 all install:
 	make -C src $@
+	make -C login $@
 	make -C util $@
 
 clean:
 	make -C src $@
+	make -C login $@
 	make -C util $@
 	make -C doc $@
 
