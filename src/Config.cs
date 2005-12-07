@@ -164,16 +164,29 @@ namespace Server {
 
 	public class LoginConfig {
 		private bool ignoreAuthID;
+		private string accountDatabase;
 
 		public LoginConfig() {
 		}
 
 		public LoginConfig(XmlElement el) {
 			ignoreAuthID = Config.GetElementBool(el, "ignore-auth-id", false);
+			accountDatabase = GetElementString(el, "account-database");
+		}
+
+		private static string GetElementString(XmlElement parent, string tag) {
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return null;
+			return nl[0].InnerText;
 		}
 
 		public bool IgnoreAuthID {
 			get { return ignoreAuthID; }
+		}
+
+		public string AccountDatabase {
+			get { return accountDatabase; }
 		}
 	}
 

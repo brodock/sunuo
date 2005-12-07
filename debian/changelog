@@ -2,7 +2,8 @@ sunuo (0.2.1) unstable; urgency=low
 
   * ignore misconfiguration in Scripts/Misc/DataPath.cs, just like RunUO
     does
-  * implemented a stripped down SunUO server as login server
+  * implemented a stripped down SunUO server as login server, with account
+    database in ODBC
 
  --
 

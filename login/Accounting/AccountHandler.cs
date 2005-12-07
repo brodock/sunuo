@@ -23,45 +23,41 @@ using System;
 using Server.Network;
 
 namespace Server.Accounting {
-	public class SunAccount : IAccount {
-		public bool CheckPassword(String password) {
-			/* XXX */
-			return true;
-		}
-
-		public bool Banned {
-			get {
-				/* XXX */
-				return false;
-			}
-		}
-	}
-
 	public class AccountHandler {
 		private static bool AutoAccountCreation = true;
+		private static AccountDB accountDB;
 
 		public static void Initialize() {
+			string connectString = Core.Config.LoginConfig.AccountDatabase;
+			if (connectString == null)
+				throw new Exception("login/account-database is not configured");
+
 			EventSink.AccountLogin += new AccountLoginEventHandler( EventSink_AccountLogin );
-		}
 
-		private static SunAccount CreateAccount(NetState state, string username, string password) {
-			/* XXX */
-			return new SunAccount();
-		}
-
-		private static SunAccount GetAccount(string username) {
-			/* XXX */
-			return new SunAccount();
+			accountDB = new AccountDB(connectString);
 		}
 
 		public static void EventSink_AccountLogin(AccountLoginEventArgs e) {
 			e.Accepted = false;
-			SunAccount account = GetAccount(e.Username);
+			SunAccount account;
+			try {
+				account = accountDB.GetAccount(e.Username);
+			} catch (Exception ex) {
+				Console.WriteLine("AccountDB.GetAccount failed: {0}", ex);
+				e.RejectReason = ALRReason.Blocked;
+				return;
+			}
 
 			if (account == null) {
 				if (AutoAccountCreation) {
-					e.State.Account = account = CreateAccount(e.State, e.Username, e.Password);
-					e.Accepted = true;
+					try {
+						e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
+						e.Accepted = true;
+					} catch (Exception ex) {
+						Console.WriteLine("AccountDB.CreateAccount failed: {0}", ex);
+						e.RejectReason = ALRReason.Blocked;
+						return;
+					}
 				} else {
 					Console.WriteLine( "Login: {0}: Invalid username '{1}'", e.State, e.Username);
 					e.RejectReason = ALRReason.Invalid;
@@ -80,3 +76,4 @@ namespace Server.Accounting {
 		}
 	}
 }
+
