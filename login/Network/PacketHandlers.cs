@@ -23,6 +23,7 @@
  ***************************************************************************/
 
 using System;
+using System.Collections;
 using Server.Accounting;
 using CV = Server.ClientVersion;
 
@@ -45,6 +46,9 @@ namespace Server.Network
 	{
 		private static PacketHandler[] m_Handlers;
 
+		private static PacketHandler[] m_ExtendedHandlersLow;
+		private static Hashtable m_ExtendedHandlersHigh;
+
 		public static PacketHandler[] Handlers
 		{
 			get{ return m_Handlers; }
@@ -58,11 +62,36 @@ namespace Server.Network
 			Register( 0x80,  62, false, new OnPacketReceive( AccountLogin ) );
 			Register( 0xA0,   3, false, new OnPacketReceive( PlayServer ) );
 			Register( 0xCF,   0, false, new OnPacketReceive( AccountLogin ) );
+			Register( 0xBF,   0,  true, new OnPacketReceive( ExtendedCommand ) );
 		}
 
 		public static void Register( int packetID, int length, bool ingame, OnPacketReceive onReceive )
 		{
 			m_Handlers[packetID] = new PacketHandler( packetID, length, ingame, onReceive );
+		}
+
+		public static void RegisterExtended( int packetID, bool ingame, OnPacketReceive onReceive )
+		{
+			if ( packetID >= 0 && packetID < 0x100 )
+				m_ExtendedHandlersLow[packetID] = new PacketHandler( packetID, 0, ingame, onReceive );
+			else
+				m_ExtendedHandlersHigh[packetID] = new PacketHandler( packetID, 0, ingame, onReceive );
+		}
+
+		public static PacketHandler GetExtendedHandler( int packetID )
+		{
+			if ( packetID >= 0 && packetID < 0x100 )
+				return m_ExtendedHandlersLow[packetID];
+			else
+				return (PacketHandler)m_ExtendedHandlersHigh[packetID];
+		}
+
+		public static void RemoveExtendedHandler( int packetID )
+		{
+			if ( packetID >= 0 && packetID < 0x100 )
+				m_ExtendedHandlersLow[packetID] = null;
+			else
+				m_ExtendedHandlersHigh.Remove( packetID );
 		}
 
 		public static void PingReq( NetState state, PacketReader pvSrc )
@@ -160,6 +189,34 @@ namespace Server.Network
 		{
 			state.Send( new AccountLoginRej( reason ) );
 			state.Dispose();
+		}
+
+		public static void ExtendedCommand( NetState state, PacketReader pvSrc )
+		{
+			int packetID = pvSrc.ReadUInt16();
+
+			PacketHandler ph = GetExtendedHandler( packetID );
+
+			if ( ph != null )
+			{
+				if ( ph.Ingame && state.Mobile == null )
+				{
+					Console.WriteLine( "Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile", state, packetID );
+					state.Dispose();
+				}
+				else if ( ph.Ingame && state.Mobile.Deleted )
+				{
+					state.Dispose();
+				}
+				else
+				{
+					ph.OnReceive( state, pvSrc );
+				}
+			}
+			else
+			{
+				pvSrc.Trace( state );
+			}
 		}
 
 		public static PacketHandler GetHandler( int packetID )
