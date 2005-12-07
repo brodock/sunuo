@@ -24,7 +24,6 @@ using Server.Network;
 
 namespace Server.Accounting {
 	public class AccountHandler {
-		private static bool AutoAccountCreation = true;
 		private static AccountDB accountDB;
 
 		public static void Initialize() {
@@ -49,7 +48,7 @@ namespace Server.Accounting {
 			}
 
 			if (account == null) {
-				if (AutoAccountCreation) {
+				if (Core.Config.LoginConfig.AutoCreateAccounts) {
 					try {
 						e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
 						e.Accepted = true;

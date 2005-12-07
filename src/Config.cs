@@ -163,7 +163,7 @@ namespace Server {
 	}
 
 	public class LoginConfig {
-		private bool ignoreAuthID;
+		private bool ignoreAuthID, autoCreateAccounts;
 		private string accountDatabase;
 
 		public LoginConfig() {
@@ -171,6 +171,7 @@ namespace Server {
 
 		public LoginConfig(XmlElement el) {
 			ignoreAuthID = Config.GetElementBool(el, "ignore-auth-id", false);
+			autoCreateAccounts = Config.GetElementBool(el, "auto-create-accounts", false);
 			accountDatabase = GetElementString(el, "account-database");
 		}
 
@@ -183,6 +184,10 @@ namespace Server {
 
 		public bool IgnoreAuthID {
 			get { return ignoreAuthID; }
+		}
+
+		public bool AutoCreateAccounts {
+			get { return autoCreateAccounts; }
 		}
 
 		public string AccountDatabase {
