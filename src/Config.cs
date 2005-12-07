@@ -25,6 +25,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
+using System.Net;
 
 namespace Server {
 	public class LibraryConfig {
@@ -176,6 +177,88 @@ namespace Server {
 		}
 	}
 
+	public class GameServerConfig {
+		private String name;
+		private IPEndPoint address;
+
+		public GameServerConfig(String _name, IPEndPoint _address) {
+			name = _name;
+			address = _address;
+		}
+
+		public String Name {
+			get { return name; }
+		}
+
+		public IPEndPoint Address {
+			get { return address; }
+		}
+	}
+
+	public class GameServerListConfig {
+		private ArrayList servers = new ArrayList();
+
+		public GameServerListConfig() {
+		}
+
+		public GameServerListConfig(XmlElement el) {
+			foreach (XmlElement gs in el.GetElementsByTagName("game-server")) {
+				string name = GetElementString(gs, "name");
+				if (name == null) {
+					Console.WriteLine("Game server without name ignored");
+					continue;
+				}
+
+				string addressString = GetElementString(gs, "address");
+				if (addressString == null) {
+					Console.WriteLine("Game server without address ignored");
+					continue;
+				}
+
+				string[] splitted = addressString.Split(new char[]{':'}, 2);
+				if (splitted.Length != 2) {
+					Console.WriteLine("Game server without port ignored");
+					continue;
+				}
+
+				IPAddress ip;
+				try {
+					IPHostEntry he = Dns.Resolve(splitted[0]);
+					if (he.AddressList.Length == 0) {
+						Console.WriteLine("Failed to resolve {0}", splitted[0]);
+						continue;
+					}
+					ip = he.AddressList[he.AddressList.Length - 1];
+				} catch (Exception e) {
+					Console.WriteLine("Failed to resolve {0}: {1}", splitted[0], e);
+					continue;
+				}
+
+				short port;
+				try {
+					port = Int16.Parse(splitted[1]);
+				} catch {
+					Console.WriteLine("Invalid game server port ignored");
+					continue;
+				}
+
+				IPEndPoint address = new IPEndPoint(ip, port);
+				servers.Add(new GameServerConfig(name, address));
+			}
+		}
+
+		private static string GetElementString(XmlElement parent, string tag) {
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return null;
+			return nl[0].InnerText;
+		}
+
+		public IEnumerable GameServers {
+			get { return servers; }
+		}
+	}
+
 	public class Config {
 		private string filename;
 		private XmlDocument document;
@@ -183,6 +266,7 @@ namespace Server {
 		private ArrayList dataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private LoginConfig loginConfig;
+		private GameServerListConfig gameServerListConfig;
 
 		public Config(string _filename) {
 			filename = _filename;
@@ -212,6 +296,10 @@ namespace Server {
 
 		public LoginConfig LoginConfig {
 			get { return loginConfig; }
+		}
+
+		public GameServerListConfig GameServerListConfig {
+			get { return gameServerListConfig; }
 		}
 
 		public XmlElement GetConfiguration(string path) {
@@ -369,6 +457,11 @@ namespace Server {
 			loginConfig = loginEl == null
 				? new LoginConfig()
 				: new LoginConfig(loginEl);
+
+			// section "server-list"
+			XmlElement serverListEl = GetConfiguration("server-list");
+			if (serverListEl != null)
+				gameServerListConfig = new GameServerListConfig(serverListEl);
 		}
 
 		public void Save() {
