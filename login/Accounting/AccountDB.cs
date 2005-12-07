@@ -26,6 +26,7 @@ using System.Data;
 using System.Data.Odbc;
 using Server.Network;
 using System.Text;
+using MySql.Data.MySqlClient;
 
 namespace Server.Accounting {
 	class Hash {
@@ -70,16 +71,17 @@ namespace Server.Accounting {
 		private IDbConnection dbcon;
 
 		public AccountDB(String connectString) {
-			dbcon = new OdbcConnection(connectString);
+			//dbcon = new OdbcConnection(connectString);
+			dbcon = new MySqlConnection(connectString);
 			dbcon.Open();
 		}
 
 		private bool FindAccountRecord(string username, ref string password,
 									   ref bool banned) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "SELECT Password,Flags FROM users WHERE Username=?";
+			dbcmd.CommandText = "SELECT Password,Flags FROM users WHERE Username=?Username";
 			IDataParameter p = (IDataParameter)dbcmd.CreateParameter();
-			p.ParameterName = "Username";
+			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
 			p.Value = username;
 			dbcmd.Parameters.Add(p); 
@@ -99,9 +101,9 @@ namespace Server.Accounting {
 
 		private void UpdateAccountRecord(string username) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "UPDATE users SET LastLogin=NOW() WHERE Username=?";
+			dbcmd.CommandText = "UPDATE users SET LastLogin=NOW() WHERE Username=?Username";
 			IDataParameter p = dbcmd.CreateParameter();
-			p.ParameterName = "Username";
+			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
 			p.Value = username;
 			dbcmd.Parameters.Add(p); 
@@ -110,21 +112,21 @@ namespace Server.Accounting {
 
 		private void CreateAccountRecord(NetState state, string username, string password) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "INSERT INTO users(Username, Password, Flags, Created, LastLogin, CreationIP) VALUES(?, ?, 2, NOW(), NOW(), ?)";
+			dbcmd.CommandText = "INSERT INTO users(Username, Password, Flags, Created, LastLogin, CreationIP) VALUES(?Username, ?Password, 2, NOW(), NOW(), ?CreationIP)";
 			IDataParameter p = dbcmd.CreateParameter();
-			p.ParameterName = "Username";
+			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
 			p.Value = username;
 			dbcmd.Parameters.Add(p);
 
 			p = dbcmd.CreateParameter();
-			p.ParameterName = "Password";
+			p.ParameterName = "?Password";
 			p.DbType = DbType.String;
 			p.Value = password;
 			dbcmd.Parameters.Add(p);
 
 			p = dbcmd.CreateParameter();
-			p.ParameterName = "CreationIP";
+			p.ParameterName = "?CreationIP";
 			p.DbType = DbType.String;
 			p.Value = state.Address.ToString();
 			dbcmd.Parameters.Add(p);

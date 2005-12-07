@@ -10,7 +10,7 @@ clean:
 	rm -f SunLogin.exe
 
 SunLogin.exe: $(SOURCES)
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll $(SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data $(SOURCES)
 
 install: all
 	install -m 0755 SunLogin.exe $(RUNUO_BASE)/
