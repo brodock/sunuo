@@ -50,6 +50,7 @@ namespace Server.Network
 		private SendQueue m_SendQueue;
 		private bool m_Seeded;
 		private bool m_Running;
+		private bool m_Super;
 		private AsyncCallback m_OnReceive, m_OnSend;
 		private MessagePump m_MessagePump;
 		private ServerInfo[] m_ServerInfo;
@@ -178,6 +179,8 @@ namespace Server.Network
 
 			try{ m_Address = ((IPEndPoint)m_Socket.RemoteEndPoint).Address; m_ToString = m_Address.ToString(); }
 			catch{ m_Address = IPAddress.None; m_ToString = "(error)"; }
+
+			m_Super = Core.Config.LoginConfig.IsSuperClient(m_ToString);
 
 			if ( m_CreatedCallback != null )
 				m_CreatedCallback( this );
@@ -567,6 +570,14 @@ namespace Server.Network
 			get
 			{
 				return m_Buffer;
+			}
+		}
+
+		public bool Super
+		{
+			get
+			{
+				return m_Super;
 			}
 		}
 	}
