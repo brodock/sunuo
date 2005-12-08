@@ -63,6 +63,8 @@ namespace Server.Network
 			Register( 0xA0,   3, false, new OnPacketReceive( PlayServer ) );
 			Register( 0xCF,   0, false, new OnPacketReceive( AccountLogin ) );
 			Register( 0xBF,   0, false, new OnPacketReceive( ExtendedCommand ) );
+
+			RegisterExtended( 0x5555, false, new OnPacketReceive( Emulator ) );
 		}
 
 		public static void Register( int packetID, int length, bool ingame, OnPacketReceive onReceive )
@@ -217,6 +219,15 @@ namespace Server.Network
 			{
 				pvSrc.Trace( state );
 			}
+		}
+
+		private static void Emulator( NetState state, PacketReader pvSrc )
+		{
+			int code = pvSrc.ReadUInt16();
+			/*
+			switch (code) {
+			}
+			*/
 		}
 
 		public static PacketHandler GetHandler( int packetID )
