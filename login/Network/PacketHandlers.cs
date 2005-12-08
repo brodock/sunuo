@@ -58,6 +58,9 @@ namespace Server.Network
 		{
 			m_Handlers = new PacketHandler[0x100];
 
+			m_ExtendedHandlersLow = new PacketHandler[0x100];
+			m_ExtendedHandlersHigh = new Hashtable();
+
 			Register( 0x73,   2, false, new OnPacketReceive( PingReq ) );
 			Register( 0x80,  62, false, new OnPacketReceive( AccountLogin ) );
 			Register( 0xA0,   3, false, new OnPacketReceive( PlayServer ) );
