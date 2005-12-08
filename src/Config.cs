@@ -290,6 +290,16 @@ namespace Server {
 		public IEnumerable GameServers {
 			get { return servers; }
 		}
+
+		public GameServerConfig this[string name] {
+			get {
+				foreach (GameServerConfig gs in servers) {
+					if (gs.Name == name)
+						return gs;
+				}
+				return null;
+			}
+		}
 	}
 
 	public class Config {
