@@ -35,7 +35,7 @@ namespace Server
 	public class Utility
 	{
 		private static Random m_Random = new Random();
-		private static Encoding m_UTF8, m_UTF8WithEncoding;
+		private static Encoding m_UTF8;
 
 		public static Encoding UTF8
 		{
