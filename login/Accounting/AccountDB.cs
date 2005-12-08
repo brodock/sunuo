@@ -72,9 +72,15 @@ namespace Server.Accounting {
 	}
 
 	public class AccountDB {
+		private string connectString;
 		private IDbConnection dbcon;
 
-		public AccountDB(String connectString) {
+		public AccountDB(String _connectString) {
+			connectString = _connectString;
+			Reconnect();
+		}
+
+		private void Reconnect() {
 			//dbcon = new OdbcConnection(connectString);
 			dbcon = new MySqlConnection(connectString);
 			dbcon.Open();
@@ -100,6 +106,21 @@ namespace Server.Accounting {
 			} else {
 				reader.Close();
 				return false;
+			}
+		}
+
+		/** same as FindAccountRecord(), but auto-reconnects when the
+			DB connection is lost */
+		private bool FindAccountRecordAutoR(string username, ref string password,
+											ref bool banned) {
+			try {
+				return FindAccountRecord(username, ref password, ref banned);
+			} catch (Exception e) {
+				Console.WriteLine("Connection to DB lost? ({0})", e.Message);
+				Reconnect();
+				Console.WriteLine("Reconnected DB.");
+
+				return FindAccountRecord(username, ref password, ref banned);
 			}
 		}
 
@@ -148,7 +169,7 @@ namespace Server.Accounting {
 		public SunAccount GetAccount(string username) {
 			string password = null;
 			bool banned = true;
-			if (FindAccountRecord(username, ref password, ref banned)) {
+			if (FindAccountRecordAutoR(username, ref password, ref banned)) {
 				UpdateAccountRecord(username);
 				return new SunAccount(username, password, banned);
 			} else {
