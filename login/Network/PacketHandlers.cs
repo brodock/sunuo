@@ -62,7 +62,7 @@ namespace Server.Network
 			Register( 0x80,  62, false, new OnPacketReceive( AccountLogin ) );
 			Register( 0xA0,   3, false, new OnPacketReceive( PlayServer ) );
 			Register( 0xCF,   0, false, new OnPacketReceive( AccountLogin ) );
-			Register( 0xBF,   0,  true, new OnPacketReceive( ExtendedCommand ) );
+			Register( 0xBF,   0, false, new OnPacketReceive( ExtendedCommand ) );
 		}
 
 		public static void Register( int packetID, int length, bool ingame, OnPacketReceive onReceive )

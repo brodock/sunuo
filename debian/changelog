@@ -4,6 +4,7 @@ sunuo (0.2.1) unstable; urgency=low
     does
   * implemented a stripped down SunUO server as login server, with account
     database in ODBC
+  * ExtendedCommand does its own in-game check, removed requirement
 
  --
 

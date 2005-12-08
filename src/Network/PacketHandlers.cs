@@ -132,7 +132,7 @@ namespace Server.Network
 			Register( 0xBB,   9, false, new OnPacketReceive( AccountID ) );
 			Register( 0xBD,   0,  true, new OnPacketReceive( ClientVersion ) );
 			Register( 0xBE,   0,  true, new OnPacketReceive( AssistVersion ) );
-			Register( 0xBF,   0,  true, new OnPacketReceive( ExtendedCommand ) );
+			Register( 0xBF,   0, false, new OnPacketReceive( ExtendedCommand ) );
 			Register( 0xC2,   0,  true, new OnPacketReceive( UnicodePromptResponse ) );
 			Register( 0xC8,   2,  true, new OnPacketReceive( SetUpdateRange ) );
 			Register( 0xC9,   6,  true, new OnPacketReceive( TripTime ) );
