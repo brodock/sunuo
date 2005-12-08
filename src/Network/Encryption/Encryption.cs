@@ -167,6 +167,19 @@ namespace Server.Network.Encryption
 					}
 				}
 
+				// This is special handling for the "Emulator" packet
+				if (packetLength >= 5)
+				{
+					if (buffer[packetOffset] == 0xbf &&
+						buffer[packetOffset + 1] < 0x10 &&
+						buffer[packetOffset + 3] == 0x55 &&
+						buffer[packetOffset + 4] == 0x55)
+					{
+						m_Encryption = new NoEncryption();
+						return;
+					}
+				}
+
 				// Check if the current buffer contains a valid login packet (62 byte + 4 byte header)
 				// Please note that the client sends these in two chunks. One 4 byte and one 62 byte.
 				if (packetLength == 62) 
