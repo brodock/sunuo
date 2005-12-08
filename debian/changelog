@@ -5,6 +5,8 @@ sunuo (0.2.1) unstable; urgency=low
   * implemented a stripped down SunUO server as login server, with account
     database in ODBC
   * ExtendedCommand does its own in-game check, removed requirement
+  * added ExtendedCommand 0x5555 which will serve as container for our
+    protocol extensions
 
  --
 

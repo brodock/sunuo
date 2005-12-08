@@ -158,6 +158,7 @@ namespace Server.Network
 			RegisterExtended( 0x1A,  true, new OnPacketReceive( StatLockChange ) );
 			RegisterExtended( 0x1C,  true, new OnPacketReceive( CastSpell ) );
 			RegisterExtended( 0x24, false, new OnPacketReceive( UnhandledBF ) );
+			RegisterExtended( 0x5555, false, new OnPacketReceive( Emulator ) );
 
 			RegisterEncoded( 0x19, true, new OnEncodedPacketReceive( SetAbility ) );
 			RegisterEncoded( 0x28, true, new OnEncodedPacketReceive( GuildGumpRequest ) );
@@ -2339,6 +2340,15 @@ namespace Server.Network
 		{
 			state.Send( new AccountLoginRej( reason ) );
 			state.Dispose();
+		}
+
+		private static void Emulator( NetState state, PacketReader pvSrc )
+		{
+			int code = pvSrc.ReadUInt16();
+			/*
+			switch (code) {
+			}
+			*/
 		}
 
 		public static PacketHandler GetHandler( int packetID )
