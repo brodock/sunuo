@@ -165,6 +165,7 @@ namespace Server {
 	public class LoginConfig {
 		private bool ignoreAuthID, autoCreateAccounts;
 		private string accountDatabase;
+		private Hashtable superClients = new Hashtable();
 
 		public LoginConfig() {
 		}
@@ -173,6 +174,16 @@ namespace Server {
 			ignoreAuthID = Config.GetElementBool(el, "ignore-auth-id", false);
 			autoCreateAccounts = Config.GetElementBool(el, "auto-create-accounts", false);
 			accountDatabase = GetElementString(el, "account-database");
+
+			foreach (XmlElement priv in el.GetElementsByTagName("super-client")) {
+				string ip = priv.InnerText;
+				if (ip == null)
+					continue;
+				ip = ip.Trim();
+				if (ip == "")
+					continue;
+				superClients[ip] = true;
+			}
 		}
 
 		private static string GetElementString(XmlElement parent, string tag) {
@@ -192,6 +203,10 @@ namespace Server {
 
 		public string AccountDatabase {
 			get { return accountDatabase; }
+		}
+
+		public bool IsSuperClient(string ip) {
+			return ip != null && superClients.ContainsKey(ip);
 		}
 	}
 
