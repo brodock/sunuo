@@ -213,10 +213,13 @@ namespace Server {
 	public class GameServerConfig {
 		private String name;
 		private IPEndPoint address;
+		private bool sendAuthID;
 
-		public GameServerConfig(String _name, IPEndPoint _address) {
+		public GameServerConfig(String _name, IPEndPoint _address,
+								bool _sendAuthID) {
 			name = _name;
 			address = _address;
+			sendAuthID = _sendAuthID;
 		}
 
 		public String Name {
@@ -225,6 +228,10 @@ namespace Server {
 
 		public IPEndPoint Address {
 			get { return address; }
+		}
+
+		public bool SendAuthID {
+			get { return sendAuthID; }
 		}
 	}
 
@@ -276,7 +283,10 @@ namespace Server {
 				}
 
 				IPEndPoint address = new IPEndPoint(ip, port);
-				servers.Add(new GameServerConfig(name, address));
+
+				bool sendAuthID = Config.GetElementBool(gs, "send-auth-id", false);
+
+				servers.Add(new GameServerConfig(name, address, sendAuthID));
 			}
 		}
 

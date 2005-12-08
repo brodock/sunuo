@@ -2342,13 +2342,28 @@ namespace Server.Network
 			state.Dispose();
 		}
 
+		private static void OnAddAuthID( NetState state, PacketReader pvSrc ) {
+			if (!state.Super) {
+				Console.WriteLine("Client {0} attempted to inject an AuthID", state);
+				state.Dispose(false);
+				return;
+			}
+
+			int authID = pvSrc.ReadInt32();
+			/*String username =*/ pvSrc.ReadString(30);
+			AddAuthID(authID);
+
+			state.Send(new AddAuthIDAck(authID));
+		}
+
 		private static void Emulator( NetState state, PacketReader pvSrc )
 		{
 			int code = pvSrc.ReadUInt16();
-			/*
 			switch (code) {
+			case 0x0001:
+				OnAddAuthID(state, pvSrc);
+				break;
 			}
-			*/
 		}
 
 		public static PacketHandler GetHandler( int packetID )

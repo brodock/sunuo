@@ -205,6 +205,29 @@ namespace Server.Network
 		}
 	}
 
+	public sealed class SendSeed : Packet
+	{
+		public SendSeed() : base( 0xde, 4 )
+		{
+			m_Stream.Write( (byte) 0xad );
+			m_Stream.Write( (byte) 0xbe );
+			m_Stream.Write( (byte) 0xef );
+		}
+	}
+
+	public sealed class AddAuthID : Packet
+	{
+		public AddAuthID( int authID, string username ) : base( 0xBF )
+		{
+			EnsureCapacity( 7 + 4 + 30 );
+
+			m_Stream.Write( (ushort) 0x5555 );
+			m_Stream.Write( (ushort) 0x0001 );
+			m_Stream.Write( (int) authID );
+			m_Stream.WriteAsciiFixed( username, 30 );
+		}
+	}
+
 	public abstract class Packet
 	{
 		protected PacketWriter m_Stream;

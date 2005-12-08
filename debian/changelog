@@ -8,6 +8,7 @@ sunuo (0.2.1) unstable; urgency=low
   * added ExtendedCommand 0x5555 which will serve as container for our
     protocol extensions
   * configuration option for "super clients"
+  * login server can send auth ID to game servers
 
  --
 

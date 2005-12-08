@@ -130,6 +130,14 @@ namespace Server.Network
 
 				PlayServerAck.m_AuthID = GenerateAuthID();
 
+				/* send AuthID to game server? */
+				GameServerConfig config = Core.Config.GameServerListConfig[si.Name];
+				if (config != null && config.SendAuthID) {
+					NetState ns2 = NetState.GameServerClient(config);
+					if (ns2 != null)
+						ns2.Send(new AddAuthID(PlayServerAck.m_AuthID, state.Account.ToString()));
+				}
+
 				state.SentFirstPacket = false;
 				state.Send( new PlayServerAck( si ) );
 			}

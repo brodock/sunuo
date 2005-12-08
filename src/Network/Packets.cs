@@ -3176,6 +3176,18 @@ namespace Server.Network
 		}
 	}
 
+	public sealed class AddAuthIDAck : Packet
+	{
+		public AddAuthIDAck( int authID ) : base( 0xBF )
+		{
+			EnsureCapacity( 7 + 4 );
+
+			m_Stream.Write( (ushort) 0x5555 );
+			m_Stream.Write( (ushort) 0x0002 );
+			m_Stream.Write( (int) authID );
+		}
+	}
+
 	public abstract class Packet
 	{
 		protected PacketWriter m_Stream;

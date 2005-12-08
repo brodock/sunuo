@@ -44,6 +44,7 @@ namespace Server.Network
 	public class NetState
 	{
 		private Socket m_Socket;
+		private IPEndPoint m_EndPoint;
 		private IPAddress m_Address;
 		private ByteQueue m_Buffer;
 		private byte[] m_RecvBuffer;
@@ -51,7 +52,9 @@ namespace Server.Network
 		private bool m_Seeded;
 		private bool m_Running;
 		private bool m_Super;
-		private AsyncCallback m_OnReceive, m_OnSend;
+		private bool m_Client = false;
+		private bool m_Connecting = false;
+		private AsyncCallback m_OnConnect, m_OnReceive, m_OnSend;
 		private MessagePump m_MessagePump;
 		private ServerInfo[] m_ServerInfo;
 		private IAccount m_Account;
@@ -160,6 +163,30 @@ namespace Server.Network
 			}
 		}
 
+		private static Hashtable m_GameServers = new Hashtable();
+
+		public static NetState GameServerClient(GameServerConfig config) {
+			if (config == null)
+				return null;
+
+			String address = config.Address.ToString();
+			NetState ns = (NetState)m_GameServers[address];
+			if (ns != null)
+				return ns;
+
+			try {
+				ns = new NetState(config.Address, Core.MessagePump);
+				ns.Start();
+				ns.Send(new SendSeed());
+				m_GameServers[address] = ns;
+				return ns;
+			} catch (Exception e) {
+				Console.WriteLine("Exception while trying to connect to game server {0} ({1}): {2}",
+								  config.Name, address, e);
+				return null;
+			}
+		}
+
 		private static BufferPool m_ReceiveBufferPool = new BufferPool( 1024, 2048 );
 
 		public NetState( Socket socket, MessagePump messagePump )
@@ -181,6 +208,33 @@ namespace Server.Network
 			catch{ m_Address = IPAddress.None; m_ToString = "(error)"; }
 
 			m_Super = Core.Config.LoginConfig.IsSuperClient(m_ToString);
+
+			if ( m_CreatedCallback != null )
+				m_CreatedCallback( this );
+		}
+
+		/** client constructor, used to connect to other UO servers */
+		public NetState( IPEndPoint connectTo, MessagePump messagePump )
+		{
+			m_Socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
+			m_EndPoint = connectTo;
+			m_Buffer = new ByteQueue();
+			m_Seeded = true;
+			m_Running = false;
+			m_Client = true;
+			m_RecvBuffer = m_ReceiveBufferPool.AquireBuffer();
+			m_MessagePump = messagePump;
+
+			m_SendQueue = new SendQueue();
+
+			m_NextCheckActivity = DateTime.Now + TimeSpan.FromMinutes( 0.5 );
+
+			m_Instances.Add( this );
+
+			try {
+				m_Address = m_EndPoint.Address;
+				m_ToString = "[To GameServer " + m_EndPoint.ToString() + "]";
+			} catch{ m_Address = IPAddress.None; m_ToString = "(error)"; }
 
 			if ( m_CreatedCallback != null )
 				m_CreatedCallback( this );
@@ -210,6 +264,9 @@ namespace Server.Network
 
 				lock ( m_SendQueue )
 					shouldBegin = ( m_SendQueue.Enqueue( buffer, length ) );
+
+				if (m_Connecting)
+					shouldBegin = false;
 
 				if ( shouldBegin )
 				{
@@ -343,6 +400,8 @@ namespace Server.Network
 		{
 			m_OnReceive = new AsyncCallback( OnReceive );
 			m_OnSend = new AsyncCallback( OnSend );
+			if (m_Client)
+				m_OnConnect = new AsyncCallback( OnConnect );
 
 			m_Running = true;
 
@@ -351,7 +410,12 @@ namespace Server.Network
 
 			try
 			{
-				m_Socket.BeginReceive( m_RecvBuffer, 0, 4, SocketFlags.None, m_OnReceive, null );
+				if (m_Client && !m_Connecting) {
+					m_Socket.BeginConnect( m_EndPoint, m_OnConnect, null );
+					m_Connecting = true;
+				} else {
+					m_Socket.BeginReceive( m_RecvBuffer, 0, 4, SocketFlags.None, m_OnReceive, null );
+				}
 			}
 			catch // ( Exception ex )
 			{
@@ -395,6 +459,31 @@ namespace Server.Network
 				//Console.WriteLine(ex);
 				Dispose( false );
 			}
+		}
+
+		private void OnConnect( IAsyncResult asyncResult )
+		{
+			lock ( this )
+			{
+				if ( m_Socket == null )
+					return;
+
+				try
+				{
+					m_Socket.EndConnect( asyncResult );
+					m_Connecting = false;
+					m_Socket.BeginReceive( m_RecvBuffer, 0, 4, SocketFlags.None, m_OnReceive, null );
+				}
+				catch ( Exception ex )
+				{
+					Console.WriteLine(ex);
+					Dispose( false );
+					return;
+				}
+			}
+
+			// After a successful connect, send what may be already in the queue
+			Flush();
 		}
 
 		private void OnReceive( IAsyncResult asyncResult )
@@ -443,6 +532,13 @@ namespace Server.Network
 
 		public void Dispose( bool flush )
 		{
+			if (m_Client && m_EndPoint != null) {
+				string endpoint = m_EndPoint.ToString();
+				NetState old = (NetState)m_GameServers[endpoint];
+				if (old == this)
+					m_GameServers.Remove(endpoint);
+			}
+
 			if (m_Disposing && !m_DisposeFinished) {
 				/* the second call forces disposal */
 				FinishDispose();
