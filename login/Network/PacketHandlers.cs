@@ -140,6 +140,8 @@ namespace Server.Network
 
 				state.SentFirstPacket = false;
 				state.Send( new PlayServerAck( si ) );
+
+				Console.WriteLine("Client {0} playing server '{1}'", state, si.Name);
 			}
 		}
 
