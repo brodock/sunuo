@@ -10,7 +10,7 @@ sunuo (0.2.1) unstable; urgency=low
   * configuration option for "super clients"
   * login server can send auth ID to game servers
 
- --
+ -- Max Kellermann <mk@cm4all.com>  Fri, 16 Dec 2005 15:51:13 +0100
 
 sunuo (0.2.0) unstable; urgency=low
 
