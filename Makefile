@@ -2,6 +2,7 @@ include config.mk
 
 VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
 DISTDIR = build/sunuo-$(VERSION)-bin
+DISTDLL = MySql.Data.dll
 
 MCS_FLAGS += -unsafe -define:MONO -debug -lib:build/lib
 
@@ -36,7 +37,7 @@ $(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ util/UOGQuery.cs
 
-$(DISTDIR)/MySql.Data.dll: build/lib/MySql.Data.dll
+$(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: build/lib/%
 	cp $< $@
 
 # dist targets
@@ -50,7 +51,7 @@ $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 $(DISTDIR)/changelog: debian/changelog
 	cp $< $@
 
-build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunLogin.exe UOGQuery.exe sunuo.html COPYING AUTHORS README changelog)
+build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunLogin.exe UOGQuery.exe sunuo.html COPYING AUTHORS README changelog $(DISTDLL))
 	mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
 
