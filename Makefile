@@ -42,7 +42,7 @@ $(DISTDIR)/MySql.Data.dll: build/lib/MySql.Data.dll
 # dist targets
 
 .PHONY: dist
-dist: build/sunuo-$(VERSION)-bin.zip
+dist: build/dist/sunuo-$(VERSION)-bin.zip build/dist/sunuo-$(VERSION).zip
 
 $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 	cp $< $@
@@ -50,8 +50,19 @@ $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 $(DISTDIR)/changelog: debian/changelog
 	cp $< $@
 
-build/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunLogin.exe UOGQuery.exe sunuo.html COPYING AUTHORS README changelog)
-	cd build && fakeroot zip -q -r sunuo-$(VERSION)-bin.zip sunuo-$(VERSION)-bin
+build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunLogin.exe UOGQuery.exe sunuo.html COPYING AUTHORS README changelog)
+	mkdir -p $(dir $@)
+	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
+
+.PHONY: svn-export
+svn-export:
+	rm -rf build/tmp
+	mkdir -p build/tmp
+	svn export . build/tmp/sunuo-$(VERSION)
+
+build/dist/sunuo-$(VERSION).zip: svn-export
+	mkdir -p $(dir $@)
+	cd build/tmp && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
 # auto-download targets
 
