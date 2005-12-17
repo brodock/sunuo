@@ -8,6 +8,7 @@ all: src/SunUO.exe login/SunLogin.exe util/UOGQuery.exe
 
 clean:
 	rm -f src/SunUO.exe login/SunLogin.exe util/UOGQuery.exe doc/sunuo.html
+	rm -rf build
 
 install: all
 	install -m 0755 src/SunUO.exe $(RUNUO_BASE)/
@@ -16,16 +17,34 @@ install: all
 src/SunUO.exe: $(SUNUO_SOURCES)
 	$(MCS) $(MCS_FLAGS) -out:$@ $^
 
-login/SunLogin.exe: $(SUNLOGIN_SOURCES)
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data $^
+login/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data $(SUNLOGIN_SOURCES)
 
 util/UOGQuery.exe: util/UOGQuery.cs
 	$(MCS) $(MCS_FLAGS) -out:$@ $^
+
+# auto-download targets
+
+download/mysql-connector-net-1.0.7-noinstall.zip:
+	mkdir -p download
+	wget http://sunsite.informatik.rwth-aachen.de/mysql/Downloads/Connector-Net/mysql-connector-net-1.0.7-noinstall.zip -O $@.tmp
+	mv $@.tmp $@
+
+build/lib/MySql.Data.dll: download/mysql-connector-net-1.0.7-noinstall.zip
+	rm -rf build/tmp && mkdir -p build/tmp
+	unzip -q -d build/tmp download/mysql-connector-net-1.0.7-noinstall.zip
+	mkdir -p build/lib
+	cp build/tmp/bin/mono-1.0/release/MySql.Data.dll build/lib/
+	rm -rf build/tmp
+
+# documentation targets
 
 .PHONY: docs
 docs: doc/sunuo.html
 doc/sunuo.html: doc/sunuo.xml
 	xsltproc -o $@ /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/xhtml/docbook.xsl $<
+
+# release targets
 
 export:
 	rm -rf /mnt/misc/sunuo /mnt/misc/runuo/SunUO.exe
