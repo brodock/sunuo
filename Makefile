@@ -22,10 +22,10 @@ install: all
 
 # compile targets
 
-$(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES)
+$(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) build/lib/MySql.Data.dll build/lib/Npgsql.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ $(SUNUO_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll $(SUNUO_SOURCES)
 
 $(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll
 	mkdir -p $(DISTDIR)
