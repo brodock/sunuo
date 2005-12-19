@@ -205,6 +205,15 @@ namespace Server.Network
 		}
 	}
 
+	public sealed class UOGInfo : Packet
+	{
+		public UOGInfo( string str ) : base( 0x53, str.Length+6 ) // 'S'
+		{
+			m_Stream.WriteAsciiFixed( "unUO", 4 );
+			m_Stream.WriteAsciiNull( str );
+		}
+	}
+
 	public sealed class SendSeed : Packet
 	{
 		public SendSeed() : base( 0xde, 4 )

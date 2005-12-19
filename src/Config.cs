@@ -213,13 +213,14 @@ namespace Server {
 	public class GameServerConfig {
 		private String name;
 		private IPEndPoint address;
-		private bool sendAuthID;
+		private bool sendAuthID, query;
 
 		public GameServerConfig(String _name, IPEndPoint _address,
-								bool _sendAuthID) {
+								bool _sendAuthID, bool _query) {
 			name = _name;
 			address = _address;
 			sendAuthID = _sendAuthID;
+			query = _query;
 		}
 
 		public String Name {
@@ -232,6 +233,10 @@ namespace Server {
 
 		public bool SendAuthID {
 			get { return sendAuthID; }
+		}
+
+		public bool Query {
+			get { return query; }
 		}
 	}
 
@@ -285,8 +290,9 @@ namespace Server {
 				IPEndPoint address = new IPEndPoint(ip, port);
 
 				bool sendAuthID = Config.GetElementBool(gs, "send-auth-id", false);
+				bool query = Config.GetElementBool(gs, "query", false);
 
-				servers.Add(new GameServerConfig(name, address, sendAuthID));
+				servers.Add(new GameServerConfig(name, address, sendAuthID, query));
 			}
 		}
 
@@ -315,6 +321,7 @@ namespace Server {
 	public class Config {
 		private string filename;
 		private XmlDocument document;
+		private string serverName;
 		private bool multiThreading;
 		private ArrayList dataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
@@ -330,6 +337,10 @@ namespace Server {
 
 		public bool Exists {
 			get { return File.Exists(filename); }
+		}
+
+		public string ServerName {
+			get { return serverName; }
 		}
 
 		public bool MultiThreading {
@@ -420,6 +431,13 @@ namespace Server {
 			}
 		}
 
+		private static string GetElementString(XmlElement parent, string tag) {
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return null;
+			return nl[0].InnerText;
+		}
+
 		public static bool GetElementBool(XmlElement parent, string tag,
 										  bool defaultValue) {
 			if (parent == null)
@@ -473,6 +491,7 @@ namespace Server {
 			// section "global"
 			XmlElement global = GetConfiguration("global");
 			if (global != null) {
+				serverName = GetElementString(global, "server-name");
 				multiThreading = GetElementBool(global, "multi-threading", false);
 			}
 

@@ -2,6 +2,7 @@ sunuo (0.2.2) unstable; urgency=low
 
   * don't use nested Makefiles
   * distribute Mysql.Data.dll and Npgsql.dll
+  * SunLogin responds to UOG queries
 
  --
 

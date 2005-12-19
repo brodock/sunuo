@@ -306,6 +306,7 @@ namespace Server
 			NetState.Initialize();
 			Encryption.Initialize();
 			ServerList.Initialize();
+			ServerQueryTimer.Initialize();
 			Server.Accounting.AccountHandler.Initialize();
 
 			EventSink.InvokeServerStarted();

@@ -66,6 +66,7 @@ namespace Server.Network
 			Register( 0xA0,   3, false, new OnPacketReceive( PlayServer ) );
 			Register( 0xCF,   0, false, new OnPacketReceive( AccountLogin ) );
 			Register( 0xBF,   0, false, new OnPacketReceive( ExtendedCommand ) );
+			Register( 0xF1,	  0, false, new OnPacketReceive( UOGQuery ) );
 
 			RegisterExtended( 0x5555, false, new OnPacketReceive( Emulator ) );
 		}
@@ -232,6 +233,42 @@ namespace Server.Network
 			{
 				pvSrc.Trace( state );
 			}
+		}
+
+		public static void UOGQuery( NetState state, PacketReader pvSrc )
+		{
+			byte cmd = pvSrc.ReadByte();
+			if ( cmd != 0xFF )
+				return;
+
+			Console.WriteLine("Client {0} querying UOG status", state);
+
+			string name = Core.Config.ServerName;
+			if (name == null)
+				name = "SunUO Login";
+
+			int age = 0;
+			int clients = NetState.Instances.Count;
+			int items = 0;
+			int chars = 0;
+
+			GameServerListConfig gsl = Core.Config.GameServerListConfig;
+			if (gsl != null) {
+				/* add values from game servers */
+				foreach (GameServerConfig gs in gsl.GameServers) {
+					ServerStatus status = ServerQueryTimer.GetStatus(gs);
+					if (status != null) {
+						age += status.age;
+						clients += status.clients;
+						items += status.items;
+						chars += status.chars;
+					}
+				}
+			}
+
+			string statStr = String.Format( ", Name={0}, Age={1}, Clients={2}, Items={3}, Chars={4}, Mem={5}K", name, age, clients, items, chars, (int)(System.GC.GetTotalMemory(false)/1024) );
+			state.Send( new UOGInfo( statStr ) );
+			state.Dispose();
 		}
 
 		private static void Emulator( NetState state, PacketReader pvSrc )
