@@ -66,6 +66,7 @@ namespace Server.Network
 			Register( 0xA0,   3, false, new OnPacketReceive( PlayServer ) );
 			Register( 0xCF,   0, false, new OnPacketReceive( AccountLogin ) );
 			Register( 0xBF,   0, false, new OnPacketReceive( ExtendedCommand ) );
+			Register( 0xD9, 0x10C, false, new OnPacketReceive( IgnorePacket ) );
 			Register( 0xF1,	  0, false, new OnPacketReceive( UOGQuery ) );
 
 			RegisterExtended( 0x5555, false, new OnPacketReceive( Emulator ) );
@@ -233,6 +234,9 @@ namespace Server.Network
 			{
 				pvSrc.Trace( state );
 			}
+		}
+
+		public static void IgnorePacket( NetState state, PacketReader pvSrc ) {
 		}
 
 		public static void UOGQuery( NetState state, PacketReader pvSrc )

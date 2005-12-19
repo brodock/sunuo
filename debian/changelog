@@ -1,8 +1,8 @@
 sunuo (0.2.3) unstable; urgency=low
 
-  * 
+  * explicitly ignore HardwareInfo packets
 
- --
+ -- Max Kellermann <max@duempel.org>  Mon, 19 Dec 2005 16:25:41 +0100
 
 sunuo (0.2.2) unstable; urgency=low
 
