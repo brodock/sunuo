@@ -4,7 +4,7 @@ sunuo (0.2.2) unstable; urgency=low
   * distribute Mysql.Data.dll and Npgsql.dll
   * SunLogin responds to UOG queries
 
- --
+ -- Max Kellermann <max@duempel.org>  Mon, 19 Dec 2005 15:59:06 +0100
 
 sunuo (0.2.1) unstable; urgency=low
 
