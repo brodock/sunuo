@@ -2,7 +2,7 @@ include config.mk
 
 VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
 DISTDIR = build/sunuo-$(VERSION)-bin
-DISTDLL = MySql.Data.dll Npgsql.dll
+DISTDLL = MySql.Data.dll Npgsql.dll log4net.dll
 
 MCS_FLAGS += -unsafe -define:MONO -debug -lib:build/lib
 
@@ -22,15 +22,15 @@ install: all
 
 # compile targets
 
-$(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) build/lib/MySql.Data.dll build/lib/Npgsql.dll
+$(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) build/lib/MySql.Data.dll build/lib/Npgsql.dll build/lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll $(SUNUO_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
 
-$(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll
+$(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll build/lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data $(SUNLOGIN_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
 
 $(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
 	mkdir -p $(DISTDIR)
@@ -89,6 +89,17 @@ build/lib/Npgsql.dll: download/Npgsql1.0beta1-bin.tar.bz2
 	tar xjfC $< build/tmp
 	unzip -q -d build/tmp download/mysql-connector-net-1.0.7-noinstall.zip
 	cp build/tmp/Npgsql/bin/mono/Npgsql.dll build/lib/
+	rm -rf build/tmp
+
+download/incubating-log4net-1.2.9-beta.zip:
+	mkdir -p $(dir $@)
+	wget http://cvs.apache.org/dist/incubator/log4net/1.2.9/incubating-log4net-1.2.9-beta.zip -O $@.tmp
+	mv $@.tmp $@
+
+build/lib/log4net.dll: download/incubating-log4net-1.2.9-beta.zip
+	rm -rf build/tmp && mkdir -p build/tmp
+	unzip -q -d build/tmp $<
+	cp build/tmp/bin/mono/1.0/release/log4net.dll build/lib/
 	rm -rf build/tmp
 
 # documentation targets
