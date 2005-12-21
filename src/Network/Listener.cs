@@ -32,6 +32,8 @@ namespace Server.Network
 {
 	public class Listener : IDisposable
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Socket m_Listener;
 		private bool m_Disposed;
 		private int m_ThisPort;
@@ -77,7 +79,8 @@ namespace Server.Network
 				ArrayList list = new ArrayList();
 				list.Add( IPAddress.Loopback );
 
-				Console.WriteLine( "Address: {0}:{1}", IPAddress.Loopback, port );
+				log.Info(String.Format("Listening on {0}:{1}",
+									   IPAddress.Loopback, port));
 
 				IPAddress[] ips = iphe.AddressList;
 
@@ -87,7 +90,8 @@ namespace Server.Network
 					{
 						list.Add( ips[i] );
 
-						Console.WriteLine( "Address: {0}:{1}", ips[i], port );
+						log.Info(String.Format("Listening on {0}:{1}",
+											   ips[i], port));
 					}
 				}
 			}

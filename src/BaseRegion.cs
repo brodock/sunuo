@@ -87,6 +87,8 @@ namespace Server
 
 	public class Region : IComparable
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private int m_Priority;
 		private ArrayList m_Coords;//Rectangle2D
 		private ArrayList m_InnBounds;
@@ -739,12 +741,10 @@ namespace Server
 
 		private static int m_RegionUID = 1;//use to give each region a unique identifier number (to check for equality)
 
-		private static bool m_SupressXmlWarnings;
-
 		public static bool SupressXmlWarnings
 		{
-			get{ return m_SupressXmlWarnings; }
-			set{ m_SupressXmlWarnings = value; }
+			get{ return false; }
+			set{}
 		}
 
 		public static Region GetByName( string name, Map map )
@@ -803,11 +803,11 @@ namespace Server
 		{
 			if ( !System.IO.File.Exists( "Data/Regions.xml" ) )
 			{
-				Console.WriteLine( "Error: Data/Regions.xml does not exist" );
+				log.Error("Error: Data/Regions.xml does not exist");
 				return;
 			}
 
-			Console.Write( "Regions: Loading..." );
+			log.Info("Loading regions");
 
 			XmlDocument doc = new XmlDocument();
 			doc.Load( "Data/Regions.xml" );
@@ -822,8 +822,7 @@ namespace Server
 				catch {}
 				if ( map == null || map == Map.Internal )
 				{
-					if ( !m_SupressXmlWarnings )
-						Console.WriteLine( "Regions.xml: Invalid facet name '{0}'", facetName );
+					log.Error(String.Format("Regions.xml: Invalid facet name '{0}'", facetName));
 					continue;
 				}
 
@@ -842,8 +841,8 @@ namespace Server
 					}
 					else if ( !r.LoadFromXml )
 					{
-						if ( !m_SupressXmlWarnings )
-							Console.WriteLine( "Regions.xml: Region '{0}' has an XML entry, but is set not to LoadFromXml.", name );
+						log.Error(String.Format("Regions.xml: Region '{0}' has an XML entry, but is set not to LoadFromXml.",
+												name));
 						continue;
 					}
 
@@ -851,10 +850,11 @@ namespace Server
 					{
 						r.Priority = int.Parse( reg.GetAttribute( "priority" ) );
 					}
-					catch
+					catch (Exception e)
 					{
-						if ( !m_SupressXmlWarnings )
-							Console.WriteLine( "Regions.xml: Could not parse priority for region '{0}' (assuming TownPriority)", r.Name );
+						log.Error(String.Format("Regions.xml: Could not parse priority for region '{0}' (assuming TownPriority)",
+												r.Name),
+								  e);
 						r.Priority = TownPriority;
 					}
 						
@@ -867,10 +867,11 @@ namespace Server
 						{
 							r.GoLocation = Point3D.Parse( el.GetAttribute( "location" ) );
 						}
-						catch
+						catch (Exception e)
 						{
-							if ( !m_SupressXmlWarnings )
-								Console.WriteLine( "Regions.xml: Could not parse go location for region '{0}'", r.Name );
+							log.Error(String.Format("Regions.xml: Could not parse go location for region '{0}'",
+													r.Name),
+									  e);
 						}
 					}
 
@@ -881,10 +882,11 @@ namespace Server
 						{
 							r.Music = (MusicName)Enum.Parse( typeof( MusicName ), el.GetAttribute( "name" ), true );
 						}
-						catch
+						catch (Exception e)
 						{
-							if ( !m_SupressXmlWarnings )
-								Console.WriteLine( "Regions.xml: Could not parse music for region '{0}'", r.Name );
+							log.Error(String.Format("Regions.xml: Could not parse music for region '{0}'",
+													r.Name),
+									  e);
 						}
 					}
 
@@ -898,10 +900,11 @@ namespace Server
 							{
 								r.MinZ = int.Parse( s );
 							}
-							catch
+							catch (Exception e)
 							{
-								if ( !m_SupressXmlWarnings )
-									Console.WriteLine( "Regions.xml: Could not parse zrange:min for region '{0}'", r.Name );
+								log.Error(String.Format("Regions.xml: Could not parse zrange:min for region '{0}'",
+														r.Name),
+										  e);
 							}
 						}
 
@@ -912,10 +915,11 @@ namespace Server
 							{
 								r.MaxZ = int.Parse( s );
 							}
-							catch
+							catch (Exception e)
 							{
-								if ( !m_SupressXmlWarnings )
-									Console.WriteLine( "Regions.xml: Could not parse zrange:max for region '{0}'", r.Name );
+								log.Error(String.Format("Regions.xml: Could not parse zrange:max for region '{0}'",
+														r.Name),
+										  e);
 							}
 						}
 					}
@@ -929,10 +933,10 @@ namespace Server
 
 							r.m_LoadCoords.Add( ParseRectangle( rect, true ) );
 						}
-						catch
+						catch (Exception e)
 						{
-							if ( !m_SupressXmlWarnings )
-								Console.WriteLine( "Regions.xml: Error parsing rect for region '{0}'", r.Name );
+							log.Error(String.Format("Regions.xml: Error parsing rect for region '{0}'", r.Name),
+									  e);
 							continue;
 						}
 					}
@@ -946,10 +950,11 @@ namespace Server
 
 							r.InnBounds.Add( ParseRectangle( rect, false ) );
 						}
-						catch
+						catch (Exception e)
 						{
-							if ( !m_SupressXmlWarnings )
-								Console.WriteLine( "Regions.xml: Error parsing inn for region '{0}'", r.Name );
+							log.Error(String.Format("Regions.xml: Error parsing inn for region '{0}'",
+													r.Name),
+									  e);
 							continue;
 						}
 					}
@@ -986,7 +991,7 @@ namespace Server
 			foreach ( Mobile m in list )
 				m.ForceRegionReEnter( true );
 
-			Console.WriteLine( "done" );
+			log.Info("Finished loading regions");
 		}
 
 		/*public static void Load()
