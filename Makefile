@@ -10,15 +10,16 @@ SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
 SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Network/PacketReader.cs src/Network/Listener.cs src/Network/SendQueue.cs src/Network/BufferPool.cs src/Network/PacketWriter.cs src/ClientVersion.cs src/Config.cs src/Timer.cs src/Insensitive.cs src/Network/PacketProfile.cs src/Attributes.cs src/Network/Compression.cs src/Network/PacketHandler.cs
 
-all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe UOGQuery.exe)
+all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe UOGQuery.exe $(DISTDLL))
 
 clean:
 	rm -f doc/sunuo.html
 	rm -rf build
 
 install: all
-	install -m 0755 src/SunUO.exe $(RUNUO_BASE)/
-	-test -f src/SunUO.exe.mdb && install -m 0644 src/SunUO.exe.mdb $(RUNUO_BASE)/
+	install -m 0755 $(DISTDIR)/SunUO.exe $(RUNUO_BASE)/
+	test -f $(DISTDIR)/SunUO.exe.mdb && install -m 0644 $(DISTDIR)/SunUO.exe.mdb $(RUNUO_BASE)/
+	install -m 0644 $(addprefix $(DISTDIR)/,$(DISTDLL) SunUO.exe.config) $(RUNUO_BASE)/
 
 # compile targets
 
