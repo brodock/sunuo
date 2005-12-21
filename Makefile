@@ -10,7 +10,7 @@ SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
 SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Network/PacketReader.cs src/Network/Listener.cs src/Network/SendQueue.cs src/Network/BufferPool.cs src/Network/PacketWriter.cs src/ClientVersion.cs src/Config.cs src/Timer.cs src/Insensitive.cs src/Network/PacketProfile.cs src/Attributes.cs src/Network/Compression.cs src/Network/PacketHandler.cs
 
-all: $(addprefix $(DISTDIR)/,SunUO.exe SunLogin.exe UOGQuery.exe)
+all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe UOGQuery.exe)
 
 clean:
 	rm -f doc/sunuo.html
@@ -46,6 +46,9 @@ $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: build/lib/%
 dist: build/dist/sunuo-$(VERSION)-bin.zip build/dist/sunuo-$(VERSION).zip
 
 $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
+	cp $< $@
+
+$(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
 	cp $< $@
 
 $(DISTDIR)/changelog: debian/changelog
