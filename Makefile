@@ -74,7 +74,7 @@ download/mysql-connector-net-1.0.7-noinstall.zip:
 
 build/lib/MySql.Data.dll: download/mysql-connector-net-1.0.7-noinstall.zip
 	rm -rf build/tmp && mkdir -p build/tmp
-	unzip -q -d build/tmp download/mysql-connector-net-1.0.7-noinstall.zip
+	unzip -q -d build/tmp $<
 	mkdir -p build/lib
 	cp build/tmp/bin/mono-1.0/release/MySql.Data.dll build/lib/
 	rm -rf build/tmp
@@ -87,7 +87,6 @@ download/Npgsql1.0beta1-bin.tar.bz2:
 build/lib/Npgsql.dll: download/Npgsql1.0beta1-bin.tar.bz2
 	rm -rf build/tmp && mkdir -p build/tmp
 	tar xjfC $< build/tmp
-	unzip -q -d build/tmp download/mysql-connector-net-1.0.7-noinstall.zip
 	cp build/tmp/Npgsql/bin/mono/Npgsql.dll build/lib/
 	rm -rf build/tmp
 
