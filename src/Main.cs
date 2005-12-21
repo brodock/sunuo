@@ -376,18 +376,18 @@ namespace Server
 			if (!ScriptCompiler.Compile(debug))
 				return;
 
-			Console.Write("Verifying scripts:");
 			m_ItemCount = 0;
 			m_MobileCount = 0;
 			foreach (Library l in ScriptCompiler.Libraries) {
 				int itemCount = 0, mobileCount = 0;
-				Console.Write(" {0}[", l.Name);
 				l.Verify(ref itemCount, ref mobileCount);
-				Console.Write("{0} items, {1} mobiles]", itemCount, mobileCount);
+				log.Info(String.Format("Library {0} verified: {1} items, {2} mobiles",
+									   l.Name, itemCount, mobileCount));
 				m_ItemCount += itemCount;
 				m_MobileCount += mobileCount;
 			}
-			Console.WriteLine(" - done ({0} items, {1} mobiles)", m_ItemCount, m_MobileCount);
+			log.Info(String.Format("All libraries verified: {0} items, {1} mobiles)",
+								   m_ItemCount, m_MobileCount));
 
 			try {
 				ScriptCompiler.Configure();

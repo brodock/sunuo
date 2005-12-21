@@ -35,6 +35,8 @@ namespace Server
 {
 	public class ScriptCompiler
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static ArrayList libraries;
 
 		public static Library[] Libraries {
@@ -169,7 +171,8 @@ namespace Server
 
 			string[] files;
 
-			Console.Write("{0}[C#,{1}", libConfig.Name, fileColl.Count);
+			log.Info(String.Format("Compiling library {0}, {1} C# sources",
+								   libConfig.Name, fileColl.Count));
 
 			string tempFile = compiler.GetType().FullName == "Mono.CSharp.CSharpCodeCompiler"
 				? Path.GetTempFileName() : null;
@@ -207,10 +210,8 @@ namespace Server
 				 * #define ERROR_PATH_NOT_FOUND 3L
 				 */
 				if (e.NativeErrorCode == 2 || e.NativeErrorCode == 3) {
-					Console.WriteLine();
-					Console.WriteLine();
-					Console.WriteLine("Could not find the compiler - are you sure MCS is installed?");
-					Console.WriteLine("On Debian, try: apt-get install mono-mcs");
+					log.Fatal(String.Format("Could not find the compiler - are you sure MCS is installed?"));
+					log.Info(String.Format("On Debian, try: apt-get install mono-mcs"));
 					Environment.Exit(2);
 				} else {
 					throw e;
@@ -234,20 +235,24 @@ namespace Server
 						++errorCount;
 				}
 
-				Console.WriteLine();
 				if ( errorCount > 0 )
-					Console.WriteLine( "failed ({0} errors, {1} warnings)", errorCount, warningCount );
+					log.Error(String.Format("Compilation failed ({0} errors, {1} warnings)", errorCount, warningCount));
 				else
-					Console.WriteLine( "done ({0} errors, {1} warnings)", errorCount, warningCount );
+					log.Info(String.Format("Compilation complete ({1} warnings)", warningCount));
 
 				foreach ( CompilerError e in results.Errors )
 				{
-					Console.WriteLine( " - {0}: {1}: {2}: (line {3}, column {4}) {5}", e.IsWarning ? "Warning" : "Error", e.FileName, e.ErrorNumber, e.Line, e.Column, e.ErrorText );
+					String msg = String.Format("{0}: {1}: (line {2}, column {3}) {4}",
+											   e.FileName, e.ErrorNumber, e.Line, e.Column, e.ErrorText);
+					if (e.IsWarning)
+						log.Warn(msg);
+					else
+						log.Error(msg);
 				}
 			}
 			else
 			{
-				Console.Write("] ");
+				log.Info("Compilation complete");
 			}
 
 			return results;
@@ -329,24 +334,24 @@ namespace Server
 			/* check if there is source code for this library */
 			if (libConfig.SourcePath == null) {
 				if (libConfig.BinaryPath == null) {
-					Console.WriteLine("Warning: library {0} does not exist",
-									  libConfig.Name);
+					log.Warn(String.Format("library {0} does not exist",
+										   libConfig.Name));
 					return true;
 				} else if (!libConfig.BinaryPath.Exists) {
-					Console.WriteLine("Warning: library {0} does not exist: {1}",
-									  libConfig.Name, libConfig.BinaryPath);
+					log.Warn(String.Format("library {0} does not exist: {1}",
+										   libConfig.Name, libConfig.BinaryPath));
 					return false;
 				}
 
-				Console.Write("{0}", libConfig.Name);
+				log.Info(String.Format("Loading library {0}", libConfig.Name));
 				libraries.Add(new Library(libConfig,
 										  Assembly.LoadFrom(libConfig.BinaryPath.FullName)));
 				m_AdditionalReferences.Add(libConfig.BinaryPath.FullName);
-				Console.Write(". ");
 				return true;
 			} else if (!libConfig.SourcePath.Exists) {
-				Console.WriteLine("Warning: library {0} does not exist: {1}",
-								  libConfig.Name, libConfig.SourcePath);
+				log.Warn(String.Format("library {0} does not exist",
+									   libConfig.Name));
+				return true;
 			}
 
 			DirectoryInfo cache = Core.CacheDirectoryInfo
@@ -354,7 +359,7 @@ namespace Server
 				.CreateSubdirectory(libConfig.Name);
 
 			if (!cache.Exists) {
-				Console.WriteLine("Failed to create directory {0}", cache.FullName);
+				log.Error(String.Format("Failed to create directory {0}", cache.FullName));
 				return false;
 			}
 
@@ -372,7 +377,7 @@ namespace Server
 				if (File.Exists(csFile) && CheckStamps(files, stampFile)) {
 					libraries.Add(new Library(libConfig, Assembly.LoadFrom(csFile)));
 					m_AdditionalReferences.Add(csFile);
-					Console.Write("{0}. ", libConfig.Name);
+					log.Info(String.Format("Loaded binary library {0}", libConfig.Name));
 				} else {
 					/* work around a serious faction bug: the factions
 					   code (Reflector.cs) assumes alphabetical
@@ -444,8 +449,7 @@ namespace Server
 
 			if (!libConfig.Exists) {
 				libs.Remove(libConfig);
-				Console.WriteLine("Warning: library {0} does not exist",
-								  libConfig.Name);
+				log.Warn(String.Format("library {0} does not exist", libConfig.Name));
 				return;
 			}
 
@@ -457,21 +461,21 @@ namespace Server
 					/* if the depended library is already in the
 					 * queue, there is a circular dependency */
 					if (queue.ContainsKey(depend)) {
-						Console.WriteLine("Circular library dependency {0} on {1}",
-										  libConfig.Name, depend);
+						log.Error(String.Format("Circular library dependency {0} on {1}",
+												libConfig.Name, depend));
 						throw new ApplicationException();
 					}
 
 					LibraryConfig next = Core.Config.GetLibraryConfig(depend);
 					if (next == null || !next.Exists) {
-						Console.WriteLine("Unresolved library dependency: {0} depends on {1}, which does not exist",
-										  libConfig.Name, depend);
+						log.Error(String.Format("Unresolved library dependency: {0} depends on {1}, which does not exist",
+												libConfig.Name, depend));
 						throw new ApplicationException();
 					}
 
 					if (next.Disabled) {
-						Console.WriteLine("Unresolved library dependency: {0} depends on {1}, which is disabled",
-										  libConfig.Name, depend);
+						log.Error(String.Format("Unresolved library dependency: {0} depends on {1}, which is disabled",
+												libConfig.Name, depend));
 						throw new ApplicationException();
 					}
 
@@ -505,8 +509,6 @@ namespace Server
 
 		public static bool Compile( bool debug )
 		{
-			Console.Write("Compiling scripts: ");
-
 			if (m_AdditionalReferences != null)
 				throw new ApplicationException("already compiled");
 
@@ -524,22 +526,22 @@ namespace Server
 					continue;
 
 				if (libConfig.SourcePath == null) {
-					Console.WriteLine("Can't overlay the binary library {0}",
-									  libConfig.Name);
+					log.Error(String.Format("Can't overlay the binary library {0}",
+											libConfig.Name));
 					throw new ApplicationException();
 				}
 
 				foreach (string name in libConfig.Overlays) {
 					LibraryConfig overlay = Core.Config.GetLibraryConfig(name);
 					if (overlay == null || !overlay.Exists) {
-						Console.WriteLine("Can't overlay {0} with {1}, because it does not exist",
-										  libConfig.Name, name);
+						log.Error(String.Format("Can't overlay {0} with {1}, because it does not exist",
+												libConfig.Name, name));
 						throw new ApplicationException();
 					}
 
 					if (overlay.SourcePath == null) {
-						Console.WriteLine("Can't overlay {0} with {1}, because it is binary only",
-										  libConfig.Name, overlay.Name);
+						log.Error(String.Format("Can't overlay {0} with {1}, because it is binary only",
+												libConfig.Name, overlay.Name));
 						throw new ApplicationException();
 					}
 
@@ -550,8 +552,8 @@ namespace Server
 			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
 				if (libConfig.Overlays != null && libConfig.Exists &&
 					libConfig.Name != "core" && libConfig.Disabled) {
-					Console.WriteLine("Can't overlay library {0} which is already used as overlay for another library",
-									  libConfig.Name);
+					log.Error(String.Format("Can't overlay library {0} which is already used as overlay for another library",
+											libConfig.Name));
 					throw new ApplicationException();
 				}
 			}
@@ -575,8 +577,6 @@ namespace Server
 			}
 
 			/* done */
-			Console.WriteLine();
-
 			return true;
 		}
 
