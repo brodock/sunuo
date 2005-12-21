@@ -241,6 +241,8 @@ namespace Server {
 	}
 
 	public class GameServerListConfig {
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private ArrayList servers = new ArrayList();
 
 		public GameServerListConfig() {
@@ -250,19 +252,19 @@ namespace Server {
 			foreach (XmlElement gs in el.GetElementsByTagName("game-server")) {
 				string name = GetElementString(gs, "name");
 				if (name == null) {
-					Console.WriteLine("Game server without name ignored");
+					log.Warn("Game server without name ignored");
 					continue;
 				}
 
 				string addressString = GetElementString(gs, "address");
 				if (addressString == null) {
-					Console.WriteLine("Game server without address ignored");
+					log.Warn("Game server without address ignored");
 					continue;
 				}
 
 				string[] splitted = addressString.Split(new char[]{':'}, 2);
 				if (splitted.Length != 2) {
-					Console.WriteLine("Game server without port ignored");
+					log.Warn("Game server without port ignored");
 					continue;
 				}
 
@@ -270,12 +272,12 @@ namespace Server {
 				try {
 					IPHostEntry he = Dns.Resolve(splitted[0]);
 					if (he.AddressList.Length == 0) {
-						Console.WriteLine("Failed to resolve {0}", splitted[0]);
+						log.Warn(String.Format("Failed to resolve {0}", splitted[0]));
 						continue;
 					}
 					ip = he.AddressList[he.AddressList.Length - 1];
 				} catch (Exception e) {
-					Console.WriteLine("Failed to resolve {0}: {1}", splitted[0], e);
+					log.Warn(String.Format("Failed to resolve {0}", splitted[0]), e);
 					continue;
 				}
 
@@ -283,7 +285,7 @@ namespace Server {
 				try {
 					port = Int16.Parse(splitted[1]);
 				} catch {
-					Console.WriteLine("Invalid game server port ignored");
+					log.Warn("Invalid game server port ignored");
 					continue;
 				}
 
@@ -319,6 +321,8 @@ namespace Server {
 	}
 
 	public class Config {
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string filename;
 		private XmlDocument document;
 		private string serverName;
@@ -401,8 +405,8 @@ namespace Server {
 			foreach (DirectoryInfo sub in src.GetDirectories()) {
 				string libName = sub.Name.ToLower();
 				if (libName == "core" || libName == "legacy") {
-					Console.WriteLine("Warning: the library name '{0}' is invalid",
-									  libName);
+					log.Warn(String.Format("the library name '{0}' is invalid",
+										   libName));
 					continue;
 				}
 
@@ -416,14 +420,14 @@ namespace Server {
 				string libName = fileName.Substring(0, fileName.Length - 4).ToLower();
 
 				if (libName == "core" || libName == "legacy") {
-					Console.WriteLine("Warning: the library name '{0}' is invalid",
-									  libName);
+					log.Warn(String.Format("the library name '{0}' is invalid",
+										   libName));
 					continue;
 				}
 
 				if (libraryConfig.ContainsKey(libName)) {
-					Console.WriteLine("Warning: duplicate library '{0}' in '{1}'",
-									  libName, libFile);
+					log.Warn(String.Format("duplicate library '{0}' in '{1}'",
+										   libName, libFile));
 					continue;
 				}
 
@@ -508,7 +512,7 @@ namespace Server {
 			foreach (XmlElement el in librariesEl.GetElementsByTagName("library")) {
 				string name = el.GetAttribute("name");
 				if (name == null || name == "") {
-					Console.WriteLine("Warning: library element without name attribute");
+					log.Warn("library element without name attribute");
 					continue;
 				}
 

@@ -36,12 +36,16 @@ using Server.Network.Encryption;
 using Server.Accounting;
 using Server.Gumps;
 
+[assembly: log4net.Config.XmlConfigurator(Watch=true)]
+
 namespace Server
 {
 	public delegate void Slice();
 
 	public class Core
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static bool m_Crashed;
 		private static Thread timerThread;
 		private static string m_BaseDirectory;
@@ -134,7 +138,8 @@ namespace Server
 				}
 			}
 
-			Console.WriteLine("Warning: data file {0} not found", path);
+			if (log.IsWarnEnabled)
+				log.Warn(String.Format("Warning: data file {0} not found", path));
 			return null;
 		}
 
@@ -242,8 +247,10 @@ namespace Server
 
 		private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
-			Console.WriteLine( e.IsTerminating ? "Error:" : "Warning:" );
-			Console.WriteLine( e.ExceptionObject );
+			if (e.IsTerminating)
+				log.Fatal(e);
+			else
+				log.Error(e);
 
 			if ( e.IsTerminating )
 			{
@@ -289,13 +296,13 @@ namespace Server
 
 			m_Closing = true;
 
-			Console.Write( "Exiting..." );
+			log.Info( "Exiting..." );
 
 			if ( !m_Crashed )
 				EventSink.InvokeShutdown( new ShutdownEventArgs() );
 
 			timerThread.Join();
-			Console.WriteLine( "done" );
+			log.Info( "done" );
 		}
 
 		public static void Main( string[] args )
@@ -385,7 +392,7 @@ namespace Server
 			try {
 				ScriptCompiler.Configure();
 			} catch (TargetInvocationException e) {
-				Console.WriteLine("Configure exception: {0}", e.InnerException);
+				log.Fatal("Configure exception: {0}", e.InnerException);
 				return;
 			}
 
@@ -397,7 +404,7 @@ namespace Server
 			try {
 				ScriptCompiler.Initialize();
 			} catch (TargetInvocationException e) {
-				Console.WriteLine("Initialize exception: {0}", e.InnerException);
+				log.Fatal("Initialize exception: {0}", e.InnerException);
 				return;
 			}
 

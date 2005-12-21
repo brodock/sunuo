@@ -1,6 +1,7 @@
 sunuo (0.2.4) unstable; urgency=low
 
   * distribute log4net.dll
+  * use log4net in exception handlers and more
 
  --
 

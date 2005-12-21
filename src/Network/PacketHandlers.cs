@@ -56,6 +56,8 @@ namespace Server.Network
 
 	public class PacketHandlers
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static PacketHandler[] m_Handlers;
 
 		private static PacketHandler[] m_ExtendedHandlersLow;
@@ -246,7 +248,7 @@ namespace Server.Network
 			{
 				if ( ph.Ingame && state.Mobile == null )
 				{
-					Console.WriteLine( "Client: {0}: Sent ingame packet (0xD7x{1:X2}) before having been attached to a mobile", state, packetID );
+					log.Warn(String.Format("Client: {0}: Sent ingame packet (0xD7x{1:X2}) before having been attached to a mobile", state, packetID));
 					state.Dispose();
 				}
 				else if ( ph.Ingame && state.Mobile.Deleted )
@@ -724,8 +726,8 @@ namespace Server.Network
 					try {
 						Skills.UseSkill( m, skillIndex );
 					} catch (Exception e) {
-						Console.WriteLine("Exception disarmed in UseSkill {0} > {1}: {2}",
-										  state.Mobile, skillIndex, e);
+						log.Error(String.Format("Exception disarmed in UseSkill {0} > {1}",
+												state.Mobile, skillIndex), e);
 					}
 
 					break;
@@ -753,8 +755,8 @@ namespace Server.Network
 						try {
 							EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, World.FindItem( serial ) ) );
 						} catch (Exception e) {
-							Console.WriteLine("Exception disarmed in CastSpell I {0}, spell {1}: {2}",
-											  state.Mobile, spellID, e);
+							log.Error(String.Format("Exception disarmed in CastSpell I {0}, spell {1}",
+													state.Mobile, spellID), e);
 						}
 					}
 
@@ -765,8 +767,8 @@ namespace Server.Network
 					try {
 						EventSink.InvokeOpenDoorMacroUsed( new OpenDoorMacroEventArgs( m ) );
 					} catch (Exception e) {
-						Console.WriteLine("Exception disarmed in OpenDoor {0}: {1}",
-										  state.Mobile, e);
+						log.Error(String.Format("Exception disarmed in OpenDoor {0}",
+												state.Mobile), e);
 					}
 
 					break;
@@ -778,15 +780,15 @@ namespace Server.Network
 					try {
 						EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, null ) );
 					} catch (Exception e) {
-						Console.WriteLine("Exception disarmed in CastSpell II {0}, spell {1}: {2}",
-										  state.Mobile, spellID, e);
+						log.Error(String.Format("Exception disarmed in CastSpell II {0}, spell {1}",
+												state.Mobile, spellID), e);
 					}
 
 					break;
 				}
 				default:
 				{
-					Console.WriteLine( "Client: {0}: Unknown text-command type 0x{1:X2}: {2}", state, type, command );
+					log.Warn(String.Format("Client: {0}: Unknown text-command type 0x{1:X2}: {2}", state, type, command));
 					break;
 				}
 			}
@@ -823,8 +825,8 @@ namespace Server.Network
 					else
 						p.OnResponse( from, text );
 				} catch (Exception e) {
-					Console.WriteLine("Exception disarmed in AsciiPrompt response {0}, type {1}: {2}",
-									  state.Mobile, type, e);
+					log.Error(String.Format("Exception disarmed in AsciiPrompt response {0}, type {1}",
+											state.Mobile, type), e);
 				}
 			}
 		}
@@ -853,8 +855,8 @@ namespace Server.Network
 					else
 						p.OnResponse( from, text );
 				} catch (Exception e) {
-					Console.WriteLine("Exception disarmed in UnicodePrompt response {0}, type {1}: {2}",
-									  state.Mobile, type, e);
+					log.Error(String.Format("Exception disarmed in UnicodePrompt response {0}, type {1}",
+											state.Mobile, type), e);
 				}
 			}
 		}
@@ -881,8 +883,8 @@ namespace Server.Network
 						else
 							menu.OnCancel( state );
 					} catch (Exception e) {
-						Console.WriteLine("Exception disarmed in menu response {0} > {1}[index]: {2}",
-										  state.Mobile, menu, e);
+						log.Error(String.Format("Exception disarmed in menu response {0} > {1}[index]",
+												state.Mobile, menu), e);
 					}
 
 					state.RemoveMenu( i );
@@ -945,8 +947,8 @@ namespace Server.Network
 			try {
 				state.Mobile.Lift( item, amount, out rejected, out reject );
 			} catch (Exception e) {
-				Console.WriteLine("Exception disarmed in lift {0}, {1} x {2}: {3}",
-								  state.Mobile, item, amount, e);
+				log.Error(String.Format("Exception disarmed in lift {0}, {1} x {2}",
+										state.Mobile, item, amount), e);
 			}
 		}
 
@@ -972,8 +974,8 @@ namespace Server.Network
 				if (to.AllowEquipFrom(from))
 					success = to.EquipItem(item);
 			} catch (Exception e) {
-				Console.WriteLine("Exception disarmed in equip {0} < {1}: {2}",
-								  to, item, e);
+				log.Error(String.Format("Exception disarmed in equip {0} < {1}",
+										to, item), e);
 			}
 
 			if (!success)
@@ -1000,8 +1002,8 @@ namespace Server.Network
 					if (m != null)
 						from.Drop(m, loc);
 				} catch (Exception e) {
-					Console.WriteLine("Exception disarmed in drop {0} > {1}: {2}",
-									  from, m, e);
+					log.Error(String.Format("Exception disarmed in drop {0} > {1}",
+											from, m), e);
 				}
 			} else if (dest.IsItem) {
 				Item i = World.FindItem(dest);
@@ -1009,8 +1011,8 @@ namespace Server.Network
 					if (i != null)
 						from.Drop(i, loc);
 				} catch (Exception e) {
-					Console.WriteLine("Exception disarmed in drop {0} > {1}: {2}",
-									  from, i, e);
+					log.Error(String.Format("Exception disarmed in drop {0} > {1}",
+											from, i), e);
 				}
 			} else {
 				from.Drop(loc);
@@ -1119,8 +1121,8 @@ namespace Server.Network
 					try {
 						t.Invoke( from, toTarget );
 					} catch (Exception e) {
-						Console.WriteLine("Exception disarmed in target {0} > {1} > {2}: {3}",
-										  from, t, toTarget, e);
+						log.Error(String.Format("Exception disarmed in target {0} > {1} > {2}",
+												from, t, toTarget), e);
 					}
 				}
 			}
@@ -1180,8 +1182,8 @@ namespace Server.Network
 					try {
 						gump.OnResponse( state, new RelayInfo( buttonID, switches, textEntries ) );
 					} catch (Exception e) {
-						Console.WriteLine("Exception disarmed in gump response of {0}: {1}",
-										  gump, e);
+						log.Error(String.Format("Exception disarmed in gump response of {0}",
+												gump), e);
 					}
 
 					state.RemoveGump( i );
@@ -1346,8 +1348,8 @@ namespace Server.Network
 							if ( m != null && !m.Deleted )
 								from.Use( m );
 						} catch (Exception e) {
-							Console.WriteLine("Exception disarmed in use {0} > {1}: {2}",
-											  from, m, e);
+							log.Error(String.Format("Exception disarmed in use {0} > {1}",
+													from, m), e);
 						}
 					}
 					else if ( s.IsItem )
@@ -1358,8 +1360,8 @@ namespace Server.Network
 							if ( item != null && !item.Deleted )
 								from.Use( item );
 						} catch (Exception e) {
-							Console.WriteLine("Exception disarmed in use {0} > {1}: {2}",
-											  from, item, e);
+							log.Error(String.Format("Exception disarmed in use {0} > {1}",
+													from, item), e);
 						}
 					}
 				}
@@ -1513,7 +1515,7 @@ namespace Server.Network
 			{
 				if ( ph.Ingame && state.Mobile == null )
 				{
-					Console.WriteLine( "Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile", state, packetID );
+					log.Warn(String.Format("Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile", state, packetID));
 					state.Dispose();
 				}
 				else if ( ph.Ingame && state.Mobile.Deleted )
@@ -1865,7 +1867,7 @@ namespace Server.Network
 			{
 				if ( m_State.Socket != null )
 				{
-					Console.WriteLine( "Client: {0}: Disconnecting, bad version", m_State );
+					log.Warn(String.Format("Client: {0}: Disconnecting, bad version", m_State));
 					m_State.Dispose();
 				}
 			}
@@ -1939,7 +1941,7 @@ namespace Server.Network
 
 					if ( check != null && check.Map != Map.Internal && check != m )
 					{
-						Console.WriteLine( "Login: {0}: Account in use", state );
+						log.Info(String.Format("Login: {0}: Account in use", state));
 						state.Send( new PopupMessage( PMMessage.CharInWorld ) );
 						return;
 					}
@@ -2012,8 +2014,7 @@ namespace Server.Network
 			try {
 				EventSink.InvokeLogin(new LoginEventArgs(m));
 			} catch (Exception ex) {
-				Console.WriteLine("Exception disarmed in Login: {0}",
-								  ex);
+				log.Error("Exception disarmed in Login", ex);
 			}
 
 			m.ClearFastwalkStack();
@@ -2073,7 +2074,7 @@ namespace Server.Network
 
 					if ( check != null && check.Map != Map.Internal )
 					{
-						Console.WriteLine( "Login: {0}: Account in use", state );
+						log.Info(String.Format("Login: {0}: Account in use", state));
 						state.Send( new PopupMessage( PMMessage.CharInWorld ) );
 						return;
 					}
@@ -2102,8 +2103,8 @@ namespace Server.Network
 				try {
 					EventSink.InvokeCharacterCreated(args);
 				} catch (Exception ex) {
-					Console.WriteLine("Exception disarmed in CharacterCreated {0}: {1}",
-									  name, ex);
+					log.Error(String.Format("Exception disarmed in CharacterCreated {0}",
+											name), ex);
 				}
 
 				Mobile m = args.Mobile;
@@ -2208,19 +2209,19 @@ namespace Server.Network
 
 			if ( !IsValidAuthID( authID ) )
 			{
-				Console.WriteLine( "Login: {0}: Invalid client detected, disconnecting", state );
+				log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", state));
 				state.Dispose();
 				return;
 			}
 			else if ( state.m_AuthID != 0 && authID != state.m_AuthID )
 			{
-				Console.WriteLine( "Login: {0}: Invalid client detected, disconnecting", state );
+				log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", state));
 				state.Dispose();
 				return;
 			}
 			else if ( state.m_AuthID == 0 && authID != state.m_Seed )
 			{
-				Console.WriteLine( "Login: {0}: Invalid client detected, disconnecting", state );
+				log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", state));
 				state.Dispose();
 				return;
 			}
@@ -2233,8 +2234,8 @@ namespace Server.Network
 			try {
 				EventSink.InvokeGameLogin(e);
 			} catch (Exception ex) {
-				Console.WriteLine("Exception disarmed in GameLogin {0}: {1}",
-								  username, ex);
+				log.Error(String.Format("Exception disarmed in GameLogin {0}",
+										username), ex);
 			}
 
 			if ( e.Accepted )
@@ -2299,8 +2300,8 @@ namespace Server.Network
 			try {
 				EventSink.InvokeAccountLogin(e);
 			} catch (Exception ex) {
-				Console.WriteLine("Exception disarmed in AccountLogin {0}: {1}",
-								  username, ex);
+				log.Error(String.Format("Exception disarmed in AccountLogin {0}",
+										username), ex);
 			}
 
 			if ( e.Accepted )
@@ -2316,7 +2317,7 @@ namespace Server.Network
 			try {
 				EventSink.InvokeServerList(e);
 			} catch (Exception ex) {
-				Console.WriteLine("Exception disarmed in ServerList: {0}", ex);
+				log.Error("Exception disarmed in ServerList", ex);
 				e.Rejected = true;
 			}
 

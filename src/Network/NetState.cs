@@ -47,6 +47,8 @@ namespace Server.Network
 
 	public class NetState
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Socket m_Socket;
 		private IPAddress m_Address;
 		private ByteQueue m_Buffer;
@@ -605,7 +607,7 @@ namespace Server.Network
 			if ( DateTime.Now < m_NextCheckActivity )
 				return true;
 
-			Console.WriteLine( "Client: {0}: Disconnecting due to inactivity...", this );
+			log.Info(String.Format("Client: {0}: Disconnecting due to inactivity...", this));
 
 			Dispose();
 			return false;
@@ -756,9 +758,9 @@ namespace Server.Network
 				NetState ns = (NetState)m_Disposed.Dequeue();
 
 				if ( ns.m_Account != null )
-					Console.WriteLine( "Client: {0}: Disconnected. [{1} Online] [{2}]", ns, m_Instances.Count, ns.m_Account );
+					log.Info(String.Format("Client: {0}: Disconnected. [{1} Online] [{2}]", ns, m_Instances.Count, ns.m_Account));
 				else
-					Console.WriteLine( "Client: {0}: Disconnected. [{1} Online]", ns, m_Instances.Count );
+					log.Info(String.Format("Client: {0}: Disconnected. [{1} Online]", ns, m_Instances.Count));
 
 				Mobile m = ns.m_Mobile;
 

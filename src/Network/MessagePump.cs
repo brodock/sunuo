@@ -34,6 +34,8 @@ namespace Server.Network
 {
 	public class MessagePump
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Listener[] m_Listeners;
 		private Queue m_Queue;
 		private Queue m_Throttled;
@@ -77,7 +79,7 @@ namespace Server.Network
 					ns.Start();
 
 					if ( ns.Running )
-						Console.WriteLine( "Client: {0}: Connected. [{1} Online]", ns, NetState.Instances.Count );
+						log.Info(String.Format("Client: {0}: Connected. [{1} Online]", ns, NetState.Instances.Count));
 				}
 			}
 		}
@@ -138,7 +140,7 @@ namespace Server.Network
 
 						if ( seed == 0 )
 						{
-							Console.WriteLine( "Login: {0}: Invalid client detected, disconnecting", ns );
+							log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", ns));
 							ns.Dispose();
 							return false;
 						}
@@ -158,7 +160,7 @@ namespace Server.Network
 
 					if ( !ns.SentFirstPacket && packetID != 0xF1 && packetID != 0xCF && packetID != 0x80 && packetID != 0x91 && packetID != 0xA4 && packetID != 0xBF )
 					{
-						Console.WriteLine( "Client: {0}: Encrypted client detected, disconnecting", ns );
+						log.Warn(String.Format("Client: {0}: Encrypted client detected, disconnecting", ns));
 						ns.Dispose();
 						break;
 					}
@@ -199,7 +201,7 @@ namespace Server.Network
 					{
 						if ( handler.Ingame && ns.Mobile == null )
 						{
-							Console.WriteLine( "Client: {0}: Sent ingame packet (0x{1:X2}) before having been attached to a mobile", ns, packetID );
+							log.Warn(String.Format("Client: {0}: Sent ingame packet (0x{1:X2}) before having been attached to a mobile", ns, packetID));
 							ns.Dispose();
 							break;
 						}
@@ -238,8 +240,8 @@ namespace Server.Network
 							try {
 								handler.OnReceive( ns, r );
 							} catch (Exception e) {
-								Console.WriteLine("Exception disarmed in HandleReceive from {0}: {1}",
-												  ns.Address, e);
+								log.Error(String.Format("Exception disarmed in HandleReceive from {0}",
+														ns.Address), e);
 							}
 
 							length = buffer.Length;

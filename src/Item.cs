@@ -542,6 +542,8 @@ namespace Server
 
 	public class Item : IPoint3D, IEntity, IHued
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static readonly EmptyArrayList EmptyItems = new EmptyArrayList();
 
 		private Serial m_Serial;
@@ -2845,8 +2847,8 @@ namespace Server
 				try {
 					item.ProcessDelta();
 				} catch (Exception e) {
-					Console.WriteLine("Exception disarmed in Item.ProcessDeltaQueue in {0}: {1}",
-									  item, e);
+					log.Error(String.Format("Exception disarmed in Item.ProcessDeltaQueue in {0}",
+											item), e);
 				}
 
 				if ( i >= count )

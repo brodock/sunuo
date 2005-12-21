@@ -37,6 +37,8 @@ namespace Server
 {
 	public class World
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public enum SaveOption
 		{
 			Normal,
@@ -391,7 +393,7 @@ namespace Server
 			m_Loaded = true;
 			m_LoadingType = null;
 
-			Console.Write( "World: Loading..." );
+			log.Info("Loading world");
 
 			DateTime start = DateTime.Now;
 
@@ -686,7 +688,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
-								Console.WriteLine("failed to load mobile: {0}", e);
+								log.Error("failed to load mobile", e);
 								mobiles.RemoveAt( i );
 
 								failed = e;
@@ -919,7 +921,7 @@ namespace Server
 				m.ClearProperties();
 			}
 
-			Console.WriteLine( "done ({1} items, {2} mobiles) ({0:F1} seconds)", (DateTime.Now-start).TotalSeconds, m_Items.Count, m_Mobiles.Count );
+			log.Info(String.Format("World loaded: {1} items, {2} mobiles ({0:F1} seconds)", (DateTime.Now-start).TotalSeconds, m_Items.Count, m_Mobiles.Count));
 		}
 
 		public static void SaveIndex( ArrayList list, string path )
@@ -1024,7 +1026,8 @@ namespace Server
 			//System.GC.Collect();
 
 			DateTime endTime = DateTime.Now;
-			Console.WriteLine( "done in {0:F1} seconds.", (endTime - startTime).TotalSeconds );
+			log.Info(String.Format("World saved in {0:F1} seconds.",
+								   (endTime - startTime).TotalSeconds));
 
 			if ( message )
 				Broadcast( 0x35, true, "World save complete. The entire process took {0:F1} seconds.", (endTime - startTime).TotalSeconds );
