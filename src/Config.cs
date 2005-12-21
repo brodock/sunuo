@@ -389,42 +389,29 @@ namespace Server {
 			LibraryConfig coreConfig = new LibraryConfig("core");
 			libraryConfig["core"] = coreConfig;
 
-			LibraryConfig legacyConfig;
-			DirectoryInfo legacy = new DirectoryInfo(Path.Combine(Core.BaseDirectory,
-																  "Scripts"));
-			if (legacy.Exists) {
-				legacyConfig = new LibraryConfig("legacy", legacy);
-				libraryConfig[legacyConfig.Name] = legacyConfig;
-			}
-
 			DirectoryInfo local = Core.BaseDirectoryInfo
 				.CreateSubdirectory("local");
 
+			/* find source libraries in ./local/src/ */
 			DirectoryInfo src = local
 				.CreateSubdirectory("src");
 			foreach (DirectoryInfo sub in src.GetDirectories()) {
 				string libName = sub.Name.ToLower();
-				if (libName == "core" || libName == "legacy") {
-					log.Warn(String.Format("the library name '{0}' is invalid",
-										   libName));
+				if (libraryConfig.ContainsKey(libName)) {
+					log.Warn(String.Format("duplicate library '{0}' in '{1}'",
+										   libName, sub.FullName));
 					continue;
 				}
 
 				libraryConfig[libName] = new LibraryConfig(libName, sub);
 			}
 
+			/* find binary libraries in ./local/lib/ */
 			DirectoryInfo lib = local
 				.CreateSubdirectory("lib");
 			foreach (FileInfo libFile in lib.GetFiles("*.dll")) {
 				string fileName = libFile.Name;
 				string libName = fileName.Substring(0, fileName.Length - 4).ToLower();
-
-				if (libName == "core" || libName == "legacy") {
-					log.Warn(String.Format("the library name '{0}' is invalid",
-										   libName));
-					continue;
-				}
-
 				if (libraryConfig.ContainsKey(libName)) {
 					log.Warn(String.Format("duplicate library '{0}' in '{1}'",
 										   libName, libFile));
@@ -432,6 +419,17 @@ namespace Server {
 				}
 
 				libraryConfig[libName] = new LibraryConfig(libName, libFile);
+			}
+
+			/* if the 'legacy' library was not found until now, load
+			   the legacy scripts from ./Scripts/ */
+			if (!libraryConfig.ContainsKey("legacy")) {
+				DirectoryInfo legacy = new DirectoryInfo(Path.Combine(Core.BaseDirectory,
+																	  "Scripts"));
+				if (legacy.Exists) {
+					LibraryConfig legacyConfig = new LibraryConfig("legacy", legacy);
+					libraryConfig[legacyConfig.Name] = legacyConfig;
+				}
 			}
 		}
 
