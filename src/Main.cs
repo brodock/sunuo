@@ -419,6 +419,8 @@ namespace Server
 
 			EventSink.InvokeServerStarted();
 
+			log.Info("SunUO initialized, entering main loop");
+
 			try
 			{
 				while ( !m_Closing )
