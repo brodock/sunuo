@@ -44,6 +44,8 @@ namespace Server.Network
 
 	public class PacketHandlers
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static PacketHandler[] m_Handlers;
 
 		private static PacketHandler[] m_ExtendedHandlersLow;
@@ -143,7 +145,7 @@ namespace Server.Network
 				state.SentFirstPacket = false;
 				state.Send( new PlayServerAck( si ) );
 
-				Console.WriteLine("Client {0} playing server '{1}'", state, si.Name);
+				log.Info(String.Format("Client {0} playing server '{1}'", state, si.Name));
 			}
 		}
 
@@ -245,7 +247,7 @@ namespace Server.Network
 			if ( cmd != 0xFF )
 				return;
 
-			Console.WriteLine("Client {0} querying UOG status", state);
+			log.Info(String.Format("Client {0} querying UOG status", state));
 
 			string name = Core.Config.ServerName;
 			if (name == null)

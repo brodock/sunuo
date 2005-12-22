@@ -33,12 +33,16 @@ using Server.Network;
 using Server.Network.Encryption;
 using Server.Accounting;
 
+[assembly: log4net.Config.XmlConfigurator(Watch=true)]
+
 namespace Server
 {
 	public delegate void Slice();
 
 	public class Core
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static bool m_Crashed;
 		private static Thread timerThread;
 		private static string m_BaseDirectory;
@@ -177,8 +181,10 @@ namespace Server
 
 		private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
-			Console.WriteLine( e.IsTerminating ? "Error:" : "Warning:" );
-			Console.WriteLine( e.ExceptionObject );
+			if (e.IsTerminating)
+				log.Fatal(e);
+			else
+				log.Error(e);
 
 			if ( e.IsTerminating )
 			{
@@ -310,6 +316,8 @@ namespace Server
 			Server.Accounting.AccountHandler.Initialize();
 
 			EventSink.InvokeServerStarted();
+
+			log.Info("SunLogin initialized, entering main loop");
 
 			try
 			{

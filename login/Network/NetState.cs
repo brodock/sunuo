@@ -43,6 +43,8 @@ namespace Server.Network
 
 	public class NetState
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Socket m_Socket;
 		private IPEndPoint m_EndPoint;
 		private IPAddress m_Address;
@@ -181,8 +183,9 @@ namespace Server.Network
 				m_GameServers[address] = ns;
 				return ns;
 			} catch (Exception e) {
-				Console.WriteLine("Exception while trying to connect to game server {0} ({1}): {2}",
-								  config.Name, address, e);
+				log.Error(String.Format("Exception while trying to connect to game server {0} ({1}): {2}",
+										config.Name, address),
+						  e);
 				return null;
 			}
 		}
@@ -439,7 +442,7 @@ namespace Server.Network
 			if ( DateTime.Now < m_NextCheckActivity )
 				return true;
 
-			Console.WriteLine( "Client: {0}: Disconnecting due to inactivity...", this );
+			log.Info(String.Format("Client: {0}: Disconnecting due to inactivity...", this));
 
 			Dispose();
 			return false;
@@ -476,7 +479,7 @@ namespace Server.Network
 				}
 				catch ( Exception ex )
 				{
-					Console.WriteLine(ex);
+					log.Error(ex);
 					Dispose( false );
 					return;
 				}
@@ -622,9 +625,9 @@ namespace Server.Network
 				NetState ns = (NetState)m_Disposed.Dequeue();
 
 				if ( ns.m_Account != null )
-					Console.WriteLine( "Client: {0}: Disconnected. [{1} Online] [{2}]", ns, m_Instances.Count, ns.m_Account );
+					log.Info(String.Format("Client: {0}: Disconnected. [{1} Online] [{2}]", ns, m_Instances.Count, ns.m_Account));
 				else
-					Console.WriteLine( "Client: {0}: Disconnected. [{1} Online]", ns, m_Instances.Count );
+					log.Info(String.Format("Client: {0}: Disconnected. [{1} Online]", ns, m_Instances.Count));
 
 				ns.m_Account = null;
 				ns.m_ServerInfo = null;
