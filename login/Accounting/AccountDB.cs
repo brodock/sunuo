@@ -72,6 +72,8 @@ namespace Server.Accounting {
 	}
 
 	public class AccountDB {
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string connectString;
 		private IDbConnection dbcon;
 
@@ -116,9 +118,9 @@ namespace Server.Accounting {
 			try {
 				return FindAccountRecord(username, ref password, ref banned);
 			} catch (Exception e) {
-				Console.WriteLine("Connection to DB lost? ({0})", e.Message);
+				log.Warn("Connection to DB lost?", e);
 				Reconnect();
-				Console.WriteLine("Reconnected DB.");
+				log.Info("Reconnected DB.");
 
 				return FindAccountRecord(username, ref password, ref banned);
 			}

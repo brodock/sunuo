@@ -31,6 +31,8 @@ namespace Server.Network {
 	}
 
 	class ServerQuery {
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private GameServerConfig m_Config;
 		private Socket m_Socket;
 		private AsyncCallback m_Callback;
@@ -48,7 +50,7 @@ namespace Server.Network {
 				m_Callback = new AsyncCallback(OnConnect);
 				m_Socket.BeginConnect(m_Config.Address, m_Callback, null);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				log.Error(ex);
 			}
 		}
 
@@ -62,7 +64,7 @@ namespace Server.Network {
 				m_Socket.BeginSend(m_SeedPacket, 0, m_SeedPacket.Length,
 								   SocketFlags.None, m_Callback, null);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				log.Error(ex);
 			}
 		}
 
@@ -76,7 +78,7 @@ namespace Server.Network {
 				m_Socket.BeginSend(m_QueryPacket, 0, m_QueryPacket.Length,
 								   SocketFlags.None, m_Callback, null);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				log.Error(ex);
 			}
 		}
 
@@ -90,7 +92,7 @@ namespace Server.Network {
 				m_Socket.BeginReceive(m_Buffer, 0, m_Buffer.Length,
 									  SocketFlags.None, m_Callback, null);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				log.Error(ex);
 			}
 		}
 
@@ -122,12 +124,14 @@ namespace Server.Network {
 
 				ServerQueryTimer.SetStatus(m_Config, status);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+				log.Error(ex);
 			}
 		}
 	}
 
 	public class ServerQueryTimer : Timer {
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static Hashtable m_Status;
 
 		private ServerQueryTimer() : base(TimeSpan.Zero,
@@ -161,7 +165,7 @@ namespace Server.Network {
 			if (gsl == null)
 				return;
 
-			Console.WriteLine("Querying game servers");
+			log.Info("Querying game servers");
 
 			foreach (GameServerConfig gs in gsl.GameServers) {
 				if (!gs.Query)

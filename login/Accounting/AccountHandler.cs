@@ -24,6 +24,8 @@ using Server.Network;
 
 namespace Server.Accounting {
 	public class AccountHandler {
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static AccountDB accountDB;
 
 		public static void Initialize() {
@@ -42,7 +44,7 @@ namespace Server.Accounting {
 			try {
 				account = accountDB.GetAccount(e.Username);
 			} catch (Exception ex) {
-				Console.WriteLine("AccountDB.GetAccount failed: {0}", ex);
+				log.Error("AccountDB.GetAccount failed", ex);
 				e.RejectReason = ALRReason.Blocked;
 				return;
 			}
@@ -53,22 +55,22 @@ namespace Server.Accounting {
 						e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
 						e.Accepted = true;
 					} catch (Exception ex) {
-						Console.WriteLine("AccountDB.CreateAccount failed: {0}", ex);
+						log.Error("AccountDB.CreateAccount failed", ex);
 						e.RejectReason = ALRReason.Blocked;
 						return;
 					}
 				} else {
-					Console.WriteLine( "Login: {0}: Invalid username '{1}'", e.State, e.Username);
+					log.Warn(String.Format("Login: {0}: Invalid username '{1}'", e.State, e.Username));
 					e.RejectReason = ALRReason.Invalid;
 				}
 			} else if (!account.CheckPassword(e.Password)) {
-				Console.WriteLine( "Login: {0}: Invalid password for '{1}'", e.State, e.Username);
+				log.Warn(String.Format("Login: {0}: Invalid password for '{1}'", e.State, e.Username));
 				e.RejectReason = ALRReason.BadPass;
 			} else if (account.Banned) {
-				Console.WriteLine("Login: {0}: Banned account '{1}'", e.State, e.Username);
+				log.Warn(String.Format("Login: {0}: Banned account '{1}'", e.State, e.Username));
 				e.RejectReason = ALRReason.Blocked;
 			} else {
-				Console.WriteLine("Login: {0}: Valid credentials for '{1}'", e.State, e.Username);
+				log.Info(String.Format("Login: {0}: Valid credentials for '{1}'", e.State, e.Username));
 				e.State.Account = account;
 				e.Accepted = true;
 			}
