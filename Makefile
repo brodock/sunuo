@@ -10,7 +10,7 @@ SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
 SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Network/PacketReader.cs src/Network/Listener.cs src/Network/SendQueue.cs src/Network/BufferPool.cs src/Network/PacketWriter.cs src/ClientVersion.cs src/Config.cs src/Timer.cs src/Insensitive.cs src/Network/PacketProfile.cs src/Attributes.cs src/Network/Compression.cs src/Network/PacketHandler.cs
 
-all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe UOGQuery.exe $(DISTDLL))
+all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe $(DISTDLL))
 
 clean:
 	rm -f doc/sunuo.html
@@ -19,7 +19,7 @@ clean:
 install: all
 	install -m 0755 $(DISTDIR)/SunUO.exe $(RUNUO_BASE)/
 	test -f $(DISTDIR)/SunUO.exe.mdb && install -m 0644 $(DISTDIR)/SunUO.exe.mdb $(RUNUO_BASE)/
-	install -m 0644 $(addprefix $(DISTDIR)/,$(DISTDLL) SunUO.exe.config) $(RUNUO_BASE)/
+	install -m 0644 $(addprefix $(DISTDIR)/,$(DISTDLL) SunUO.exe.config SunLogin.exe.config) $(RUNUO_BASE)/
 
 # compile targets
 
@@ -52,10 +52,13 @@ $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
 	cp $< $@
 
+$(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config
+	cp $< $@
+
 $(DISTDIR)/changelog: debian/changelog
 	cp $< $@
 
-build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunLogin.exe UOGQuery.exe sunuo.html COPYING AUTHORS README changelog $(DISTDLL))
+build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog $(DISTDLL))
 	mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
 
