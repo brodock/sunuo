@@ -2847,7 +2847,7 @@ namespace Server
 				try {
 					item.ProcessDelta();
 				} catch (Exception e) {
-					log.Error(String.Format("Exception disarmed in Item.ProcessDeltaQueue in {0}",
+					log.Fatal(String.Format("Exception disarmed in Item.ProcessDeltaQueue in {0}",
 											item), e);
 				}
 

@@ -726,7 +726,7 @@ namespace Server.Network
 					try {
 						Skills.UseSkill( m, skillIndex );
 					} catch (Exception e) {
-						log.Error(String.Format("Exception disarmed in UseSkill {0} > {1}",
+						log.Fatal(String.Format("Exception disarmed in UseSkill {0} > {1}",
 												state.Mobile, skillIndex), e);
 					}
 
@@ -755,7 +755,7 @@ namespace Server.Network
 						try {
 							EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, World.FindItem( serial ) ) );
 						} catch (Exception e) {
-							log.Error(String.Format("Exception disarmed in CastSpell I {0}, spell {1}",
+							log.Fatal(String.Format("Exception disarmed in CastSpell I {0}, spell {1}",
 													state.Mobile, spellID), e);
 						}
 					}
@@ -767,7 +767,7 @@ namespace Server.Network
 					try {
 						EventSink.InvokeOpenDoorMacroUsed( new OpenDoorMacroEventArgs( m ) );
 					} catch (Exception e) {
-						log.Error(String.Format("Exception disarmed in OpenDoor {0}",
+						log.Fatal(String.Format("Exception disarmed in OpenDoor {0}",
 												state.Mobile), e);
 					}
 
@@ -780,7 +780,7 @@ namespace Server.Network
 					try {
 						EventSink.InvokeCastSpellRequest( new CastSpellRequestEventArgs( m, spellID, null ) );
 					} catch (Exception e) {
-						log.Error(String.Format("Exception disarmed in CastSpell II {0}, spell {1}",
+						log.Fatal(String.Format("Exception disarmed in CastSpell II {0}, spell {1}",
 												state.Mobile, spellID), e);
 					}
 
@@ -825,7 +825,7 @@ namespace Server.Network
 					else
 						p.OnResponse( from, text );
 				} catch (Exception e) {
-					log.Error(String.Format("Exception disarmed in AsciiPrompt response {0}, type {1}",
+					log.Fatal(String.Format("Exception disarmed in AsciiPrompt response {0}, type {1}",
 											state.Mobile, type), e);
 				}
 			}
@@ -855,7 +855,7 @@ namespace Server.Network
 					else
 						p.OnResponse( from, text );
 				} catch (Exception e) {
-					log.Error(String.Format("Exception disarmed in UnicodePrompt response {0}, type {1}",
+					log.Fatal(String.Format("Exception disarmed in UnicodePrompt response {0}, type {1}",
 											state.Mobile, type), e);
 				}
 			}
@@ -883,7 +883,7 @@ namespace Server.Network
 						else
 							menu.OnCancel( state );
 					} catch (Exception e) {
-						log.Error(String.Format("Exception disarmed in menu response {0} > {1}[index]",
+						log.Fatal(String.Format("Exception disarmed in menu response {0} > {1}[index]",
 												state.Mobile, menu), e);
 					}
 
@@ -947,7 +947,7 @@ namespace Server.Network
 			try {
 				state.Mobile.Lift( item, amount, out rejected, out reject );
 			} catch (Exception e) {
-				log.Error(String.Format("Exception disarmed in lift {0}, {1} x {2}",
+				log.Fatal(String.Format("Exception disarmed in lift {0}, {1} x {2}",
 										state.Mobile, item, amount), e);
 			}
 		}
@@ -974,7 +974,7 @@ namespace Server.Network
 				if (to.AllowEquipFrom(from))
 					success = to.EquipItem(item);
 			} catch (Exception e) {
-				log.Error(String.Format("Exception disarmed in equip {0} < {1}",
+				log.Fatal(String.Format("Exception disarmed in equip {0} < {1}",
 										to, item), e);
 			}
 
@@ -1002,7 +1002,7 @@ namespace Server.Network
 					if (m != null)
 						from.Drop(m, loc);
 				} catch (Exception e) {
-					log.Error(String.Format("Exception disarmed in drop {0} > {1}",
+					log.Fatal(String.Format("Exception disarmed in drop {0} > {1}",
 											from, m), e);
 				}
 			} else if (dest.IsItem) {
@@ -1011,7 +1011,7 @@ namespace Server.Network
 					if (i != null)
 						from.Drop(i, loc);
 				} catch (Exception e) {
-					log.Error(String.Format("Exception disarmed in drop {0} > {1}",
+					log.Fatal(String.Format("Exception disarmed in drop {0} > {1}",
 											from, i), e);
 				}
 			} else {
@@ -1121,7 +1121,7 @@ namespace Server.Network
 					try {
 						t.Invoke( from, toTarget );
 					} catch (Exception e) {
-						log.Error(String.Format("Exception disarmed in target {0} > {1} > {2}",
+						log.Fatal(String.Format("Exception disarmed in target {0} > {1} > {2}",
 												from, t, toTarget), e);
 					}
 				}
@@ -1182,7 +1182,7 @@ namespace Server.Network
 					try {
 						gump.OnResponse( state, new RelayInfo( buttonID, switches, textEntries ) );
 					} catch (Exception e) {
-						log.Error(String.Format("Exception disarmed in gump response of {0}",
+						log.Fatal(String.Format("Exception disarmed in gump response of {0}",
 												gump), e);
 					}
 
@@ -1348,7 +1348,7 @@ namespace Server.Network
 							if ( m != null && !m.Deleted )
 								from.Use( m );
 						} catch (Exception e) {
-							log.Error(String.Format("Exception disarmed in use {0} > {1}",
+							log.Fatal(String.Format("Exception disarmed in use {0} > {1}",
 													from, m), e);
 						}
 					}
@@ -1360,7 +1360,7 @@ namespace Server.Network
 							if ( item != null && !item.Deleted )
 								from.Use( item );
 						} catch (Exception e) {
-							log.Error(String.Format("Exception disarmed in use {0} > {1}",
+							log.Fatal(String.Format("Exception disarmed in use {0} > {1}",
 													from, item), e);
 						}
 					}
@@ -2014,7 +2014,7 @@ namespace Server.Network
 			try {
 				EventSink.InvokeLogin(new LoginEventArgs(m));
 			} catch (Exception ex) {
-				log.Error("Exception disarmed in Login", ex);
+				log.Fatal("Exception disarmed in Login", ex);
 			}
 
 			m.ClearFastwalkStack();
@@ -2103,7 +2103,7 @@ namespace Server.Network
 				try {
 					EventSink.InvokeCharacterCreated(args);
 				} catch (Exception ex) {
-					log.Error(String.Format("Exception disarmed in CharacterCreated {0}",
+					log.Fatal(String.Format("Exception disarmed in CharacterCreated {0}",
 											name), ex);
 				}
 
@@ -2234,7 +2234,7 @@ namespace Server.Network
 			try {
 				EventSink.InvokeGameLogin(e);
 			} catch (Exception ex) {
-				log.Error(String.Format("Exception disarmed in GameLogin {0}",
+				log.Fatal(String.Format("Exception disarmed in GameLogin {0}",
 										username), ex);
 			}
 
@@ -2300,7 +2300,7 @@ namespace Server.Network
 			try {
 				EventSink.InvokeAccountLogin(e);
 			} catch (Exception ex) {
-				log.Error(String.Format("Exception disarmed in AccountLogin {0}",
+				log.Fatal(String.Format("Exception disarmed in AccountLogin {0}",
 										username), ex);
 			}
 
@@ -2317,7 +2317,7 @@ namespace Server.Network
 			try {
 				EventSink.InvokeServerList(e);
 			} catch (Exception ex) {
-				log.Error("Exception disarmed in ServerList", ex);
+				log.Fatal("Exception disarmed in ServerList", ex);
 				e.Rejected = true;
 			}
 

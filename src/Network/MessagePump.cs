@@ -240,7 +240,7 @@ namespace Server.Network
 							try {
 								handler.OnReceive( ns, r );
 							} catch (Exception e) {
-								log.Error(String.Format("Exception disarmed in HandleReceive from {0}",
+								log.Fatal(String.Format("Exception disarmed in HandleReceive from {0}",
 														ns.Address), e);
 							}
 
