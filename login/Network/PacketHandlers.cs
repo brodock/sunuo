@@ -167,8 +167,8 @@ namespace Server.Network
 			try {
 				EventSink.InvokeAccountLogin(e);
 			} catch (Exception ex) {
-				Console.WriteLine("Exception disarmed in AccountLogin {0}: {1}",
-								  username, ex);
+				log.Fatal(String.Format("Exception disarmed in AccountLogin {0}",
+										username), ex);
 			}
 
 			if ( e.Accepted )
@@ -184,7 +184,7 @@ namespace Server.Network
 			try {
 				EventSink.InvokeServerList(e);
 			} catch (Exception ex) {
-				Console.WriteLine("Exception disarmed in ServerList: {0}", ex);
+				log.Fatal("Exception disarmed in ServerList", ex);
 				e.Rejected = true;
 			}
 
@@ -220,7 +220,7 @@ namespace Server.Network
 			{
 				if ( ph.Ingame && state.Mobile == null )
 				{
-					Console.WriteLine( "Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile", state, packetID );
+					log.Warn(String.Format("Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile", state, packetID));
 					state.Dispose();
 				}
 				else if ( ph.Ingame && state.Mobile.Deleted )
