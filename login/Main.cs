@@ -265,13 +265,6 @@ namespace Server
 					m_Service = true;
 				else if ( Insensitive.Equals( args[i], "-profile" ) )
 					Profiling = true;
-				else if (args[i] == "--logfile") {
-					string logfile = args[++i];
-					StreamWriter writer = new StreamWriter(new FileStream(logfile, FileMode.Append, FileAccess.Write));
-					writer.AutoFlush = true;
-					Console.SetOut(writer);
-					Console.SetError(writer);
-				}
 			}
 
 			config = new Config(Path.Combine(BaseDirectoryInfo.CreateSubdirectory("etc").FullName, "sunuo.xml"));
