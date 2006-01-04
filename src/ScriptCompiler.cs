@@ -210,8 +210,8 @@ namespace Server
 				 * #define ERROR_PATH_NOT_FOUND 3L
 				 */
 				if (e.NativeErrorCode == 2 || e.NativeErrorCode == 3) {
-					log.Fatal(String.Format("Could not find the compiler - are you sure MCS is installed?"));
-					log.Info(String.Format("On Debian, try: apt-get install mono-mcs"));
+					log.Fatal("Could not find the compiler - are you sure MCS is installed?");
+					log.Info("On Debian, try: apt-get install mono-mcs");
 					Environment.Exit(2);
 				} else {
 					throw e;
