@@ -238,7 +238,7 @@ namespace Server
 				if ( errorCount > 0 )
 					log.Error(String.Format("Compilation failed ({0} errors, {1} warnings)", errorCount, warningCount));
 				else
-					log.Info(String.Format("Compilation complete ({1} warnings)", warningCount));
+					log.Info(String.Format("Compilation complete ({0} warnings)", warningCount));
 
 				foreach ( CompilerError e in results.Errors )
 				{
