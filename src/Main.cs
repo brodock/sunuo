@@ -247,10 +247,7 @@ namespace Server
 
 		private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
-			if (e.IsTerminating)
-				log.Fatal(e);
-			else
-				log.Error(e);
+			log.Fatal(e.ExceptionObject);
 
 			if ( e.IsTerminating )
 			{
