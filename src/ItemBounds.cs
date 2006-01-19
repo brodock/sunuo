@@ -28,6 +28,8 @@ namespace Server
 {
 	public class ItemBounds
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static Rectangle2D[] m_Bounds;
 
 		public static Rectangle2D[] Table
@@ -63,7 +65,7 @@ namespace Server
 			}
 			else
 			{
-				Console.WriteLine( "Warning: Data/Binary/Bounds.bin does not exist" );
+				log.Warn( "Data/Binary/Bounds.bin does not exist" );
 
 				m_Bounds = new Rectangle2D[0x4000];
 			}
