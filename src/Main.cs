@@ -308,6 +308,9 @@ namespace Server
 
 			bool debug = false;
 
+			string baseDirectory = null;
+			string configFile = null;
+
 			for ( int i = 0; i < args.Length; ++i )
 			{
 				if ( Insensitive.Equals( args[i], "-debug" ) )
@@ -316,14 +319,45 @@ namespace Server
 					m_Service = true;
 				else if ( Insensitive.Equals( args[i], "-profile" ) )
 					Profiling = true;
+				else if (args[i] == "-c" || args[i] == "--config") {
+					if (i == args.Length - 1) {
+						Console.Error.WriteLine("file name expected after {0}",
+												args[i]);
+						return;
+					}
+
+					configFile = args[++i];
+
+					if (!File.Exists(configFile)) {
+						Console.Error.WriteLine("{0} does not exist", configFile);
+						return;
+					}
+				} else if (args[i] == "-b" || args[i] == "--base") {
+					if (i == args.Length - 1) {
+						Console.Error.WriteLine("directory name expected after {0}",
+												args[i]);
+						return;
+					}
+
+					baseDirectory = args[++i];
+
+					if (!Directory.Exists(baseDirectory)) {
+						Console.Error.WriteLine("{0} does not exist", baseDirectory);
+						return;
+					}
+				}
 			}
 
-			string baseDirectory = Path.GetDirectoryName(ExePath);
-			string confDirectory = new DirectoryInfo(baseDirectory)
-				.CreateSubdirectory("etc").FullName;
+			if (baseDirectory == null)
+				baseDirectory = Path.GetDirectoryName(ExePath);
 
-			config = new Config(baseDirectory,
-								Path.Combine(confDirectory, "sunuo.xml"));
+			if (configFile == null) {
+				string confDirectory = new DirectoryInfo(baseDirectory)
+					.CreateSubdirectory("etc").FullName;
+				configFile = Path.Combine(confDirectory, "sunuo.xml");
+			}
+
+			config = new Config(baseDirectory, configFile);
 
 			try
 			{
