@@ -327,7 +327,7 @@ namespace Server {
 		private XmlDocument document;
 		private string serverName;
 		private bool multiThreading;
-		private ArrayList dataDirectories;
+		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private LoginConfig loginConfig;
 		private GameServerListConfig gameServerListConfig;
@@ -352,7 +352,7 @@ namespace Server {
 		}
 
 		public ArrayList DataDirectories {
-			get { return dataDirectories; }
+			get { return m_DataDirectories; }
 		}
 
 		public LibraryConfig GetLibraryConfig(string name) {
@@ -477,7 +477,7 @@ namespace Server {
 
 		private void Load() {
 			document = new XmlDocument();
-			dataDirectories = new ArrayList();
+			m_DataDirectories = new ArrayList();
 
 			if (Exists) {
 				XmlTextReader reader = new XmlTextReader(filename);
@@ -502,7 +502,7 @@ namespace Server {
 			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
 				string path = dp.InnerText;
 				if (Directory.Exists(path))
-					dataDirectories.Add(path);
+					m_DataDirectories.Add(path);
 			}
 
 			// section "libraries"
@@ -557,7 +557,7 @@ namespace Server {
 
 			Hashtable dirHash = new Hashtable();
 
-			foreach (string path in	dataDirectories) {
+			foreach (string path in	m_DataDirectories) {
 				/* check for double path */
 				if (dirHash.ContainsKey(path))
 					continue;
