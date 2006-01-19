@@ -59,19 +59,23 @@ namespace Server
 		public static bool Loaded{ get { return m_Loaded; } }
 		public static bool Loading{ get { return m_Loading; } }
 
-		private static string mobIdxPath = Path.Combine( "Saves/Mobiles/", "Mobiles.idx" );
-		private static string mobTdbPath = Path.Combine( "Saves/Mobiles/", "Mobiles.tdb" );
-		private static string mobBinPath = Path.Combine( "Saves/Mobiles/", "Mobiles.bin" );
+		private static string mobileBase = Path.Combine(Core.Config.SaveDirectory, "Mobiles");
+		private static string mobIdxPath = Path.Combine( mobileBase, "Mobiles.idx" );
+		private static string mobTdbPath = Path.Combine( mobileBase, "Mobiles.tdb" );
+		private static string mobBinPath = Path.Combine( mobileBase, "Mobiles.bin" );
 
-		private static string itemIdxPath = Path.Combine( "Saves/Items/", "Items.idx" );
-		private static string itemTdbPath = Path.Combine( "Saves/Items/", "Items.tdb" );
-		private static string itemBinPath = Path.Combine( "Saves/Items/", "Items.bin" );
+		private static string itemBase = Path.Combine(Core.Config.SaveDirectory, "Items");
+		private static string itemIdxPath = Path.Combine( itemBase, "Items.idx" );
+		private static string itemTdbPath = Path.Combine( itemBase, "Items.tdb" );
+		private static string itemBinPath = Path.Combine( itemBase, "Items.bin" );
 
-		private static string regionIdxPath = Path.Combine( "Saves/Regions/", "Regions.idx" );
-		private static string regionBinPath = Path.Combine( "Saves/Regions/", "Regions.bin" );
+		private static string regionBase = Path.Combine(Core.Config.SaveDirectory, "Regions");
+		private static string regionIdxPath = Path.Combine( regionBase, "Regions.idx" );
+		private static string regionBinPath = Path.Combine( regionBase, "Regions.bin" );
 
-		private static string guildIdxPath = Path.Combine( "Saves/Guilds/", "Guilds.idx" );
-		private static string guildBinPath = Path.Combine( "Saves/Guilds/", "Guilds.bin" );
+		private static string guildBase = Path.Combine(Core.Config.SaveDirectory, "Guilds");
+		private static string guildIdxPath = Path.Combine( guildBase, "Guilds.idx" );
+		private static string guildBinPath = Path.Combine( guildBase, "Guilds.bin" );
 
 		//static World()
 		//{
