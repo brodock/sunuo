@@ -327,7 +327,7 @@ namespace Server {
 		private XmlDocument document;
 		private string serverName;
 		private bool multiThreading;
-		private string m_BaseDirectory;
+		private string m_BaseDirectory, m_ConfigDirectory;
 		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private LoginConfig loginConfig;
@@ -335,6 +335,8 @@ namespace Server {
 
 		public Config(string _baseDirectory, string _filename) {
 			m_BaseDirectory = _baseDirectory;
+			m_ConfigDirectory = Path.Combine(m_BaseDirectory, "Data");
+
 			filename = _filename;
 
 			Defaults();
@@ -357,6 +359,10 @@ namespace Server {
 			get {
 				return m_BaseDirectory;
 			}
+		}
+
+		public string ConfigDirectory {
+			get { return m_ConfigDirectory; }
 		}
 
 		public ArrayList DataDirectories {
@@ -514,6 +520,10 @@ namespace Server {
 					switch (el.Name) {
 					case "base-dir":
 						m_BaseDirectory = path;
+						break;
+
+					case "config-dir":
+						m_ConfigDirectory = path;
 						break;
 
 					case "data-path":
