@@ -9,6 +9,8 @@ sunuo (0.2.4) unstable; urgency=low
   * command line arguments are no longer case insensitive
   * added directories to Config:
     - ConfigDirectory = BaseDirectory + "/Data"
+    - SaveDirectory = BaseDirectory + "/Saves"
+    - BackupDirectory = BaseDirectory + "/Backup"
 
  --
 

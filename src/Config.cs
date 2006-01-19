@@ -327,7 +327,8 @@ namespace Server {
 		private XmlDocument document;
 		private string serverName;
 		private bool multiThreading;
-		private string m_BaseDirectory, m_ConfigDirectory;
+		private string m_BaseDirectory, m_ConfigDirectory,
+			m_SaveDirectory, m_BackupDirectory;
 		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private LoginConfig loginConfig;
@@ -336,6 +337,8 @@ namespace Server {
 		public Config(string _baseDirectory, string _filename) {
 			m_BaseDirectory = _baseDirectory;
 			m_ConfigDirectory = Path.Combine(m_BaseDirectory, "Data");
+			m_SaveDirectory = Path.Combine(m_BaseDirectory, "Saves");
+			m_BackupDirectory = Path.Combine(m_BaseDirectory, "Backups");
 
 			filename = _filename;
 
@@ -363,6 +366,14 @@ namespace Server {
 
 		public string ConfigDirectory {
 			get { return m_ConfigDirectory; }
+		}
+
+		public string SaveDirectory {
+			get { return m_SaveDirectory; }
+		}
+
+		public string BackupDirectory {
+			get { return m_BackupDirectory; }
 		}
 
 		public ArrayList DataDirectories {
@@ -524,6 +535,14 @@ namespace Server {
 
 					case "config-dir":
 						m_ConfigDirectory = path;
+						break;
+
+					case "save-dir":
+						m_SaveDirectory = path;
+						break;
+
+					case "backup-dir":
+						m_BackupDirectory = path;
 						break;
 
 					case "data-path":
