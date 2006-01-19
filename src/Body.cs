@@ -38,6 +38,8 @@ namespace Server
 
 	public struct Body
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private int m_BodyID;
 
 		private static BodyType[] m_Types;
@@ -56,7 +58,7 @@ namespace Server
 			}
 			else
 			{
-				Console.WriteLine( "Warning: Data/Binary/BodyTypes.bin does not exist" );
+				log.Warn( "Data/Binary/BodyTypes.bin does not exist" );
 
 				m_Types = new BodyType[0];
 			}
