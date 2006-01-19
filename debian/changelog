@@ -6,6 +6,7 @@ sunuo (0.2.4) unstable; urgency=low
   * load legacy scripts from local/src and local/lib if present
   * moved main BaseDirectory declaration to Config
   * configure config file and base directory on the command line
+  * command line arguments are no longer case insensitive
 
  --
 

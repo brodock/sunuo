@@ -313,13 +313,21 @@ namespace Server
 
 			for ( int i = 0; i < args.Length; ++i )
 			{
-				if ( Insensitive.Equals( args[i], "-debug" ) )
+				switch (args[i]) {
+				case "-debug":
 					debug = true;
-				else if ( Insensitive.Equals( args[i], "-service" ) )
+					break;
+
+				case "-service":
 					m_Service = true;
-				else if ( Insensitive.Equals( args[i], "-profile" ) )
+					break;
+
+				case "-profile":
 					Profiling = true;
-				else if (args[i] == "-c" || args[i] == "--config") {
+					break;
+
+				case "-c":
+				case "--config":
 					if (i == args.Length - 1) {
 						Console.Error.WriteLine("file name expected after {0}",
 												args[i]);
@@ -332,7 +340,11 @@ namespace Server
 						Console.Error.WriteLine("{0} does not exist", configFile);
 						return;
 					}
-				} else if (args[i] == "-b" || args[i] == "--base") {
+
+					break;
+
+				case "-b":
+				case "--base":
 					if (i == args.Length - 1) {
 						Console.Error.WriteLine("directory name expected after {0}",
 												args[i]);
@@ -345,6 +357,8 @@ namespace Server
 						Console.Error.WriteLine("{0} does not exist", baseDirectory);
 						return;
 					}
+
+					break;
 				}
 			}
 
