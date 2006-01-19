@@ -507,10 +507,26 @@ namespace Server {
 
 			// section "locations"
 			XmlElement locations = GetConfiguration("locations");
-			foreach (XmlElement dp in locations.GetElementsByTagName("data-path")) {
-				string path = dp.InnerText;
-				if (Directory.Exists(path))
-					m_DataDirectories.Add(path);
+			foreach (XmlNode node in locations.ChildNodes) {
+				XmlElement el = node as XmlElement;
+				if (el != null) {
+					string path = el.InnerText;
+					switch (el.Name) {
+					case "base-dir":
+						m_BaseDirectory = path;
+						break;
+
+					case "data-path":
+						if (Directory.Exists(path))
+							m_DataDirectories.Add(path);
+						break;
+
+					default:
+						log.Warn(String.Format("Ignoring unknown location tag in {0}: {1}",
+											   filename, el.Name));
+						break;
+					}
+				}
 			}
 
 			// section "libraries"
