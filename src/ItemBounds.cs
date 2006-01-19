@@ -42,9 +42,11 @@ namespace Server
 
 		static ItemBounds()
 		{
-			if ( File.Exists( "Data/Binary/Bounds.bin" ) )
+			string path = Path.Combine(Path.Combine(Core.Config.ConfigDirectory, "Binary"), "Bounds.bin");
+
+			if ( File.Exists( path ) )
 			{
-				using ( FileStream fs = new FileStream( "Data/Binary/Bounds.bin", FileMode.Open, FileAccess.Read, FileShare.Read ) )
+				using ( FileStream fs = new FileStream( path, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryReader bin = new BinaryReader( fs );
 
@@ -65,7 +67,7 @@ namespace Server
 			}
 			else
 			{
-				log.Warn( "Data/Binary/Bounds.bin does not exist" );
+				log.Warn(String.Format("{0} does not exist", path));
 
 				m_Bounds = new Rectangle2D[0x4000];
 			}

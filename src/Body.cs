@@ -46,9 +46,11 @@ namespace Server
 
 		static Body()
 		{
-			if ( File.Exists( "Data/Binary/BodyTypes.bin" ) )
+			string path = Path.Combine(Path.Combine(Core.Config.ConfigDirectory, "Binary"), "BodyTypes.bin");
+
+			if ( File.Exists( path ) )
 			{
-				using ( BinaryReader bin = new BinaryReader( new FileStream( "Data/Binary/BodyTypes.bin", FileMode.Open, FileAccess.Read, FileShare.Read ) ) )
+				using ( BinaryReader bin = new BinaryReader( new FileStream( path, FileMode.Open, FileAccess.Read, FileShare.Read ) ) )
 				{
 					m_Types = new BodyType[(int)bin.BaseStream.Length];
 
@@ -58,7 +60,7 @@ namespace Server
 			}
 			else
 			{
-				log.Warn( "Data/Binary/BodyTypes.bin does not exist" );
+				log.Warn(String.Format("{0} does not exist", path));
 
 				m_Types = new BodyType[0];
 			}

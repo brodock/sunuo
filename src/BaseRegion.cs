@@ -25,6 +25,7 @@ using Server;
 using System;
 using System.Collections;
 using System.Xml;
+using System.IO;
 using Server.Targeting;
 
 namespace Server
@@ -801,16 +802,18 @@ namespace Server
 
 		public static void Load()
 		{
-			if ( !System.IO.File.Exists( "Data/Regions.xml" ) )
+			string path = Path.Combine(Core.Config.ConfigDirectory, "Regions.xml");
+
+			if ( !System.IO.File.Exists( path ) )
 			{
-				log.Error("Error: Data/Regions.xml does not exist");
+				log.Error(String.Format("{0} does not exist", path));
 				return;
 			}
 
 			log.Info("Loading regions");
 
 			XmlDocument doc = new XmlDocument();
-			doc.Load( "Data/Regions.xml" );
+			doc.Load( path );
 
 			XmlElement root = doc["ServerRegions"];
 			foreach ( XmlElement facet in root.GetElementsByTagName( "Facet" ) )

@@ -70,7 +70,7 @@ namespace Server
 		private static string[] GetReferenceAssemblies() {
 			ArrayList list = new ArrayList();
 
-			string path = Path.Combine( Core.BaseDirectory, "Data/Assemblies.cfg" );
+			string path = Path.Combine(Core.Config.ConfigDirectory, "Assemblies.cfg");
 
 			if ( File.Exists( path ) )
 			{
