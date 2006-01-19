@@ -48,7 +48,6 @@ namespace Server
 
 		private static bool m_Crashed;
 		private static Thread timerThread;
-		private static string m_BaseDirectory;
 		private static DirectoryInfo m_BaseDirectoryInfo;
 		private static DirectoryInfo m_CacheDirectoryInfo;
 		private static string m_ExePath;
@@ -187,22 +186,7 @@ namespace Server
 		{
 			get
 			{
-				if ( m_BaseDirectory == null )
-				{
-					try
-					{
-						m_BaseDirectory = ExePath;
-
-						if ( m_BaseDirectory.Length > 0 )
-							m_BaseDirectory = Path.GetDirectoryName( m_BaseDirectory );
-					}
-					catch
-					{
-						m_BaseDirectory = "";
-					}
-				}
-
-				return m_BaseDirectory;
+				return Config.BaseDirectory;
 			}
 		}
 
@@ -334,7 +318,12 @@ namespace Server
 					Profiling = true;
 			}
 
-			config = new Config(Path.Combine(BaseDirectoryInfo.CreateSubdirectory("etc").FullName, "sunuo.xml"));
+			string baseDirectory = Path.GetDirectoryName(ExePath);
+			string confDirectory = new DirectoryInfo(baseDirectory)
+				.CreateSubdirectory("etc").FullName;
+
+			config = new Config(baseDirectory,
+								Path.Combine(confDirectory, "sunuo.xml"));
 
 			try
 			{

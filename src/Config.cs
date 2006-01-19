@@ -327,12 +327,14 @@ namespace Server {
 		private XmlDocument document;
 		private string serverName;
 		private bool multiThreading;
+		private string m_BaseDirectory;
 		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private LoginConfig loginConfig;
 		private GameServerListConfig gameServerListConfig;
 
-		public Config(string _filename) {
+		public Config(string _baseDirectory, string _filename) {
+			m_BaseDirectory = _baseDirectory;
 			filename = _filename;
 
 			Defaults();
@@ -349,6 +351,12 @@ namespace Server {
 
 		public bool MultiThreading {
 			get { return multiThreading; }
+		}
+
+		public string BaseDirectory {
+			get {
+				return m_BaseDirectory;
+			}
 		}
 
 		public ArrayList DataDirectories {
@@ -389,7 +397,7 @@ namespace Server {
 			LibraryConfig coreConfig = new LibraryConfig("core");
 			libraryConfig["core"] = coreConfig;
 
-			DirectoryInfo local = Core.BaseDirectoryInfo
+			DirectoryInfo local = new DirectoryInfo(BaseDirectory)
 				.CreateSubdirectory("local");
 
 			/* find source libraries in ./local/src/ */
@@ -424,7 +432,7 @@ namespace Server {
 			/* if the 'legacy' library was not found until now, load
 			   the legacy scripts from ./Scripts/ */
 			if (!libraryConfig.ContainsKey("legacy")) {
-				DirectoryInfo legacy = new DirectoryInfo(Path.Combine(Core.BaseDirectory,
+				DirectoryInfo legacy = new DirectoryInfo(Path.Combine(BaseDirectory,
 																	  "Scripts"));
 				if (legacy.Exists) {
 					LibraryConfig legacyConfig = new LibraryConfig("legacy", legacy);

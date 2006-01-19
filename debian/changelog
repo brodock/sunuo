@@ -4,6 +4,7 @@ sunuo (0.2.4) unstable; urgency=low
   * removed the --logfile option
   * use log4net in exception handlers and more
   * load legacy scripts from local/src and local/lib if present
+  * moved main BaseDirectory declaration to Config
 
  --
 
