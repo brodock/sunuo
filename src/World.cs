@@ -930,17 +930,17 @@ namespace Server
 
 		public static void SaveIndex( ArrayList list, string path )
 		{
-			if ( !Directory.Exists( "Saves/Mobiles/" ) )
-				Directory.CreateDirectory( "Saves/Mobiles/" );
+			if ( !Directory.Exists( mobileBase ) )
+				Directory.CreateDirectory( mobileBase );
 
-			if ( !Directory.Exists( "Saves/Items/" ) )
-				Directory.CreateDirectory( "Saves/Items/" );
+			if ( !Directory.Exists( itemBase ) )
+				Directory.CreateDirectory( itemBase );
 
-			if ( !Directory.Exists( "Saves/Guilds/" ) )
-				Directory.CreateDirectory( "Saves/Guilds/" );
+			if ( !Directory.Exists( guildBase ) )
+				Directory.CreateDirectory( guildBase );
 
-			if ( !Directory.Exists( "Saves/Regions/" ) )
-				Directory.CreateDirectory( "Saves/Regions/" );
+			if ( !Directory.Exists( regionBase ) )
+				Directory.CreateDirectory( regionBase );
 
 			using ( FileStream idx = new FileStream( path, FileMode.Create, FileAccess.Write, FileShare.None ) )
 			{
@@ -986,14 +986,14 @@ namespace Server
 
 			DateTime startTime = DateTime.Now;
 
-			if ( !Directory.Exists( "Saves/Mobiles/" ) )
-				Directory.CreateDirectory( "Saves/Mobiles/" );
-			if ( !Directory.Exists( "Saves/Items/" ) )
-				Directory.CreateDirectory( "Saves/Items/" );
-			if ( !Directory.Exists( "Saves/Guilds/" ) )
-				Directory.CreateDirectory( "Saves/Guilds/" );
-			if ( !Directory.Exists( "Saves/Regions/" ) )
-				Directory.CreateDirectory( "Saves/Regions/" );
+			if ( !Directory.Exists( mobileBase ) )
+				Directory.CreateDirectory( mobileBase );
+			if ( !Directory.Exists( itemBase ) )
+				Directory.CreateDirectory( itemBase );
+			if ( !Directory.Exists( guildBase ) )
+				Directory.CreateDirectory( guildBase );
+			if ( !Directory.Exists( regionBase ) )
+				Directory.CreateDirectory( regionBase );
 
 			if (Core.Config.MultiThreading)
 			{
