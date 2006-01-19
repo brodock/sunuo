@@ -359,6 +359,11 @@ namespace Server
 					}
 
 					break;
+
+				default:
+					Console.Error.WriteLine("Unrecognized command line argument: {0}",
+											args[i]);
+					return;
 				}
 			}
 
