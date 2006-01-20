@@ -319,6 +319,7 @@ namespace Server
 					break;
 
 				case "-service":
+				case "--service":
 					m_Service = true;
 					break;
 

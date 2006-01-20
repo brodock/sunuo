@@ -17,7 +17,6 @@ MONO=/usr/bin/mono
 
 SUNUO_BASE=/var/lib/sunuo/base
 EXE=/usr/share/sunuo/SunUO.exe
-LOGFILE=/var/log/sunuo/core.log
 
 # Gracefully exit if the package has been removed.
 test -x $MONO || exit 0
@@ -42,7 +41,7 @@ d_start() {
             -- \
             $EXE \
             --base $SUNUO_BASE \
-            --logfile $LOGFILE
+            --service
 }
 
 #
