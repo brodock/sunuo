@@ -258,6 +258,8 @@ namespace Server
 			config = new Config(baseDirectory,
 								Path.Combine(confDirectory, "sunuo.xml"));
 
+			Directory.SetCurrentDirectory(config.BaseDirectory);
+
 			try
 			{
 				m_MultiConOut = new MultiTextWriter(Console.Out);

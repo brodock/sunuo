@@ -381,6 +381,8 @@ namespace Server
 
 			config = new Config(baseDirectory, configFile);
 
+			Directory.SetCurrentDirectory(config.BaseDirectory);
+
 			try
 			{
 				m_MultiConOut = new MultiTextWriter(Console.Out);
