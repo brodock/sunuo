@@ -13,6 +13,7 @@ sunuo (0.2.4) unstable; urgency=low
     - BackupDirectory = BaseDirectory + "/Backup"
   * debian: don't symlink .exe, run with --base instead
   * debian: symlink base/Data to /etc/sunuo
+  * debian: symlink base/var/log to /var/log/sunuo
 
  --
 
