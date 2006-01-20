@@ -1,2 +1,3 @@
 debian/sunuo.xml etc/sunuo
+conf/SunUO.exe.config etc/sunuo
 build/sunuo-*-bin/SunUO.exe usr/share/sunuo
