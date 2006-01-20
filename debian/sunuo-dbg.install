@@ -1,1 +1,1 @@
-src/SunUO.exe.mdb usr/share/sunuo
+build/sunuo-*-bin/SunUO.exe.mdb usr/share/sunuo

@@ -11,6 +11,7 @@ sunuo (0.2.4) unstable; urgency=low
     - ConfigDirectory = BaseDirectory + "/Data"
     - SaveDirectory = BaseDirectory + "/Saves"
     - BackupDirectory = BaseDirectory + "/Backup"
+  * debian: don't symlink .exe, run with --base instead
 
  --
 
