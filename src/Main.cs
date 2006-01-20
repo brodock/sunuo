@@ -315,6 +315,7 @@ namespace Server
 			{
 				switch (args[i]) {
 				case "-debug":
+				case "--debug":
 					debug = true;
 					break;
 
@@ -324,6 +325,7 @@ namespace Server
 					break;
 
 				case "-profile":
+				case "--profile":
 					Profiling = true;
 					break;
 
