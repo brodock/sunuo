@@ -110,7 +110,6 @@ namespace Server
 
 			if (baseDirectory == null)
 				baseDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-			baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
 			if (configFile == null) {
 				string confDirectory = new DirectoryInfo(baseDirectory)
