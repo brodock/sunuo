@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+#  SunUO
+#  $Id$
+#
+#  (c) 2006 Max Kellermann <max@duempel.org>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; version 2 of the License.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+
+set -e
+
+# check command line
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 SHARD [ARGUMENTS]" >&2
+    exit 1
+fi
+
+SHARD="$1"
+shift
+
+export SUNUO_BASE="/var/lib/sunuo/$SHARD"
+
+if ! [ -f "$SUNUO_BASE/SunUO.exe" ]; then
+    echo "Shard $SHARD does not exist" >&2
+    exit 2
+fi
+
+# global configuration
+
+MONO=/usr/bin/mono
+if [ -r /etc/default/sunuo ]
+then
+    . /etc/default/sunuo
+fi
+
+if ! [ -x "$MONO" ]; then
+    echo "Mono is not installed at $MONO" >&2
+    exit 2
+fi
+
+# prepare environment
+
+umask 0027
+
+export MONO_PATH=/usr/share/sunuo
+export MONO_SHARED_DIR="$SUNUO_BASE/var/wapi"
+export HOME="$SUNUO_BASE"
+
+export SUNUO_LOG="/var/log/sunuo/$SHARD"
+
+mkdir -p "$MONO_SHARED_DIR"
+chown sunuo:sunuo "$MONO_SHARED_DIR"
+
+# execute SunUO
+
+exec start-stop-daemon --start \
+    --pidfile "/var/run/sunuo/$SHARD.pid" --make-pidfile \
+    --chdir "$SUNUO_BASE" --chuid sunuo --exec /usr/bin/mono \
+    -- \
+    --server -O=all,-shared \
+    "$SUNUO_BASE/SunUO.exe" --base "$SUNUO_BASE" "$@"

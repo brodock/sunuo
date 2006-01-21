@@ -1,11 +1,7 @@
 etc/sunuo
 usr/share/sunuo
 usr/share/sunuo/lib
-usr/src/sunuo
-var/lib/sunuo/.wapi
-var/lib/sunuo/base/local
-var/lib/sunuo/base/var
-var/lib/sunuo/backups/Automatic
-var/lib/sunuo/saves
+var/lib/sunuo
 var/cache/sunuo
 var/log/sunuo
+var/run/sunuo

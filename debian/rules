@@ -6,4 +6,4 @@ include /usr/share/cdbs/1/class/makefile.mk
 
 DEB_MAKE_BUILD_TARGET := all docs MCS=/usr/bin/mcs
 
-DEB_DH_INSTALLINIT_ARGS := --no-start --no-restart-on-upgrade
+DEB_DH_INSTALLINIT_ARGS := --no-restart-on-upgrade

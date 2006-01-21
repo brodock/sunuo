@@ -1,0 +1,4 @@
+# AUTO_SHARDS: add shard names here which should be started
+# automatically on boot
+
+AUTO_SHARDS=""

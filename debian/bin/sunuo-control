@@ -1,0 +1,220 @@
+#!/usr/bin/env ruby
+#
+#  SunUO
+#  $Id$
+#
+#  (c) 2006 Max Kellermann <max@duempel.org>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; version 2 of the License.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+
+require 'etc'
+require 'fileutils'
+
+def usage
+    <<EOT
+Usage: sunuo-control COMMAND ARGS ...
+
+Valid commands:
+  create NAME       create a new shard with this name
+  pid NAME          print a shard\'s pid
+  status [NAME ..]  show shard status
+  start NAME ...    start one or more shards in background
+  stop [NAME ...]   shut down shards         
+  run NAME          run a shard in foreground
+  help              print this text
+EOT
+end
+
+class Shard
+    def initialize(name)
+        raise "invalid shard name #{name}" unless name =~ /\A\w+\Z/
+        raise "Shard #{name} does not exist" unless File.directory?("/var/lib/sunuo/#{name}")
+        @name = name
+    end
+
+    attr_reader :name
+
+    def pid
+        pidfile = "/var/run/sunuo/#{@name}.pid"
+        pid = File.open(pidfile).read
+        return unless pid =~ /(\d+)/
+        pid = $1
+        return unless File.directory?("/proc/#{pid}")
+        pid.to_i
+    rescue Errno::ENOENT
+        nil
+    end
+
+    def alive?
+        pid != nil
+    end
+
+    def run(*args)
+        exec('/usr/share/sunuo/wrapper', @name, *args)
+    end
+
+    def start(*args)
+        fork do
+            run('--service', *args)
+        end
+    end
+
+    def kill(signal = 'SIGTERM')
+        p = pid
+        return unless p
+        Process.kill(signal, p)
+        return p
+    end
+
+    def Shard.all
+        result = []
+        Dir.open('/var/lib/sunuo').each do |name|
+            next unless name =~ /\A\w+\Z/
+            next unless File.directory?("/var/lib/sunuo/#{name}")
+            result << Shard.new(name)
+        end
+        result
+    end
+
+    def Shard.collect(names)
+        names.collect do |name|
+            Shard.new(name)
+        end
+    end
+end
+
+
+raise "Please run this program as root" unless Process.uid == 0
+
+if ARGV.empty?
+    $stderr << "No command - type 'sunuo-control help' for help\n"
+    exit 1
+end
+
+pw = Etc.getpwnam('sunuo')
+Process.egid = Process.gid = pw.gid
+File.umask 0027
+
+case ARGV.shift
+when 'create'
+    raise "'create' requires exactly one shard name" unless ARGV.length == 1
+
+    name = ARGV.shift
+    raise "Invalid shard name #{name}" if name == 'skel'
+    raise "Invalid characters in shard name" unless name =~ /\A\w+\Z/
+
+    base_dir = "/var/lib/sunuo/#{name}"
+    cache_dir = "/var/cache/sunuo/#{name}"
+    log_dir = "/var/log/sunuo/#{name}"
+    conf_dir = "/etc/sunuo/#{name}"
+
+    [ base_dir, cache_dir, log_dir, conf_dir ].each do |dir|
+        raise "#{dir} already exists" if File.exists?(dir)
+    end
+
+    if File.directory?('/etc/sunuo/skel')
+        FileUtils.cp_r('/etc/sunuo/skel', conf_dir)
+    else
+        Dir.mkdir(conf_dir)
+    end
+
+    Dir.mkdir(base_dir)
+    Dir.mkdir(log_dir)
+    Dir.mkdir(cache_dir)
+
+    Dir.mkdir("#{base_dir}/local")
+    Dir.mkdir("#{base_dir}/local/src")
+    Dir.mkdir("#{base_dir}/local/lib")
+
+    File.symlink(conf_dir, "#{base_dir}/etc")
+    File.symlink(conf_dir, "#{base_dir}/Data")
+
+    Dir.mkdir("#{base_dir}/var")
+    File.symlink(cache_dir, "#{base_dir}/var/cache")
+    File.symlink(log_dir, "#{base_dir}/var/log")
+    File.symlink(log_dir, "#{base_dir}/Logs")
+
+    Dir.mkdir("#{base_dir}/Saves")
+    Dir.mkdir("#{base_dir}/Backups")
+    Dir.mkdir("#{base_dir}/Backups/Automatic")
+    File.symlink('Backups/Automatic', "#{base_dir}/Backups\\Automatic")
+
+    File.symlink('/usr/lib/libz.so.1', "#{base_dir}/libz.so")
+
+    File.symlink('/usr/share/sunuo/SunUO.exe', "#{base_dir}/SunUO.exe")
+    File.symlink('/usr/share/sunuo/SunUO.exe.mdb', "#{base_dir}/SunUO.exe.mdb")
+    File.symlink("#{conf_dir}/SunUO.exe.config", "#{base_dir}/SunUO.exe.config")
+
+    File.chown(pw.uid, pw.gid,
+               log_dir, cache_dir, base_dir,
+               "#{base_dir}/var",
+               "#{base_dir}/Backups",
+               "#{base_dir}/Saves")
+
+when 'pid'
+    raise "'run' requires exactly one shard name" unless ARGV.length == 1
+
+    name = ARGV.shift
+    pid = Shard.new(name).pid
+    puts "#{pid}\n" if pid
+
+when 'status'
+    shards = ARGV.empty? ? Shard.all : Shard.collect(ARGV)
+    shards.each do |shard|
+        pid = shard.pid
+        if pid
+            puts "#{shard.name}: pid=#{pid}\n"
+        else
+            puts "#{shard.name}: not running\n"
+        end
+    end
+
+when 'run'
+    raise "'run' requires exactly one shard name" unless ARGV.length == 1
+
+    name = ARGV.shift
+    shard = Shard.new(name)
+    if shard.alive?
+        $stderr << "Shard #{name} already running\n"
+        exit 3
+    end
+    shard.run
+
+when 'start'
+    raise "'start' requires one or more shard names" if ARGV.empty?
+
+    Shard.collect(ARGV) do |shard|
+        if shard.alive?
+            $stderr << "Shard #{shard.name} already running\n"
+        else
+            shard.start
+        end
+    end
+
+when 'stop'
+    shards = ARGV.empty? ? Shard.all : Shard.collect(ARGV)
+    shards.each do |shard|
+        next if ARGV.empty? && !shard.alive?
+        pid = shard.kill
+        $stderr << "Shard #{shard.name} not running\n" unless pid
+    end
+
+when 'help', '--help', '-h'
+    $stdout << usage
+
+else
+    $stderr << "Unknown command - type 'sunuo-control help' for help\n"
+    exit 1
+end

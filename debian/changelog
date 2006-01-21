@@ -19,6 +19,7 @@ sunuo (0.2.4) unstable; urgency=low
   * debian: install SunUO.exe.config in /etc/sunuo/
   * debian: install third party libraries in /usr/share/sunuo/
   * debian: start SunUO in service mode
+  * debian: support multiple shards
 
  --
 

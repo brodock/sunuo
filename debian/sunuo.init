@@ -13,10 +13,9 @@ NAME=sunuo
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
-MONO=/usr/bin/mono
+test -x /usr/share/sunuo/SunUO.exe || exit 0
 
-SUNUO_BASE=/var/lib/sunuo/base
-EXE=$SUNUO_BASE/SunUO.exe
+AUTO_SHARDS=""
 
 # Read config file if it is present.
 if [ -r /etc/default/$NAME ]
@@ -24,37 +23,23 @@ then
 	. /etc/default/$NAME
 fi
 
-# Gracefully exit if the package has been removed.
-test -x $MONO || exit 0
-test -f $EXE || exit 0
-
 #
 #	Function that starts the daemon/service.
 #
 d_start() {
-	start-stop-daemon --start --quiet --pidfile $PIDFILE \
-            --chdir $SUNUO_BASE \
-            --background \
-            --make-pidfile \
-            --chuid sunuo \
-            --exec $MONO \
-            -- \
-            $EXE \
-            --base $SUNUO_BASE \
-            --service
+    /usr/sbin/sunuo-control start $AUTO_SHARDS
 }
 
 #
 #	Function that stops the daemon/service.
 #
 d_stop() {
-	start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-            --user sunuo \
-            --name `basename $MONO`
+    /usr/sbin/sunuo-control stop $AUTO_SHARDS
 }
 
 case "$1" in
   start)
+        test -z "$AUTO_SHARDS" && exit 0
 	echo -n "Starting $DESC: $NAME"
 	d_start
 	echo "."
@@ -65,6 +50,7 @@ case "$1" in
 	echo "."
 	;;
   restart|force-reload)
+        test -z "$AUTO_SHARDS" && exit 0
 	echo -n "Restarting $DESC: $NAME"
 	d_stop
 	sleep 1
