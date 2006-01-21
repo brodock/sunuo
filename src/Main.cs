@@ -286,102 +286,16 @@ namespace Server
 			log.Info( "done" );
 		}
 
-		public static void Main( string[] args )
-		{
+		public static void Start(Config _config, bool debug, bool _service, bool _profiling) {
+			config = _config;
+			m_Service = _service;
+			Profiling = _profiling;
+
 			m_Assembly = Assembly.GetEntryAssembly();
-
-			/* print a banner */
-			Version ver = m_Assembly.GetName().Version;
-			Console.WriteLine("SunUO Version {0}.{1}.{2} http://www.sunuo.org/",
-							  ver.Major, ver.Minor, ver.Revision);
-			Console.WriteLine("  on {0}, runtime {1}",
-							  Environment.OSVersion, Environment.Version);
-
-			if ((int)Environment.OSVersion.Platform == 128)
-				Console.WriteLine("Please make sure you have Mono 1.1.7 or newer! (mono -V)");
-
-			Console.WriteLine();
 
 			/* prepare SunUO */
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler( CurrentDomain_ProcessExit );
-
-			bool debug = false;
-
-			string baseDirectory = null;
-			string configFile = null;
-
-			for ( int i = 0; i < args.Length; ++i )
-			{
-				switch (args[i]) {
-				case "-debug":
-				case "--debug":
-					debug = true;
-					break;
-
-				case "-service":
-				case "--service":
-					m_Service = true;
-					break;
-
-				case "-profile":
-				case "--profile":
-					Profiling = true;
-					break;
-
-				case "-c":
-				case "--config":
-					if (i == args.Length - 1) {
-						Console.Error.WriteLine("file name expected after {0}",
-												args[i]);
-						return;
-					}
-
-					configFile = args[++i];
-
-					if (!File.Exists(configFile)) {
-						Console.Error.WriteLine("{0} does not exist", configFile);
-						return;
-					}
-
-					break;
-
-				case "-b":
-				case "--base":
-					if (i == args.Length - 1) {
-						Console.Error.WriteLine("directory name expected after {0}",
-												args[i]);
-						return;
-					}
-
-					baseDirectory = args[++i];
-
-					if (!Directory.Exists(baseDirectory)) {
-						Console.Error.WriteLine("{0} does not exist", baseDirectory);
-						return;
-					}
-
-					break;
-
-				default:
-					Console.Error.WriteLine("Unrecognized command line argument: {0}",
-											args[i]);
-					return;
-				}
-			}
-
-			if (baseDirectory == null)
-				baseDirectory = Path.GetDirectoryName(ExePath);
-
-			if (configFile == null) {
-				string confDirectory = new DirectoryInfo(baseDirectory)
-					.CreateSubdirectory("etc").FullName;
-				configFile = Path.Combine(confDirectory, "sunuo.xml");
-			}
-
-			config = new Config(baseDirectory, configFile);
-
-			Directory.SetCurrentDirectory(config.BaseDirectory);
 
 			try
 			{
