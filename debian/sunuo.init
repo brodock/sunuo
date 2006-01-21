@@ -16,7 +16,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 MONO=/usr/bin/mono
 
 SUNUO_BASE=/var/lib/sunuo/base
-EXE=/usr/share/sunuo/SunUO.exe
+EXE=$SUNUO_BASE/SunUO.exe
 
 # Read config file if it is present.
 if [ -r /etc/default/$NAME ]

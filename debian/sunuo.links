@@ -1,6 +1,7 @@
 etc/sunuo var/lib/sunuo/base/etc
 etc/sunuo var/lib/sunuo/base/Data
-etc/sunuo/SunUO.exe.config usr/share/sunuo/SunUO.exe.config
+usr/share/sunuo/SunUO.exe var/lib/sunuo/base/SunUO.exe
+etc/sunuo/SunUO.exe.config var/lib/sunuo/base/SunUO.exe.config
 usr/share/sunuo/lib var/lib/sunuo/base/local/lib
 usr/src/sunuo var/lib/sunuo/base/local/src
 usr/lib/libz.so.1 var/lib/sunuo/base/libz.so
