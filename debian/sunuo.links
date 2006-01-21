@@ -10,4 +10,4 @@ var/lib/sunuo/backups var/lib/sunuo/base/Backups
 var/lib/sunuo/backups/Automatic var/lib/sunuo/base/Backups\Automatic
 var/lib/sunuo/saves var/lib/sunuo/base/Saves
 var/log/sunuo var/lib/sunuo/base/Logs
-var/log/sunuo var/lib/sunuo/var/log
+var/log/sunuo var/lib/sunuo/base/var/log
