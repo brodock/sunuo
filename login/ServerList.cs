@@ -32,7 +32,7 @@ namespace Server {
 		}
 
 		public static void EventSink_ServerList(ServerListEventArgs e) {
-			Config.GameServerList gsl = Core.Config.GameServerList;
+			Config.GameServerList gsl = Core.Config.GameServers;
 			if (gsl == null) {
 				e.Rejected = true;
 				return;

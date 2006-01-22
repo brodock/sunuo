@@ -355,7 +355,7 @@ namespace Server.Config {
 		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private Login loginConfig;
-		private GameServerList gameServerList;
+		private GameServerList gameServers;
 
 		public Root(string _baseDirectory, string _filename) {
 			m_BaseDirectory = _baseDirectory;
@@ -416,8 +416,8 @@ namespace Server.Config {
 			get { return loginConfig; }
 		}
 
-		public GameServerList GameServerList {
-			get { return gameServerList; }
+		public GameServerList GameServers {
+			get { return gameServers; }
 		}
 
 		public XmlElement GetConfiguration(string path) {
@@ -625,7 +625,7 @@ namespace Server.Config {
 			// section "server-list"
 			XmlElement serverListEl = GetConfiguration("server-list");
 			if (serverListEl != null)
-				gameServerList = new GameServerList(serverListEl);
+				gameServers = new GameServerList(serverListEl);
 		}
 
 		public void Save() {

@@ -141,7 +141,7 @@ namespace Server.Network {
 
 		private static bool Enabled {
 			get {
-				Config.GameServerList gsl = Core.Config.GameServerList;
+				Config.GameServerList gsl = Core.Config.GameServers;
 				if (gsl == null)
 					return false;
 
@@ -161,7 +161,7 @@ namespace Server.Network {
 		}
 
 		protected override void OnTick() {
-			Config.GameServerList gsl = Core.Config.GameServerList;
+			Config.GameServerList gsl = Core.Config.GameServers;
 			if (gsl == null)
 				return;
 
