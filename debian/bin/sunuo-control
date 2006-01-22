@@ -169,6 +169,11 @@ when 'create'
                         "#{base_dir}/Backups",
                         "#{base_dir}/Saves" ])
 
+    FileUtils.chown_R('root', 'sunuo',
+                      [ conf_dir ])
+    raise "chmod failed" unless
+        system('chmod', '-R', 'u+rwX,g+rX,o-rwx', conf_dir)
+
 when 'destroy'
     raise "'run' requires exactly one shard name" unless ARGV.length == 1
 
