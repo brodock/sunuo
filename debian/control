@@ -7,7 +7,7 @@ Build-Depends-Indep: cdbs (>= 0.4.26), debhelper (>= 4.9.1), cli-common (>= 0.1.
 
 Package: sunuo
 Architecture: all
-Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7), debconf (>= 1.4.51)
+Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7), debconf (>= 1.4.30.13)
 Recommends: runuo-skeleton, sunuo-legacy-scripts
 Suggests: sunuo-doc
 Description: free Ultima Online server
