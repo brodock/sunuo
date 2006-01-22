@@ -735,7 +735,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
-								Console.WriteLine("failed to load item: {0}", e);
+								log.Fatal("failed to load item", e);
 								items.RemoveAt( i );
 
 								failed = e;
@@ -779,7 +779,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
-								Console.WriteLine("failed to load guild: {0}", e);
+								log.Fatal("failed to load guild", e);
 								guilds.RemoveAt( i );
 
 								failed = e;
@@ -821,7 +821,7 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
-								Console.WriteLine("failed to load region: {0}", e);
+								log.Fatal("failed to load region", e);
 								regions.RemoveAt( i );
 
 								failed = e;
@@ -982,7 +982,7 @@ namespace Server
 			if ( message )
 				Broadcast( 0x35, true, "The world is saving, please wait." );
 
-			Console.Write( "World: Saving..." );
+			log.Info( "Saving world" );
 
 			DateTime startTime = DateTime.Now;
 
