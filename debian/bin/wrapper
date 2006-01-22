@@ -61,7 +61,7 @@ export HOME="$SUNUO_BASE"
 
 export SUNUO_LOG="/var/log/sunuo/$SHARD"
 
-mkdir -p "$MONO_SHARED_DIR"
+mkdir --mode=0700 -p "$MONO_SHARED_DIR"
 chown sunuo:sunuo "$MONO_SHARED_DIR"
 
 # execute SunUO
