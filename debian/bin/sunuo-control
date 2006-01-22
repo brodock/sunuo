@@ -104,8 +104,7 @@ if ARGV.empty?
     exit 1
 end
 
-pw = Etc.getpwnam('sunuo')
-Process.egid = Process.gid = pw.gid
+Process.egid = Process.gid = Etc.getpwnam('sunuo').gid
 File.umask 0027
 
 case ARGV.shift
