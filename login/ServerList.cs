@@ -32,13 +32,13 @@ namespace Server {
 		}
 
 		public static void EventSink_ServerList(ServerListEventArgs e) {
-			GameServerListConfig gsl = Core.Config.GameServerListConfig;
+			Configuration.GameServerList gsl = Core.Config.GameServerList;
 			if (gsl == null) {
 				e.Rejected = true;
 				return;
 			}
 
-			foreach (GameServerConfig gs in gsl.GameServers)
+			foreach (Configuration.GameServer gs in gsl.GameServers)
 				e.AddServer(gs.Name, gs.Address);
 		}
 	}

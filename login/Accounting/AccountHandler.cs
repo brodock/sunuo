@@ -29,7 +29,7 @@ namespace Server.Accounting {
 		private static AccountDB accountDB;
 
 		public static void Initialize() {
-			string connectString = Core.Config.LoginConfig.AccountDatabase;
+			string connectString = Core.Config.Login.AccountDatabase;
 			if (connectString == null)
 				throw new Exception("login/account-database is not configured");
 
@@ -50,7 +50,7 @@ namespace Server.Accounting {
 			}
 
 			if (account == null) {
-				if (Core.Config.LoginConfig.AutoCreateAccounts) {
+				if (Core.Config.Login.AutoCreateAccounts) {
 					try {
 						e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
 						e.Accepted = true;

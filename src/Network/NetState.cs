@@ -406,7 +406,7 @@ namespace Server.Network
 			try{ m_Address = ((IPEndPoint)m_Socket.RemoteEndPoint).Address; m_ToString = m_Address.ToString(); }
 			catch{ m_Address = IPAddress.None; m_ToString = "(error)"; }
 
-			m_Super = Core.Config.LoginConfig.IsSuperClient(m_ToString);
+			m_Super = Core.Config.Login.IsSuperClient(m_ToString);
 
 			if ( m_CreatedCallback != null )
 				m_CreatedCallback( this );

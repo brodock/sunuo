@@ -20,6 +20,7 @@ sunuo (0.3.0) unstable; urgency=low
   * disable console in service mode
   * added Config.Features
   * Config.MultiThreading renamed to Config.Features["multi-threading"]
+  * moved classes to namespace Server.Configuration
   * debian: symlink base/Data to /etc/sunuo
   * debian: symlink base/var/log to /var/log/sunuo
   * debian: install SunUO.exe.config in /etc/sunuo/

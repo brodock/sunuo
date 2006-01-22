@@ -2204,7 +2204,7 @@ namespace Server.Network
 
 			int authID = pvSrc.ReadInt32();
 
-			if (Core.Config.LoginConfig.IgnoreAuthID)
+			if (Core.Config.Login.IgnoreAuthID)
 				AddAuthID(authID);
 
 			if ( !IsValidAuthID( authID ) )

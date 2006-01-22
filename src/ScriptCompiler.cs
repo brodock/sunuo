@@ -164,7 +164,7 @@ namespace Server
 
 		private static CompilerResults CompileCSScripts(ICollection fileColl,
 														string assemblyFile,
-														LibraryConfig libConfig,
+														Configuration.Library libConfig,
 														bool debug) {
 			CSharpCodeProvider provider = new CSharpCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
@@ -260,7 +260,7 @@ namespace Server
 
 		private static CompilerResults CompileVBScripts(ICollection fileColl,
 														string assemblyFile,
-														LibraryConfig libConfig,
+														Configuration.Library libConfig,
 														bool debug) {
 			VBCodeProvider provider = new VBCodeProvider();
 			ICodeCompiler compiler = provider.CreateCompiler();
@@ -313,12 +313,12 @@ namespace Server
 			}
 		}
 
-		private static Hashtable GetScripts(LibraryConfig libConfig, IEnumerable overlays,
+		private static Hashtable GetScripts(Configuration.Library libConfig, IEnumerable overlays,
 											string type) {
 			Hashtable files = GetScripts(libConfig, type);
 
 			if (overlays != null) {
-				foreach (LibraryConfig overlay in overlays) {
+				foreach (Configuration.Library overlay in overlays) {
 					Hashtable files2 = GetScripts(overlay, type);
 
 					Overlay(libConfig.SourcePath.FullName, files,
@@ -329,7 +329,7 @@ namespace Server
 			return files;
 		}
 
-		private static bool Compile(LibraryConfig libConfig,
+		private static bool Compile(Configuration.Library libConfig,
 									bool debug) {
 			/* check if there is source code for this library */
 			if (libConfig.SourcePath == null) {
@@ -367,7 +367,7 @@ namespace Server
 			if (libConfig.Overlays != null) {
 				overlays = new ArrayList();
 				foreach (string name in libConfig.Overlays)
-					overlays.Add(Core.Config.GetLibraryConfig(name));
+					overlays.Add(Core.Config.GetLibrary(name));
 			}
 
 			string csFile = Path.Combine(cache.FullName, libConfig.Name + ".dll");
@@ -439,7 +439,7 @@ namespace Server
 		 * @param libConfig the library to be added
 		 */
 		private static void EnqueueLibrary(ArrayList dst, ArrayList libs,
-										   Hashtable queue, LibraryConfig libConfig) {
+										   Hashtable queue, Configuration.Library libConfig) {
 			string[] depends = libConfig.Depends;
 
 			if (libConfig.Name == "core" || libConfig.Disabled) {
@@ -466,7 +466,7 @@ namespace Server
 						throw new ApplicationException();
 					}
 
-					LibraryConfig next = Core.Config.GetLibraryConfig(depend);
+					Configuration.Library next = Core.Config.GetLibrary(depend);
 					if (next == null || !next.Exists) {
 						log.Error(String.Format("Unresolved library dependency: {0} depends on {1}, which does not exist",
 												libConfig.Name, depend));
@@ -497,12 +497,12 @@ namespace Server
 			ArrayList dst = new ArrayList();
 
 			/* handle "./Scripts/" first, for most compatibility */
-			LibraryConfig libConfig = Core.Config.GetLibraryConfig("legacy");
+			Configuration.Library libConfig = Core.Config.GetLibrary("legacy");
 			if (libConfig != null)
 				EnqueueLibrary(dst, libs, queue, libConfig);
 
 			while (libs.Count > 0)
-				EnqueueLibrary(dst, libs, queue, (LibraryConfig)libs[0]);
+				EnqueueLibrary(dst, libs, queue, (Configuration.Library)libs[0]);
 
 			return dst;
 		}
@@ -515,12 +515,12 @@ namespace Server
 			m_AdditionalReferences = new ArrayList();
 
 			libraries = new ArrayList();
-			libraries.Add(new Library(Core.Config.GetLibraryConfig("core"),
+			libraries.Add(new Library(Core.Config.GetLibrary("core"),
 									  Core.Assembly));
 			m_AdditionalReferences.Add(Core.ExePath);
 
 			/* prepare overlays */
-			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
+			foreach (Configuration.Library libConfig in Core.Config.Libraries) {
 				if (libConfig.Overlays == null || !libConfig.Exists ||
 					libConfig.Name == "core")
 					continue;
@@ -532,7 +532,7 @@ namespace Server
 				}
 
 				foreach (string name in libConfig.Overlays) {
-					LibraryConfig overlay = Core.Config.GetLibraryConfig(name);
+					Configuration.Library overlay = Core.Config.GetLibrary(name);
 					if (overlay == null || !overlay.Exists) {
 						log.Error(String.Format("Can't overlay {0} with {1}, because it does not exist",
 												libConfig.Name, name));
@@ -549,7 +549,7 @@ namespace Server
 				}
 			}
 
-			foreach (LibraryConfig libConfig in Core.Config.Libraries) {
+			foreach (Configuration.Library libConfig in Core.Config.Libraries) {
 				if (libConfig.Overlays != null && libConfig.Exists &&
 					libConfig.Name != "core" && libConfig.Disabled) {
 					log.Error(String.Format("Can't overlay library {0} which is already used as overlay for another library",
@@ -558,10 +558,10 @@ namespace Server
 				}
 			}
 
-			/* collect LibraryConfig objects, sort them and compile */
+			/* collect Configuration.Library objects, sort them and compile */
 			ArrayList libConfigs = SortLibrariesByDepends();
 
-			foreach (LibraryConfig libConfig in libConfigs) {
+			foreach (Configuration.Library libConfig in libConfigs) {
 				bool result = Compile(libConfig, debug);
 				if (!result)
 					return false;
@@ -658,7 +658,7 @@ namespace Server
 			return null;
 		}
 
-		private static Hashtable GetScripts(LibraryConfig libConfig,
+		private static Hashtable GetScripts(Configuration.Library libConfig,
 											string type) {
 			Hashtable list = new Hashtable();
 
@@ -667,7 +667,7 @@ namespace Server
 			return list;
 		}
 
-		private static void GetScripts(LibraryConfig libConfig,
+		private static void GetScripts(Configuration.Library libConfig,
 									   Hashtable list, string path, string type) {
 			foreach ( string dir in Directory.GetDirectories( path ) )
 				GetScripts(libConfig, list, dir, type);

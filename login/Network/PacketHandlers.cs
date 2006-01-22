@@ -135,7 +135,7 @@ namespace Server.Network
 				PlayServerAck.m_AuthID = GenerateAuthID();
 
 				/* send AuthID to game server? */
-				GameServerConfig config = Core.Config.GameServerListConfig[si.Name];
+				Configuration.GameServer config = Core.Config.GameServerList[si.Name];
 				if (config != null && config.SendAuthID) {
 					NetState ns2 = NetState.GameServerClient(config);
 					if (ns2 != null)
@@ -258,10 +258,10 @@ namespace Server.Network
 			int items = 0;
 			int chars = 0;
 
-			GameServerListConfig gsl = Core.Config.GameServerListConfig;
+			Configuration.GameServerList gsl = Core.Config.GameServerList;
 			if (gsl != null) {
 				/* add values from game servers */
-				foreach (GameServerConfig gs in gsl.GameServers) {
+				foreach (Configuration.GameServer gs in gsl.GameServers) {
 					ServerStatus status = ServerQueryTimer.GetStatus(gs);
 					if (status != null) {
 						age += status.age;

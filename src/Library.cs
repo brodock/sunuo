@@ -34,7 +34,7 @@ namespace Server {
 		private bool configured, initialized;
 		private TypeCache typeCache;
 
-		public Library(LibraryConfig libConfig, Assembly _assembly) {
+		public Library(Configuration.Library libConfig, Assembly _assembly) {
 			name = libConfig.Name;
 			assembly = _assembly;
 
