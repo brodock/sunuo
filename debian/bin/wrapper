@@ -61,6 +61,11 @@ export HOME="$SUNUO_BASE"
 
 export SUNUO_LOG="/var/log/sunuo/$SHARD"
 
+export LANG=C
+export LC_ALL=C
+
+unset DISPLAY XAUTHORITY
+
 mkdir --mode=0700 -p "$MONO_SHARED_DIR"
 chown sunuo:sunuo "$MONO_SHARED_DIR"
 
