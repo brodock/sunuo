@@ -75,5 +75,5 @@ exec start-stop-daemon --start \
     --pidfile "/var/run/sunuo/$SHARD.pid" --make-pidfile \
     --chdir "$SUNUO_BASE" --chuid sunuo --exec $MONO \
     -- \
-    --server -O=all,-shared \
+    --server -O=all,-shared --debug \
     "$SUNUO_BASE/SunUO.exe" --base "$SUNUO_BASE" "$@"
