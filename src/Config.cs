@@ -483,13 +483,6 @@ namespace Server.Config {
 			}
 		}
 
-		private static string GetElementString(XmlElement parent, string tag) {
-			XmlNodeList nl = parent.GetElementsByTagName(tag);
-			if (nl.Count == 0)
-				return null;
-			return nl[0].InnerText;
-		}
-
 		public static bool GetElementBool(XmlElement parent, string tag,
 										  bool defaultValue) {
 			if (parent == null)
@@ -642,9 +635,6 @@ namespace Server.Config {
 			} else {
 				tempFilename = filename + ".new";
 			}
-
-			// section "global"
-			XmlElement global = GetConfiguration("global");
 
 			// section "locations"
 			XmlElement locations = GetConfiguration("locations");
