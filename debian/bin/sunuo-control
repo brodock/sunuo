@@ -211,7 +211,7 @@ when 'run'
 when 'start'
     raise "'start' requires one or more shard names" if ARGV.empty?
 
-    Shard.collect(ARGV) do |shard|
+    Shard.collect(ARGV).each do |shard|
         if shard.alive?
             $stderr << "Shard #{shard.name} already running\n"
         else
