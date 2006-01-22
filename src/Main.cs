@@ -55,7 +55,7 @@ namespace Server
 		private static Process m_Process;
 		private static Thread m_Thread;
 		private static bool m_Service;
-		private static MultiTextWriter m_MultiConOut;
+		private static MultiTextWriter m_MultiConOut = new MultiTextWriter();
 
 		private static Config config;
 
@@ -297,8 +297,6 @@ namespace Server
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler( CurrentDomain_ProcessExit );
 
-			m_MultiConOut = new MultiTextWriter();
-
 			if (m_Service) {
 				string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
 				FileStream stream = new FileStream(filename, FileMode.Create,
@@ -411,48 +409,18 @@ namespace Server
 		public static int ScriptMobiles { get { return m_MobileCount; } }
 	}
 
-	public class MultiTextWriter : TextWriter
+	public class MultiTextWriter
 	{
-		private ArrayList m_Streams;
-
-		public MultiTextWriter( params TextWriter[] streams )
+		public MultiTextWriter()
 		{
-			m_Streams = new ArrayList( streams );
-
-			if ( m_Streams.Count < 0 )
-				throw new ArgumentException( "You must specify at least one stream." );
 		}
 
 		public void Add( TextWriter tw )
 		{
-			m_Streams.Add( tw );
 		}
 
 		public void Remove( TextWriter tw )
 		{
-			m_Streams.Remove( tw );
-		}
-
-		public override void Write( char ch )
-		{
-			for (int i=0;i<m_Streams.Count;i++)
-				((TextWriter)m_Streams[i]).Write( ch );
-		}
-
-		public override void WriteLine( string line )
-		{
-			for (int i=0;i<m_Streams.Count;i++)
-				((TextWriter)m_Streams[i]).WriteLine( line );
-		}
-
-		public override void WriteLine( string line, params object[] args )
-		{
-			WriteLine( String.Format( line, args ) );
-		}
-
-		public override System.Text.Encoding Encoding
-		{
-			get{ return System.Text.Encoding.Default; }
 		}
 	}
 }
