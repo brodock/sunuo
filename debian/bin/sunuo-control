@@ -130,13 +130,18 @@ when 'create'
         Dir.mkdir(conf_dir)
     end
 
-    Dir.mkdir(base_dir)
+    if File.directory?('/var/lib/sunuo/skel')
+        FileUtils.cp_r('/var/lib/sunuo/skel', base_dir)
+    else
+        Dir.mkdir(base_dir)
+    end
+
     Dir.mkdir(log_dir)
     Dir.mkdir(cache_dir)
 
-    Dir.mkdir("#{base_dir}/local")
-    Dir.mkdir("#{base_dir}/local/src")
-    Dir.mkdir("#{base_dir}/local/lib")
+    [ 'local', 'local/src', 'local/lib' ].each do |sub|
+        Dir.mkdir("#{base_dir}/#{sub}") unless File.exists?("#{base_dir}/#{sub}")
+    end
 
     File.symlink(conf_dir, "#{base_dir}/etc")
     File.symlink(conf_dir, "#{base_dir}/Data")
@@ -146,7 +151,7 @@ when 'create'
     File.symlink(log_dir, "#{base_dir}/var/log")
     File.symlink(log_dir, "#{base_dir}/Logs")
 
-    Dir.mkdir("#{base_dir}/Saves")
+    Dir.mkdir("#{base_dir}/Saves") unless File.exists?("#{base_dir}/Saves")
     Dir.mkdir("#{base_dir}/Backups")
     Dir.mkdir("#{base_dir}/Backups/Automatic")
     File.symlink('Backups/Automatic', "#{base_dir}/Backups\\Automatic")
@@ -157,11 +162,11 @@ when 'create'
     File.symlink('/usr/share/sunuo/SunUO.exe.mdb', "#{base_dir}/SunUO.exe.mdb")
     File.symlink("#{conf_dir}/SunUO.exe.config", "#{base_dir}/SunUO.exe.config")
 
-    File.chown(pw.uid, pw.gid,
-               log_dir, cache_dir, base_dir,
-               "#{base_dir}/var",
-               "#{base_dir}/Backups",
-               "#{base_dir}/Saves")
+    FileUtils.chown_R('sunuo', 'sunuo',
+                      [ log_dir, cache_dir, base_dir,
+                        "#{base_dir}/var",
+                        "#{base_dir}/Backups",
+                        "#{base_dir}/Saves" ])
 
 when 'pid'
     raise "'run' requires exactly one shard name" unless ARGV.length == 1
