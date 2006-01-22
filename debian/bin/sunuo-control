@@ -163,10 +163,7 @@ when 'create'
     File.symlink("#{conf_dir}/SunUO.exe.config", "#{base_dir}/SunUO.exe.config")
 
     FileUtils.chown_R('sunuo', 'sunuo',
-                      [ log_dir, cache_dir, base_dir,
-                        "#{base_dir}/var",
-                        "#{base_dir}/Backups",
-                        "#{base_dir}/Saves" ])
+                      [ log_dir, cache_dir, base_dir ])
 
     FileUtils.chown_R('root', 'sunuo',
                       [ conf_dir ])
