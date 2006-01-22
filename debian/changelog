@@ -14,6 +14,7 @@ sunuo (0.2.4) unstable; urgency=low
     - BackupDirectory = BaseDirectory + "/Backup"
   * moved bootstrapping code to Bootstrap.cs
   * change to base directory
+  * GameServerListConfig.GameServers returns IList
   * debian: symlink base/Data to /etc/sunuo
   * debian: symlink base/var/log to /var/log/sunuo
   * debian: install SunUO.exe.config in /etc/sunuo/

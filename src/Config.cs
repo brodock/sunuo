@@ -305,7 +305,7 @@ namespace Server {
 			return nl[0].InnerText;
 		}
 
-		public IEnumerable GameServers {
+		public IList GameServers {
 			get { return servers; }
 		}
 
