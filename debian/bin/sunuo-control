@@ -83,6 +83,7 @@ class Shard
         result = []
         Dir.open('/var/lib/sunuo').each do |name|
             next unless name =~ /\A\w+\Z/
+            next if name == 'skel'
             next unless File.directory?("/var/lib/sunuo/#{name}")
             result << Shard.new(name)
         end
