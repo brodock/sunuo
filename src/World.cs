@@ -995,7 +995,7 @@ namespace Server
 			if ( !Directory.Exists( regionBase ) )
 				Directory.CreateDirectory( regionBase );
 
-			if (Core.Config.MultiThreading)
+			if (Core.Config.Features["multi-threading"])
 			{
 				Thread saveThread = new Thread( new ThreadStart( SaveItems ) );
 

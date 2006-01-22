@@ -352,7 +352,6 @@ namespace Server {
 		private XmlDocument document;
 		private string serverName;
 		private Configuration.Features m_Features = new Configuration.Features();
-		private bool multiThreading;
 		private string m_BaseDirectory, m_ConfigDirectory,
 			m_SaveDirectory, m_BackupDirectory;
 		private ArrayList m_DataDirectories;
@@ -384,10 +383,6 @@ namespace Server {
 			get {
 				return m_Features;
 			}
-		}
-
-		public bool MultiThreading {
-			get { return multiThreading; }
 		}
 
 		public string BaseDirectory {
@@ -560,9 +555,8 @@ namespace Server {
 						break;
 
 					case "multi-threading":
-						string value2 = el.GetAttribute("value");
-						multiThreading = value2 == null || value2 == "" ||
-							value2 == "true" || value2 == "on" || value2 == "yes";
+						m_Features[node.Name]
+							= Configuration.Parser.ParseBool(el.GetAttribute("value"));
 						break;
 
 					case "feature":
@@ -657,8 +651,6 @@ namespace Server {
 
 			// section "global"
 			XmlElement global = GetConfiguration("global");
-
-			SetElementBool(global, "multi-threading", multiThreading);
 
 			// section "locations"
 			XmlElement locations = GetConfiguration("locations");
