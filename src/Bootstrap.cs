@@ -123,7 +123,7 @@ namespace Server
 
 			/* load configuration */
 
-			Config config = new Config(baseDirectory, configFile);
+			Config.Root config = new Config.Root(baseDirectory, configFile);
 
 			/* enter stage II */
 

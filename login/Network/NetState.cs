@@ -167,7 +167,7 @@ namespace Server.Network
 
 		private static Hashtable m_GameServers = new Hashtable();
 
-		public static NetState GameServerClient(Configuration.GameServer config) {
+		public static NetState GameServerClient(Config.GameServer config) {
 			if (config == null)
 				return null;
 

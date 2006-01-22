@@ -57,7 +57,7 @@ namespace Server
 		private static bool m_Service;
 		private static MultiTextWriter m_MultiConOut = new MultiTextWriter();
 
-		private static Config config;
+		private static Config.Root config;
 
 		private static bool m_AOS;
 		private static bool m_SE;
@@ -225,7 +225,7 @@ namespace Server
 			}
 		}
 
-		public static Config Config {
+		public static Config.Root Config {
 			get { return config; }
 		}
 
@@ -286,7 +286,7 @@ namespace Server
 			log.Info( "done" );
 		}
 
-		public static void Start(Config _config, bool debug, bool _service, bool _profiling) {
+		public static void Start(Config.Root _config, bool debug, bool _service, bool _profiling) {
 			config = _config;
 			m_Service = _service;
 			Profiling = _profiling;

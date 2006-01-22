@@ -33,14 +33,14 @@ namespace Server.Network {
 	class ServerQuery {
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		private Configuration.GameServer m_Config;
+		private Config.GameServer m_Config;
 		private Socket m_Socket;
 		private AsyncCallback m_Callback;
 		private byte[] m_Buffer = new byte[512];
 		private static byte[] m_SeedPacket = { 0x12, 0x34, 0x56, 0x78 };
 		private static byte[] m_QueryPacket = { 0xf1, 0x00, 0x04, 0xff };
 
-		public ServerQuery(Configuration.GameServer config) {
+		public ServerQuery(Config.GameServer config) {
 			m_Config = config;
 
 			try {
@@ -141,11 +141,11 @@ namespace Server.Network {
 
 		private static bool Enabled {
 			get {
-				Configuration.GameServerList gsl = Core.Config.GameServerList;
+				Config.GameServerList gsl = Core.Config.GameServerList;
 				if (gsl == null)
 					return false;
 
-				foreach (Configuration.GameServer gs in gsl.GameServers)
+				foreach (Config.GameServer gs in gsl.GameServers)
 					if (gs.Query)
 						return true;
 
@@ -161,24 +161,24 @@ namespace Server.Network {
 		}
 
 		protected override void OnTick() {
-			Configuration.GameServerList gsl = Core.Config.GameServerList;
+			Config.GameServerList gsl = Core.Config.GameServerList;
 			if (gsl == null)
 				return;
 
 			log.Info("Querying game servers");
 
-			foreach (Configuration.GameServer gs in gsl.GameServers) {
+			foreach (Config.GameServer gs in gsl.GameServers) {
 				if (!gs.Query)
 					continue;
 				new ServerQuery(gs);
 			}
 		}
 
-		public static void SetStatus(Configuration.GameServer config, ServerStatus status) {
+		public static void SetStatus(Config.GameServer config, ServerStatus status) {
 			m_Status[config] = status;
 		}
 
-		public static ServerStatus GetStatus(Configuration.GameServer config) {
+		public static ServerStatus GetStatus(Config.GameServer config) {
 			return m_Status == null
 				? null
 				: (ServerStatus)m_Status[config];

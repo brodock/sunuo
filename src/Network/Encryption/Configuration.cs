@@ -17,14 +17,14 @@ namespace Server.Network.Encryption
 		// Set this to true to enable this subsystem.
 		public static bool Enabled {
 			get {
-				return Config.GetElementBool(MyConfig, "enabled", true);
+				return Config.Root.GetElementBool(MyConfig, "enabled", true);
 			}
 		}
 
 		// Set this to false to disconnect unencrypted connections.
 		public static bool AllowUnencryptedClients {
 			get {
-				return Config.GetElementBool(MyConfig, "allow-unencrypted", true);
+				return Config.Root.GetElementBool(MyConfig, "allow-unencrypted", true);
 			}
 		}
 

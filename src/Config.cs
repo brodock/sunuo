@@ -27,8 +27,8 @@ using System.IO;
 using System.Xml;
 using System.Net;
 
-namespace Server.Configuration {
-	public class Parser {
+namespace Server.Config {
+	class Parser {
 		public static bool ParseBool(string value) {
 			return value == null || value == "" ||
 				value == "true" || value == "on" || value == "yes";
@@ -194,8 +194,8 @@ namespace Server.Configuration {
 		}
 
 		public Login(XmlElement el) {
-			ignoreAuthID = Config.GetElementBool(el, "ignore-auth-id", false);
-			autoCreateAccounts = Config.GetElementBool(el, "auto-create-accounts", false);
+			ignoreAuthID = Root.GetElementBool(el, "ignore-auth-id", false);
+			autoCreateAccounts = Root.GetElementBool(el, "auto-create-accounts", false);
 			accountDatabase = GetElementString(el, "account-database");
 
 			foreach (XmlElement priv in el.GetElementsByTagName("super-client")) {
@@ -314,8 +314,8 @@ namespace Server.Configuration {
 
 				IPEndPoint address = new IPEndPoint(ip, port);
 
-				bool sendAuthID = Config.GetElementBool(gs, "send-auth-id", false);
-				bool query = Config.GetElementBool(gs, "query", false);
+				bool sendAuthID = Root.GetElementBool(gs, "send-auth-id", false);
+				bool query = Root.GetElementBool(gs, "query", false);
 
 				servers.Add(new GameServer(name, address, sendAuthID, query));
 			}
@@ -342,24 +342,22 @@ namespace Server.Configuration {
 			}
 		}
 	}
-}
 
-namespace Server {
-	public class Config {
+	public class Root {
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		private string filename;
 		private XmlDocument document;
 		private string serverName;
-		private Configuration.Features m_Features = new Configuration.Features();
+		private Features m_Features = new Features();
 		private string m_BaseDirectory, m_ConfigDirectory,
 			m_SaveDirectory, m_BackupDirectory;
 		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
-		private Configuration.Login loginConfig;
-		private Configuration.GameServerList gameServerList;
+		private Login loginConfig;
+		private GameServerList gameServerList;
 
-		public Config(string _baseDirectory, string _filename) {
+		public Root(string _baseDirectory, string _filename) {
 			m_BaseDirectory = _baseDirectory;
 			m_ConfigDirectory = Path.Combine(m_BaseDirectory, "Data");
 			m_SaveDirectory = Path.Combine(m_BaseDirectory, "Saves");
@@ -379,7 +377,7 @@ namespace Server {
 			get { return serverName; }
 		}
 
-		public Configuration.Features Features {
+		public Features Features {
 			get {
 				return m_Features;
 			}
@@ -407,18 +405,18 @@ namespace Server {
 			get { return m_DataDirectories; }
 		}
 
-		public Configuration.Library GetLibrary(string name) {
-			return (Configuration.Library)libraryConfig[name];
+		public Library GetLibrary(string name) {
+			return (Library)libraryConfig[name];
 		}
 		public ICollection Libraries {
 			get { return libraryConfig.Values; }
 		}
 
-		public Configuration.Login Login {
+		public Login Login {
 			get { return loginConfig; }
 		}
 
-		public Configuration.GameServerList GameServerList {
+		public GameServerList GameServerList {
 			get { return gameServerList; }
 		}
 
@@ -438,7 +436,7 @@ namespace Server {
 		}
 
 		private void Defaults() {
-			Configuration.Library coreConfig = new Configuration.Library("core");
+			Library coreConfig = new Library("core");
 			libraryConfig["core"] = coreConfig;
 
 			DirectoryInfo local = new DirectoryInfo(BaseDirectory)
@@ -455,7 +453,7 @@ namespace Server {
 					continue;
 				}
 
-				libraryConfig[libName] = new Configuration.Library(libName, sub);
+				libraryConfig[libName] = new Library(libName, sub);
 			}
 
 			/* find binary libraries in ./local/lib/ */
@@ -470,7 +468,7 @@ namespace Server {
 					continue;
 				}
 
-				libraryConfig[libName] = new Configuration.Library(libName, libFile);
+				libraryConfig[libName] = new Library(libName, libFile);
 			}
 
 			/* if the 'legacy' library was not found until now, load
@@ -479,7 +477,7 @@ namespace Server {
 				DirectoryInfo legacy = new DirectoryInfo(Path.Combine(BaseDirectory,
 																	  "Scripts"));
 				if (legacy.Exists) {
-					Configuration.Library legacyConfig = new Configuration.Library("legacy", legacy);
+					Library legacyConfig = new Library("legacy", legacy);
 					libraryConfig[legacyConfig.Name] = legacyConfig;
 				}
 			}
@@ -500,7 +498,7 @@ namespace Server {
 			if (nl.Count == 0)
 				return defaultValue;
 			string value = ((XmlElement)nl[0]).GetAttribute("value");
-			return Configuration.Parser.ParseBool(value);
+			return Parser.ParseBool(value);
 		}
 
 		public static void RemoveElement(XmlElement parent, string tag) {
@@ -556,12 +554,12 @@ namespace Server {
 
 					case "multi-threading":
 						m_Features[node.Name]
-							= Configuration.Parser.ParseBool(el.GetAttribute("value"));
+							= Parser.ParseBool(el.GetAttribute("value"));
 						break;
 
 					case "feature":
 						m_Features[el.GetAttribute("name")]
-							= Configuration.Parser.ParseBool(el.GetAttribute("value"));
+							= Parser.ParseBool(el.GetAttribute("value"));
 						break;
 
 					default:
@@ -615,26 +613,26 @@ namespace Server {
 
 				name = name.ToLower();
 
-				Configuration.Library libConfig = (Configuration.Library)libraryConfig[name];
+				Library libConfig = (Library)libraryConfig[name];
 				if (libConfig == null)
-					libraryConfig[name] = libConfig = new Configuration.Library(name);
+					libraryConfig[name] = libConfig = new Library(name);
 
 				libConfig.Load(el);
 			}
 
 			if (!libraryConfig.ContainsKey("legacy"))
-				libraryConfig["legacy"] = new Configuration.Library("legacy");
+				libraryConfig["legacy"] = new Library("legacy");
 
 			// section "login"
 			XmlElement loginEl = GetConfiguration("login");
 			loginConfig = loginEl == null
-				? new Configuration.Login()
-				: new Configuration.Login(loginEl);
+				? new Login()
+				: new Login(loginEl);
 
 			// section "server-list"
 			XmlElement serverListEl = GetConfiguration("server-list");
 			if (serverListEl != null)
-				gameServerList = new Configuration.GameServerList(serverListEl);
+				gameServerList = new GameServerList(serverListEl);
 		}
 
 		public void Save() {

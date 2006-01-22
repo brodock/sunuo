@@ -52,7 +52,7 @@ namespace Server
 		private static Thread m_Thread;
 		private static bool m_Service;
 
-		private static Config config;
+		private static Config.Root config;
 
 		private static bool m_Profiling;
 		private static DateTime m_ProfileStart;
@@ -157,7 +157,7 @@ namespace Server
 			}
 		}
 
-		public static Config Config {
+		public static Config.Root Config {
 			get { return config; }
 		}
 
@@ -253,8 +253,8 @@ namespace Server
 			string confDirectory = new DirectoryInfo(baseDirectory)
 				.CreateSubdirectory("etc").FullName;
 
-			config = new Config(baseDirectory,
-								Path.Combine(confDirectory, "sunuo.xml"));
+			config = new Config.Root(baseDirectory,
+									 Path.Combine(confDirectory, "sunuo.xml"));
 
 			Directory.SetCurrentDirectory(config.BaseDirectory);
 
