@@ -173,7 +173,8 @@ when 'destroy'
     raise "'run' requires exactly one shard name" unless ARGV.length == 1
 
     name = ARGV.shift
-    shard = Shard.new(name)
+    raise "Invalid shard name #{name}" if name == 'skel'
+    raise "Invalid characters in shard name" unless name =~ /\A\w+\Z/
 
     puts "rm -rf /var/cache/sunuo/#{name} /var/log/sunuo/#{name} /var/lib/sunuo/#{name} /etc/sunuo/#{name}"
 
