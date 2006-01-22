@@ -2,6 +2,7 @@ etc/sunuo
 usr/share/sunuo
 usr/share/sunuo/lib
 var/lib/sunuo
+var/lib/sunuo/.mono
 var/cache/sunuo
 var/log/sunuo
 var/run/sunuo
