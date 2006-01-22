@@ -579,10 +579,6 @@ namespace Server {
 				if (el != null) {
 					string path = el.InnerText;
 					switch (el.Name) {
-					case "base-dir":
-						m_BaseDirectory = path;
-						break;
-
 					case "config-dir":
 						m_ConfigDirectory = path;
 						break;
