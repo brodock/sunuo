@@ -27,6 +27,24 @@ using System.IO;
 using System.Xml;
 using System.Net;
 
+namespace Server.Configuration {
+	public class Features {
+		private Hashtable m_Table = new Hashtable();
+
+		public bool this[string name] {
+			get {
+				return m_Table.Contains(name);
+			}
+			set {
+				if (value)
+					m_Table[name] = true;
+				else
+					m_Table.Remove(name);
+			}
+		}
+	}
+}
+
 namespace Server {
 	public class LibraryConfig {
 		private string name;
@@ -326,6 +344,7 @@ namespace Server {
 		private string filename;
 		private XmlDocument document;
 		private string serverName;
+		private Configuration.Features m_Features = new Configuration.Features();
 		private bool multiThreading;
 		private string m_BaseDirectory, m_ConfigDirectory,
 			m_SaveDirectory, m_BackupDirectory;
@@ -352,6 +371,12 @@ namespace Server {
 
 		public string ServerName {
 			get { return serverName; }
+		}
+
+		public Configuration.Features Features {
+			get {
+				return m_Features;
+			}
 		}
 
 		public bool MultiThreading {
@@ -518,8 +543,36 @@ namespace Server {
 			// section "global"
 			XmlElement global = GetConfiguration("global");
 			if (global != null) {
-				serverName = GetElementString(global, "server-name");
-				multiThreading = GetElementBool(global, "multi-threading", false);
+				foreach (XmlNode node in global.ChildNodes) {
+					if (node.NodeType != XmlNodeType.Element)
+						continue;
+
+					XmlElement el = (XmlElement)node;
+
+					switch (node.Name) {
+					case "server-name":
+						serverName = el.InnerText;
+						break;
+
+					case "multi-threading":
+						string value2 = el.GetAttribute("value");
+						multiThreading = value2 == null || value2 == "" ||
+							value2 == "true" || value2 == "on" || value2 == "yes";
+						break;
+
+					case "feature":
+						string name = el.GetAttribute("name");
+						string value = el.GetAttribute("value");
+						m_Features[name] = value == null || value == "" ||
+							value == "true" || value == "on" || value == "yes";
+						break;
+
+					default:
+						log.Warn(String.Format("Invalid element global/{0}",
+											   node.Name));
+						break;
+					}
+				}
 			}
 
 			// section "locations"

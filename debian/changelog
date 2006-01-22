@@ -18,6 +18,7 @@ sunuo (0.3.0) unstable; urgency=low
   * removed zlib workaround which should be in scripts
   * MultiConOut is a dummy now that log4net is being used
   * disable console in service mode
+  * added Config.Features
   * debian: symlink base/Data to /etc/sunuo
   * debian: symlink base/var/log to /var/log/sunuo
   * debian: install SunUO.exe.config in /etc/sunuo/
