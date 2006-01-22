@@ -1,4 +1,4 @@
-sunuo (0.2.4) unstable; urgency=low
+sunuo (0.3.0) unstable; urgency=low
 
   * distribute log4net.dll
   * removed the --logfile option
