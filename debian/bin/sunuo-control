@@ -28,6 +28,7 @@ Usage: sunuo-control COMMAND ARGS ...
 
 Valid commands:
   create NAME       create a new shard with this name
+  destroy NAME      destroy a shard
   pid NAME          print a shard\'s pid
   status [NAME ..]  show shard status
   start NAME ...    start one or more shards in background
@@ -167,6 +168,14 @@ when 'create'
                         "#{base_dir}/var",
                         "#{base_dir}/Backups",
                         "#{base_dir}/Saves" ])
+
+when 'destroy'
+    raise "'run' requires exactly one shard name" unless ARGV.length == 1
+
+    name = ARGV.shift
+    shard = Shard.new(name)
+
+    puts "rm -rf /var/cache/sunuo/#{name} /var/log/sunuo/#{name} /var/lib/sunuo/#{name} /etc/sunuo/#{name}"
 
 when 'pid'
     raise "'run' requires exactly one shard name" unless ARGV.length == 1
