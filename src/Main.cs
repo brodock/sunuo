@@ -297,18 +297,15 @@ namespace Server
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler( CurrentDomain_ProcessExit );
 
-			try
-			{
-				m_MultiConOut = new MultiTextWriter(Console.Out);
-				Console.SetOut(m_MultiConOut);
+			m_MultiConOut = new MultiTextWriter();
 
-				if (m_Service) {
-					string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
-					m_MultiConOut.Add(new FileLogger(filename));
-				}
-			}
-			catch
-			{
+			if (m_Service) {
+				string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
+				FileStream stream = new FileStream(filename, FileMode.Create,
+												   FileAccess.Write, FileShare.Read);
+				StreamWriter writer = new StreamWriter(stream);
+				Console.SetOut(writer);
+				Console.SetError(writer);
 			}
 
 			m_Thread = Thread.CurrentThread;
