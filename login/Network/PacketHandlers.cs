@@ -258,17 +258,14 @@ namespace Server.Network
 			int items = 0;
 			int chars = 0;
 
-			Config.GameServerList gsl = Core.Config.GameServers;
-			if (gsl != null) {
-				/* add values from game servers */
-				foreach (Config.GameServer gs in gsl.GameServers) {
-					ServerStatus status = ServerQueryTimer.GetStatus(gs);
-					if (status != null) {
-						age += status.age;
-						clients += status.clients;
-						items += status.items;
-						chars += status.chars;
-					}
+			/* add values from game servers */
+			foreach (Config.GameServer gs in Core.Config.GameServers) {
+				ServerStatus status = ServerQueryTimer.GetStatus(gs);
+				if (status != null) {
+					age += status.age;
+					clients += status.clients;
+					items += status.items;
+					chars += status.chars;
 				}
 			}
 

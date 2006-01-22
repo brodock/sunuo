@@ -141,11 +141,7 @@ namespace Server.Network {
 
 		private static bool Enabled {
 			get {
-				Config.GameServerList gsl = Core.Config.GameServers;
-				if (gsl == null)
-					return false;
-
-				foreach (Config.GameServer gs in gsl.GameServers)
+				foreach (Config.GameServer gs in Core.Config.GameServers)
 					if (gs.Query)
 						return true;
 
@@ -161,13 +157,9 @@ namespace Server.Network {
 		}
 
 		protected override void OnTick() {
-			Config.GameServerList gsl = Core.Config.GameServers;
-			if (gsl == null)
-				return;
-
 			log.Info("Querying game servers");
 
-			foreach (Config.GameServer gs in gsl.GameServers) {
+			foreach (Config.GameServer gs in Core.Config.GameServers) {
 				if (!gs.Query)
 					continue;
 				new ServerQuery(gs);

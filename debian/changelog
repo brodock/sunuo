@@ -21,6 +21,7 @@ sunuo (0.3.0) unstable; urgency=low
   * added Config.Features
   * Config.MultiThreading renamed to Config.Features["multi-threading"]
   * moved config classes to namespace Server.Config
+  * Config.GameServerList implements IEnumerable
   * debian: symlink base/Data to /etc/sunuo
   * debian: symlink base/var/log to /var/log/sunuo
   * debian: install SunUO.exe.config in /etc/sunuo/

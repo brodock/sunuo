@@ -263,7 +263,7 @@ namespace Server.Config {
 		}
 	}
 
-	public class GameServerList {
+	public class GameServerList : IEnumerable {
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		private ArrayList servers = new ArrayList();
@@ -328,8 +328,16 @@ namespace Server.Config {
 			return nl[0].InnerText;
 		}
 
-		public IList GameServers {
-			get { return servers; }
+		public IEnumerator GetEnumerator() {
+			return servers.GetEnumerator();
+		}
+
+		public int Count {
+			get { return servers.Count; }
+		}
+
+		public GameServer this[int index] {
+			get { return (GameServer)servers[index]; }
 		}
 
 		public GameServer this[string name] {
