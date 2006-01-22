@@ -20,6 +20,7 @@ sunuo (0.2.4) unstable; urgency=low
   * debian: install third party libraries in /usr/share/sunuo/
   * debian: start SunUO in service mode
   * debian: support multiple shards
+  * debian: recommend runuo-skeleton and sunuo-legacy-scripts
 
  --
 
