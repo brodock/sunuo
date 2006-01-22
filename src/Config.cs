@@ -43,6 +43,13 @@ namespace Server.Configuration {
 			}
 		}
 	}
+
+	public class Parser {
+		public static bool ParseBool(string value) {
+			return value == null || value == "" ||
+				value == "true" || value == "on" || value == "yes";
+		}
+	}
 }
 
 namespace Server {
@@ -498,9 +505,7 @@ namespace Server {
 			if (nl.Count == 0)
 				return defaultValue;
 			string value = ((XmlElement)nl[0]).GetAttribute("value");
-			if (value == null || value == "")
-				return true;
-			return value == "on" || value == "true" || value == "yes";
+			return Configuration.Parser.ParseBool(value);
 		}
 
 		public static void RemoveElement(XmlElement parent, string tag) {
@@ -561,10 +566,8 @@ namespace Server {
 						break;
 
 					case "feature":
-						string name = el.GetAttribute("name");
-						string value = el.GetAttribute("value");
-						m_Features[name] = value == null || value == "" ||
-							value == "true" || value == "on" || value == "yes";
+						m_Features[el.GetAttribute("name")]
+							= Configuration.Parser.ParseBool(el.GetAttribute("value"));
 						break;
 
 					default:
