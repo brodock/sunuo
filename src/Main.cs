@@ -297,6 +297,7 @@ namespace Server
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler( CurrentDomain_ProcessExit );
 
+			/* redirect Console to file in service mode */
 			if (m_Service) {
 				string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
 				FileStream stream = new FileStream(filename, FileMode.Create,

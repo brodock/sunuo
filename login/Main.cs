@@ -51,7 +51,6 @@ namespace Server
 		private static Assembly m_Assembly;
 		private static Thread m_Thread;
 		private static bool m_Service;
-		private static MultiTextWriter m_MultiConOut;
 
 		private static Config config;
 
@@ -103,7 +102,6 @@ namespace Server
 		}
 		public static Assembly Assembly{ get{ return m_Assembly; } set{ m_Assembly = value; } }
 		public static Thread Thread{ get{ return m_Thread; } }
-		public static MultiTextWriter MultiConsoleOut{ get{ return m_MultiConOut; } }
 
 		public static string ExePath
 		{
@@ -260,18 +258,14 @@ namespace Server
 
 			Directory.SetCurrentDirectory(config.BaseDirectory);
 
-			try
-			{
-				m_MultiConOut = new MultiTextWriter(Console.Out);
-				Console.SetOut(m_MultiConOut);
-
-				if (m_Service) {
-					string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
-					m_MultiConOut.Add(new FileLogger(filename));
-				}
-			}
-			catch
-			{
+			/* redirect Console to file in service mode */
+			if (m_Service) {
+				string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
+				FileStream stream = new FileStream(filename, FileMode.Create,
+												   FileAccess.Write, FileShare.Read);
+				StreamWriter writer = new StreamWriter(stream);
+				Console.SetOut(writer);
+				Console.SetError(writer);
 			}
 
 			m_Thread = Thread.CurrentThread;
@@ -326,116 +320,6 @@ namespace Server
 
 			if ( timerThread.IsAlive )
 				timerThread.Abort();
-		}
-	}
-
-	public class FileLogger : TextWriter, IDisposable
-	{
-		private string m_FileName;
-		private bool m_NewLine;
-		public const string DateFormat = "[MMMM dd hh:mm:ss.f tt]: ";
-
-		public string FileName{ get{ return m_FileName; } }
-
-		public FileLogger( string file ) : this( file, false )
-		{
-		}
-
-		public FileLogger( string file, bool append )
-		{
-			m_FileName = file;
-			using ( StreamWriter writer = new StreamWriter( new FileStream( m_FileName, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.Read ) ) )
-			{
-				writer.WriteLine( ">>>Logging started on {0}.", DateTime.Now.ToString( "f" ) ); //f = Tuesday, April 10, 2001 3:51 PM 
-			}
-			m_NewLine = true;
-		}
-
-		public override void Write( char ch )
-		{
-			using ( StreamWriter writer = new StreamWriter( new FileStream( m_FileName, FileMode.Append, FileAccess.Write, FileShare.Read ) ) )
-			{
-				if ( m_NewLine )
-				{
-					writer.Write( DateTime.Now.ToString( DateFormat ) );
-					m_NewLine = false;
-				}
-				writer.Write( ch );
-			}
-		}
-
-		public override void Write( string str )
-		{
-			using ( StreamWriter writer = new StreamWriter( new FileStream( m_FileName, FileMode.Append, FileAccess.Write, FileShare.Read ) ) )
-			{
-				if ( m_NewLine )
-				{
-					writer.Write( DateTime.Now.ToString( DateFormat ) );
-					m_NewLine = false;
-				}
-				writer.Write( str );
-			}
-		}
-
-		public override void WriteLine( string line )
-		{
-			using ( StreamWriter writer = new StreamWriter( new FileStream( m_FileName, FileMode.Append, FileAccess.Write, FileShare.Read ) ) )
-			{
-				if ( m_NewLine )
-					writer.Write( DateTime.Now.ToString( DateFormat ) );
-				writer.WriteLine( line );
-				m_NewLine = true;
-			}
-		}
-
-		public override System.Text.Encoding Encoding
-		{
-			get{ return System.Text.Encoding.Default; }
-		}
-	}
-	
-	public class MultiTextWriter : TextWriter
-	{
-		private ArrayList m_Streams;
-
-		public MultiTextWriter( params TextWriter[] streams )
-		{
-			m_Streams = new ArrayList( streams );
-
-			if ( m_Streams.Count < 0 )
-				throw new ArgumentException( "You must specify at least one stream." );
-		}
-
-		public void Add( TextWriter tw )
-		{
-			m_Streams.Add( tw );
-		}
-
-		public void Remove( TextWriter tw )
-		{
-			m_Streams.Remove( tw );
-		}
-
-		public override void Write( char ch )
-		{
-			for (int i=0;i<m_Streams.Count;i++)
-				((TextWriter)m_Streams[i]).Write( ch );
-		}
-
-		public override void WriteLine( string line )
-		{
-			for (int i=0;i<m_Streams.Count;i++)
-				((TextWriter)m_Streams[i]).WriteLine( line );
-		}
-
-		public override void WriteLine( string line, params object[] args )
-		{
-			WriteLine( String.Format( line, args ) );
-		}
-
-		public override System.Text.Encoding Encoding
-		{
-			get{ return System.Text.Encoding.Default; }
 		}
 	}
 }
