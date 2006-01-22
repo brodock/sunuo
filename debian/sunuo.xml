@@ -5,7 +5,7 @@
 <sunuo-config>
   <locations>
     <!--the element 'data-path' sets the UO client directory-->
-    <data-path>/usr/share/sunuo/data</data-path>
+    <data-path>/usr/local/share/sunuo/client</data-path>
   </locations>
   <libraries>
     <library name="legacy">
