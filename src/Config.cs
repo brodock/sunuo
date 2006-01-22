@@ -33,6 +33,24 @@ namespace Server.Config {
 			return value == null || value == "" ||
 				value == "true" || value == "on" || value == "yes";
 		}
+
+		public static string GetElementString(XmlElement parent, string tag) {
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return null;
+			return nl[0].InnerText;
+		}
+
+		public static bool GetElementBool(XmlElement parent, string tag,
+										  bool defaultValue) {
+			if (parent == null)
+				return defaultValue;
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return defaultValue;
+			string value = ((XmlElement)nl[0]).GetAttribute("value");
+			return Parser.ParseBool(value);
+		}
 	}
 
 	public class Features {
@@ -86,13 +104,6 @@ namespace Server.Config {
 			return dst;
 		}
 
-		private static string GetElementString(XmlElement parent, string tag) {
-			XmlNodeList nl = parent.GetElementsByTagName(tag);
-			if (nl.Count == 0)
-				return null;
-			return nl[0].InnerText;
-		}
-
 		public Library(string _name) {
 			name = _name;
 		}
@@ -108,7 +119,7 @@ namespace Server.Config {
 		}
 
 		public void Load(XmlElement libConfigEl) {
-			string sourcePathString = GetElementString(libConfigEl, "path");
+			string sourcePathString = Parser.GetElementString(libConfigEl, "path");
 			if (sourcePathString != null) {
 				if (sourcePathString.EndsWith(".dll")) {
 					sourcePath = null;
@@ -194,9 +205,9 @@ namespace Server.Config {
 		}
 
 		public Login(XmlElement el) {
-			ignoreAuthID = Root.GetElementBool(el, "ignore-auth-id", false);
-			autoCreateAccounts = Root.GetElementBool(el, "auto-create-accounts", false);
-			accountDatabase = GetElementString(el, "account-database");
+			ignoreAuthID = Parser.GetElementBool(el, "ignore-auth-id", false);
+			autoCreateAccounts = Parser.GetElementBool(el, "auto-create-accounts", false);
+			accountDatabase = Parser.GetElementString(el, "account-database");
 
 			foreach (XmlElement priv in el.GetElementsByTagName("super-client")) {
 				string ip = priv.InnerText;
@@ -207,13 +218,6 @@ namespace Server.Config {
 					continue;
 				superClients[ip] = true;
 			}
-		}
-
-		private static string GetElementString(XmlElement parent, string tag) {
-			XmlNodeList nl = parent.GetElementsByTagName(tag);
-			if (nl.Count == 0)
-				return null;
-			return nl[0].InnerText;
 		}
 
 		public bool IgnoreAuthID {
@@ -273,13 +277,13 @@ namespace Server.Config {
 
 		public GameServerList(XmlElement el) {
 			foreach (XmlElement gs in el.GetElementsByTagName("game-server")) {
-				string name = GetElementString(gs, "name");
+				string name = Parser.GetElementString(gs, "name");
 				if (name == null) {
 					log.Warn("Game server without name ignored");
 					continue;
 				}
 
-				string addressString = GetElementString(gs, "address");
+				string addressString = Parser.GetElementString(gs, "address");
 				if (addressString == null) {
 					log.Warn("Game server without address ignored");
 					continue;
@@ -314,18 +318,11 @@ namespace Server.Config {
 
 				IPEndPoint address = new IPEndPoint(ip, port);
 
-				bool sendAuthID = Root.GetElementBool(gs, "send-auth-id", false);
-				bool query = Root.GetElementBool(gs, "query", false);
+				bool sendAuthID = Parser.GetElementBool(gs, "send-auth-id", false);
+				bool query = Parser.GetElementBool(gs, "query", false);
 
 				servers.Add(new GameServer(name, address, sendAuthID, query));
 			}
-		}
-
-		private static string GetElementString(XmlElement parent, string tag) {
-			XmlNodeList nl = parent.GetElementsByTagName(tag);
-			if (nl.Count == 0)
-				return null;
-			return nl[0].InnerText;
 		}
 
 		public IEnumerator GetEnumerator() {
@@ -489,17 +486,6 @@ namespace Server.Config {
 					libraryConfig[legacyConfig.Name] = legacyConfig;
 				}
 			}
-		}
-
-		public static bool GetElementBool(XmlElement parent, string tag,
-										  bool defaultValue) {
-			if (parent == null)
-				return defaultValue;
-			XmlNodeList nl = parent.GetElementsByTagName(tag);
-			if (nl.Count == 0)
-				return defaultValue;
-			string value = ((XmlElement)nl[0]).GetAttribute("value");
-			return Parser.ParseBool(value);
 		}
 
 		public static void RemoveElement(XmlElement parent, string tag) {
