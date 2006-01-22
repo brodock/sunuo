@@ -28,6 +28,13 @@ using System.Xml;
 using System.Net;
 
 namespace Server.Configuration {
+	public class Parser {
+		public static bool ParseBool(string value) {
+			return value == null || value == "" ||
+				value == "true" || value == "on" || value == "yes";
+		}
+	}
+
 	public class Features {
 		private Hashtable m_Table = new Hashtable();
 
@@ -41,13 +48,6 @@ namespace Server.Configuration {
 				else
 					m_Table.Remove(name);
 			}
-		}
-	}
-
-	public class Parser {
-		public static bool ParseBool(string value) {
-			return value == null || value == "" ||
-				value == "true" || value == "on" || value == "yes";
 		}
 	}
 }
