@@ -21,6 +21,7 @@ sunuo (0.3.0) unstable; urgency=low
   * added Config.Features
     - disable-context-menus
     - prefer-ascii
+    - delocalize
   * Config.MultiThreading renamed to Config.Features["multi-threading"]
   * moved config classes to namespace Server.Config
   * Config.GameServerList implements IEnumerable
