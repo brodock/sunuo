@@ -36,6 +36,7 @@ using Server.Mobiles;
 using Server.Movement;
 using Server.Prompts;
 using Server.HuePickers;
+using Server.StringQueries;
 using Server.ContextMenus;
 using CV = Server.ClientVersion;
 
@@ -126,6 +127,7 @@ namespace Server.Network
 			Register( 0xA0,   3, false, new OnPacketReceive( PlayServer ) );
 			Register( 0xA4, 149, false, new OnPacketReceive( SystemInfo ) );
 			Register( 0xA7,   4,  true, new OnPacketReceive( RequestScrollWindow ) );
+			Register( 0xAC,   0,  true, new OnPacketReceive( StringQueryResponse ) );
 			Register( 0xAD,   0,  true, new OnPacketReceive( UnicodeSpeech ) );
 			Register( 0xB1,   0,  true, new OnPacketReceive( DisplayGumpResponse ) );
 			Register( 0xB5,  64,  true, new OnPacketReceive( ChatRequest ) );
@@ -889,6 +891,32 @@ namespace Server.Network
 
 					state.RemoveMenu( i );
 
+					return;
+				}
+			}
+		}
+
+		public static void StringQueryResponse( NetState state, PacketReader pvSrc )
+		{
+			int serial = pvSrc.ReadInt32();
+			pvSrc.ReadUInt16(); // unknown
+			bool ok = pvSrc.ReadBoolean();
+			int length = pvSrc.ReadUInt16(); 
+			string str = null;
+			if ( length > 0 )
+				str = pvSrc.ReadString(length - 1);
+
+			StringQueryCollection stringqueries = state.StringQueries;
+
+			for ( int i = 0; i < stringqueries.Count; ++i )
+			{
+				StringQuery stringquery = stringqueries[i];
+
+				if ( stringquery.Serial == serial )
+				{
+					stringquery.OnResponse( state, ok, str );
+
+					state.RemoveStringQuery( i );
 					return;
 				}
 			}

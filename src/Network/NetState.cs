@@ -33,6 +33,7 @@ using Server.Network;
 using Server.Items;
 using Server.Gumps;
 using Server.Menus;
+using Server.StringQueries;
 using Server.HuePickers;
 
 namespace Server.Network
@@ -66,6 +67,7 @@ namespace Server.Network
 		private GumpCollection m_Gumps;
 		private HuePickerCollection m_HuePickers;
 		private MenuCollection m_Menus;
+		private StringQueryCollection m_StringQueries;
 		private int m_Sequence;
 		private bool m_CompressionEnabled;
 		private string m_ToString;
@@ -239,13 +241,15 @@ namespace Server.Network
 
 		public GumpCollection Gumps{ get{ return m_Gumps; } }
 		public HuePickerCollection HuePickers{ get{ return m_HuePickers; } }
+		public StringQueryCollection StringQueries{ get{ return m_StringQueries; } }
 		public MenuCollection Menus{ get{ return m_Menus; } }
 
-		private static int m_GumpCap = 512, m_HuePickerCap = 512, m_MenuCap = 512;
+		private static int m_GumpCap = 512, m_HuePickerCap = 512, m_MenuCap = 512, m_StringQueryCap = 512;
 
 		public static int GumpCap{ get{ return m_GumpCap; } set{ m_GumpCap = value; } }
 		public static int HuePickerCap{ get{ return m_HuePickerCap; } set{ m_HuePickerCap = value; } }
 		public static int MenuCap{ get{ return m_MenuCap; } set{ m_MenuCap = value; } }
+		public static int StringQueryCap{ get{ return m_StringQueryCap; } set{ m_StringQueryCap = value; } }
 
 		public void AddMenu( IMenu menu )
 		{
@@ -317,6 +321,30 @@ namespace Server.Network
 				return;
 
 			m_Gumps.RemoveAt( index );
+		}
+
+		public void AddStringQuery( StringQuery sq )
+		{
+			if ( m_StringQueries == null )
+				return;
+
+			if ( m_StringQueries.Count >= m_StringQueryCap )
+			{
+				Console.WriteLine( "Client: {0}: Exceeded string query cap, disconnecting...", this );
+				Dispose();
+			}
+			else
+			{
+				m_StringQueries.Add( sq );
+			}
+		}
+
+		public void RemoveStringQuery( int index )
+		{
+			if ( m_StringQueries == null )
+				return;
+
+			m_StringQueries.RemoveAt( index );
 		}
 
 		public CityInfo[] CityInfo
@@ -395,6 +423,7 @@ namespace Server.Network
 			m_Gumps = new GumpCollection();
 			m_HuePickers = new HuePickerCollection();
 			m_Menus = new MenuCollection();
+			m_StringQueries = new StringQueryCollection();
 			m_Trades = new ArrayList();
 
 			m_SendQueue = new SendQueue();

@@ -2999,6 +2999,32 @@ namespace Server.Network
 		}
 	}
 
+	public class DisplayStringQuery : Packet
+	{
+		public DisplayStringQuery( int serial, string caption, bool cancellable,
+								   byte number, int max, string label ) : base( 0xAB )
+		{
+			int len = caption.Length + label.Length + 21;
+			
+			EnsureCapacity( len );
+
+			m_Stream.Write( serial ); // query serial
+			m_Stream.Write( (short)0 ); // unknown
+
+			m_Stream.Write( (short)(caption.Length + 1) );
+			m_Stream.WriteAsciiNull( caption );
+			
+			m_Stream.Write( cancellable ); // is able to cancel? true/false
+
+			m_Stream.Write( number ); // query type 1 = string, 2 = number
+
+			m_Stream.Write( max ); // max. if string it's max length, if number it's maximum number
+
+			m_Stream.Write( (short)(label.Length + 1) );
+			m_Stream.WriteAsciiNull( label );
+		}
+	}
+
 	public enum ALRReason : byte
 	{
 		Invalid = 0x00,

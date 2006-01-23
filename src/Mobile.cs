@@ -29,6 +29,7 @@ using System.Collections;
 using Server;
 using Server.Gumps;
 using Server.Menus;
+using Server.StringQueries;
 using Server.Prompts;
 using Server.Guilds;
 using Server.Network;
@@ -6121,6 +6122,28 @@ namespace Server
 			else if ( throwOnOffline )
 			{
 				throw new MobileNotConnectedException( this, "Menu could not be sent." );
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool SendStringQuery( StringQuery sq )
+		{
+			return SendStringQuery( sq, false );
+		}
+
+		public bool SendStringQuery( StringQuery sq, bool throwOnOffline )
+		{
+			if ( m_NetState != null )
+			{
+				sq.SendTo( m_NetState );
+				return true;
+			}
+			else if ( throwOnOffline )
+			{
+				throw new MobileNotConnectedException( this, "String query could not be sent." );
 			}
 			else
 			{
