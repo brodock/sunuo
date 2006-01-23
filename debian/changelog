@@ -19,6 +19,7 @@ sunuo (0.3.0) unstable; urgency=low
   * MultiConOut is a dummy now that log4net is being used
   * disable console in service mode
   * added Config.Features
+    - disable-context-menus
   * Config.MultiThreading renamed to Config.Features["multi-threading"]
   * moved config classes to namespace Server.Config
   * Config.GameServerList implements IEnumerable

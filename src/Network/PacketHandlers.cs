@@ -1752,6 +1752,9 @@ namespace Server.Network
 
 		public static void ContextMenuRequest( NetState state, PacketReader pvSrc )
 		{
+			if (Core.Config.Features["disable-context-menus"])
+				return;
+
 			Mobile from = state.Mobile;
 			IEntity target = World.FindEntity( pvSrc.ReadInt32() );
 
