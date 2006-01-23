@@ -22,6 +22,7 @@ sunuo (0.3.0) unstable; urgency=low
     - disable-context-menus
     - prefer-ascii
     - delocalize
+    - oldschool
   * support StringQuery
   * Config.MultiThreading renamed to Config.Features["multi-threading"]
   * moved config classes to namespace Server.Config

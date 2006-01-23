@@ -6923,7 +6923,9 @@ namespace Server
 		{
 			get
 			{
-				return 50 + (Str / 2);
+				return Core.Config.Features["oldschool"]
+					? Str
+					: (50 + Str / 2);
 			}
 		}
 
@@ -7151,7 +7153,7 @@ namespace Server
 			if ( m_Poison != null )
 				flags |= 0x04;
 
-			if ( m_Blessed || m_YellowHealthbar )
+			if ( m_YellowHealthbar || ( m_Blessed && !Core.Config.Features["oldschool"]) )
 				flags |= 0x08;
 
 			if ( m_Warmode )
@@ -9877,7 +9879,9 @@ namespace Server
 			};
 
 		public virtual bool CanTarget{ get{ return true; } }
-		public virtual bool ClickTitle{ get{ return true; } }
+		public virtual bool ClickTitle {
+			get { return !Core.Config.Features["oldschool"]; }
+		}
 
 		private static bool m_DisableHiddenSelfClick = true;
 
@@ -9964,6 +9968,13 @@ namespace Server
 				val = String.Concat( name, " ", suffix );
 			else
 				val = name;
+
+			if (Core.Config.Features["oldschool"]) {
+				if ( Frozen || Paralyzed || (m_Spell != null && m_Spell.IsCasting) )
+					val += " (frozen)";
+				if ( Blessed && (!Player || AccessLevel == AccessLevel.Player) )
+					val += " (invulnerable)";
+			}
 
 			PrivateOverheadMessage( MessageType.Label, hue, m_AsciiClickMessage, val, from.NetState );
 		}
