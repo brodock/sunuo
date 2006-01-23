@@ -586,6 +586,8 @@ namespace Server
 			}
 		}
 
+		private static string m_DiscordanceName = Core.Config.Features["oldschool"] ? "Enticement" : "Discordance";
+
 		private static SkillInfo[] m_Table = new SkillInfo[54]
 			{
 				new SkillInfo(  0, "Alchemy",					0.0,	5.0,	5.0,	"Alchemist",	null,	0.0,	0.5,	0.5,	1.0 ),
@@ -603,7 +605,7 @@ namespace Server
 				new SkillInfo( 12, "Cartography",				0.0,	7.5,	7.5,	"Cartographer",	null,	0.0,	0.75,	0.75,	1.0 ),
 				new SkillInfo( 13, "Cooking",					0.0,	20.0,	30.0,	"Chef",			null,	0.0,	2.0,	3.0,	1.0 ),
 				new SkillInfo( 14, "Detecting Hidden",			0.0,	0.0,	0.0,	"Scout",		null,	0.0,	0.4,	0.6,	1.0 ),
-				new SkillInfo( 15, "Discordance",				0.0,	2.5,	2.5,	"Bard",			null,	0.0,	0.25,	0.25,	1.0 ),
+				new SkillInfo( 15, m_DiscordanceName,			0.0,	2.5,	2.5,	"Bard",			null,	0.0,	0.25,	0.25,	1.0 ),
 				new SkillInfo( 16, "Evaluating Intelligence",	0.0,	0.0,	0.0,	"Scholar",		null,	0.0,	0.0,	1.0,	1.0 ),
 				new SkillInfo( 17, "Healing",					6.0,	6.0,	8.0,	"Healer",		null,	0.6,	0.6,	0.8,	1.0 ),
 				new SkillInfo( 18, "Fishing",					0.0,	0.0,	0.0,	"Fisherman",	null,	0.5,	0.5,	0.0,	1.0 ),
