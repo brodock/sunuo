@@ -2200,7 +2200,10 @@ namespace Server.Network
 
 		public SupportedFeatures( IAccount acct ) : base( 0xB9, 3 )
 		{
-			int flags = 0x3 | m_AdditionalFlags;
+			int flags = 0x0001 | m_AdditionalFlags;
+
+			if (!Core.Config.Features["oldschool"])
+				flags |= 0x0002;
 
 			if ( Core.SE )
 				flags |= 0x0040;
