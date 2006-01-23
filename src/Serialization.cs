@@ -125,7 +125,7 @@ namespace Server
 	public class BinaryFileWriter : GenericWriter
 	{
 		private bool PrefixStrings;
-		//private BinaryWriter m_Bin;
+		private BinaryWriter m_Bin;
 		private FileStream m_File;
 
 		private const int BufferSize = 4096;
@@ -138,7 +138,7 @@ namespace Server
 		public BinaryFileWriter( FileStream strm, bool prefixStr ) 
 		{ 
 			PrefixStrings = prefixStr;
-			//m_Bin = new BinaryWriter( strm, Utility.UTF8 ); 
+			m_Bin = new BinaryWriter( strm, Utility.UTF8 ); 
 			m_Encoding = Utility.UTF8;
 			m_Buffer = new byte[BufferSize];
 			m_File = strm;
@@ -150,7 +150,7 @@ namespace Server
 			m_Buffer = new byte[BufferSize];
 			m_File = new FileStream( filename, FileMode.Create, FileAccess.Write, FileShare.None );
 			m_Encoding = Utility.UTF8WithEncoding;
-			//m_Bin = new BinaryWriter( m_File, Utility.UTF8WithEncoding );
+			m_Bin = new BinaryWriter( m_File, Utility.UTF8WithEncoding );
 		}
 
 		public void Flush()
@@ -392,26 +392,18 @@ namespace Server
 			m_Index += 2;
 		}
 
-		public unsafe override void Write( double value )
+		public override void Write( double value )
 		{
-			if ( (m_Index + 8) > BufferSize )
-				Flush();
-
-			fixed ( byte *pBuffer = m_Buffer )
-				*((double *)(pBuffer + m_Index)) = value;
-
-			m_Index += 8;
+			Flush();
+			m_Bin.Write(value);
+			m_Bin.Flush();
 		}
 
-		public unsafe override void Write( float value )
+		public override void Write( float value )
 		{
-			if ( (m_Index + 4) > BufferSize )
-				Flush();
-
-			fixed ( byte *pBuffer = m_Buffer )
-				*((float *)(pBuffer + m_Index)) = value;
-
-			m_Index += 4;
+			Flush();
+			m_Bin.Write(value);
+			m_Bin.Flush();
 		}
 
 		private char[] m_SingleCharBuffer = new char[1];
