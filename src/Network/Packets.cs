@@ -1791,8 +1791,6 @@ namespace Server.Network
 					Packet p = new AsciiMessage(serial, graphic, type, hue, font, name, text);
 					EnsureCapacity(3);
 					m_Stream = p.UnderlyingStream;
-
-					Console.WriteLine("delocalized0 {0} to {1}", number, text);
 					return;
 				}
 			}
@@ -3044,7 +3042,6 @@ namespace Server.Network
 												hue, font, name, text);
 					EnsureCapacity(3);
 					m_Stream = p.UnderlyingStream;
-					Console.WriteLine("delocalized1 {0} to {1}", number, text);
 					return;
 				}
 			}
