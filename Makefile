@@ -4,7 +4,7 @@ VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changel
 DISTDIR = build/sunuo-$(VERSION)-bin
 DISTDLL = MySql.Data.dll Npgsql.dll log4net.dll
 
-MCS_FLAGS += -unsafe -define:MONO -debug -lib:build/lib
+MCS_FLAGS += -define:MONO -debug -lib:build/lib
 
 SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
@@ -26,12 +26,12 @@ install: all
 $(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) build/lib/MySql.Data.dll build/lib/Npgsql.dll build/lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
+	$(MCS) $(MCS_FLAGS) -unsafe -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
 
 $(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll build/lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
+	$(MCS) $(MCS_FLAGS) -unsafe -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
 
 $(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
 	mkdir -p $(DISTDIR)
