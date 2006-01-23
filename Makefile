@@ -26,7 +26,7 @@ install: all
 $(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) build/lib/MySql.Data.dll build/lib/Npgsql.dll build/lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -unsafe -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
 
 $(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll build/lib/log4net.dll
 	mkdir -p $(DISTDIR)
