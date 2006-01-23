@@ -991,7 +991,10 @@ namespace Server
 
 		public void LabelTo( Mobile to, string text )
 		{
-			to.Send( new UnicodeMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "ENU", "", text ) );
+			if (Core.Config.Features["prefer-ascii"])
+				to.Send( new AsciiMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "", text ) );
+			else
+				to.Send( new UnicodeMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "ENU", "", text ) );
 		}
 
 		public void LabelTo( Mobile to, string format, params object[] args )
@@ -3975,7 +3978,14 @@ namespace Server
 				}
 				else
 				{
-					ns.Send( new UnicodeMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "ENU", "", m_Name + (m_Amount > 1 ? " : " + m_Amount : "") ) );
+					string text = m_Name;
+					if (m_Amount > 1)
+						text += " : " + m_Amount;
+
+					if (Core.Config.Features["prefer-ascii"])
+						ns.Send( new AsciiMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "", text) );
+					else
+						ns.Send( new UnicodeMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "ENU", "", text) );
 				}
 			}
 		}

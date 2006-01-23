@@ -9372,7 +9372,7 @@ namespace Server
 					{
 						if ( p == null )
 						{
-							if ( ascii )
+							if ( ascii || (!this.Player && Core.Config.Features["prefer-ascii"]) )
 								p = new AsciiMessage( m_Serial, Body, type, hue, 3, Name, text );
 							else
 								p = new UnicodeMessage( m_Serial, Body, type, hue, 3, m_Language, Name, text );
@@ -9619,10 +9619,14 @@ namespace Server
 
 		public void SendMessage( int hue, string text )
 		{
-			NetState ns = m_NetState;
+			if (Core.Config.Features["prefer-ascii"]) {
+				SendAsciiMessage(hue, text);
+			} else {
+				NetState ns = m_NetState;
 
-			if ( ns != null )
-				ns.Send( new UnicodeMessage( Serial.MinusOne, -1, MessageType.Regular, hue, 3, "ENU", "System", text ) );
+				if ( ns != null )
+					ns.Send( new UnicodeMessage( Serial.MinusOne, -1, MessageType.Regular, hue, 3, "ENU", "System", text ) );
+			}
 		}
 
 		public void SendMessage( int hue, string format, params object[] args )
