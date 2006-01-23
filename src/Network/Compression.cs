@@ -71,7 +71,7 @@ namespace Server.Network
 		private static byte[] m_OutputBuffer = new byte[0x40000];
 		private static object m_SyncRoot = new object();
 
-		public unsafe static void Compress( byte[] input, int length, out byte[] output, out int outputLength )
+		public static void Compress( byte[] input, int length, out byte[] output, out int outputLength )
 		{
 			lock ( m_SyncRoot )
 			{
@@ -88,47 +88,41 @@ namespace Server.Network
 
 				int outputCount = 0;
 
-				fixed ( int *pTable = m_Table )
+				while ( inputIndex < inputLength )
 				{
-					fixed ( byte *pOutputBuffer = m_OutputBuffer )
+					byteValue = input[inputIndex++] << 1;
+
+					packCount = m_Table[byteValue];
+					packValue = m_Table[byteValue | 1];
+
+					holdValue <<= packCount;
+					holdValue  |= packValue;
+					holdCount  += packCount;
+
+					while ( holdCount >= 8 )
 					{
-						while ( inputIndex < inputLength )
-						{
-							byteValue = input[inputIndex++] << 1;
+						holdCount -= 8;
 
-							packCount = pTable[byteValue];
-							packValue = pTable[byteValue | 1];
-
-							holdValue <<= packCount;
-							holdValue  |= packValue;
-							holdCount  += packCount;
-
-							while ( holdCount >= 8 )
-							{
-								holdCount -= 8;
-
-								pOutputBuffer[outputCount++] = (byte)(holdValue >> holdCount);
-							}
-						}
-
-						packCount = pTable[0x200];
-						packValue = pTable[0x201];
-
-						holdValue <<= packCount;
-						holdValue  |= packValue;
-						holdCount  += packCount;
-
-						while ( holdCount >= 8 )
-						{
-							holdCount -= 8;
-
-							pOutputBuffer[outputCount++] = (byte)(holdValue >> holdCount);
-						}
-
-						if ( holdCount > 0 )
-							pOutputBuffer[outputCount++] = (byte)(holdValue << (8 - holdCount));
+						m_OutputBuffer[outputCount++] = (byte)(holdValue >> holdCount);
 					}
 				}
+
+				packCount = m_Table[0x200];
+				packValue = m_Table[0x201];
+
+				holdValue <<= packCount;
+				holdValue  |= packValue;
+				holdCount  += packCount;
+
+				while ( holdCount >= 8 )
+				{
+					holdCount -= 8;
+
+					m_OutputBuffer[outputCount++] = (byte)(holdValue >> holdCount);
+				}
+
+				if ( holdCount > 0 )
+					m_OutputBuffer[outputCount++] = (byte)(holdValue << (8 - holdCount));
 
 				output = m_OutputBuffer;
 				outputLength = outputCount;

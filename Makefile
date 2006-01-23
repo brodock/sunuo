@@ -31,7 +31,7 @@ $(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) build/lib/MySql.Data.dll build/lib/Npgsql
 $(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll build/lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -unsafe -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
 
 $(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
 	mkdir -p $(DISTDIR)
