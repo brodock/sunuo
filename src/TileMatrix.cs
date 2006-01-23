@@ -379,9 +379,7 @@ namespace Server
 
 		private static byte[] m_Buffer;
 
-		private static StaticTile[] m_TileBuffer = new StaticTile[128];
-
-		private unsafe Tile[][][] ReadStaticBlock( int x, int y )
+		private Tile[][][] ReadStaticBlock( int x, int y )
 		{
 			try
 			{
@@ -400,19 +398,12 @@ namespace Server
 
 					m_Statics.Seek( lookup, SeekOrigin.Begin );
 
-					if ( m_TileBuffer.Length < count )
-						m_TileBuffer = new StaticTile[count];
+					if ( m_Buffer == null || length > m_Buffer.Length )
+						m_Buffer = new byte[length];
 
-					StaticTile[] staTiles = m_TileBuffer;//new StaticTile[tileCount];
-
-					fixed ( StaticTile *pTiles = staTiles )
-					{
-						if ( m_Buffer == null || length > m_Buffer.Length )
-							m_Buffer = new byte[length];
-
+					GCHandle handle = GCHandle.Alloc(m_Buffer, GCHandleType.Pinned);
+					try {
 						m_Statics.Read( m_Buffer, 0, length );
-
-						Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
 
 						if ( m_Lists == null )
 						{
@@ -430,8 +421,10 @@ namespace Server
 						TileList[][] lists = m_Lists;
 
 						for (int i = 0; i < count; i++) {
-							StaticTile *pCur = pTiles + i;
-							lists[pCur->m_X & 0x7][pCur->m_Y & 0x7].Add( (short)((pCur->m_ID & 0x3FFF) + 0x4000), pCur->m_Z );
+							IntPtr ptr = new IntPtr((long)handle.AddrOfPinnedObject() + i * 7);
+							StaticTile cur = (StaticTile)Marshal.PtrToStructure(ptr,
+																				typeof(StaticTile));
+							lists[cur.m_X & 0x7][cur.m_Y & 0x7].Add( (short)((cur.m_ID & 0x3FFF) + 0x4000), cur.m_Z );
 						}
 
 						Tile[][][] tiles = new Tile[8][][];
@@ -445,6 +438,8 @@ namespace Server
 						}
 
 						return tiles;
+					} finally {
+						handle.Free();
 					}
 				}
 			}
@@ -463,7 +458,7 @@ namespace Server
 		private DateTime m_NextStaticWarning;
 		private DateTime m_NextLandWarning;
 
-		private unsafe Tile[] ReadLandBlock( int x, int y )
+		private Tile[] ReadLandBlock( int x, int y )
 		{
 			try
 			{
@@ -471,14 +466,16 @@ namespace Server
 
 				Tile[] tiles = new Tile[64];
 
-				fixed ( Tile *pTiles = tiles )
-				{
+				GCHandle handle = GCHandle.Alloc(tiles, GCHandleType.Pinned);
+				try {
 					if ( m_Buffer == null || 192 > m_Buffer.Length )
 						m_Buffer = new byte[192];
 
 					m_Map.Read( m_Buffer, 0, 192 );
 
-					Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), 192);
+					Marshal.Copy(m_Buffer, 0, handle.AddrOfPinnedObject(), 192);
+				} finally {
+					handle.Free();
 				}
 
 				return tiles;

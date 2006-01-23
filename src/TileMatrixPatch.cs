@@ -82,7 +82,7 @@ namespace Server
 				m_StaticBlocks = PatchStatics( matrix, staDataPath, staIndexPath, staLookupPath );
 		}
 
-		private unsafe int PatchLand( TileMatrix matrix, string dataPath, string indexPath )
+		private int PatchLand( TileMatrix matrix, string dataPath, string indexPath )
 		{
 			using ( FileStream fsData = new FileStream( dataPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 			{
@@ -102,14 +102,16 @@ namespace Server
 
 						Tile[] tiles = new Tile[64];
 
-						fixed ( Tile *pTiles = tiles )
-						{
+						GCHandle handle = GCHandle.Alloc(tiles, GCHandleType.Pinned);
+						try {
 							if ( m_Buffer == null || 192 > m_Buffer.Length )
 								m_Buffer = new byte[192];
 
 							fsData.Read( m_Buffer, 0, 192 );
 
-							Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), 192);
+							Marshal.Copy(m_Buffer, 0, handle.AddrOfPinnedObject(), 192);
+						} finally {
+							handle.Free();
 						}
 
 						matrix.SetLandBlock( x, y, tiles );
@@ -126,7 +128,7 @@ namespace Server
 
 		private static StaticTile[] m_TileBuffer = new StaticTile[128];
 
-		private unsafe int PatchStatics( TileMatrix matrix, string dataPath, string indexPath, string lookupPath )
+		private int PatchStatics( TileMatrix matrix, string dataPath, string indexPath, string lookupPath )
 		{
 			using ( FileStream fsData = new FileStream( dataPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 			{
@@ -174,21 +176,19 @@ namespace Server
 
 							StaticTile[] staTiles = m_TileBuffer;//new StaticTile[tileCount];
 
-							fixed ( StaticTile *pTiles = staTiles )
-							{
+							GCHandle handle = GCHandle.Alloc(staTiles, GCHandleType.Pinned);
+							try {
 								if ( m_Buffer == null || length > m_Buffer.Length )
 									m_Buffer = new byte[length];
 
 								fsData.Read( m_Buffer, 0, length );
 
-								Marshal.Copy(m_Buffer, 0, new IntPtr(pTiles), length);
-
-								StaticTile *pStart = pTiles;
+								Marshal.Copy(m_Buffer, 0, handle.AddrOfPinnedObject(), length);
 
 								for (int j = 0; j < tileCount; j++)
 								{
-									StaticTile *pCur = pStart + j;
-									lists[pCur->m_X & 0x7][pCur->m_Y & 0x7].Add( (short)((pCur->m_ID & 0x3FFF) + 0x4000), pCur->m_Z );
+									StaticTile cur = staTiles[j];
+									lists[cur.m_X & 0x7][cur.m_Y & 0x7].Add( (short)((cur.m_ID & 0x3FFF) + 0x4000), cur.m_Z );
 								}
 
 								Tile[][][] tiles = new Tile[8][][];
@@ -202,6 +202,8 @@ namespace Server
 								}
 
 								matrix.SetStaticBlock( blockX, blockY, tiles );
+							} finally {
+								handle.Free();
 							}
 						}
 
