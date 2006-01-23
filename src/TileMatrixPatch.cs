@@ -33,20 +33,6 @@ namespace Server
 	{
 		private int m_LandBlocks, m_StaticBlocks;
 
-		private static bool m_Enabled = true;
-
-		public static bool Enabled
-		{
-			get
-			{
-				return m_Enabled;
-			}
-			set
-			{
-				m_Enabled = value;
-			}
-		}
-
 		public int LandBlocks
 		{
 			get
@@ -65,7 +51,7 @@ namespace Server
 
 		public TileMatrixPatch( TileMatrix matrix, int index )
 		{
-			if ( !m_Enabled )
+			if (Core.Config.Features["disable-tile-patch"])
 				return;
 
 			string mapDataPath = Core.FindDataFile( "mapdif{0}.mul", index );
