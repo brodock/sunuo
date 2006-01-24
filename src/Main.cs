@@ -59,9 +59,6 @@ namespace Server
 
 		private static Config.Root config;
 
-		private static bool m_AOS;
-		private static bool m_SE;
-
 		private static bool m_Profiling;
 		private static DateTime m_ProfileStart;
 		private static TimeSpan m_ProfileTime;
@@ -151,11 +148,11 @@ namespace Server
 		{
 			get
 			{
-				return m_AOS || m_SE;
+				return Config.Features["age-of-shadows"] || SE;
 			}
 			set
 			{
-				m_AOS = value;
+				log.Warn("A script attempted to modify Core.AOS - please configure that option in etc/sunuo.xml instead");
 			}
 		}
 
@@ -163,11 +160,11 @@ namespace Server
 		{
 			get
 			{
-				return m_SE;
+				return Config.Features["samurai-empire"];
 			}
 			set
 			{
-				m_SE = value;
+				log.Warn("A script attempted to modify Core.SE - please configure that option in etc/sunuo.xml instead");
 			}
 		}
 
