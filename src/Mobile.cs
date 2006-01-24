@@ -2376,7 +2376,8 @@ namespace Server
 		{
 			get
 			{
-				return m_Followers;
+				return Core.Config.Features["oldschool"]
+					? 0 : m_Followers;
 			}
 			set
 			{
@@ -2394,7 +2395,8 @@ namespace Server
 		{
 			get
 			{
-				return m_FollowersMax;
+				return Core.Config.Features["oldschool"]
+					? 0 : m_FollowersMax;
 			}
 			set
 			{
@@ -3693,7 +3695,8 @@ namespace Server
 			}
 			else if ( m_Body.IsHuman )
 			{
-				return Utility.Random( m_Female ? 0x314 : 0x423, m_Female ? 4 : 5 );
+				return Utility.Random( m_Female ? 0x314 : 0x423,
+									   m_Female || Core.Config.Features["oldschool"] ? 4 : 5 );
 			}
 			else
 			{
