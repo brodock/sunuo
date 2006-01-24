@@ -2010,6 +2010,20 @@ namespace Server
 
 		private DateTime m_NextCombatTime;
 
+		private DateTime m_LastCombatTime;
+
+		public DateTime LastCombatTime
+		{
+			get
+			{
+				return m_LastCombatTime;
+			}
+			set
+			{
+				m_LastCombatTime = value;
+			}
+		}
+
 		public DateTime NextSkillTime
 		{
 			get
