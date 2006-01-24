@@ -3971,7 +3971,9 @@ namespace Server
 			{
 				if ( m_Name == null )
 				{
-					if ( m_Amount <= 1 )
+					if (Core.Config.Features["oldschool"])
+						ns.Send( new AsciiMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "", Oldschool.ConvertItemName( LabelNumber, m_Amount ) ) );
+					else if ( m_Amount <= 1 )
 						ns.Send( new MessageLocalized( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, LabelNumber, "", "" ) );
 					else
 						ns.Send( new MessageLocalizedAffix( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, LabelNumber, "", AffixType.Append, String.Format( " : {0}", m_Amount ), "" ) );
