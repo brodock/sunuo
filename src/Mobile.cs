@@ -2063,8 +2063,12 @@ namespace Server
 
 		public virtual void Attack( Mobile m )
 		{
-			if ( CheckAttack( m ) )
+			if ( CheckAttack( m ) ) {
 				Combatant = m;
+
+				if (OldschoolRules && m != null && m.Combatant == null && m != this && m.Player && this.Player)
+					m.Combatant = this;
+			}
 		}
 
 		public virtual bool CheckAttack( Mobile m )
