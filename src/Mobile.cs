@@ -476,6 +476,7 @@ namespace Server
 	public class Mobile : IEntity, IPoint3D, IHued
 	{
 		protected static readonly bool OldschoolRules = Core.Config.Features["oldschool"];
+		protected static readonly bool PreferAscii = Core.Config.Features["prefer-ascii"];
 
 		private static bool m_DragEffects = true;
 
@@ -9420,7 +9421,7 @@ namespace Server
 					{
 						if ( p == null )
 						{
-							if ( ascii || (!this.Player && Core.Config.Features["prefer-ascii"]) )
+							if ( ascii || (!this.Player && PreferAscii ) )
 								p = new AsciiMessage( m_Serial, Body, type, hue, 3, Name, text );
 							else
 								p = new UnicodeMessage( m_Serial, Body, type, hue, 3, m_Language, Name, text );
@@ -9667,7 +9668,7 @@ namespace Server
 
 		public void SendMessage( int hue, string text )
 		{
-			if (Core.Config.Features["prefer-ascii"]) {
+			if (PreferAscii) {
 				SendAsciiMessage(hue, text);
 			} else {
 				NetState ns = m_NetState;
