@@ -586,7 +586,7 @@ namespace Server
 			}
 		}
 
-		private static string m_DiscordanceName = Core.Config.Features["oldschool"] ? "Enticement" : "Discordance";
+		private static readonly string m_DiscordanceName = Core.Config.Features["oldschool"] ? "Enticement" : "Discordance";
 
 		private static SkillInfo[] m_Table = new SkillInfo[54]
 			{

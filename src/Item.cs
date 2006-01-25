@@ -544,6 +544,8 @@ namespace Server
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+		protected static readonly bool OldschoolRules = Core.Config.Features["oldschool"];
+
 		public static readonly EmptyArrayList EmptyItems = new EmptyArrayList();
 
 		private Serial m_Serial;
@@ -3971,7 +3973,7 @@ namespace Server
 			{
 				if ( m_Name == null )
 				{
-					if (Core.Config.Features["oldschool"])
+					if (OldschoolRules)
 						ns.Send( new AsciiMessage( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, "", Oldschool.ConvertItemName( LabelNumber, m_Amount ) ) );
 					else if ( m_Amount <= 1 )
 						ns.Send( new MessageLocalized( m_Serial, m_ItemID, MessageType.Label, 0x3B2, 3, LabelNumber, "", "" ) );

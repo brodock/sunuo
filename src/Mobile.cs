@@ -475,6 +475,8 @@ namespace Server
 	/// </summary>
 	public class Mobile : IEntity, IPoint3D, IHued
 	{
+		protected static readonly bool OldschoolRules = Core.Config.Features["oldschool"];
+
 		private static bool m_DragEffects = true;
 
 		public static bool DragEffects
@@ -2390,7 +2392,7 @@ namespace Server
 		{
 			get
 			{
-				return Core.Config.Features["oldschool"]
+				return OldschoolRules
 					? 0 : m_Followers;
 			}
 			set
@@ -2409,7 +2411,7 @@ namespace Server
 		{
 			get
 			{
-				return Core.Config.Features["oldschool"]
+				return OldschoolRules
 					? 0 : m_FollowersMax;
 			}
 			set
@@ -3710,7 +3712,7 @@ namespace Server
 			else if ( m_Body.IsHuman )
 			{
 				return Utility.Random( m_Female ? 0x314 : 0x423,
-									   m_Female || Core.Config.Features["oldschool"] ? 4 : 5 );
+									   m_Female || OldschoolRules ? 4 : 5 );
 			}
 			else
 			{
@@ -6940,7 +6942,7 @@ namespace Server
 		{
 			get
 			{
-				return Core.Config.Features["oldschool"]
+				return OldschoolRules
 					? Str
 					: (50 + Str / 2);
 			}
@@ -7170,7 +7172,7 @@ namespace Server
 			if ( m_Poison != null )
 				flags |= 0x04;
 
-			if ( m_YellowHealthbar || ( m_Blessed && !Core.Config.Features["oldschool"]) )
+			if ( m_YellowHealthbar || ( m_Blessed && !OldschoolRules) )
 				flags |= 0x08;
 
 			if ( m_Warmode )
@@ -9897,7 +9899,7 @@ namespace Server
 
 		public virtual bool CanTarget{ get{ return true; } }
 		public virtual bool ClickTitle {
-			get { return !Core.Config.Features["oldschool"]; }
+			get { return !OldschoolRules; }
 		}
 
 		private static bool m_DisableHiddenSelfClick = true;
@@ -9986,7 +9988,7 @@ namespace Server
 			else
 				val = name;
 
-			if (Core.Config.Features["oldschool"]) {
+			if (OldschoolRules) {
 				if ( Frozen || Paralyzed || (m_Spell != null && m_Spell.IsCasting) )
 					val += " (frozen)";
 				if ( Blessed && (!Player || AccessLevel == AccessLevel.Player) )
