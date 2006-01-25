@@ -35,7 +35,9 @@ namespace Server.Items
 		{
 			get
 			{
-				return 0;
+				return OldschoolRules
+					? base.MaxWeight
+					: 0;
 			}
 		}
 
