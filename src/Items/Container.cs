@@ -82,6 +82,10 @@ namespace Server.Items
 					if ( maxWeight > 0 )
 						maxWeight = Math.Max( maxWeight, DefaultMaxWeight );
 				}
+				else if ( OldschoolRules && IsLockedDown )
+				{
+					maxWeight = 0;
+				}
 				else
 				{
 					maxWeight = DefaultMaxWeight;
