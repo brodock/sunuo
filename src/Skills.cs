@@ -56,6 +56,7 @@ namespace Server
 		Cooking = 13,
 		DetectHidden = 14,
 		Discordance = 15,
+		Enticement = 15,
 		EvalInt = 16,
 		Healing = 17,
 		Fishing = 18,
