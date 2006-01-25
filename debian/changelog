@@ -31,6 +31,7 @@ sunuo (0.3.0) unstable; urgency=low
   * Config.GameServerList implements IEnumerable
   * all unsafe code replaced with managed implementations
   * added property Mobile.LastCombatTime
+  * added interface IGold
   * debian: symlink base/Data to /etc/sunuo
   * debian: symlink base/var/log to /var/log/sunuo
   * debian: install SunUO.exe.config in /etc/sunuo/
