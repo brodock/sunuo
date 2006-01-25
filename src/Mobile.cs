@@ -5791,12 +5791,12 @@ namespace Server
 
 		public void SayTo( Mobile to, string text )
 		{
-			SayTo( to, false, text );
+			SayTo( to, PreferAscii, text );
 		}
 
 		public void SayTo( Mobile to, string format, params object[] args )
 		{
-			SayTo( to, false, String.Format( format, args ) );
+			SayTo( to, PreferAscii, String.Format( format, args ) );
 		}
 
 		public void SayTo( Mobile to, bool ascii, string format, params object[] args )
