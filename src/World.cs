@@ -409,10 +409,10 @@ namespace Server
 			object[] ctorArgs = new object[1];
 			Type[] ctorTypes = new Type[1]{ typeof( Serial ) };
 
-			ArrayList items;
-			ArrayList mobiles;
-			ArrayList guilds;
-			ArrayList regions;
+			ItemEntry[] itemEntries = null;
+			MobileEntry[] mobileEntries = null;
+			GuildEntry[] guildEntries = null;
+			RegionEntry[] regionEntries = null;
 
 			if ( File.Exists( mobIdxPath ) && File.Exists( mobTdbPath ) )
 			{
@@ -428,8 +428,7 @@ namespace Server
 
 						int count = tdbReader.ReadInt32();
 
-						ArrayList types = new ArrayList( count );
-						mobiles = new ArrayList(count);
+						ConstructorInfo[] types = new ConstructorInfo[count];
 
 						for ( int i = 0; i < count; ++i )
 						{
@@ -444,7 +443,6 @@ namespace Server
 
 								if ( Console.ReadLine() == "y" )
 								{
-									types.Add( null );
 									Console.Write( "World: Loading..." );
 									continue;
 								}
@@ -458,7 +456,7 @@ namespace Server
 
 							if ( ctor != null )
 							{
-								types.Add( new object[]{ ctor, null } );
+								types[i] = ctor;
 							}
 							else
 							{
@@ -469,6 +467,7 @@ namespace Server
 						mobileCount = idxReader.ReadInt32();
 
 						m_Mobiles = new Hashtable( mobileCount );
+						mobileEntries = new MobileEntry[mobileCount];
 
 						for ( int i = 0; i < mobileCount; ++i )
 						{
@@ -477,14 +476,13 @@ namespace Server
 							long pos = idxReader.ReadInt64();
 							int length = idxReader.ReadInt32();
 
-							object[] objs = (object[])types[typeID];
+							ConstructorInfo ctor = types[typeID];
 
-							if ( objs == null )
+							if ( ctor == null )
 								continue;
 
 							Mobile m = null;
-							ConstructorInfo ctor = (ConstructorInfo)objs[0];
-							string typeName = (string)objs[1];
+							string typeName = null;
 
 							try
 							{
@@ -497,7 +495,7 @@ namespace Server
 
 							if ( m != null )
 							{
-								mobiles.Add( new MobileEntry( m, typeID, typeName, pos, length ) );
+								mobileEntries[i] = new MobileEntry( m, typeID, typeName, pos, length );
 								AddMobile( m );
 							}
 						}
@@ -510,7 +508,6 @@ namespace Server
 			}
 			else
 			{
-				mobiles = new ArrayList();
 				m_Mobiles = new Hashtable();
 			}
 
@@ -529,7 +526,6 @@ namespace Server
 						int count = tdbReader.ReadInt32();
 
 						ArrayList types = new ArrayList( count );
-						items = new ArrayList(count);
 
 						for ( int i = 0; i < count; ++i )
 						{
@@ -544,7 +540,6 @@ namespace Server
 
 								if ( Console.ReadLine() == "y" )
 								{
-									types.Add( null );
 									Console.Write( "World: Loading..." );
 									continue;
 								}
@@ -567,6 +562,7 @@ namespace Server
 						}
 
 						itemCount = idxReader.ReadInt32();
+						itemEntries = new ItemEntry[itemCount];
 
 						m_Items = new Hashtable( itemCount );
 
@@ -597,7 +593,7 @@ namespace Server
 
 							if ( item != null )
 							{
-								items.Add( new ItemEntry( item, typeID, typeName, pos, length ) );
+								itemEntries[i] = new ItemEntry( item, typeID, typeName, pos, length );
 								AddItem( item );
 							}
 						}
@@ -610,7 +606,6 @@ namespace Server
 			}
 			else
 			{
-				items = new ArrayList();
 				m_Items = new Hashtable();
 			}
 
@@ -623,7 +618,7 @@ namespace Server
 					BinaryReader idxReader = new BinaryReader( idx );
 
 					guildCount = idxReader.ReadInt32();
-					guilds = new ArrayList(guildCount);
+					guildEntries = new GuildEntry[guildCount];
 
 					CreateGuildEventArgs createEventArgs = new CreateGuildEventArgs( -1 );
 					for ( int i = 0; i < guildCount; ++i )
@@ -636,13 +631,11 @@ namespace Server
 						createEventArgs.Id = id;
 						BaseGuild guild = EventSink.InvokeCreateGuild( createEventArgs );//new Guild( id );
 						if ( guild != null )
-							guilds.Add( new GuildEntry( guild, pos, length ) );
+							guildEntries[i] = new GuildEntry( guild, pos, length );
 					}
 
 					idxReader.Close();
 				}
-			} else {
-				guilds = new ArrayList();
 			}
 
 			if ( File.Exists( regionIdxPath ) )
@@ -654,7 +647,7 @@ namespace Server
 					BinaryReader idxReader = new BinaryReader( idx );
 
 					regionCount = idxReader.ReadInt32();
-					regions = new ArrayList(regionCount);
+					regionEntries = new RegionEntry[regionCount];
 
 					for ( int i = 0; i < regionCount; ++i )
 					{
@@ -667,7 +660,7 @@ namespace Server
 
 						if ( r != null )
 						{
-							regions.Add( new RegionEntry( r, pos, length ) );
+							regionEntries[i] = new RegionEntry( r, pos, length );
 							Region.AddRegion( r );
 							regionCount++;
 						}
@@ -675,8 +668,6 @@ namespace Server
 
 					idxReader.Close();
 				}
-			} else {
-				regions = new ArrayList();
 			}
 
 			bool failedMobiles = false, failedItems = false, failedGuilds = false, failedRegions = false;
@@ -693,9 +684,9 @@ namespace Server
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
 
-					for ( int i = 0; i < mobiles.Count; ++i )
+					for ( int i = 0; i < mobileEntries.Length; ++i )
 					{
-						MobileEntry entry = (MobileEntry)mobiles[i];
+						MobileEntry entry = mobileEntries[i];
 						Mobile m = (Mobile)entry.Object;
 
 						if ( m != null )
@@ -713,7 +704,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Error("failed to load mobile", e);
-								mobiles.RemoveAt( i );
+								mobileEntries[i] = null;
 
 								failed = e;
 								failedMobiles = true;
@@ -728,6 +719,9 @@ namespace Server
 
 					reader.Close();
 				}
+
+				if (!failedMobiles)
+					mobileEntries = null;
 			}
 
 			if ( !failedMobiles && File.Exists( itemBinPath ) )
@@ -738,9 +732,9 @@ namespace Server
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
 
-					for ( int i = 0; i < items.Count; ++i )
+					for ( int i = 0; i < itemEntries.Length; ++i )
 					{
-						ItemEntry entry = (ItemEntry)items[i];
+						ItemEntry entry = itemEntries[i];
 						Item item = (Item)entry.Object;
 
 						if ( item != null )
@@ -758,7 +752,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load item", e);
-								items.RemoveAt( i );
+								itemEntries[i] = null;
 
 								failed = e;
 								failedItems = true;
@@ -773,6 +767,9 @@ namespace Server
 
 					reader.Close();
 				}
+
+				if (!failedItems)
+					itemEntries = null;
 			}
 
 			m_LoadingType = null;
@@ -785,9 +782,9 @@ namespace Server
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
 
-					for ( int i = 0; i < guilds.Count; ++i )
+					for ( int i = 0; i < guildEntries.Length; ++i )
 					{
-						GuildEntry entry = (GuildEntry)guilds[i];
+						GuildEntry entry = guildEntries[i];
 						BaseGuild g = (BaseGuild)entry.Object;
 
 						if ( g != null )
@@ -804,7 +801,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load guild", e);
-								guilds.RemoveAt( i );
+								guildEntries[i] = null;
 
 								failed = e;
 								failedGuilds = true;
@@ -819,6 +816,9 @@ namespace Server
 
 					reader.Close();
 				}
+
+				if (!failedGuilds)
+					guildEntries = null;
 			}
 
 			if ( !failedMobiles && !failedItems && File.Exists( regionBinPath ) )
@@ -829,9 +829,9 @@ namespace Server
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
 
-					for ( int i = 0; i <regions.Count; ++i )
+					for ( int i = 0; i < regionEntries.Length; ++i )
 					{
-						RegionEntry entry = (RegionEntry)regions[i];
+						RegionEntry entry = regionEntries[i];
 						Region r = (Region)entry.Object;
 
 						if ( r != null )
@@ -848,7 +848,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load region", e);
-								regions.RemoveAt( i );
+								regionEntries[i] = null;
 
 								failed = e;
 								failedRegions = true;
@@ -863,6 +863,9 @@ namespace Server
 
 					reader.Close();
 				}
+
+				if (!failedRegions)
+					regionEntries = null;
 			}
 
 			if ( failedItems || failedMobiles || failedGuilds || failedRegions )
@@ -884,31 +887,33 @@ namespace Server
 						{
 							if ( failedMobiles )
 							{
-								for ( int i = 0; i < mobiles.Count; )
+								for ( int i = 0; i < mobileEntries.Length; ++i)
 								{
-									if ( ((MobileEntry)mobiles[i]).TypeID == failedTypeID )
-										mobiles.RemoveAt( i );
-									else
-										++i;
+									if (mobileEntries[i] != null &&
+										((MobileEntry)mobileEntries[i]).TypeID == failedTypeID)
+										mobileEntries[i] = null;
 								}
 							}
 							else if ( failedItems )
 							{
-								for ( int i = 0; i < items.Count; )
+								for ( int i = 0; i < itemEntries.Length; ++i)
 								{
-									if ( ((ItemEntry)items[i]).TypeID == failedTypeID )
-										items.RemoveAt( i );
-									else
-										++i;
+									if (itemEntries[i] != null &&
+										((ItemEntry)itemEntries[i]).TypeID == failedTypeID)
+										itemEntries[i] = null;
 								}
 							}
 						}
 					}
 
-					SaveIndex( mobiles, mobIdxPath );
-					SaveIndex( items, itemIdxPath );
-					SaveIndex( guilds, guildIdxPath );
-					SaveIndex( regions, regionIdxPath );
+					if (mobileEntries != null)
+						SaveIndex( mobileEntries, mobIdxPath );
+					if (itemEntries != null)
+						SaveIndex( itemEntries, itemIdxPath );
+					if (guildEntries != null)
+						SaveIndex( guildEntries, guildIdxPath );
+					if (regionEntries != null)
+						SaveIndex( regionEntries, regionIdxPath );
 				}
 
 				Console.WriteLine( "After pressing return an exception will be thrown and the server will terminate" );
@@ -918,14 +923,10 @@ namespace Server
 			}
 
 			// free memory
-			mobiles.Clear();
-			mobiles = null;
-			items.Clear();
-			items = null;
-			guilds.Clear();
-			guilds = null;
-			regions.Clear();
-			regions = null;
+			mobileEntries = null;
+			itemEntries = null;
+			guildEntries = null;
+			regionEntries = null;
 
 
 			EventSink.InvokeWorldLoad();
@@ -965,7 +966,7 @@ namespace Server
 			log.Info(String.Format("World loaded: {1} items, {2} mobiles ({0:F1} seconds)", (DateTime.Now-start).TotalSeconds, m_Items.Count, m_Mobiles.Count));
 		}
 
-		public static void SaveIndex( ArrayList list, string path )
+		private static void SaveIndex( IEntityEntry[] list, string path )
 		{
 			if ( !Directory.Exists( mobileBase ) )
 				Directory.CreateDirectory( mobileBase );
@@ -983,9 +984,9 @@ namespace Server
 			{
 				BinaryWriter idxWriter = new BinaryWriter( idx );
 
-				idxWriter.Write( list.Count );
+				idxWriter.Write( list.Length );
 
-				for ( int i = 0; i < list.Count; ++i )
+				for ( int i = 0; i < list.Length; ++i )
 				{
 					IEntityEntry e = (IEntityEntry)list[i];
 
