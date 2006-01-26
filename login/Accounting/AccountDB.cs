@@ -25,6 +25,7 @@ using System.Security.Cryptography;
 using System.Data;
 using System.Data.Odbc;
 using Server.Network;
+using System.Globalization;
 using System.Text;
 using MySql.Data.MySqlClient;
 
@@ -77,6 +78,8 @@ namespace Server.Accounting {
 		private string connectString;
 		private IDbConnection dbcon;
 
+		public static IFormatProvider m_Culture = new CultureInfo("en-GB", true);
+
 		public AccountDB(String _connectString) {
 			connectString = _connectString;
 			Reconnect();
@@ -128,18 +131,26 @@ namespace Server.Accounting {
 
 		private void UpdateAccountRecord(string username) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "UPDATE users SET LastLogin=NOW() WHERE Username=?Username";
+			dbcmd.CommandText = "UPDATE users SET LastLogin=?LastLogin WHERE Username=?Username";
+
 			IDataParameter p = dbcmd.CreateParameter();
+			p.ParameterName = "?LastLogin";
+			p.DbType = DbType.String;
+			p.Value = DateTime.Now.ToString(m_Culture);
+			dbcmd.Parameters.Add(p); 
+
+			p = dbcmd.CreateParameter();
 			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
 			p.Value = username;
 			dbcmd.Parameters.Add(p); 
+
 			dbcmd.ExecuteScalar();
 		}
 
 		private void CreateAccountRecord(NetState state, string username, string password) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "INSERT INTO users(Username, Password, Flags, Created, LastLogin, CreationIP) VALUES(?Username, ?Password, 2, NOW(), NOW(), ?CreationIP)";
+			dbcmd.CommandText = "INSERT INTO users(Username, Password, Flags, Created, LastLogin, CreationIP) VALUES(?Username, ?Password, 2, ?Created, ?LastLogin, ?CreationIP)";
 			IDataParameter p = dbcmd.CreateParameter();
 			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
@@ -151,6 +162,18 @@ namespace Server.Accounting {
 			p.DbType = DbType.String;
 			p.Value = password;
 			dbcmd.Parameters.Add(p);
+
+			p = dbcmd.CreateParameter();
+			p.ParameterName = "?LastLogin";
+			p.DbType = DbType.String;
+			p.Value = DateTime.Now.ToString(m_Culture);
+			dbcmd.Parameters.Add(p); 
+
+			p = dbcmd.CreateParameter();
+			p.ParameterName = "?Created";
+			p.DbType = DbType.String;
+			p.Value = DateTime.MinValue.ToString(m_Culture);
+			dbcmd.Parameters.Add(p); 
 
 			p = dbcmd.CreateParameter();
 			p.ParameterName = "?CreationIP";
