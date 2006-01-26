@@ -416,6 +416,8 @@ namespace Server
 
 			if ( File.Exists( mobIdxPath ) && File.Exists( mobTdbPath ) )
 			{
+				log.Debug("loading mobile index");
+
 				using ( FileStream idx = new FileStream( mobIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryReader idxReader = new BinaryReader( idx );
@@ -512,6 +514,8 @@ namespace Server
 
 			if ( File.Exists( itemIdxPath ) && File.Exists( itemTdbPath ) )
 			{
+				log.Debug("loading item index");
+
 				using ( FileStream idx = new FileStream( itemIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryReader idxReader = new BinaryReader( idx );
@@ -608,6 +612,8 @@ namespace Server
 
 			if ( File.Exists( guildIdxPath ) )
 			{
+				log.Debug("loading guild index");
+
 				using ( FileStream idx = new FileStream( guildIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryReader idxReader = new BinaryReader( idx );
@@ -634,6 +640,8 @@ namespace Server
 
 			if ( File.Exists( regionIdxPath ) )
 			{
+				log.Debug("loading region index");
+
 				using ( FileStream idx = new FileStream( regionIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryReader idxReader = new BinaryReader( idx );
@@ -669,6 +677,8 @@ namespace Server
 
 			if ( File.Exists( mobBinPath ) )
 			{
+				log.Debug("loading mobiles");
+
 				using ( FileStream bin = new FileStream( mobBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
@@ -712,6 +722,8 @@ namespace Server
 
 			if ( !failedMobiles && File.Exists( itemBinPath ) )
 			{
+				log.Debug("loading items");
+
 				using ( FileStream bin = new FileStream( itemBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
@@ -757,6 +769,8 @@ namespace Server
 
 			if ( !failedMobiles && !failedItems && File.Exists( guildBinPath ) )
 			{
+				log.Debug("loading guilds");
+
 				using ( FileStream bin = new FileStream( guildBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
@@ -799,6 +813,8 @@ namespace Server
 
 			if ( !failedMobiles && !failedItems && File.Exists( regionBinPath ) )
 			{
+				log.Debug("loading regions");
+
 				using ( FileStream bin = new FileStream( regionBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
 					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
