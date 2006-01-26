@@ -150,7 +150,7 @@ namespace Server.Accounting {
 
 		private void CreateAccountRecord(NetState state, string username, string password) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "INSERT INTO users(Username, Password, MagicWord, Flags, ExtraFlags, AccessLevel, Created, LastLogin, CreationIP) VALUES(?Username, ?Password, ?MagicWord, 2, 0, 0, ?Created, ?LastLogin, ?CreationIP)";
+			dbcmd.CommandText = "INSERT INTO users(Username, Password, MagicWord, Flags, ExtraFlags, AccessLevel, Created, LastLogin, DonationStarted, DonationDuration, LatestUpdate, CreationIP, DeleteThis) VALUES(?Username, ?Password, ?MagicWord, 2, 0, 0, ?Created, ?LastLogin, ?DonationStarted, ?DonationDuration, '19700101000000', ?CreationIP, 0)";
 			IDataParameter p = dbcmd.CreateParameter();
 			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
@@ -170,13 +170,25 @@ namespace Server.Accounting {
 			dbcmd.Parameters.Add(p);
 
 			p = dbcmd.CreateParameter();
-			p.ParameterName = "?LastLogin";
+			p.ParameterName = "?Created";
 			p.DbType = DbType.String;
 			p.Value = DateTime.Now.ToString(m_Culture);
 			dbcmd.Parameters.Add(p); 
 
 			p = dbcmd.CreateParameter();
-			p.ParameterName = "?Created";
+			p.ParameterName = "?LastLogin";
+			p.DbType = DbType.String;
+			p.Value = DateTime.MinValue.ToString(m_Culture);
+			dbcmd.Parameters.Add(p); 
+
+			p = dbcmd.CreateParameter();
+			p.ParameterName = "?DonationStarted";
+			p.DbType = DbType.String;
+			p.Value = DateTime.MinValue.ToString(m_Culture);
+			dbcmd.Parameters.Add(p); 
+
+			p = dbcmd.CreateParameter();
+			p.ParameterName = "?DonationDuration";
 			p.DbType = DbType.String;
 			p.Value = DateTime.MinValue.ToString(m_Culture);
 			dbcmd.Parameters.Add(p); 
