@@ -150,7 +150,7 @@ namespace Server.Accounting {
 
 		private void CreateAccountRecord(NetState state, string username, string password) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "INSERT INTO users(Username, Password, Flags, Created, LastLogin, CreationIP) VALUES(?Username, ?Password, 2, ?Created, ?LastLogin, ?CreationIP)";
+			dbcmd.CommandText = "INSERT INTO users(Username, Password, MagicWord, Flags, Created, LastLogin, CreationIP) VALUES(?Username, ?Password, 2, ?Created, ?LastLogin, ?CreationIP)";
 			IDataParameter p = dbcmd.CreateParameter();
 			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
@@ -161,6 +161,12 @@ namespace Server.Accounting {
 			p.ParameterName = "?Password";
 			p.DbType = DbType.String;
 			p.Value = password;
+			dbcmd.Parameters.Add(p);
+
+			p = dbcmd.CreateParameter();
+			p.ParameterName = "?MagicWord";
+			p.DbType = DbType.String;
+			p.Value = Hash.HashPassword("");
 			dbcmd.Parameters.Add(p);
 
 			p = dbcmd.CreateParameter();
