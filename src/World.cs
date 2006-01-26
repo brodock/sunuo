@@ -409,10 +409,10 @@ namespace Server
 			object[] ctorArgs = new object[1];
 			Type[] ctorTypes = new Type[1]{ typeof( Serial ) };
 
-			ArrayList items = new ArrayList();
-			ArrayList mobiles = new ArrayList();
-			ArrayList guilds = new ArrayList();
-			ArrayList regions = new ArrayList();
+			ArrayList items;
+			ArrayList mobiles;
+			ArrayList guilds;
+			ArrayList regions;
 
 			if ( File.Exists( mobIdxPath ) && File.Exists( mobTdbPath ) )
 			{
@@ -429,6 +429,7 @@ namespace Server
 						int count = tdbReader.ReadInt32();
 
 						ArrayList types = new ArrayList( count );
+						mobiles = new ArrayList(count);
 
 						for ( int i = 0; i < count; ++i )
 						{
@@ -509,6 +510,7 @@ namespace Server
 			}
 			else
 			{
+				mobiles = new ArrayList();
 				m_Mobiles = new Hashtable();
 			}
 
@@ -527,6 +529,7 @@ namespace Server
 						int count = tdbReader.ReadInt32();
 
 						ArrayList types = new ArrayList( count );
+						items = new ArrayList(count);
 
 						for ( int i = 0; i < count; ++i )
 						{
@@ -607,6 +610,7 @@ namespace Server
 			}
 			else
 			{
+				items = new ArrayList();
 				m_Items = new Hashtable();
 			}
 
@@ -619,6 +623,7 @@ namespace Server
 					BinaryReader idxReader = new BinaryReader( idx );
 
 					guildCount = idxReader.ReadInt32();
+					guilds = new ArrayList(guildCount);
 
 					CreateGuildEventArgs createEventArgs = new CreateGuildEventArgs( -1 );
 					for ( int i = 0; i < guildCount; ++i )
@@ -636,6 +641,8 @@ namespace Server
 
 					idxReader.Close();
 				}
+			} else {
+				guilds = new ArrayList();
 			}
 
 			if ( File.Exists( regionIdxPath ) )
@@ -647,6 +654,7 @@ namespace Server
 					BinaryReader idxReader = new BinaryReader( idx );
 
 					regionCount = idxReader.ReadInt32();
+					regions = new ArrayList(regionCount);
 
 					for ( int i = 0; i < regionCount; ++i )
 					{
@@ -667,6 +675,8 @@ namespace Server
 
 					idxReader.Close();
 				}
+			} else {
+				regions = new ArrayList();
 			}
 
 			bool failedMobiles = false, failedItems = false, failedGuilds = false, failedRegions = false;
@@ -906,6 +916,17 @@ namespace Server
 
 				throw new Exception( String.Format( "Load failed (items={0}, mobiles={1}, guilds={2}, regions={3}, type={4}, serial={5})", failedItems, failedMobiles, failedGuilds, failedRegions, failedType, failedSerial ), failed );
 			}
+
+			// free memory
+			mobiles.Clear();
+			mobiles = null;
+			items.Clear();
+			items = null;
+			guilds.Clear();
+			guilds = null;
+			regions.Clear();
+			regions = null;
+
 
 			EventSink.InvokeWorldLoad();
 
