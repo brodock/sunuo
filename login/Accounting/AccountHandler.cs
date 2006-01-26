@@ -52,6 +52,7 @@ namespace Server.Accounting {
 			if (account == null) {
 				if (Core.Config.Login.AutoCreateAccounts) {
 					try {
+						log.Info(String.Format("Login: {0}: Creating account '{1}'", e.State, e.Username));
 						e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
 						e.Accepted = true;
 					} catch (Exception ex) {
