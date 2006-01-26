@@ -64,7 +64,8 @@ namespace Server.Network {
 				m_Socket.BeginSend(m_SeedPacket, 0, m_SeedPacket.Length,
 								   SocketFlags.None, m_Callback, null);
 			} catch (Exception ex) {
-				log.Error(ex);
+				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
+						  ex);
 			}
 		}
 
@@ -78,7 +79,8 @@ namespace Server.Network {
 				m_Socket.BeginSend(m_QueryPacket, 0, m_QueryPacket.Length,
 								   SocketFlags.None, m_Callback, null);
 			} catch (Exception ex) {
-				log.Error(ex);
+				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
+						  ex);
 			}
 		}
 
@@ -92,7 +94,8 @@ namespace Server.Network {
 				m_Socket.BeginReceive(m_Buffer, 0, m_Buffer.Length,
 									  SocketFlags.None, m_Callback, null);
 			} catch (Exception ex) {
-				log.Error(ex);
+				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
+						  ex);
 			}
 		}
 
@@ -124,7 +127,8 @@ namespace Server.Network {
 
 				ServerQueryTimer.SetStatus(m_Config, status);
 			} catch (Exception ex) {
-				log.Error(ex);
+				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
+						  ex);
 			}
 		}
 	}
