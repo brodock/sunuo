@@ -432,7 +432,7 @@ namespace Server
 
 						for ( int i = 0; i < count; ++i )
 						{
-							string typeName = tdbReader.ReadString();
+							string typeName = string.Intern(tdbReader.ReadString());
 
 							Type t = ScriptCompiler.FindTypeByFullName( typeName );
 
@@ -530,7 +530,7 @@ namespace Server
 
 						for ( int i = 0; i < count; ++i )
 						{
-							string typeName = tdbReader.ReadString();
+							string typeName = string.Intern(tdbReader.ReadString());
 
 							Type t = ScriptCompiler.FindTypeByFullName( typeName );
 
