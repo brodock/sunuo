@@ -111,7 +111,7 @@ namespace Server
 				if ( m_Queued )
 					DumpAccess();
 
-				return ( m_Attacker.Deleted || m_Defender.Deleted || DateTime.Now >= (m_LastCombatTime + m_ExpireDelay) );
+				return ( m_Attacker.Deleted || m_Defender.Deleted || Core.Now >= (m_LastCombatTime + m_ExpireDelay) );
 			}
 		}
 
@@ -207,7 +207,7 @@ namespace Server
 			if ( m_Queued )
 				DumpAccess();
 
-			m_LastCombatTime = DateTime.Now;
+			m_LastCombatTime = Core.Now;
 			m_Reported = false;
 		}
 	}

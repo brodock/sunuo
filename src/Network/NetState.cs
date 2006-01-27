@@ -428,7 +428,7 @@ namespace Server.Network
 
 			m_SendQueue = new SendQueue();
 
-			m_NextCheckActivity = DateTime.Now + TimeSpan.FromMinutes( 0.5 );
+			m_NextCheckActivity = Core.Now + TimeSpan.FromMinutes( 0.5 );
 
 			m_Instances.Add( this );
 
@@ -569,7 +569,7 @@ namespace Server.Network
 
 				//Console.WriteLine( "OnSend: {0}: Complete send of {1} bytes", this, bytes );
 
-				m_NextCheckActivity = DateTime.Now + TimeSpan.FromMinutes( 1.2 );
+				m_NextCheckActivity = Core.Now + TimeSpan.FromMinutes( 1.2 );
 
 				if ( m_CoalesceSleep >= 0 )
 					System.Threading.Thread.Sleep( m_CoalesceSleep );
@@ -633,7 +633,7 @@ namespace Server.Network
 			if ( m_Socket == null )
 				return false;
 
-			if ( DateTime.Now < m_NextCheckActivity )
+			if ( Core.Now < m_NextCheckActivity )
 				return true;
 
 			log.Info(String.Format("Client: {0}: Disconnecting due to inactivity...", this));
@@ -671,7 +671,7 @@ namespace Server.Network
 
 					if ( byteCount > 0 )
 					{
-						m_NextCheckActivity = DateTime.Now + TimeSpan.FromMinutes( 1.2 );
+						m_NextCheckActivity = Core.Now + TimeSpan.FromMinutes( 1.2 );
 
 						byte[] buffer = m_RecvBuffer;
 

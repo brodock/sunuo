@@ -2116,7 +2116,7 @@ namespace Server.Network
 	{
 		public CurrentTime() : base( 0x5B, 4 )
 		{
-			DateTime now = DateTime.Now;
+			DateTime now = Core.Now;
 
 			m_Stream.Write( (byte) now.Hour );
 			m_Stream.Write( (byte) now.Minute );
@@ -3156,7 +3156,7 @@ namespace Server.Network
 		{
 			m_Name = name;
 			m_FullPercent = fullPercent;
-			m_TimeZone = tz.GetUtcOffset( DateTime.Now ).Hours;
+			m_TimeZone = tz.GetUtcOffset( Core.Now ).Hours;
 			m_Address = address;
 		}
 	}

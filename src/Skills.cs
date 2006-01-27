@@ -899,11 +899,11 @@ namespace Server
 
 				if ( info.Callback != null )
 				{
-					if ( from.NextSkillTime <= DateTime.Now && from.Spell == null )
+					if ( from.NextSkillTime <= Core.Now && from.Spell == null )
 					{
 						from.DisruptiveAction();
 
-						from.NextSkillTime = DateTime.Now + info.Callback( from );
+						from.NextSkillTime = Core.Now + info.Callback( from );
 
 						return true;
 					}

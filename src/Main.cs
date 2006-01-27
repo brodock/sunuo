@@ -226,6 +226,13 @@ namespace Server
 			get { return config; }
 		}
 
+		private static DateTime m_Now = DateTime.Now;
+		public static DateTime Now {
+			get {
+				return m_Now;
+			}
+		}
+
 		private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
 			log.Fatal(e.ExceptionObject);
@@ -370,6 +377,8 @@ namespace Server
 				while ( !m_Closing )
 				{
 					Thread.Sleep( 1 );
+
+					m_Now = DateTime.Now;
 
 					Mobile.ProcessDeltaQueue();
 					Item.ProcessDeltaQueue();

@@ -1356,7 +1356,7 @@ namespace Server.Network
 		{
 			Mobile from = state.Mobile;
 
-			if ( from.AccessLevel >= AccessLevel.GameMaster || DateTime.Now >= from.NextActionTime )
+			if ( from.AccessLevel >= AccessLevel.GameMaster || Core.Now >= from.NextActionTime )
 			{
 				int value = pvSrc.ReadInt32();
 
@@ -1394,7 +1394,7 @@ namespace Server.Network
 					}
 				}
 
-				from.NextActionTime = DateTime.Now + TimeSpan.FromSeconds( 0.5 );
+				from.NextActionTime = Core.Now + TimeSpan.FromSeconds( 0.5 );
 			}
 			else
 			{
@@ -2191,7 +2191,7 @@ namespace Server.Network
 				if ( m_AuthIDWindow[i] == 0 )
 				{
 					m_AuthIDWindow[i] = authID;
-					m_AuthIDWindowAge[i] = DateTime.Now;
+					m_AuthIDWindowAge[i] = Core.Now;
 					wasSet = true;
 					break;
 				}
@@ -2205,7 +2205,7 @@ namespace Server.Network
 			if ( !wasSet )
 			{
 				m_AuthIDWindow[oldestIndex] = authID;
-				m_AuthIDWindowAge[oldestIndex] = DateTime.Now;
+				m_AuthIDWindowAge[oldestIndex] = Core.Now;
 			}
 		}
 

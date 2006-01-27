@@ -1247,7 +1247,7 @@ namespace Server
 
 		public void SetLastMoved()
 		{
-			m_LastMovedTime = DateTime.Now;
+			m_LastMovedTime = Core.Now;
 		}
 
 		public DateTime LastMoved
@@ -1717,7 +1717,7 @@ namespace Server
 
 			/* begin last moved time optimization */
 			long ticks = m_LastMovedTime.Ticks;
-			long now = DateTime.Now.Ticks;
+			long now = Core.Now.Ticks;
 
 			TimeSpan d;
 
@@ -1944,8 +1944,8 @@ namespace Server
 					{
 						int minutes = reader.ReadEncodedInt();
 
-						try{ LastMoved = DateTime.Now - TimeSpan.FromMinutes( minutes ); }
-						catch{ LastMoved = DateTime.Now; }
+						try{ LastMoved = Core.Now - TimeSpan.FromMinutes( minutes ); }
+						catch{ LastMoved = Core.Now; }
 					}
 
 					if ( GetSaveFlag( flags, SaveFlag.Direction ) )
