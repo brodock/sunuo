@@ -362,6 +362,143 @@ namespace Server
 			}
 		}
 
+		private static ConstructorInfo[] LoadTypes(BinaryReader tdbReader) {
+			int count = tdbReader.ReadInt32();
+
+			Type[] ctorTypes = new Type[1]{ typeof( Serial ) };
+
+			ConstructorInfo[] types = new ConstructorInfo[count];
+
+			for (int i = 0; i < count; ++i) {
+				string typeName = tdbReader.ReadString();
+				if (typeName == null || typeName == "")
+					continue;
+
+				Type t = ScriptCompiler.FindTypeByFullName(typeName);
+
+				if (t == null) {
+					Console.WriteLine( "failed" );
+					Console.WriteLine( "Error: Type '{0}' was not found. Delete all of those types? (y/n)", typeName );
+
+					if ( Console.ReadLine() == "y" ) {
+						Console.Write( "World: Loading..." );
+						continue;
+					}
+
+					Console.WriteLine( "Types will not be deleted. An exception will be thrown when you press return" );
+					throw new Exception( String.Format( "Bad type '{0}'", typeName ) );
+				}
+
+				ConstructorInfo ctor = t.GetConstructor( ctorTypes );
+
+				if ( ctor != null ) {
+					types[i] = ctor;
+				} else {
+					throw new Exception( String.Format( "Type '{0}' does not have a serialization constructor", t ) );
+				}
+			}
+
+			return types;
+		}
+
+		private static ConstructorInfo[] LoadTypes(string path) {
+			using (FileStream tdb = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader tdbReader = new BinaryReader(tdb)) {
+					return LoadTypes(tdbReader);
+				}
+			}
+		}
+
+		private static MobileEntry[] LoadMobileIndex(BinaryReader idxReader,
+													 ConstructorInfo[] ctors) {
+			int count = idxReader.ReadInt32();
+
+			object[] ctorArgs = new object[1];
+
+			m_Mobiles = new Hashtable(count);
+			MobileEntry[] entries = new MobileEntry[count];
+
+			for (int i = 0; i < count; ++i) {
+				int typeID = idxReader.ReadInt32();
+				int serial = idxReader.ReadInt32();
+				long pos = idxReader.ReadInt64();
+				int length = idxReader.ReadInt32();
+
+				ConstructorInfo ctor = ctors[typeID];
+				if (ctor == null)
+					continue;
+
+				Mobile m = null;
+
+				try {
+					ctorArgs[0] = (Serial)serial;
+					m = (Mobile)ctor.Invoke(ctorArgs);
+				} catch {
+				}
+
+				if (m != null) {
+					entries[i] = new MobileEntry(m, typeID, pos, length);
+					AddMobile(m);
+				}
+			}
+
+			return entries;
+		}
+
+		private static MobileEntry[] LoadMobileIndex(string path,
+													 ConstructorInfo[] ctors) {
+			using (FileStream idx = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader idxReader = new BinaryReader(idx)) {
+					return LoadMobileIndex(idxReader, ctors);
+				}
+			}
+		}
+
+		private static ItemEntry[] LoadItemIndex(BinaryReader idxReader,
+													 ConstructorInfo[] ctors) {
+			int count = idxReader.ReadInt32();
+
+			object[] ctorArgs = new object[1];
+
+			m_Items = new Hashtable(count);
+			ItemEntry[] entries = new ItemEntry[count];
+
+			for (int i = 0; i < count; ++i) {
+				int typeID = idxReader.ReadInt32();
+				int serial = idxReader.ReadInt32();
+				long pos = idxReader.ReadInt64();
+				int length = idxReader.ReadInt32();
+
+				ConstructorInfo ctor = ctors[typeID];
+				if (ctor == null)
+					continue;
+
+				Item item = null;
+
+				try {
+					ctorArgs[0] = (Serial)serial;
+					item = (Item)ctor.Invoke(ctorArgs);
+				} catch {
+				}
+
+				if (item != null) {
+					entries[i] = new ItemEntry(item, typeID, pos, length);
+					AddItem(item);
+				}
+			}
+
+			return entries;
+		}
+
+		private static ItemEntry[] LoadItemIndex(string path,
+													 ConstructorInfo[] ctors) {
+			using (FileStream idx = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader idxReader = new BinaryReader(idx)) {
+					return LoadItemIndex(idxReader, ctors);
+				}
+			}
+		}
+
 		private static string m_LoadingType;
 
 		public static string LoadingType
@@ -375,7 +512,6 @@ namespace Server
 				return;
 
 			m_Loaded = true;
-			m_LoadingType = null;
 
 			log.Info("Loading world");
 
@@ -384,10 +520,7 @@ namespace Server
 			m_Loading = true;
 			m_DeleteList = new ArrayList();
 
-			int mobileCount = 0, itemCount = 0, guildCount = 0, regionCount = 0;
-
-			object[] ctorArgs = new object[1];
-			Type[] ctorTypes = new Type[1]{ typeof( Serial ) };
+			int guildCount = 0, regionCount = 0;
 
 			ItemEntry[] itemEntries = null;
 			MobileEntry[] mobileEntries = null;
@@ -397,93 +530,8 @@ namespace Server
 			if ( File.Exists( mobIdxPath ) && File.Exists( mobTdbPath ) )
 			{
 				log.Debug("loading mobile index");
-
-				using ( FileStream idx = new FileStream( mobIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryReader idxReader = new BinaryReader( idx );
-
-					using ( FileStream tdb = new FileStream( mobTdbPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-					{
-						BinaryReader tdbReader = new BinaryReader( tdb );
-
-						int count = tdbReader.ReadInt32();
-
-						ConstructorInfo[] types = new ConstructorInfo[count];
-
-						for ( int i = 0; i < count; ++i )
-						{
-							string typeName = string.Intern(tdbReader.ReadString());
-
-							Type t = ScriptCompiler.FindTypeByFullName( typeName );
-
-							if ( t == null )
-							{
-								Console.WriteLine( "failed" );
-								Console.WriteLine( "Error: Type '{0}' was not found. Delete all of those types? (y/n)", typeName );
-
-								if ( Console.ReadLine() == "y" )
-								{
-									Console.Write( "World: Loading..." );
-									continue;
-								}
-
-								Console.WriteLine( "Types will not be deleted. An exception will be thrown when you press return" );
-
-								throw new Exception( String.Format( "Bad type '{0}'", typeName ) );
-							}
-
-							ConstructorInfo ctor = t.GetConstructor( ctorTypes );
-
-							if ( ctor != null )
-							{
-								types[i] = ctor;
-							}
-							else
-							{
-								throw new Exception( String.Format( "Type '{0}' does not have a serialization constructor", t ) );
-							}
-						}
-
-						mobileCount = idxReader.ReadInt32();
-
-						m_Mobiles = new Hashtable( mobileCount );
-						mobileEntries = new MobileEntry[mobileCount];
-
-						for ( int i = 0; i < mobileCount; ++i )
-						{
-							int typeID = idxReader.ReadInt32();
-							int serial = idxReader.ReadInt32();
-							long pos = idxReader.ReadInt64();
-							int length = idxReader.ReadInt32();
-
-							ConstructorInfo ctor = types[typeID];
-
-							if ( ctor == null )
-								continue;
-
-							Mobile m = null;
-
-							try
-							{
-								ctorArgs[0] = (Serial)serial;
-								m = (Mobile)(ctor.Invoke( ctorArgs ));
-							}
-							catch
-							{
-							}
-
-							if ( m != null )
-							{
-								mobileEntries[i] = new MobileEntry( m, typeID, pos, length );
-								AddMobile( m );
-							}
-						}
-
-						tdbReader.Close();
-					}
-
-					idxReader.Close();
-				}
+				ConstructorInfo[] types = LoadTypes(mobTdbPath);
+				mobileEntries = LoadMobileIndex(mobIdxPath, types);
 			}
 			else
 			{
@@ -493,94 +541,8 @@ namespace Server
 			if ( File.Exists( itemIdxPath ) && File.Exists( itemTdbPath ) )
 			{
 				log.Debug("loading item index");
-
-				using ( FileStream idx = new FileStream( itemIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryReader idxReader = new BinaryReader( idx );
-
-					using ( FileStream tdb = new FileStream( itemTdbPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-					{
-						BinaryReader tdbReader = new BinaryReader( tdb );
-
-						int count = tdbReader.ReadInt32();
-
-						ArrayList types = new ArrayList( count );
-
-						for ( int i = 0; i < count; ++i )
-						{
-							string typeName = string.Intern(tdbReader.ReadString());
-
-							Type t = ScriptCompiler.FindTypeByFullName( typeName );
-
-							if ( t == null )
-							{
-								Console.WriteLine( "failed" );
-								Console.WriteLine( "Error: Type '{0}' was not found. Delete all of those types? (y/n)", typeName );
-
-								if ( Console.ReadLine() == "y" )
-								{
-									Console.Write( "World: Loading..." );
-									continue;
-								}
-
-								Console.WriteLine( "Types will not be deleted. An exception will be thrown when you press return" );
-
-								throw new Exception( String.Format( "Bad type '{0}'", typeName ) );
-							}
-
-							ConstructorInfo ctor = t.GetConstructor( ctorTypes );
-
-							if ( ctor != null )
-							{
-								types.Add( new object[]{ ctor, typeName } );
-							}
-							else
-							{
-								throw new Exception( String.Format( "Type '{0}' does not have a serialization constructor", t ) );
-							}
-						}
-
-						itemCount = idxReader.ReadInt32();
-						itemEntries = new ItemEntry[itemCount];
-
-						m_Items = new Hashtable( itemCount );
-
-						for ( int i = 0; i < itemCount; ++i )
-						{
-							int typeID = idxReader.ReadInt32();
-							int serial = idxReader.ReadInt32();
-							long pos = idxReader.ReadInt64();
-							int length = idxReader.ReadInt32();
-
-							object[] objs = (object[])types[typeID];
-
-							if ( objs == null )
-								continue;
-
-							Item item = null;
-							ConstructorInfo ctor = (ConstructorInfo)objs[0];
-
-							try
-							{
-								ctorArgs[0] = (Serial)serial;
-								item = (Item)(ctor.Invoke( ctorArgs ));
-							}
-							catch
-							{
-							}
-
-							if ( item != null )
-							{
-								itemEntries[i] = new ItemEntry( item, typeID, pos, length );
-								AddItem( item );
-							}
-						}
-
-						tdbReader.Close();
-					}
-
-					idxReader.Close();
-				}
+				ConstructorInfo[] types = LoadTypes(itemTdbPath);
+				itemEntries = LoadItemIndex(itemIdxPath, types);
 			}
 			else
 			{
@@ -749,8 +711,6 @@ namespace Server
 				if (!failedItems)
 					itemEntries = null;
 			}
-
-			m_LoadingType = null;
 
 			if ( !failedMobiles && !failedItems && File.Exists( guildBinPath ) )
 			{
