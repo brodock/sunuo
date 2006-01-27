@@ -506,22 +506,7 @@ namespace Server
 			get{ return m_LoadingType; }
 		}
 
-		public static void Load()
-		{
-			if ( m_Loaded )
-				return;
-
-			m_Loaded = true;
-
-			log.Info("Loading world");
-
-			DateTime start = DateTime.Now;
-
-			m_Loading = true;
-			m_DeleteList = new ArrayList();
-
-			int guildCount = 0, regionCount = 0;
-
+		private static void LoadEntities() {
 			ItemEntry[] itemEntries = null;
 			MobileEntry[] mobileEntries = null;
 			GuildEntry[] guildEntries = null;
@@ -557,11 +542,11 @@ namespace Server
 				{
 					BinaryReader idxReader = new BinaryReader( idx );
 
-					guildCount = idxReader.ReadInt32();
-					guildEntries = new GuildEntry[guildCount];
+					int count = idxReader.ReadInt32();
+					guildEntries = new GuildEntry[count];
 
 					CreateGuildEventArgs createEventArgs = new CreateGuildEventArgs( -1 );
-					for ( int i = 0; i < guildCount; ++i )
+					for ( int i = 0; i < count; ++i )
 					{
 						idxReader.ReadInt32();//no typeid for guilds
 						int id = idxReader.ReadInt32();
@@ -586,10 +571,10 @@ namespace Server
 				{
 					BinaryReader idxReader = new BinaryReader( idx );
 
-					regionCount = idxReader.ReadInt32();
-					regionEntries = new RegionEntry[regionCount];
+					int count = idxReader.ReadInt32();
+					regionEntries = new RegionEntry[count];
 
-					for ( int i = 0; i < regionCount; ++i )
+					for ( int i = 0; i < count; ++i )
 					{
 						idxReader.ReadInt32(); /* typeID */
 						int serial = idxReader.ReadInt32();
@@ -602,7 +587,6 @@ namespace Server
 						{
 							regionEntries[i] = new RegionEntry( r, pos, length );
 							Region.AddRegion( r );
-							regionCount++;
 						}
 					}
 
@@ -859,13 +843,23 @@ namespace Server
 
 				throw new Exception( String.Format( "Load failed (items={0}, mobiles={1}, guilds={2}, regions={3}, type={4}, serial={5})", failedItems, failedMobiles, failedGuilds, failedRegions, failedType, failedSerial ), failed );
 			}
+		}
 
-			// free memory
-			mobileEntries = null;
-			itemEntries = null;
-			guildEntries = null;
-			regionEntries = null;
+		public static void Load()
+		{
+			if ( m_Loaded )
+				return;
 
+			m_Loaded = true;
+
+			log.Info("Loading world");
+
+			DateTime start = DateTime.Now;
+
+			m_Loading = true;
+			m_DeleteList = new ArrayList();
+
+			LoadEntities();
 
 			EventSink.InvokeWorldLoad();
 
