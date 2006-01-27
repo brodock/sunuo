@@ -254,7 +254,6 @@ namespace Server
 		{
 			private Item m_Item;
 			private int m_TypeID;
-			private string m_TypeName;
 			private long m_Position;
 			private int m_Length;
 
@@ -282,14 +281,6 @@ namespace Server
 				}
 			}
 
-			public string TypeName
-			{
-				get
-				{	
-					return m_TypeName;
-				}
-			}
-
 			public long Position
 			{
 				get
@@ -306,11 +297,10 @@ namespace Server
 				}
 			}
 
-			public ItemEntry( Item item, int typeID, string typeName, long pos, int length )
+			public ItemEntry( Item item, int typeID, long pos, int length )
 			{
 				m_Item = item;
 				m_TypeID = typeID;
-				m_TypeName = typeName;
 				m_Position = pos;
 				m_Length = length;
 			}
@@ -320,7 +310,6 @@ namespace Server
 		{
 			private Mobile m_Mobile;
 			private int m_TypeID;
-			private string m_TypeName;
 			private long m_Position;
 			private int m_Length;
 
@@ -348,14 +337,6 @@ namespace Server
 				}
 			}
 
-			public string TypeName
-			{
-				get
-				{
-					return m_TypeName;
-				}
-			}
-
 			public long Position
 			{
 				get
@@ -372,11 +353,10 @@ namespace Server
 				}
 			}
 
-			public MobileEntry( Mobile mobile, int typeID, string typeName, long pos, int length )
+			public MobileEntry( Mobile mobile, int typeID, long pos, int length )
 			{
 				m_Mobile = mobile;
 				m_TypeID = typeID;
-				m_TypeName = typeName;
 				m_Position = pos;
 				m_Length = length;
 			}
@@ -482,7 +462,6 @@ namespace Server
 								continue;
 
 							Mobile m = null;
-							string typeName = null;
 
 							try
 							{
@@ -495,7 +474,7 @@ namespace Server
 
 							if ( m != null )
 							{
-								mobileEntries[i] = new MobileEntry( m, typeID, typeName, pos, length );
+								mobileEntries[i] = new MobileEntry( m, typeID, pos, length );
 								AddMobile( m );
 							}
 						}
@@ -580,7 +559,6 @@ namespace Server
 
 							Item item = null;
 							ConstructorInfo ctor = (ConstructorInfo)objs[0];
-							string typeName = (string)objs[1];
 
 							try
 							{
@@ -593,7 +571,7 @@ namespace Server
 
 							if ( item != null )
 							{
-								itemEntries[i] = new ItemEntry( item, typeID, typeName, pos, length );
+								itemEntries[i] = new ItemEntry( item, typeID, pos, length );
 								AddItem( item );
 							}
 						}
@@ -695,7 +673,7 @@ namespace Server
 
 							try
 							{
-								m_LoadingType = entry.TypeName;
+								m_LoadingType = m.GetType().FullName;
 								m.Deserialize( reader );
 
 								if ( reader.Position != (entry.Position + entry.Length) )
@@ -743,7 +721,7 @@ namespace Server
 
 							try
 							{
-								m_LoadingType = entry.TypeName;
+								m_LoadingType = item.GetType().FullName;
 								item.Deserialize( reader );
 
 								if ( reader.Position != (entry.Position + entry.Length) )
