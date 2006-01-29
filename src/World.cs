@@ -142,7 +142,7 @@ namespace Server
 			object Object{ get; }
 		}
 
-		private sealed class RegionEntry : IEntityEntry
+		private struct RegionEntry : IEntityEntry
 		{
 			private Region m_Region;
 			private long m_Position;
@@ -194,9 +194,13 @@ namespace Server
 				m_Position = pos;
 				m_Length = length;
 			}
+
+			public void Clear() {
+				m_Region = null;
+			}
 		}
 
-		private sealed class GuildEntry : IEntityEntry
+		private struct GuildEntry : IEntityEntry
 		{
 			private BaseGuild m_Guild;
 			private long m_Position;
@@ -248,9 +252,13 @@ namespace Server
 				m_Position = pos;
 				m_Length = length;
 			}
+
+			public void Clear() {
+				m_Guild = null;
+			}
 		}
 
-		private sealed class ItemEntry : IEntityEntry
+		private struct ItemEntry : IEntityEntry
 		{
 			private Item m_Item;
 			private int m_TypeID;
@@ -304,9 +312,13 @@ namespace Server
 				m_Position = pos;
 				m_Length = length;
 			}
+
+			public void Clear() {
+				m_Item = null;
+			}
 		}
 
-		private sealed class MobileEntry : IEntityEntry
+		private struct MobileEntry : IEntityEntry
 		{
 			private Mobile m_Mobile;
 			private int m_TypeID;
@@ -359,6 +371,10 @@ namespace Server
 				m_TypeID = typeID;
 				m_Position = pos;
 				m_Length = length;
+			}
+
+			public void Clear() {
+				m_Mobile = null;
 			}
 		}
 
@@ -628,7 +644,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Error("failed to load mobile", e);
-								mobileEntries[i] = null;
+								mobileEntries[i].Clear();
 
 								failed = e;
 								failedMobiles = true;
@@ -676,7 +692,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load item", e);
-								itemEntries[i] = null;
+								itemEntries[i].Clear();
 
 								failed = e;
 								failedItems = true;
@@ -723,7 +739,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load guild", e);
-								guildEntries[i] = null;
+								guildEntries[i].Clear();
 
 								failed = e;
 								failedGuilds = true;
@@ -770,7 +786,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load region", e);
-								regionEntries[i] = null;
+								regionEntries[i].Clear();
 
 								failed = e;
 								failedRegions = true;
@@ -811,18 +827,16 @@ namespace Server
 							{
 								for ( int i = 0; i < mobileEntries.Length; ++i)
 								{
-									if (mobileEntries[i] != null &&
-										((MobileEntry)mobileEntries[i]).TypeID == failedTypeID)
-										mobileEntries[i] = null;
+									if (mobileEntries[i].TypeID == failedTypeID)
+										mobileEntries[i].Clear();
 								}
 							}
 							else if ( failedItems )
 							{
 								for ( int i = 0; i < itemEntries.Length; ++i)
 								{
-									if (itemEntries[i] != null &&
-										((ItemEntry)itemEntries[i]).TypeID == failedTypeID)
-										itemEntries[i] = null;
+									if (itemEntries[i].TypeID == failedTypeID)
+										itemEntries[i].Clear();
 								}
 							}
 						}
@@ -898,7 +912,7 @@ namespace Server
 			log.Info(String.Format("World loaded: {1} items, {2} mobiles ({0:F1} seconds)", (DateTime.Now-start).TotalSeconds, m_Items.Count, m_Mobiles.Count));
 		}
 
-		private static void SaveIndex( IEntityEntry[] list, string path )
+		private static void SaveIndex( ICollection list, string path )
 		{
 			if ( !Directory.Exists( mobileBase ) )
 				Directory.CreateDirectory( mobileBase );
@@ -916,12 +930,9 @@ namespace Server
 			{
 				BinaryWriter idxWriter = new BinaryWriter( idx );
 
-				idxWriter.Write( list.Length );
+				idxWriter.Write( list.Count );
 
-				for ( int i = 0; i < list.Length; ++i )
-				{
-					IEntityEntry e = (IEntityEntry)list[i];
-
+				foreach (IEntityEntry e in list) {
 					idxWriter.Write( e.TypeID );
 					idxWriter.Write( e.Serial );
 					idxWriter.Write( e.Position );
