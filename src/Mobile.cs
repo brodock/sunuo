@@ -5115,8 +5115,6 @@ namespace Server
 					m_DexLock = (StatLockType)reader.ReadByte();
 					m_IntLock = (StatLockType)reader.ReadByte();
 
-					m_StatMods = new ArrayList();
-
 					if ( reader.ReadBool() )
 					{
 						m_StuckMenuUses = new DateTime[reader.ReadInt()];
@@ -6562,6 +6560,9 @@ namespace Server
 
 		public bool RemoveStatMod( string name )
 		{
+			if (m_StatMods == null)
+				return false;
+
 			for ( int i = 0; i < m_StatMods.Count; ++i )
 			{
 				StatMod check = (StatMod)m_StatMods[i];
@@ -6569,6 +6570,9 @@ namespace Server
 				if ( check.Name == name )
 				{
 					m_StatMods.RemoveAt( i );
+					if (m_StatMods.Count == 0)
+						m_StatMods = null;
+
 					CheckStatTimers();
 					Delta( MobileDelta.Stat | GetStatDelta( check.Type ) );
 					return true;
@@ -6580,6 +6584,9 @@ namespace Server
 
 		public StatMod GetStatMod( string name )
 		{
+			if (m_StatMods == null)
+				return null;
+
 			for ( int i = 0; i < m_StatMods.Count; ++i )
 			{
 				StatMod check = (StatMod)m_StatMods[i];
@@ -6593,6 +6600,9 @@ namespace Server
 
 		public void AddStatMod( StatMod mod )
 		{
+			if (m_StatMods == null)
+				m_StatMods = new ArrayList(4);
+
 			for ( int i = 0; i < m_StatMods.Count; ++i )
 			{
 				StatMod check = (StatMod)m_StatMods[i];
@@ -6631,6 +6641,9 @@ namespace Server
 		/// </summary>
 		public int GetStatOffset( StatType type )
 		{
+			if (m_StatMods == null)
+				return 0;
+
 			int offset = 0;
 
 			for ( int i = 0; i < m_StatMods.Count; ++i )
@@ -6754,7 +6767,7 @@ namespace Server
 			}
 			set
 			{
-				if ( m_StatMods.Count == 0 )
+				if ( m_StatMods == null || m_StatMods.Count == 0 )
 					RawStr = value;
 			}
 		}
@@ -6822,7 +6835,7 @@ namespace Server
 			}
 			set
 			{
-				if ( m_StatMods.Count == 0 )
+				if ( m_StatMods == null || m_StatMods.Count == 0 )
 					RawDex = value;
 			}
 		}
@@ -6890,7 +6903,7 @@ namespace Server
 			}
 			set
 			{
-				if ( m_StatMods.Count == 0 )
+				if ( m_StatMods == null || m_StatMods.Count == 0 )
 					RawInt = value;
 			}
 		}
@@ -8975,7 +8988,7 @@ namespace Server
 			m_FollowersMax = 5;			
 			m_Skills = new Skills( this );
 			m_Items = new ArrayList( 1 );
-			m_StatMods = new ArrayList( 1 );
+			m_StatMods = null;
 			Map = Map.Internal;
 			m_AutoPageNotify = true;
 			m_Aggressors = new ArrayList( 1 );

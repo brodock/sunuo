@@ -35,7 +35,9 @@ sunuo (0.3.0) unstable; urgency=low
   * optimized memory allocations during world load
   * World.LoadingType is fed from Entity.GetType().FullName
   * cache DateTime.Now
-  * don't allocate an ArrayList when Mobile.SkillMods is empty
+  * don't allocate an ArrayList when empty:
+    - Mobile.SkillMods
+    - Mobile.StatMods
   * login: use proprietary timestamp format for now
   * login: initialize all columns
   * login: print name of failed game server
