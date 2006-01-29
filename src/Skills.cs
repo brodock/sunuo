@@ -373,7 +373,8 @@ namespace Server
 
 				double bonusObey = 0.0, bonusNotObey = 0.0;
 
-				for ( int i = 0; i < mods.Count; ++i )
+				int count = mods == null ? 0 : mods.Count;
+				for ( int i = 0; i < count; ++i )
 				{
 					SkillMod mod = (SkillMod)mods[i];
 

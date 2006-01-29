@@ -713,7 +713,7 @@ namespace Server
 		private int m_VirtualArmorMod;
 		private VirtueInfo m_Virtues;
 		private object m_Party;
-		private ArrayList m_SkillMods = new ArrayList( 1 );
+		private ArrayList m_SkillMods;
 		private Body m_BodyMod;
 		private DateTime m_LastStatGain;
 
@@ -1118,6 +1118,9 @@ namespace Server
 		{
 			ValidateSkillMods();
 
+			if (m_SkillMods == null)
+				return;
+
 			for ( int i = 0; i < m_SkillMods.Count; ++i )
 			{
 				SkillMod mod = (SkillMod)m_SkillMods[i];
@@ -1131,6 +1134,9 @@ namespace Server
 
 		public virtual void ValidateSkillMods()
 		{
+			if (m_SkillMods == null)
+				return;
+
 			for ( int i = 0; i < m_SkillMods.Count; )
 			{
 				SkillMod mod = (SkillMod)m_SkillMods[i];
@@ -1148,6 +1154,9 @@ namespace Server
 				return;
 
 			ValidateSkillMods();
+
+			if (m_SkillMods == null)
+				m_SkillMods = new ArrayList(4);
 
 			if ( !m_SkillMods.Contains( mod ) )
 			{
@@ -1176,6 +1185,9 @@ namespace Server
 			if ( m_SkillMods.Contains( mod ) )
 			{
 				m_SkillMods.Remove( mod );
+				if (m_SkillMods.Count == 0)
+					m_SkillMods = null;
+
 				mod.Owner = null;
 
 				Skill sk = m_Skills[mod.Skill];
