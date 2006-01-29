@@ -133,6 +133,24 @@ namespace Server
 			Broadcast( hue, ascii, String.Format( format, args ) );
 		}
 
+		private struct EntityType {
+			private string name;
+			private ConstructorInfo ctor;
+
+			public EntityType(string name, ConstructorInfo ctor) {
+				this.name = name;
+				this.ctor = ctor;
+			}
+
+			public string Name {
+				get { return name; }
+			}
+
+			public ConstructorInfo Constructor {
+				get { return ctor; }
+			}
+		}
+
 		private interface IEntityEntry
 		{
 			Serial Serial{ get; }
@@ -262,6 +280,7 @@ namespace Server
 		{
 			private Item m_Item;
 			private int m_TypeID;
+			private string m_TypeName;
 			private long m_Position;
 			private int m_Length;
 
@@ -289,6 +308,14 @@ namespace Server
 				}
 			}
 
+			public string TypeName
+			{
+				get
+				{       
+					return m_TypeName;
+				}
+			}
+
 			public long Position
 			{
 				get
@@ -305,16 +332,18 @@ namespace Server
 				}
 			}
 
-			public ItemEntry( Item item, int typeID, long pos, int length )
+			public ItemEntry( Item item, int typeID, string typeName, long pos, int length )
 			{
 				m_Item = item;
 				m_TypeID = typeID;
+				m_TypeName = typeName;
 				m_Position = pos;
 				m_Length = length;
 			}
 
 			public void Clear() {
 				m_Item = null;
+				m_TypeName = null;
 			}
 		}
 
@@ -322,6 +351,7 @@ namespace Server
 		{
 			private Mobile m_Mobile;
 			private int m_TypeID;
+			private string m_TypeName;
 			private long m_Position;
 			private int m_Length;
 
@@ -349,6 +379,14 @@ namespace Server
 				}
 			}
 
+			public string TypeName
+			{
+				get
+				{       
+					return m_TypeName;
+				}
+			}
+
 			public long Position
 			{
 				get
@@ -365,30 +403,34 @@ namespace Server
 				}
 			}
 
-			public MobileEntry( Mobile mobile, int typeID, long pos, int length )
+			public MobileEntry( Mobile mobile, int typeID, string typeName, long pos, int length )
 			{
 				m_Mobile = mobile;
 				m_TypeID = typeID;
+				m_TypeName = typeName;
 				m_Position = pos;
 				m_Length = length;
 			}
 
 			public void Clear() {
 				m_Mobile = null;
+				m_TypeName = null;
 			}
 		}
 
-		private static ConstructorInfo[] LoadTypes(BinaryReader tdbReader) {
+		private static EntityType[] LoadTypes(BinaryReader tdbReader) {
 			int count = tdbReader.ReadInt32();
 
 			Type[] ctorTypes = new Type[1]{ typeof( Serial ) };
 
-			ConstructorInfo[] types = new ConstructorInfo[count];
+			EntityType[] types = new EntityType[count];
 
 			for (int i = 0; i < count; ++i) {
 				string typeName = tdbReader.ReadString();
 				if (typeName == null || typeName == "")
 					continue;
+
+				typeName = string.Intern(typeName);
 
 				Type t = ScriptCompiler.FindTypeByFullName(typeName);
 
@@ -408,7 +450,7 @@ namespace Server
 				ConstructorInfo ctor = t.GetConstructor( ctorTypes );
 
 				if ( ctor != null ) {
-					types[i] = ctor;
+					types[i] = new EntityType(typeName, ctor);
 				} else {
 					throw new Exception( String.Format( "Type '{0}' does not have a serialization constructor", t ) );
 				}
@@ -417,7 +459,7 @@ namespace Server
 			return types;
 		}
 
-		private static ConstructorInfo[] LoadTypes(string path) {
+		private static EntityType[] LoadTypes(string path) {
 			using (FileStream tdb = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
 				using (BinaryReader tdbReader = new BinaryReader(tdb)) {
 					return LoadTypes(tdbReader);
@@ -426,7 +468,7 @@ namespace Server
 		}
 
 		private static MobileEntry[] LoadMobileIndex(BinaryReader idxReader,
-													 ConstructorInfo[] ctors) {
+													 EntityType[] types) {
 			int count = idxReader.ReadInt32();
 
 			object[] ctorArgs = new object[1];
@@ -440,20 +482,20 @@ namespace Server
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
 
-				ConstructorInfo ctor = ctors[typeID];
-				if (ctor == null)
+				EntityType type = types[typeID];
+				if (type.Constructor == null)
 					continue;
 
 				Mobile m = null;
 
 				try {
 					ctorArgs[0] = (Serial)serial;
-					m = (Mobile)ctor.Invoke(ctorArgs);
+					m = (Mobile)type.Constructor.Invoke(ctorArgs);
 				} catch {
 				}
 
 				if (m != null) {
-					entries[i] = new MobileEntry(m, typeID, pos, length);
+					entries[i] = new MobileEntry(m, typeID, type.Name, pos, length);
 					AddMobile(m);
 				}
 			}
@@ -462,7 +504,7 @@ namespace Server
 		}
 
 		private static MobileEntry[] LoadMobileIndex(string path,
-													 ConstructorInfo[] ctors) {
+													 EntityType[] ctors) {
 			using (FileStream idx = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
 				using (BinaryReader idxReader = new BinaryReader(idx)) {
 					return LoadMobileIndex(idxReader, ctors);
@@ -471,7 +513,7 @@ namespace Server
 		}
 
 		private static ItemEntry[] LoadItemIndex(BinaryReader idxReader,
-													 ConstructorInfo[] ctors) {
+												 EntityType[] types) {
 			int count = idxReader.ReadInt32();
 
 			object[] ctorArgs = new object[1];
@@ -485,20 +527,20 @@ namespace Server
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
 
-				ConstructorInfo ctor = ctors[typeID];
-				if (ctor == null)
+				EntityType type = types[typeID];
+				if (type.Constructor == null)
 					continue;
 
 				Item item = null;
 
 				try {
 					ctorArgs[0] = (Serial)serial;
-					item = (Item)ctor.Invoke(ctorArgs);
+					item = (Item)type.Constructor.Invoke(ctorArgs);
 				} catch {
 				}
 
 				if (item != null) {
-					entries[i] = new ItemEntry(item, typeID, pos, length);
+					entries[i] = new ItemEntry(item, typeID, type.Name, pos, length);
 					AddItem(item);
 				}
 			}
@@ -507,7 +549,7 @@ namespace Server
 		}
 
 		private static ItemEntry[] LoadItemIndex(string path,
-													 ConstructorInfo[] ctors) {
+												 EntityType[] ctors) {
 			using (FileStream idx = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
 				using (BinaryReader idxReader = new BinaryReader(idx)) {
 					return LoadItemIndex(idxReader, ctors);
@@ -531,7 +573,7 @@ namespace Server
 			if ( File.Exists( mobIdxPath ) && File.Exists( mobTdbPath ) )
 			{
 				log.Debug("loading mobile index");
-				ConstructorInfo[] types = LoadTypes(mobTdbPath);
+				EntityType[] types = LoadTypes(mobTdbPath);
 				mobileEntries = LoadMobileIndex(mobIdxPath, types);
 			}
 			else
@@ -542,7 +584,7 @@ namespace Server
 			if ( File.Exists( itemIdxPath ) && File.Exists( itemTdbPath ) )
 			{
 				log.Debug("loading item index");
-				ConstructorInfo[] types = LoadTypes(itemTdbPath);
+				EntityType[] types = LoadTypes(itemTdbPath);
 				itemEntries = LoadItemIndex(itemIdxPath, types);
 			}
 			else
@@ -635,7 +677,7 @@ namespace Server
 
 							try
 							{
-								m_LoadingType = m.GetType().FullName;
+								m_LoadingType = entry.TypeName;
 								m.Deserialize( reader );
 
 								if ( reader.Position != (entry.Position + entry.Length) )
@@ -683,7 +725,7 @@ namespace Server
 
 							try
 							{
-								m_LoadingType = item.GetType().FullName;
+								m_LoadingType = entry.TypeName;
 								item.Deserialize( reader );
 
 								if ( reader.Position != (entry.Position + entry.Length) )

@@ -33,7 +33,6 @@ sunuo (0.3.0) unstable; urgency=low
   * added property Mobile.LastCombatTime
   * added interface IGold
   * optimized memory allocations during world load
-  * World.LoadingType is fed from Entity.GetType().FullName
   * cache DateTime.Now
   * don't allocate an ArrayList when empty:
     - Mobile.SkillMods
