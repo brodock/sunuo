@@ -180,6 +180,20 @@ when 'destroy'
 
     puts "rm -rf /var/cache/sunuo/#{name} /var/log/sunuo/#{name} /var/lib/sunuo/#{name} /etc/sunuo/#{name}"
 
+when 'rename'
+    raise "'run' requires exactly two shard names" unless ARGV.length == 2
+
+    ARGV.each do |name|
+        raise "Invalid shard name #{name}" if name == 'skel'
+        raise "Invalid characters in shard name" unless name =~ /\A\w+\Z/
+    end
+
+    name1, name2 = ARGV
+
+    [ '/var/cache/sunuo', '/var/log/sunuo', '/var/lib/sunuo', '/etc/sunuo' ].each do |base|
+        puts "mv #{base}/#{name1} #{base}/#{name2}\n"
+    end
+
 when 'pid'
     raise "'run' requires exactly one shard name" unless ARGV.length == 1
 
