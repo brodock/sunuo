@@ -1081,7 +1081,10 @@ namespace Server
 			UpdateAggrExpire();
 		}
 
-		public ArrayList Stabled{ get{ return m_Stabled; } set{ m_Stabled = value; } }
+		public ArrayList Stabled {
+			get { return m_Stabled; }
+			set { m_Stabled = value; }
+		}
 
 		[CommandProperty( AccessLevel.Counselor, AccessLevel.GameMaster )]
 		public VirtueInfo Virtues{ get{ return m_Virtues; } set{} }
