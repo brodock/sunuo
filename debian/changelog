@@ -37,6 +37,7 @@ sunuo (0.3.0) unstable; urgency=low
   * don't allocate an ArrayList when empty:
     - Mobile.SkillMods
     - Mobile.StatMods
+    - Mobile.Stabled
   * added GenericReader.ReadMobileListOrNull()
   * login: use proprietary timestamp format for now
   * login: initialize all columns

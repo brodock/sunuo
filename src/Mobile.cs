@@ -1082,7 +1082,12 @@ namespace Server
 		}
 
 		public ArrayList Stabled {
-			get { return m_Stabled; }
+			get {
+				if (m_Stabled == null)
+					m_Stabled = new ArrayList(2);
+
+				return m_Stabled;
+			}
 			set { m_Stabled = value; }
 		}
 
@@ -4892,7 +4897,7 @@ namespace Server
 				case 22: // Just removed followers
 				case 21:
 				{
-					m_Stabled = reader.ReadMobileList();
+					m_Stabled = reader.ReadMobileListOrNull();
 
 					goto case 20;
 				}
@@ -5033,9 +5038,6 @@ namespace Server
 				}
 				case 0:
 				{
-					if ( version < 21 )
-						m_Stabled = new ArrayList();
-
 					if ( version < 18 )
 						m_Virtues = new VirtueInfo();
 
@@ -8997,7 +8999,7 @@ namespace Server
 			m_Aggressors = new ArrayList( 1 );
 			m_Aggressed = new ArrayList( 1 );
 			m_Virtues = new VirtueInfo();
-			m_Stabled = new ArrayList( 1 );
+			m_Stabled = null;
 			m_DamageEntries = new ArrayList( 1 );
 
 			m_NextSkillTime = DateTime.MinValue;
