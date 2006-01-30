@@ -111,12 +111,13 @@ namespace Server
 			return String.Format( "[{0}: {1}]", Name, Base );
 		}
 
-		public Skill( Skills owner, SkillInfo info, GenericReader reader )
+		public static Skill Deserialize( Skills owner, SkillInfo info, GenericReader reader )
 		{
-			m_Owner = owner;
-			m_Info = info;
-
 			int version = reader.ReadByte();
+
+			ushort m_Base = 0;
+			ushort m_Cap = 0;
+			SkillLock m_Lock = SkillLock.Up;
 
 			switch ( version )
 			{
@@ -129,13 +130,8 @@ namespace Server
 					break;
 				}
 				case 0xFF:
-				{
-					m_Base = 0;
-					m_Cap = 1000;
-					m_Lock = SkillLock.Up;
+					return null;
 
-					break;
-				}
 				default:
 				{
 					if ( (version & 0xC0) == 0x00 )
@@ -155,6 +151,8 @@ namespace Server
 					break;
 				}
 			}
+
+			return new Skill(owner, info, m_Base, m_Cap, m_Lock);
 		}
 
 		public Skill( Skills owner, SkillInfo info, int baseValue, int cap, SkillLock skillLock )
@@ -1023,9 +1021,9 @@ namespace Server
 					{
 						if ( i < info.Length )
 						{
-							Skill sk = new Skill( this, info[i], reader );
+							Skill sk = Skill.Deserialize( this, info[i], reader );
 
-							if ( sk.BaseFixedPoint != 0 || sk.CapFixedPoint != 1000 || sk.Lock != SkillLock.Up )
+							if ( sk != null )
 							{
 								m_Skills[i] = sk;
 								m_Total += sk.BaseFixedPoint;
@@ -1033,7 +1031,7 @@ namespace Server
 						}
 						else
 						{
-							new Skill( this, null, reader );
+							Skill.Deserialize( this, null, reader );
 						}
 					}
 

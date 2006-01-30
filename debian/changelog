@@ -39,6 +39,7 @@ sunuo (0.3.0) unstable; urgency=low
     - Mobile.StatMods
     - Mobile.Stabled
     - Mobile.Virtues
+  * don't allocate empty Skill objects
   * added GenericReader.ReadMobileListOrNull()
   * use string.Intern() in BinaryFileReader.ReadString()
   * login: use proprietary timestamp format for now
