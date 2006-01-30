@@ -1092,7 +1092,12 @@ namespace Server
 		}
 
 		[CommandProperty( AccessLevel.Counselor, AccessLevel.GameMaster )]
-		public VirtueInfo Virtues{ get{ return m_Virtues; } set{} }
+		public VirtueInfo Virtues {
+			get {
+				return m_Virtues;
+			}
+			set{}
+		}
 
 		public object Party{ get{ return m_Party; } set{ m_Party = value; } }
 		public ArrayList SkillMods{ get{ return m_SkillMods; } }
