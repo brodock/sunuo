@@ -158,6 +158,7 @@ when 'create'
     File.symlink('Backups/Automatic', "#{base_dir}/Backups\\Automatic")
 
     File.symlink('/usr/lib/libz.so.1', "#{base_dir}/libz.so")
+    File.symlink('/usr/lib/libz.so.1', "#{base_dir}/libzlib.so")
 
     File.symlink('/usr/share/sunuo/SunUO.exe', "#{base_dir}/SunUO.exe")
     File.symlink('/usr/share/sunuo/SunUO.exe.mdb', "#{base_dir}/SunUO.exe.mdb")
