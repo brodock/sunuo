@@ -38,6 +38,7 @@ sunuo (0.3.0) unstable; urgency=low
     - Mobile.SkillMods
     - Mobile.StatMods
     - Mobile.Stabled
+    - Mobile.Virtues
   * added GenericReader.ReadMobileListOrNull()
   * login: use proprietary timestamp format for now
   * login: initialize all columns

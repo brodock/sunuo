@@ -87,35 +87,37 @@ namespace Server
 		{
 		}
 
-		public VirtueInfo( GenericReader reader )
-		{
+		public static VirtueInfo Deserialize(GenericReader reader) {
 			int version = reader.ReadByte();
+
+			VirtueInfo info = null;
 
 			switch ( version )
 			{
 				case 0:
 				{
 					int mask = reader.ReadByte();
+					if (mask == 0)
+						return null;
 
-					if ( mask != 0 )
-					{
-						m_Values = new int[8];
+					info = new VirtueInfo();
 
-						for ( int i = 0; i < 8; ++i )
-							if ( (mask & (1 << i)) != 0 )
-								m_Values[i] = reader.ReadInt();
-					}
+					for ( int i = 0; i < 8; ++i )
+						if ( (mask & (1 << i)) != 0 )
+							info.SetValue(i, reader.ReadInt());
 
 					break;
 				}
 			}
+
+			return info;
 		}
 
 		public static void Serialize( GenericWriter writer, VirtueInfo info )
 		{
 			writer.Write( (byte) 0 ); // version
 
-			if ( info.m_Values == null )
+			if ( info == null || info.m_Values == null )
 			{
 				writer.Write( (byte) 0 );
 			}

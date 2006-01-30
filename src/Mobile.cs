@@ -1094,6 +1094,9 @@ namespace Server
 		[CommandProperty( AccessLevel.Counselor, AccessLevel.GameMaster )]
 		public VirtueInfo Virtues {
 			get {
+				if (m_Virtues == null)
+					m_Virtues = new VirtueInfo();
+
 				return m_Virtues;
 			}
 			set{}
@@ -4915,7 +4918,7 @@ namespace Server
 				case 19: // Just removed variables
 				case 18:
 				{
-					m_Virtues = new VirtueInfo( reader );
+					m_Virtues = VirtueInfo.Deserialize( reader );
 
 					goto case 17;
 				}
@@ -5043,9 +5046,6 @@ namespace Server
 				}
 				case 0:
 				{
-					if ( version < 18 )
-						m_Virtues = new VirtueInfo();
-
 					if ( version < 11 )
 						m_DisplayGuildTitle = true;
 
@@ -9003,7 +9003,7 @@ namespace Server
 			m_AutoPageNotify = true;
 			m_Aggressors = new ArrayList( 1 );
 			m_Aggressed = new ArrayList( 1 );
-			m_Virtues = new VirtueInfo();
+			m_Virtues = null;
 			m_Stabled = null;
 			m_DamageEntries = new ArrayList( 1 );
 
