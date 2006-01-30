@@ -600,7 +600,7 @@ namespace Server
 		public override string ReadString()
 		{
 			if ( ReadByte() != 0 )
-				return m_File.ReadString();
+				return string.Intern(m_File.ReadString());
 			else
 				return null;
 		}
