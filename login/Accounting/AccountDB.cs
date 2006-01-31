@@ -190,7 +190,7 @@ namespace Server.Accounting {
 			p = dbcmd.CreateParameter();
 			p.ParameterName = "?DonationDuration";
 			p.DbType = DbType.String;
-			p.Value = DateTime.MinValue.ToString(m_Culture);
+			p.Value = TimeSpan.Zero.ToString();
 			dbcmd.Parameters.Add(p); 
 
 			p = dbcmd.CreateParameter();
