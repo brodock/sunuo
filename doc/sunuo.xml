@@ -128,8 +128,9 @@ make install</programlisting>
     <section>
       <title>Installing the UO data files</title>
       <para>
-        SunUO needs the <filename>*.mul</filename> data files from the
-        UO client. Copy them onto your hard disk,
+        SunUO needs the <filename>*.mul</filename> and
+        <filename>multi.idx</filename> data files from the UO
+        client. Copy them onto your hard disk,
         e.g. <filename>/opt/uoclient</filename>. On the first startup,
         SunUO will ask you to enter this directory.
       </para>
