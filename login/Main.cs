@@ -103,6 +103,11 @@ namespace Server
 		public static Assembly Assembly{ get{ return m_Assembly; } set{ m_Assembly = value; } }
 		public static Thread Thread{ get{ return m_Thread; } }
 
+		private static AutoResetEvent m_Signal = new AutoResetEvent(true);
+		public static void WakeUp() {
+			m_Signal.Set();
+		}
+
 		public static string ExePath
 		{
 			get
@@ -301,7 +306,7 @@ namespace Server
 			{
 				while ( !m_Closing )
 				{
-					Thread.Sleep( 1 );
+					m_Signal.WaitOne();
 
 					Timer.Slice();
 					m_MessagePump.Slice();

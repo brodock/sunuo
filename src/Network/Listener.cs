@@ -157,6 +157,8 @@ namespace Server.Network
 			{
 				m_Listener.BeginAccept( m_OnAccept, m_Listener );
 			}
+
+			Core.WakeUp();
 		}
 
 		public Socket[] Slice()

@@ -110,6 +110,11 @@ namespace Server
 		public static Thread Thread{ get{ return m_Thread; } }
 		public static MultiTextWriter MultiConsoleOut{ get{ return m_MultiConOut; } }
 
+		private static AutoResetEvent m_Signal = new AutoResetEvent(true);
+		public static void WakeUp() {
+			m_Signal.Set();
+		}
+
 		public static string FindDataFile( string path )
 		{
 			foreach (string dir in config.DataDirectories) {
@@ -376,7 +381,7 @@ namespace Server
 			{
 				while ( !m_Closing )
 				{
-					Thread.Sleep( 1 );
+					m_Signal.WaitOne();
 
 					m_Now = DateTime.Now;
 

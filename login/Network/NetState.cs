@@ -487,6 +487,8 @@ namespace Server.Network
 
 			// After a successful connect, send what may be already in the queue
 			Flush();
+
+			Core.WakeUp();
 		}
 
 		private void OnReceive( IAsyncResult asyncResult )

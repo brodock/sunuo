@@ -237,6 +237,8 @@ namespace Server
 
 		public class TimerThread
 		{
+			private static AutoResetEvent m_Signal = new AutoResetEvent(false);
+
 			private static Queue m_ChangeQueue = Queue.Synchronized( new Queue() );
 
 			private static DateTime[] m_NextPriorities = new DateTime[8];
@@ -352,6 +354,7 @@ namespace Server
 			public static void Change( Timer t, int newIndex, bool isAdd )
 			{
 				m_ChangeQueue.Enqueue( TimerChangeEntry.GetInstance( t, newIndex, isAdd ) );
+				m_Signal.Set();
 			}
 
 			public static void AddTimer( Timer t )
@@ -443,12 +446,12 @@ namespace Server
 
 				while ( !Core.Closing )
 				{
-					Thread.Sleep( 10 );
-
 					/*ProcessAddQueue();
 					ProcessRemoveQueue();
 					ProcessPriorityQueue();*/
 					ProcessChangeQueue();
+
+					bool queued = false;
 
 					for (i=0;i<m_Timers.Length;i++)
 					{
@@ -468,7 +471,9 @@ namespace Server
 
 								lock ( m_Queue )
 									m_Queue.Enqueue( t );
-									
+
+								queued = true;
+
 								if ( t.m_Count != 0 && (++t.m_Index >= t.m_Count) )
 								{
 									t.Stop();
@@ -480,6 +485,33 @@ namespace Server
 							}
 						}//for timers.Count
 					}//for Timer.Timers.Length
+
+					/* notify the core of new timers in the queue */
+					if (queued)
+						Core.WakeUp();
+
+					/* find the earliest timer class which needs another check */
+					DateTime earliest = DateTime.MaxValue;
+
+					for (i=0; i < m_Timers.Length; i++) {
+						if (m_Timers[i].Count > 0 &&
+							m_NextPriorities[i] < earliest) {
+							earliest = m_NextPriorities[i];
+						}
+					}
+
+					/* sleep until there is a signal or until the next
+					   timer must be activated */
+					now = DateTime.Now;
+
+					TimeSpan sleep = earliest < now
+						? TimeSpan.FromMilliseconds(10)
+						: (earliest == DateTime.MaxValue
+						   ? TimeSpan.FromSeconds(1)
+						   : earliest - now);
+					m_Signal.WaitOne(sleep, false);
+					//Thread.Sleep(sleep);
+					//Thread.Sleep(10);
 				}//while (true)
 			}//TimerMain
 		}

@@ -9029,6 +9029,8 @@ namespace Server
 
 				m_DeltaQueue.Enqueue( this );
 			}
+
+			Core.WakeUp();
 		}
 
 		public Direction GetDirectionTo( int x, int y )

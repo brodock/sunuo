@@ -2606,6 +2606,8 @@ namespace Server
 
 				m_DeltaQueue.Add( this );
 			}
+
+			Core.WakeUp();
 		}
 
 		public void RemDelta( ItemDelta flags )

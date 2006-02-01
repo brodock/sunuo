@@ -42,6 +42,7 @@ sunuo (0.3.0) unstable; urgency=low
   * don't allocate empty Skill objects
   * added GenericReader.ReadMobileListOrNull()
   * use string.Intern() in BinaryFileReader.ReadString()
+  * use AutoResetEvent to notify Timer and main loop
   * login: use proprietary timestamp format for now
   * login: initialize all columns
   * login: print name of failed game server
