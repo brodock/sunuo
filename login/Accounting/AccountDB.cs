@@ -67,7 +67,7 @@ namespace Server.Accounting {
 		}
 
 		private bool FindAccountRecord(string username, ref string password,
-									   ref bool banned) {
+									   ref bool banned, ref bool young) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
 			dbcmd.CommandText = "SELECT Password,Flags FROM users WHERE Username=?Username";
 			IDataParameter p = (IDataParameter)dbcmd.CreateParameter();
@@ -81,6 +81,7 @@ namespace Server.Accounting {
 				password = reader.GetString(0);
 				int flags = reader.GetInt32(1);
 				banned = (flags & 0x01) != 0;
+				young = (flags & 0x02) == 0;
 				reader.Close();
 				return true;
 			} else {
@@ -92,15 +93,17 @@ namespace Server.Accounting {
 		/** same as FindAccountRecord(), but auto-reconnects when the
 			DB connection is lost */
 		private bool FindAccountRecordAutoR(string username, ref string password,
-											ref bool banned) {
+											ref bool banned, ref bool young) {
 			try {
-				return FindAccountRecord(username, ref password, ref banned);
+				return FindAccountRecord(username, ref password,
+										 ref banned, ref young);
 			} catch (Exception e) {
 				log.Warn("Connection to DB lost?", e);
 				Reconnect();
 				log.Info("Reconnected DB.");
 
-				return FindAccountRecord(username, ref password, ref banned);
+				return FindAccountRecord(username, ref password,
+										 ref banned, ref young);
 			}
 		}
 
@@ -181,15 +184,16 @@ namespace Server.Accounting {
 			password = Hash.HashPassword(password);
 			CreateAccountRecord(state, username, password);
 
-			return new SunAccount(username, password, false);
+			return new SunAccount(username, password, false, true);
 		}
 
 		public SunAccount GetAccount(string username) {
 			string password = null;
-			bool banned = true;
-			if (FindAccountRecordAutoR(username, ref password, ref banned)) {
+			bool banned = true, young = false;
+			if (FindAccountRecordAutoR(username, ref password,
+									   ref banned, ref young)) {
 				UpdateAccountRecord(username);
-				return new SunAccount(username, password, banned);
+				return new SunAccount(username, password, banned, young);
 			} else {
 				return null;
 			}

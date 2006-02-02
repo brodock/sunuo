@@ -24,12 +24,13 @@ using System;
 namespace Server.Accounting {
 	public class SunAccount : IAccount {
 		private String m_Name, m_Password;
-		private bool m_Banned;
+		private bool m_Banned, m_Young;
 
-		public SunAccount(String name, String password, bool banned) {
+		public SunAccount(String name, String password, bool banned, bool young) {
 			m_Name = name;
 			m_Password = password;
 			m_Banned = banned;
+			m_Young = young;
 		}
 
 		public bool CheckPassword(String password2) {
@@ -39,6 +40,12 @@ namespace Server.Accounting {
 		public bool Banned {
 			get {
 				return m_Banned;
+			}
+		}
+
+		public bool Young {
+			get {
+				return m_Young;
 			}
 		}
 
