@@ -23,27 +23,27 @@ using System;
 
 namespace Server.Accounting {
 	public class SunAccount : IAccount {
-		private String name, password;
-		private bool banned;
+		private String m_Name, m_Password;
+		private bool m_Banned;
 
-		public SunAccount(String _name, String _password, bool _banned) {
-			name = _name;
-			password = _password;
-			banned = _banned;
+		public SunAccount(String name, String password, bool banned) {
+			m_Name = name;
+			m_Password = password;
+			m_Banned = banned;
 		}
 
 		public bool CheckPassword(String password2) {
-			return password == Hash.HashPassword(password2);
+			return m_Password == Hash.HashPassword(password2);
 		}
 
 		public bool Banned {
 			get {
-				return banned;
+				return m_Banned;
 			}
 		}
 
 		public override string ToString() {
-			return name;
+			return m_Name;
 		}
 	}
 }
