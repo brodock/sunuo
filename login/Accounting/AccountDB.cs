@@ -150,7 +150,7 @@ namespace Server.Accounting {
 
 		private void CreateAccountRecord(NetState state, string username, string password) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
-			dbcmd.CommandText = "INSERT INTO users(Username, Password, MagicWord, Flags, ExtraFlags, AccessLevel, Created, LastLogin, DonationStarted, DonationDuration, LatestUpdate, CreationIP, DeleteThis) VALUES(?Username, ?Password, ?MagicWord, 2, 0, 0, ?Created, ?LastLogin, ?DonationStarted, ?DonationDuration, '19700101000000', ?CreationIP, 0)";
+			dbcmd.CommandText = "INSERT INTO users(Username, Password, MagicWord, Flags, ExtraFlags, AccessLevel, Created, LastLogin, DonationStarted, DonationDuration, LatestUpdate, CreationIP, DeleteThis) VALUES(?Username, ?Password, ?MagicWord, 2, 0, 0, ?Created, ?LastLogin, ?DonationStarted, ?DonationDuration, CURRENT_TIMESTAMP+0, ?CreationIP, 0)";
 			IDataParameter p = dbcmd.CreateParameter();
 			p.ParameterName = "?Username";
 			p.DbType = DbType.String;
