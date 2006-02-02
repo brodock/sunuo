@@ -47,31 +47,6 @@ namespace Server.Accounting {
 		}
 	}
 
-	public class SunAccount : IAccount {
-		private String name, password;
-		private bool banned;
-
-		public SunAccount(String _name, String _password, bool _banned) {
-			name = _name;
-			password = _password;
-			banned = _banned;
-		}
-
-		public bool CheckPassword(String password2) {
-			return password == Hash.HashPassword(password2);
-		}
-
-		public bool Banned {
-			get {
-				return banned;
-			}
-		}
-
-		public override string ToString() {
-			return name;
-		}
-	}
-
 	public class AccountDB {
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
