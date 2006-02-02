@@ -47,6 +47,7 @@ sunuo (0.3.0) unstable; urgency=low
   * login: initialize all columns
   * login: print name of failed game server
   * login: log account creation
+  * login: initialize new account with Flags=0
   * debian: symlink base/Data to /etc/sunuo
   * debian: symlink base/var/log to /var/log/sunuo
   * debian: install SunUO.exe.config in /etc/sunuo/
