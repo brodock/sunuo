@@ -40,6 +40,12 @@ namespace Server.Accounting {
 
 		public static void EventSink_AccountLogin(AccountLoginEventArgs e) {
 			e.Accepted = false;
+
+			if (e.Username == "" || e.Password == "") {
+				e.RejectReason = ALRReason.BadPass;
+				return;
+			}
+
 			SunAccount account;
 			try {
 				account = accountDB.GetAccount(e.Username);
