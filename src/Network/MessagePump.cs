@@ -121,8 +121,6 @@ namespace Server.Network
 
 		public bool HandleReceive( NetState ns )
 		{
-			Console.WriteLine("HandleReceive Thread={0}", System.Threading.Thread.CurrentThread.Name);
-
 			lock ( ns )
 			{
 				ByteQueue buffer = ns.Buffer;
