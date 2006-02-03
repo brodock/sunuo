@@ -32,8 +32,13 @@ namespace Server {
 		}
 
 		public static void EventSink_ServerList(ServerListEventArgs e) {
-			foreach (Config.GameServer gs in Core.Config.GameServers)
+			foreach (Config.GameServer gs in Core.Config.GameServers) {
+				if (gs.Query && gs.Optional &&
+					ServerQueryTimer.GetStatus(gs) == null)
+					continue;
+
 				e.AddServer(gs.Name, gs.Address);
+			}
 		}
 	}
 }

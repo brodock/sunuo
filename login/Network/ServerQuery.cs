@@ -66,6 +66,7 @@ namespace Server.Network {
 			} catch (Exception ex) {
 				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
 						  ex);
+				ServerQueryTimer.SetStatus(m_Config, null);
 			}
 		}
 
@@ -81,6 +82,7 @@ namespace Server.Network {
 			} catch (Exception ex) {
 				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
 						  ex);
+				ServerQueryTimer.SetStatus(m_Config, null);
 			}
 		}
 
@@ -96,6 +98,7 @@ namespace Server.Network {
 			} catch (Exception ex) {
 				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
 						  ex);
+				ServerQueryTimer.SetStatus(m_Config, null);
 			}
 		}
 
@@ -129,6 +132,7 @@ namespace Server.Network {
 			} catch (Exception ex) {
 				log.Error(String.Format("Could not query game server {0}", m_Config.Name),
 						  ex);
+				ServerQueryTimer.SetStatus(m_Config, null);
 			}
 		}
 	}
@@ -171,7 +175,10 @@ namespace Server.Network {
 		}
 
 		public static void SetStatus(Config.GameServer config, ServerStatus status) {
-			m_Status[config] = status;
+			if (status == null)
+				m_Status.Remove(config);
+			else
+				m_Status[config] = status;
 		}
 
 		public static ServerStatus GetStatus(Config.GameServer config) {
