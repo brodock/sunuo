@@ -48,7 +48,7 @@ namespace Server.Gumps
 
 		public static int GetTypeID( Type type )
 		{
-			return type.GetHashCode() ^ type.FullName.GetHashCode() ^ type.TypeHandle.Value.ToInt32();
+			return unchecked(type.GetHashCode() ^ type.FullName.GetHashCode() ^ type.TypeHandle.Value.ToInt32());
 		}
 
 		public Gump( int x, int y )
