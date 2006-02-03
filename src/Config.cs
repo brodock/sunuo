@@ -240,14 +240,15 @@ namespace Server.Config {
 	public class GameServer {
 		private String name;
 		private IPEndPoint address;
-		private bool sendAuthID, query;
+		private bool sendAuthID, query, optional;
 
 		public GameServer(String _name, IPEndPoint _address,
-						  bool _sendAuthID, bool _query) {
+						  bool _sendAuthID, bool _query, bool _optional) {
 			name = _name;
 			address = _address;
 			sendAuthID = _sendAuthID;
 			query = _query;
+			optional = _optional;
 		}
 
 		public String Name {
@@ -264,6 +265,10 @@ namespace Server.Config {
 
 		public bool Query {
 			get { return query; }
+		}
+
+		public bool Optional {
+			get { return optional; }
 		}
 	}
 
@@ -320,8 +325,10 @@ namespace Server.Config {
 
 				bool sendAuthID = Parser.GetElementBool(gs, "send-auth-id", false);
 				bool query = Parser.GetElementBool(gs, "query", false);
+				bool optional = Parser.GetElementBool(gs, "optional", false);
 
-				servers.Add(new GameServer(name, address, sendAuthID, query));
+				servers.Add(new GameServer(name, address, sendAuthID,
+										   query, optional));
 			}
 		}
 
