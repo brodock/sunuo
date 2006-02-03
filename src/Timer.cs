@@ -504,7 +504,7 @@ namespace Server
 					   timer must be activated */
 					now = DateTime.Now;
 
-					TimeSpan sleep = earliest < now
+					TimeSpan sleep = earliest <= now
 						? TimeSpan.FromMilliseconds(10)
 						: (earliest == DateTime.MaxValue
 						   ? TimeSpan.FromSeconds(1)
