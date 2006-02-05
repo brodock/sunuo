@@ -757,10 +757,10 @@ try {
     <section>
       <title>Getting help</title>
       <para>
-        It is stronly recommended to join the SunUO <ulink
+        There is a <ulink url="http://sunuo.free-forums.org/">web
+        forum</ulink> and a <ulink
         url="https://lists.berlios.de/mailman/listinfo/sunuo-users">mailing
-        list</ulink>. Questions can then be directed at
-        <email>sunuo-users@lists.berlios.de</email>.
+        list</ulink> for SunUO support.
       </para>
     </section>
   </chapter>
