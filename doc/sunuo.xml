@@ -69,9 +69,10 @@
     <section>
       <title>Installing Mono</title>
       <para>
-        SunUO requires Mono 1.1.7; older versions are too buggy. Most
-        linux distributions don't have Mono 1.1.7 yet. Manual
-        installation is not hard; you need:
+        SunUO requires Mono; please use the most recent version.
+        Older versions than 1.1.7 are far too buggy.  1.1.13.2 has
+        proven to be very stable.  Some linux distributions don't have
+        Mono yet. Manual installation is not hard; you need:
       </para>
       <itemizedlist>
         <listitem>
@@ -100,7 +101,7 @@
       <para>
         First, let's install <filename>libgdiplus</filename>:
       </para>
-      <programlisting>wget http://go-mono.com/sources/libgdiplus-1.1/libgdiplus-1.1.8.tar.gz
+      <programlisting>wget http://go-mono.com/sources/libgdiplus-1.1/libgdiplus-1.1.13.2.tar.gz
 tar xzf libgdiplus-1.1.8.tar.gz
 cd libgdiplus-1.1.8
 ./configure --prefix=/usr/local
@@ -110,7 +111,7 @@ ldconfig</programlisting>
       <para>
         The Mono installation can now be performed:
       </para>
-      <programlisting>wget http://www.go-mono.com/sources/mono-1.1/mono-1.1.8.tar.gz
+      <programlisting>wget http://www.go-mono.com/sources/mono-1.1/mono-1.1.13.2.tar.gz
 tar xzf mono-1.1.8.tar.gz
 cd mono-1.1.8
 ./configure --prefix=/usr/local
