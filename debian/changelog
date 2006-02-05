@@ -62,7 +62,7 @@ sunuo (0.3.0) unstable; urgency=low
   * debian: recommend runuo-skeleton and sunuo-legacy-scripts
   * debian: removed runuo-installer
 
- --
+ -- Max Kellermann <max@duempel.org>  Sun,  5 Feb 2006 21:02:13 +0100
 
 sunuo (0.2.3) unstable; urgency=low
 
