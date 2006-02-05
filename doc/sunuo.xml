@@ -542,6 +542,53 @@ perl -pi -e 's,\r,\n,gs' local/src/Auction/AuctionItem.cs</programlisting>
         </orderedlist>
       </section>
     </section>
+
+    <section>
+      <title>Logging</title>
+      <para>
+        SunUO includes the <ulink
+        url="http://logging.apache.org/log4net/release/features.html"><filename>log4net</filename></ulink>
+        library, which is a very flexible library for logging.  SunUO
+        provides a good default configuration, which should be enough
+        for most cases.  If you want to do more, please refer to the
+        <ulink
+        url="http://logging.apache.org/log4net/release/config-examples.html">examples</ulink>
+        section on the <filename>log4net</filename> home page.
+      </para>
+
+      <para>
+        For scripts authors, the use of <filename>log4net</filename>
+        is very easy.  Add the following declaration at the top of
+        each class body:
+      </para>
+
+      <programlisting>private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);</programlisting>
+
+      <para>
+        Now in your code, you may replace
+        <command>Console.WriteLine()</command> with method calls to
+        this <varname>log</varname> object.  The following example
+        demonstrates some of these:
+      </para>
+
+      <programlisting>log.Debug("Entering MyMethod");
+try {
+    if (!foo)
+        log.Warn("Foo is disabled, bla");
+    int result = DoSomething();
+    log.InfoFormat("Did something, result={0}", result);
+    if (result &lt; 0)
+        log.Error("Invalid foobar");
+} catch (Exception e) {
+    log.Fatal(e);
+}</programlisting>
+
+      <para>
+        For more information, read the <ulink
+          url="http://logging.apache.org/log4net/release/sdk/log4net.ILogMembers.html">API
+          documentation</ulink>.
+      </para>
+    </section>
   </chapter>
 
   <chapter>
