@@ -50,7 +50,6 @@ namespace Server
 		private static string m_ExePath;
 		private static Assembly m_Assembly;
 		private static Thread m_Thread;
-		private static bool m_Service;
 
 		private static Config.Root config;
 
@@ -96,7 +95,6 @@ namespace Server
 			}
 		}
 
-		public static bool Service{ get{ return m_Service; } }
 		public static ArrayList DataDirectories {
 			get { return config.DataDirectories; }
 		}
@@ -177,24 +175,14 @@ namespace Server
 			{
 				m_Crashed = true;
 
-				bool close = false;
-
 				try
 				{
 					CrashedEventArgs args = new CrashedEventArgs( e.ExceptionObject as Exception );
 
 					EventSink.InvokeCrashed( args );
-
-					close = args.Close;
 				}
 				catch
 				{
-				}
-
-				if ( !close && !m_Service )
-				{
-					Console.WriteLine( "This exception is fatal, press return to exit" );
-					Console.ReadLine();
 				}
 
 				m_Closing = true;
@@ -248,9 +236,7 @@ namespace Server
 
 			for ( int i = 0; i < args.Length; ++i )
 			{
-				if ( Insensitive.Equals( args[i], "-service" ) )
-					m_Service = true;
-				else if ( Insensitive.Equals( args[i], "-profile" ) )
+				if ( Insensitive.Equals( args[i], "-profile" ) )
 					Profiling = true;
 			}
 
@@ -262,16 +248,6 @@ namespace Server
 									 Path.Combine(confDirectory, "sunuo.xml"));
 
 			Directory.SetCurrentDirectory(config.BaseDirectory);
-
-			/* redirect Console to file in service mode */
-			if (m_Service) {
-				string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
-				FileStream stream = new FileStream(filename, FileMode.Create,
-												   FileAccess.Write, FileShare.Read);
-				StreamWriter writer = new StreamWriter(stream);
-				Console.SetOut(writer);
-				Console.SetError(writer);
-			}
 
 			m_Thread = Thread.CurrentThread;
 
