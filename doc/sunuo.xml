@@ -200,6 +200,35 @@ mono SunUO.exe</programlisting>
   </chapter>
 
   <chapter>
+    <title>Upgrading</title>
+    <para>
+      Before you upgrade SunUO, back up your whole shard.  Then copy
+      <filename>SunUO.exe</filename> and all
+      <filename>*.dll</filename> files to your shard's base directory.
+    </para>
+
+    <para>
+      The rest of this chapter describes other actions required for a
+      smooth upgrade.
+    </para>
+
+    <section>
+      <title>Upgrading to 0.3.0</title>
+      <para>
+        The <filename>ZLib.cs</filename> workaround was removed from
+        the core; instead of excluding that script from compilation,
+        overwrite it with the version shipped with SunUO.
+      </para>
+
+      <para>
+        <varname>Core.AOS</varname> is disabled by default.  Enable
+        the <link linkend="feature_aos">feature
+        <varname>age-of-shadows</varname></link> instead.
+      </para>
+    </section>
+  </chapter>
+
+  <chapter>
     <title>Configuration</title>
     <section>
       <title>Basics</title>
@@ -271,6 +300,7 @@ mono SunUO.exe</programlisting>
               <row>
                 <entry>age-of-shadows</entry>
                 <entry>
+                  <anchor id="feature_aos"/>
                   enable AOS features (set <varname>Core.AOS</varname>)
                 </entry>
               </row>
