@@ -152,8 +152,8 @@ make install</programlisting>
       <programlisting>cd /opt
 unzip RunUO-1.0.0.zip
 mv "RunUO 1.0" sunuo
-unzip /tmp/sunuo-0.1.9-bin.zip
-cp sunuo-0.1.9-bin/SunUO.exe sunuo/
+unzip /tmp/sunuo-0.3.0-bin.zip
+cp sunuo-0.3.0-bin/SunUO.exe* sunuo/
 cd sunuo
 mono SunUO.exe</programlisting>
       <para>
