@@ -37,8 +37,6 @@ using Server.Accounting;
 
 namespace Server
 {
-	public delegate void Slice();
-
 	public class Core
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -60,8 +58,6 @@ namespace Server
 			get{ return m_MessagePump; }
 			set{ m_MessagePump = value; }
 		}
-
-		public static Slice Slice;
 
 		public static bool Profiling {
 			get { return false; }
@@ -260,9 +256,6 @@ namespace Server
 
 					NetState.FlushAll();
 					NetState.ProcessDisposedQueue();
-
-					if ( Slice != null )
-						Slice();
 				}
 			}
 			catch ( Exception e )
