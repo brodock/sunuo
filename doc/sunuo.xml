@@ -44,7 +44,8 @@
         </listitem>
         <listitem>
           <para>
-            the <filename>*.mul</filename> files from an <ulink
+            the <filename>*.mul</filename> files and
+            <filename>multi.idx</filename> from an <ulink
             url="http://38.119.37.21/L?T=H&amp;ST=L&amp;PID=0054000025&amp;source=00001&amp;gameid=2008">Ultima
             Online client installation</ulink>
           </para>
