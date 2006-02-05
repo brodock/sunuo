@@ -4,7 +4,7 @@ VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changel
 DISTDIR = build/sunuo-$(VERSION)-bin
 DISTDLL = MySql.Data.dll Npgsql.dll log4net.dll
 
-MCS_FLAGS += -define:MONO -debug -lib:build/lib
+MCS_FLAGS += -define:MONO -debug -lib:lib
 
 SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
@@ -25,12 +25,12 @@ install: all
 
 # compile targets
 
-$(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) build/lib/MySql.Data.dll build/lib/Npgsql.dll build/lib/log4net.dll
+$(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) lib/MySql.Data.dll lib/Npgsql.dll lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
 
-$(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) build/lib/MySql.Data.dll build/lib/log4net.dll
+$(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) lib/MySql.Data.dll lib/log4net.dll
 	mkdir -p $(DISTDIR)
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
@@ -40,7 +40,7 @@ $(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ util/UOGQuery.cs
 
-$(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: build/lib/%
+$(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 	cp $< $@
 
 # dist targets
@@ -60,7 +60,10 @@ $(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config
 $(DISTDIR)/changelog: debian/changelog
 	cp $< $@
 
-build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog $(DISTDLL))
+$(DISTDIR)/ZLib.cs: scripts/ZLib.cs
+	cp $< $@
+
+build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog ZLib.cs $(DISTDLL))
 	mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
 
@@ -71,6 +74,8 @@ svn-export:
 	svn export . build/tmp/sunuo-$(VERSION)
 
 build/dist/sunuo-$(VERSION).zip: svn-export
+	mkdir -p build/tmp/sunuo-$(VERSION)/lib
+	cp $(addprefix lib/,$(DISTDLL)) build/tmp/sunuo-$(VERSION)/lib/
 	mkdir -p $(dir $@)
 	cd build/tmp && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
@@ -81,11 +86,11 @@ download/mysql-connector-net-1.0.7-noinstall.zip:
 	wget http://sunsite.informatik.rwth-aachen.de/mysql/Downloads/Connector-Net/mysql-connector-net-1.0.7-noinstall.zip -O $@.tmp
 	mv $@.tmp $@
 
-build/lib/MySql.Data.dll: download/mysql-connector-net-1.0.7-noinstall.zip
+lib/MySql.Data.dll: download/mysql-connector-net-1.0.7-noinstall.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
-	mkdir -p build/lib
-	cp build/tmp/bin/mono-1.0/release/MySql.Data.dll build/lib/
+	mkdir -p lib
+	cp build/tmp/bin/mono-1.0/release/MySql.Data.dll lib/
 	rm -rf build/tmp
 
 download/Npgsql1.0beta1-bin.tar.bz2:
@@ -93,10 +98,11 @@ download/Npgsql1.0beta1-bin.tar.bz2:
 	wget http://pgfoundry.org/frs/download.php/531/Npgsql1.0beta1-bin.tar.bz2 -O $@.tmp
 	mv $@.tmp $@
 
-build/lib/Npgsql.dll: download/Npgsql1.0beta1-bin.tar.bz2
+lib/Npgsql.dll: download/Npgsql1.0beta1-bin.tar.bz2
 	rm -rf build/tmp && mkdir -p build/tmp
 	tar xjfC $< build/tmp
-	cp build/tmp/Npgsql/bin/mono/Npgsql.dll build/lib/
+	mkdir -p lib
+	cp build/tmp/Npgsql/bin/mono/Npgsql.dll lib/
 	rm -rf build/tmp
 
 download/incubating-log4net-1.2.9-beta.zip:
@@ -104,10 +110,11 @@ download/incubating-log4net-1.2.9-beta.zip:
 	wget http://cvs.apache.org/dist/incubator/log4net/1.2.9/incubating-log4net-1.2.9-beta.zip -O $@.tmp
 	mv $@.tmp $@
 
-build/lib/log4net.dll: download/incubating-log4net-1.2.9-beta.zip
+lib/log4net.dll: download/incubating-log4net-1.2.9-beta.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
-	cp build/tmp/bin/mono/1.0/release/log4net.dll build/lib/
+	mkdir -p lib
+	cp build/tmp/bin/mono/1.0/release/log4net.dll lib/
 	rm -rf build/tmp
 
 # documentation targets
