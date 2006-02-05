@@ -154,6 +154,7 @@ unzip RunUO-1.0.0.zip
 mv "RunUO 1.0" sunuo
 unzip /tmp/sunuo-0.3.0-bin.zip
 cp sunuo-0.3.0-bin/SunUO.exe* sunuo-0.3.0-bin/*.dll sunuo/
+cp sunuo-0.3.0-bin/ZLib.cs sunuo/Scripts/Misc/
 cd sunuo
 mono SunUO.exe</programlisting>
       <para>
@@ -414,24 +415,10 @@ mono SunUO.exe</programlisting>
         <title>Customized houses</title>
         <para>
           RunUO imports code from <filename>zlib.dll</filename> on
-          windows. This is done in a non-portable way. SunUO contains
-          a workaround which must be activated in
-          <filename>./etc/sunuo.xml</filename>:
-        </para>
-        <programlisting>&lt;libraries&gt;
-  &lt;library name="legacy"&gt;
-    &lt;ignore-source name="Misc/ZLib.cs"/&gt;
-  &lt;/library&gt;
-&lt;/libraries&gt;
-</programlisting>
-        <para>
-          Now symlink <filename>libz.so.1</filename> into the SunUO
-          directory:
-        </para>
-        <programlisting>ln -s /usr/lib/libz.so.1 zlib.dll</programlisting>
-        <para>
-          The "System.DllNotFoundException: zlib" error message should
-          go away now.
+          windows.  This is done in a non-portable way.  To fix this,
+          overwrite overwrite the file
+          <filename>Scripts/Misc/ZLib.cs</filename> with the version
+          shipped with SunUO.
         </para>
       </section>
 
