@@ -53,10 +53,6 @@ namespace Server
 
 		private static Config.Root config;
 
-		private static bool m_Profiling;
-		private static DateTime m_ProfileStart;
-		private static TimeSpan m_ProfileTime;
-
 		private static MessagePump m_MessagePump;
 
 		public static MessagePump MessagePump
@@ -67,32 +63,8 @@ namespace Server
 
 		public static Slice Slice;
 
-		public static bool Profiling
-		{
-			get{ return m_Profiling; }
-			set
-			{
-				if ( m_Profiling == value )
-					return;
-
-				m_Profiling = value;
-
-				if ( m_ProfileStart > DateTime.MinValue )
-					m_ProfileTime += DateTime.Now - m_ProfileStart;
-
-				m_ProfileStart = ( m_Profiling ? DateTime.Now : DateTime.MinValue );
-			}
-		}
-
-		public static TimeSpan ProfileTime
-		{
-			get
-			{
-				if ( m_ProfileStart > DateTime.MinValue )
-					return m_ProfileTime + (DateTime.Now - m_ProfileStart);
-
-				return m_ProfileTime;
-			}
+		public static bool Profiling {
+			get { return false; }
 		}
 
 		public static ArrayList DataDirectories {
@@ -234,10 +206,9 @@ namespace Server
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler( CurrentDomain_UnhandledException );
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler( CurrentDomain_ProcessExit );
 
-			for ( int i = 0; i < args.Length; ++i )
-			{
-				if ( Insensitive.Equals( args[i], "-profile" ) )
-					Profiling = true;
+			if (args.Length > 0) {
+				Console.WriteLine("SunLogin does not understand command line arguments");
+				return;
 			}
 
 			string baseDirectory = Path.GetDirectoryName(ExePath);
