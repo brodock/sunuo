@@ -210,6 +210,79 @@ mono SunUO.exe</programlisting>
       </para>
 
       <section>
+        <title>Features</title>
+        <para>
+          The "feature" element is used by SunUO to enable features in
+          the core, and possibly in scripts.  Unknown feature
+          specifications are ignored.  Example:
+        </para>
+
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;global&gt;
+    &lt;feature name="disable-context-menus"/&gt;
+    &lt;feature name="prefer-ascii"/&gt;
+    &lt;feature name="delocalize"/&gt;
+  &lt;/global&gt;
+&lt;/sunuo-config&gt;</programlisting>
+
+        <para>
+          The following feature flags are currently recognized by the
+          SunUO core:
+        </para>
+
+        <table>
+          <title>Feature flags</title>
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry>Name</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>disable-tile-patch</entry>
+                <entry>
+                  don't load <filename>mapdif*.mul</filename>,
+                  <filename>stadif*.mul</filename>
+                </entry>
+              </row>
+              <row>
+                <entry>disable-context-menus</entry>
+                <entry>
+                  disable the client's context menus
+                </entry>
+              </row>
+              <row>
+                <entry>prefer-ascii</entry>
+                <entry>
+                  prefer ASCII over Unicode messages whenever possible
+                </entry>
+              </row>
+              <row>
+                <entry>delocalize</entry>
+                <entry>
+                  don't send localized messages to the client
+                </entry>
+              </row>
+              <row>
+                <entry>age-of-shadows</entry>
+                <entry>
+                  enable AOS features (set <varname>Core.AOS</varname>)
+                </entry>
+              </row>
+              <row>
+                <entry>samurai-empire</entry>
+                <entry>
+                  enable SE features (set <varname>Core.SE</varname>)
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
         <title>Encryption</title>
         <para>
           Starting with version 0.2.0, SunUO has out-of-the-box
