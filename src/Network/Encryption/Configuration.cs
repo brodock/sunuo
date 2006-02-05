@@ -17,7 +17,7 @@ namespace Server.Network.Encryption
 		// Set this to true to enable this subsystem.
 		public static bool Enabled {
 			get {
-				return Config.Parser.GetElementBool(MyConfig, "enabled", true);
+				return Config.Parser.GetElementBool(MyConfig, "enabled", false);
 			}
 		}
 
