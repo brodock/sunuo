@@ -127,7 +127,6 @@ namespace Server
 	public sealed class BinaryFileWriter : GenericWriter
 	{
 		private bool PrefixStrings;
-		private BinaryWriter m_Bin;
 		private FileStream m_File;
 
 		private const int BufferSize = 4096;
@@ -142,7 +141,6 @@ namespace Server
 		public BinaryFileWriter( FileStream strm, bool prefixStr ) 
 		{ 
 			PrefixStrings = prefixStr;
-			m_Bin = new BinaryWriter( strm, Utility.UTF8 ); 
 			m_Encoding = Utility.UTF8;
 			m_Buffer = new byte[BufferSize];
 			m_File = strm;
@@ -154,14 +152,13 @@ namespace Server
 			m_Buffer = new byte[BufferSize];
 			m_File = new FileStream( filename, FileMode.Create, FileAccess.Write, FileShare.None );
 			m_Encoding = Utility.UTF8WithEncoding;
-			m_Bin = new BinaryWriter( m_File, Utility.UTF8WithEncoding );
 		}
 
 		public void Flush()
 		{
 			if ( m_Index > 0 )
 			{
-				m_Bin.Write( m_Buffer, 0, m_Index );
+				m_File.Write( m_Buffer, 0, m_Index );
 				m_Position += m_Index;
 				m_Index = 0;
 			}
@@ -178,8 +175,19 @@ namespace Server
 		public override void Close()
 		{
 			Flush();
-			m_Bin.Flush();
 			m_File.Close();
+		}
+
+		private void Write(byte[] src) {
+			int length = src.Length;
+
+			if (m_Index + length > BufferSize)
+				Flush();
+
+			for (int i = 0; i < length; i++)
+				m_Buffer[m_Index + i] = src[i];
+
+			m_Index += length;
 		}
 
 		public override void WriteEncodedInt( int value )
@@ -387,16 +395,12 @@ namespace Server
 
 		public override void Write( double value )
 		{
-			Flush();
-			m_Bin.Write(value);
-			m_Position += 8;
+			Write(BitConverter.GetBytes(value));
 		}
 
 		public override void Write( float value )
 		{
-			Flush();
-			m_Bin.Write(value);
-			m_Position += 4;
+			Write(BitConverter.GetBytes(value));
 		}
 
 		private char[] m_SingleCharBuffer = new char[1];
