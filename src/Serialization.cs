@@ -174,15 +174,6 @@ namespace Server
 			}
 		}
 
-		public Stream UnderlyingStream
-		{
-			get
-			{
-				Flush();
-				return m_File;
-			}
-		}
-
 		public override void Close()
 		{
 			Flush();
