@@ -1039,6 +1039,9 @@ namespace Server
 				SaveRegions();
 			}
 
+			log.InfoFormat("Entities saved in {0:F1} seconds.",
+						   (DateTime.Now - startTime).TotalSeconds);
+
 			//Accounts.Save();
 
 			try
