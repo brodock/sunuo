@@ -129,7 +129,7 @@ namespace Server
 		private bool PrefixStrings;
 		private FileStream m_File;
 
-		private const int BufferSize = 4096;
+		private const int BufferSize = 32768;
 
 		private byte[] m_Buffer;
 		private int m_Index;
