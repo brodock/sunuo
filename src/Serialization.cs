@@ -134,6 +134,8 @@ namespace Server
 		private byte[] m_Buffer;
 		private int m_Index;
 
+		private long m_Position = 0;
+
 		private Encoding m_Encoding;
 
 		public BinaryFileWriter( FileStream strm, bool prefixStr ) 
@@ -159,6 +161,7 @@ namespace Server
 			if ( m_Index > 0 )
 			{
 				m_Bin.Write( m_Buffer, 0, m_Index );
+				m_Position += m_Index;
 				m_Index = 0;
 			}
 		}
@@ -167,9 +170,7 @@ namespace Server
 		{
 			get
 			{
-				Flush();
-				m_Bin.Flush();
-				return m_File.Position;
+				return m_Position + m_Index;
 			}
 		}
 
@@ -399,12 +400,14 @@ namespace Server
 		{
 			Flush();
 			m_Bin.Write(value);
+			m_Position += 8;
 		}
 
 		public override void Write( float value )
 		{
 			Flush();
 			m_Bin.Write(value);
+			m_Position += 4;
 		}
 
 		private char[] m_SingleCharBuffer = new char[1];
