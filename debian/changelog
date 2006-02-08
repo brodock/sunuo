@@ -1,9 +1,10 @@
 sunuo (0.3.1) unstable; urgency=low
 
-  * cache position in BinaryFileWriter
+  * optimizations in the serialization code
+    - cache position in BinaryFileWriter
+    - sealed the serialization classes
+    - enlarged BinaryFileWriter's buffer to 32kB
   * removed BinaryFileWriter.UnderlyingStream
-  * sealed the serialization classes for performance
-  * enlarged BinaryFileWriter's buffer to 32kB
   * Mobile: better SkillMod==null handling
 
  --
