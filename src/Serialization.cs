@@ -185,17 +185,14 @@ namespace Server
 		{
 			uint v = (uint) value;
 
+			if ( (m_Index + 5) > BufferSize )
+				Flush();
+
 			while ( v >= 0x80 ) 
 			{
-				if ( (m_Index + 1) > BufferSize )
-					Flush();
-
 				m_Buffer[m_Index++] = (byte) (v | 0x80);
 				v >>= 7;
 			}
-
-			if ( (m_Index + 1) > BufferSize )
-				Flush();
 
 			m_Buffer[m_Index++] = (byte) v;
 		}
