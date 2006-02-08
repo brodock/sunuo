@@ -5,6 +5,7 @@ sunuo (0.3.1) unstable; urgency=low
     - sealed the serialization classes
     - enlarged BinaryFileWriter's buffer to 32kB
   * removed BinaryFileWriter.UnderlyingStream
+  * BinaryFileWriter.Flush() is private
   * Mobile: better SkillMod==null handling
 
  --

@@ -154,7 +154,7 @@ namespace Server
 			m_Encoding = Utility.UTF8WithEncoding;
 		}
 
-		public void Flush()
+		private void Flush()
 		{
 			if ( m_Index > 0 )
 			{
