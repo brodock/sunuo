@@ -1103,7 +1103,14 @@ namespace Server
 		}
 
 		public object Party{ get{ return m_Party; } set{ m_Party = value; } }
-		public ArrayList SkillMods{ get{ return m_SkillMods; } }
+		public ArrayList SkillMods {
+			get {
+				if (m_SkillMods == null)
+					m_SkillMods = new ArrayList(1);
+
+				return m_SkillMods;
+			}
+		}
 
 		[CommandProperty( AccessLevel.GameMaster )]
 		public int VirtualArmorMod
@@ -1198,7 +1205,7 @@ namespace Server
 
 		private void InternalRemoveSkillMod( SkillMod mod )
 		{
-			if ( m_SkillMods.Contains( mod ) )
+			if ( m_SkillMods != null && m_SkillMods.Contains( mod ) )
 			{
 				m_SkillMods.Remove( mod );
 				if (m_SkillMods.Count == 0)
