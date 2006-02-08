@@ -8,7 +8,7 @@ sunuo (0.3.1) unstable; urgency=low
   * BinaryFileWriter.Flush() is private
   * Mobile: better SkillMod==null handling
 
- --
+ -- Max Kellermann <max@duempel.org>  Wed,  8 Feb 2006 23:26:45 +0100
 
 sunuo (0.3.0) unstable; urgency=low
 
