@@ -123,7 +123,7 @@ namespace Server
 		public abstract void WriteGuildList( ArrayList list, bool tidy );
 	}
 
-	public class BinaryFileWriter : GenericWriter
+	public sealed class BinaryFileWriter : GenericWriter
 	{
 		private bool PrefixStrings;
 		private BinaryWriter m_Bin;
@@ -564,7 +564,7 @@ namespace Server
 		}
 	}
 
-	public class BinaryFileReader : GenericReader
+	public sealed class BinaryFileReader : GenericReader
 	{
 		private BinaryReader m_File;
 
@@ -807,7 +807,7 @@ namespace Server
 		}
 	}
 
-	public class AsyncWriter : GenericWriter
+	public sealed class AsyncWriter : GenericWriter
 	{
 		private static int m_ThreadCount = 0;
 		public static int ThreadCount { get { return m_ThreadCount; } }

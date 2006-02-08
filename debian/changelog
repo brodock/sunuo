@@ -2,6 +2,7 @@ sunuo (0.3.1) unstable; urgency=low
 
   * cache position in BinaryFileWriter
   * removed BinaryFileWriter.UnderlyingStream
+  * sealed the serialization classes for performance
 
  --
 
