@@ -1,3 +1,9 @@
+sunuo (0.3.2) unstable; urgency=low
+
+  * 
+
+ --
+
 sunuo (0.3.1) unstable; urgency=low
 
   * optimizations in the serialization code
