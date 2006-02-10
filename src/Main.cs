@@ -35,6 +35,7 @@ using Server.Network;
 using Server.Network.Encryption;
 using Server.Accounting;
 using Server.Gumps;
+using Server.Profiler;
 
 [assembly: log4net.Config.XmlConfigurator(Watch=true)]
 
@@ -231,12 +232,40 @@ namespace Server
 			get { return config; }
 		}
 
+		/* current time */
 		private static DateTime m_Now = DateTime.Now;
 		public static DateTime Now {
 			get {
 				return m_Now;
 			}
 		}
+
+		/* main loop profiler */
+		private static MainProfile m_TotalProfile;
+		private static MainProfile m_CurrentProfile;
+
+		public static MainProfile TotalProfile {
+			get { return m_TotalProfile; }
+		}
+
+		public static MainProfile CurrentProfile {
+			get { return m_CurrentProfile; }
+		}
+
+		public static void ResetCurrentProfile() {
+
+			m_CurrentProfile = new MainProfile(m_Now);
+		}
+
+		private static void ClockProfile(MainProfile.TimerId id) {
+			DateTime prev = m_Now;
+			m_Now = DateTime.Now;
+
+			TimeSpan diff = m_Now - prev;
+			m_TotalProfile.Add(id, diff);
+			m_CurrentProfile.Add(id, diff);
+		}
+
 
 		private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
@@ -377,25 +406,55 @@ namespace Server
 
 			log.Info("SunUO initialized, entering main loop");
 
+			m_Now = DateTime.Now;
+			m_TotalProfile = new MainProfile(m_Now);
+			m_CurrentProfile = new MainProfile(m_Now);
+
 			try
 			{
 				while ( !m_Closing )
 				{
-					m_Signal.WaitOne();
-
 					m_Now = DateTime.Now;
 
+					/* wait until event happens */
+
+					m_Signal.WaitOne();
+
+					ClockProfile(MainProfile.TimerId.Idle);
+
+					/* process mobiles */
+
 					Mobile.ProcessDeltaQueue();
+
+					ClockProfile(MainProfile.TimerId.MobileDelta);
+
+					/* process items */
+
 					Item.ProcessDeltaQueue();
 
+					ClockProfile(MainProfile.TimerId.ItemDelta);
+
+					/* process timers */
+
 					Timer.Slice();
+
+					ClockProfile(MainProfile.TimerId.Timers);
+
+					/* network */
+
 					m_MessagePump.Slice();
 
 					NetState.FlushAll();
 					NetState.ProcessDisposedQueue();
 
+					ClockProfile(MainProfile.TimerId.Network);
+
 					if ( Slice != null )
 						Slice();
+
+					/* done with this iteration */
+					m_TotalProfile.Next();
+					m_CurrentProfile.Next();
 				}
 			}
 			catch ( Exception e )
