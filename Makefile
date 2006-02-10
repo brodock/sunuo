@@ -60,7 +60,7 @@ $(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config
 $(DISTDIR)/changelog: debian/changelog
 	cp $< $@
 
-$(DISTDIR)/ZLib.cs: scripts/ZLib.cs
+$(DISTDIR)/ZLib.cs: scripts/legacy/Misc/ZLib.cs
 	cp $< $@
 
 build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog ZLib.cs $(DISTDLL))
