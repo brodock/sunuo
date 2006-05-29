@@ -482,6 +482,9 @@ namespace Server
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
 
+				if (serial == Serial.MinusOne)
+					continue;
+
 				EntityType type = types[typeID];
 				if (type.Constructor == null)
 					continue;
@@ -526,6 +529,9 @@ namespace Server
 				int serial = idxReader.ReadInt32();
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
+
+				if (serial == Serial.MinusOne)
+					continue;
 
 				EntityType type = types[typeID];
 				if (type.Constructor == null)
@@ -638,6 +644,9 @@ namespace Server
 						int serial = idxReader.ReadInt32();
 						long pos = idxReader.ReadInt64();
 						int length = idxReader.ReadInt32();
+
+						if (serial == Serial.MinusOne)
+							continue;
 
 						Region r = Region.FindByUId( serial );
 
