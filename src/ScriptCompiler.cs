@@ -196,7 +196,7 @@ namespace Server
 
 			CompilerParameters parms = new CompilerParameters( GetReferenceAssemblies(), assemblyFile, debug );
 			if (tempFile != null)
-				parms.CompilerOptions += "@" + tempFile;
+				parms.CompilerOptions += "-- @" + tempFile;
 
 			if (libConfig.WarningLevel >= 0)
 				parms.WarningLevel = libConfig.WarningLevel;
