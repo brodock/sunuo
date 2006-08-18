@@ -14,6 +14,8 @@ namespace Server.Engines.Reports
 {
 	public class HtmlRenderer
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string m_OutputDirectory;
 		private DateTime m_TimeStamp;
 		private ObjectCollection m_Objects;
@@ -42,14 +44,14 @@ namespace Server.Engines.Reports
 
 		public void Render()
 		{
-			Console.WriteLine( "Reports: Render started" );
+			log.Info("Reports: Render started");
 
 			RenderFull();
 
 			for ( int i = 0; i < m_Objects.Count; ++i )
 				RenderSingle( m_Objects[i] );
 
-			Console.WriteLine( "Reports: Render complete" );
+			log.Info("Reports: Render complete");
 		}
 
 		private static readonly string FtpHost = null;
@@ -64,7 +66,7 @@ namespace Server.Engines.Reports
 			if ( FtpHost == null )
 				return;
 
-			Console.WriteLine( "Reports: Upload started" );
+			log.Info("Reports: Upload started");
 
 			string filePath = Path.Combine( m_OutputDirectory, "upload.ftp" );
 
@@ -100,7 +102,7 @@ namespace Server.Engines.Reports
 			{
 			}
 
-			Console.WriteLine( "Reports: Upload complete" );
+			log.Info("Reports: Upload complete");
 
 			try{ File.Delete( filePath ); }
 			catch{}
