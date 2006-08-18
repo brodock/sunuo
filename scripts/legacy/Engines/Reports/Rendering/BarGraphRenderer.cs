@@ -885,7 +885,7 @@ namespace Server.Engines.Reports
 			string label = text;
 			if (text.Length > 2) 
 			{
-				int midPostition = Convert.ToInt32(Math.Floor(text.Length/2));
+				int midPostition = Convert.ToInt32(Math.Floor(text.Length/2.0));
 				label = text.Substring(0,1) + text.Substring(midPostition, 1) + text.Substring(text.Length-1,1);
 			}
 			return label;
