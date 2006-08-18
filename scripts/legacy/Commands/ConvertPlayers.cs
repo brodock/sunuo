@@ -10,6 +10,8 @@ namespace Server.Scripts.Commands
 {
 	public class ConvertPlayers
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static void Initialize()
 		{
 			Server.Commands.Register( "ConvertPlayers", AccessLevel.Administrator, new CommandEventHandler( Convert_OnCommand ) );
@@ -53,13 +55,14 @@ namespace Server.Scripts.Commands
 				NetState.ProcessDisposedQueue();
 				World.Save();
 			
-				Console.WriteLine( "{0} players have been converted to PlayerMobile.  Please restart the server.", count );
+				log.Info(String.Format("{0} players have been converted to PlayerMobile.  Please restart the server.",
+									   count));
 				while ( true )
 					Console.ReadLine();
 			}
 			else
 			{
-				e.Mobile.SendMessage( "Couldn't find any Players to convert." );
+				log.Info( "Couldn't find any Players to convert." );
 			}
 		}
 		

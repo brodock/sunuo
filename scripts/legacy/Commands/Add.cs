@@ -12,6 +12,8 @@ namespace Server.Scripts.Commands
 {
 	public class Add
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static void Initialize()
 		{
 			Server.Commands.Register( "Tile", AccessLevel.GameMaster, new CommandEventHandler( Tile_OnCommand ) );
@@ -346,7 +348,7 @@ namespace Server.Scripts.Commands
 			}
 			catch ( Exception ex )
 			{
-				Console.WriteLine(ex);
+				log.Error(ex);
 				return 0;
 			}
 		}
