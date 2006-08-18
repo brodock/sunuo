@@ -9,6 +9,7 @@ sunuo (0.3.2) unstable; urgency=low
     - removed Address from ServerList
     - default to server list from Config.GameServerListConfig
     - get server name from Config.ServerName
+    - make backup path portable
 
  --
 
