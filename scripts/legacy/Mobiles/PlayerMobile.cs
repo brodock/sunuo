@@ -62,6 +62,8 @@ namespace Server.Mobiles
 
 	public class PlayerMobile : Mobile
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private class CountAndTimeStamp
 		{
 			private int m_Count;
