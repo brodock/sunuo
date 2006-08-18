@@ -240,7 +240,8 @@ namespace Server.Multis
 			int version = reader.ReadEncodedInt();
 
 			m_House = (BaseHouse) reader.ReadItem();
-			m_House.MovingCrate = this;
+			if (m_House != null)
+				m_House.MovingCrate = this;
 
 			Timer.DelayCall( TimeSpan.Zero, new TimerCallback( Hide ) );
 
