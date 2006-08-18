@@ -2,6 +2,7 @@ sunuo (0.3.2) unstable; urgency=low
 
   * implemented a main loop profiler
   * refuse to load objects with serial -1
+  * added legacy scripts
 
  --
 
