@@ -162,7 +162,7 @@ namespace Server.Engines.Help
 
 			try
 			{
-				string path = Path.Combine( Core.BaseDirectory, "Data/pageresponse.cfg" );
+				string path = Path.Combine( Core.Config.ConfigDirectory, "pageresponse.cfg" );
 
 				using ( StreamWriter op = new StreamWriter( path ) )
 				{
@@ -184,7 +184,7 @@ namespace Server.Engines.Help
 		{
 			ArrayList list = new ArrayList();
 
-			string path = Path.Combine( Core.BaseDirectory, "Data/pageresponse.cfg" );
+			string path = Path.Combine( Core.Config.ConfigDirectory, "pageresponse.cfg" );
 
 			if ( File.Exists( path ) )
 			{

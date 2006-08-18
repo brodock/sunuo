@@ -42,7 +42,7 @@ namespace Server
 
 		private static void Load()
 		{
-			string path = Path.Combine( Core.BaseDirectory, "Data/shrink.cfg" );
+			string path = Path.Combine(Core.Config.ConfigDirectory, "shrink.cfg");
 
 			if ( !File.Exists( path ) )
 			{

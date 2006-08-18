@@ -24,12 +24,14 @@ namespace Server.Scripts.Commands
 
 			m_Mobile.SendMessage( "Generating world decoration, please wait." );
 
-			Generate( "Data/Decoration/Britannia", Map.Trammel, Map.Felucca );
-			Generate( "Data/Decoration/Trammel", Map.Trammel );
-			Generate( "Data/Decoration/Felucca", Map.Felucca );
-			Generate( "Data/Decoration/Ilshenar", Map.Ilshenar );
-			Generate( "Data/Decoration/Malas", Map.Malas );
-			Generate( "Data/Decoration/Tokuno", Map.Tokuno );
+			string path = Path.Combine(Core.Config.ConfigDirectory, "Decoration");
+
+			Generate( Path.Combine(path, "Britannia"), Map.Trammel, Map.Felucca );
+			Generate( Path.Combine(path, "Trammel"), Map.Trammel );
+			Generate( Path.Combine(path, "Felucca"), Map.Felucca );
+			Generate( Path.Combine(path, "Ilshenar"), Map.Ilshenar );
+			Generate( Path.Combine(path, "Malas"), Map.Malas );
+			Generate( Path.Combine(path, "Tokuno"), Map.Tokuno );
 
 			m_Mobile.SendMessage( "World generating complete. {0} items were generated.", m_Count );
 		}

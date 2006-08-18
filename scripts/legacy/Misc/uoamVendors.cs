@@ -36,7 +36,7 @@ namespace Server
 
 		public static void Parse( Mobile from )
 		{
-			string vendor_path = Path.Combine( Core.BaseDirectory, "Data/Common.map" );
+			string vendor_path = Path.Combine(Core.Config.ConfigDirectory, "Common.map");
 			m_Count = 0;
 
 			if ( File.Exists( vendor_path ) )

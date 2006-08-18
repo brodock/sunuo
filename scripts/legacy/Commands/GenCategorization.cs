@@ -45,7 +45,7 @@ namespace Server.Custom
 		{
 			CategoryEntry root = new CategoryEntry( null, "Add Menu", new CategoryEntry[]{ Items, Mobiles } );
 
-			Export( root, "Data/objects.xml", "Objects" );
+			Export( root, Path.Combine(Core.Config.ConfigDirectory, "objects.xml"), "Objects" );
 
 			e.Mobile.SendMessage( "Categorization menu rebuilt." );
 		}
@@ -157,8 +157,8 @@ namespace Server.Custom
 			for ( int i = 0; i < ScriptCompiler.Assemblies.Length; ++i )
 				AddTypes( ScriptCompiler.Assemblies[i], types );
 
-			m_RootItems = Load( types, "Data/items.cfg" );
-			m_RootMobiles = Load( types, "Data/mobiles.cfg" );
+			m_RootItems = Load( types, Path.Combine(Core.Config.ConfigDirectory, "items.cfg") );
+			m_RootMobiles = Load( types, Path.Combine(Core.Config.ConfigDirectory, "mobiles.cfg") );
 		}
 
 		private static CategoryEntry Load( ArrayList types, string config )

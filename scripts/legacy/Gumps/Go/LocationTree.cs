@@ -17,7 +17,8 @@ namespace Server.Gumps
 			m_LastBranch = new Hashtable();
 			m_Map = map;
 
-			string path = Path.Combine( "Data/Locations/", fileName );
+			string path = Path.Combine(Path.Combine(Core.Config.ConfigDirectory, "Locations"),
+									   fileName);
 
 			if ( File.Exists( path ) )
 			{

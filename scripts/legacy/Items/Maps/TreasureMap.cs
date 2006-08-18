@@ -76,7 +76,7 @@ namespace Server.Items
 
 		private static void LoadLocations()
 		{
-			string filePath = Path.Combine( Core.BaseDirectory, "Data/treasure.cfg" );
+			string filePath = Path.Combine(Core.Config.ConfigDirectory, "treasure.cfg");
 
 			ArrayList list = new ArrayList();
 			ArrayList havenList = new ArrayList();

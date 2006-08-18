@@ -119,7 +119,7 @@ namespace Server.Gumps
 			get
 			{
 				if ( m_Root == null )
-					m_Root = Load( "Data/objects.xml" );
+					m_Root = Load(Path.Combine(Core.Config.ConfigDirectory, "objects.xml"));
 
 				return m_Root;
 			}

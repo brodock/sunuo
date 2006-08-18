@@ -51,7 +51,7 @@ namespace Server
 		{
 			m_Table = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
 
-			string filePath = Path.Combine( Core.BaseDirectory, "Data/names.xml" );
+			string filePath = Path.Combine(Core.Config.ConfigDirectory, "names.xml");
 
 			if ( !File.Exists( filePath ) )
 				return;
