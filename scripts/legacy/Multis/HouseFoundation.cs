@@ -22,6 +22,8 @@ namespace Server.Multis
 
 	public class HouseFoundation : BaseHouse
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private DesignState m_Current; // State which is currently visible.
 		private DesignState m_Design;  // State of current design.
 		private DesignState m_Backup;  // State at last user backup.
@@ -1927,6 +1929,8 @@ namespace Server.Multis
 
 	public class DesignStateDetailed : Packet
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public const int MaxItemsPerStairBuffer = 750;
 
 		private static byte[][] m_PlaneBuffers;
@@ -2119,7 +2123,7 @@ namespace Server.Multis
 
 				if ( ce != ZLibError.Z_OK )
 				{
-					Console.WriteLine( "ZLib error: {0} (#{1})", ce, (int)ce );
+					log.Error(String.Format("ZLib error: {0} (#{1})", ce, (int)ce));
 					deflatedLength = 0;
 					size = 0;
 				}
@@ -2153,7 +2157,7 @@ namespace Server.Multis
 
 				if ( ce != ZLibError.Z_OK )
 				{
-					Console.WriteLine( "ZLib error: {0} (#{1})", ce, (int)ce );
+					log.Error(String.Format("ZLib error: {0} (#{1})", ce, (int)ce));
 					deflatedLength = 0;
 					size = 0;
 				}
@@ -2248,7 +2252,7 @@ namespace Server.Multis
 					}
 					catch ( Exception e )
 					{
-						Console.WriteLine( e );
+						log.Error( e );
 
 						try
 						{

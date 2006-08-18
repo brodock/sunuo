@@ -9,6 +9,8 @@ namespace Server.Items
 	[FlipableAttribute( 0xe80, 0x9a8 )]
 	public class StrongBox : BaseContainer, IChopable
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Mobile m_Owner;
 		private BaseHouse m_House;
 
@@ -82,7 +84,7 @@ namespace Server.Items
 		{
 			if ( m_Owner != null && m_House != null && !m_House.IsCoOwner( m_Owner ) )
 			{
-				Console.WriteLine( "Warning: Destroying strongbox of {0}", m_Owner.Name );
+				log.Warn(String.Format("Destroying strongbox of {0}", m_Owner.Name));
 				Destroy();
 			}
 		}

@@ -569,7 +569,7 @@ namespace Server.Mobiles
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine( e );
+				log.Error( e );
 			}
 			finally
 			{
