@@ -7,8 +7,9 @@ namespace Server.Misc
 {
 	public class TestCenter
 	{
-		private const bool m_Enabled = false;
-		public static bool Enabled { get{ return m_Enabled; } }
+		public static bool Enabled {
+			get { return Core.Config.Features["test-center"]; }
+		}
 
 		public static void Initialize()
 		{

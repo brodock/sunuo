@@ -15,6 +15,7 @@ sunuo (0.3.2) unstable; urgency=low
     - don't read data-path from stdin
     - removed DataPath.CustomPath
     - don't try to dns-resolve hostname, just use LocalEndPoint
+    - test center switch is feature "test-center"
 
  --
 
