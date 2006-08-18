@@ -10,6 +10,7 @@ sunuo (0.3.2) unstable; urgency=low
     - default to server list from Config.GameServerListConfig
     - get server name from Config.ServerName
     - make backup path portable
+    - display "SunUO" in UOGInfo packet
 
  --
 
