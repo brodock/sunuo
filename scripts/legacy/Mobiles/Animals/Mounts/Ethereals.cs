@@ -378,7 +378,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal horse" )
 				Name = null;
@@ -412,7 +412,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal llama" )
 				Name = null;
@@ -443,7 +443,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal ostard" )
 				Name = null;
@@ -474,7 +474,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal ridgeback" )
 				Name = null;
@@ -505,7 +505,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal unicorn" )
 				Name = null;
@@ -536,7 +536,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal beetle" )
 				Name = null;
@@ -567,7 +567,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal kirin" )
 				Name = null;
@@ -598,7 +598,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Name == "an ethereal swamp dragon" )
 				Name = null;

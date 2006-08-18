@@ -62,7 +62,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 			m_Item2 = reader.ReadItem() as InternalItem2;
@@ -117,7 +117,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as LargeForgeWest;
 			}
@@ -172,7 +172,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as LargeForgeWest;
 			}
@@ -238,7 +238,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 			m_Item2 = reader.ReadItem() as InternalItem2;
@@ -293,7 +293,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as LargeForgeEast;
 			}
@@ -348,7 +348,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as LargeForgeEast;
 			}

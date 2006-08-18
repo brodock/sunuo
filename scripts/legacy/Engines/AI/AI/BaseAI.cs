@@ -1595,7 +1595,7 @@ namespace Server.Mobiles
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				Delete();
 			}
@@ -2248,7 +2248,6 @@ namespace Server.Mobiles
 					if (iCurrDist < iWantDistMin || iCurrDist > iWantDistMax)
 					{
 						bool needCloser = ( iCurrDist > iWantDistMax );
-						bool needFurther = !needCloser;
 
 						if ( needCloser && m_Path != null && m_Path.Goal == m )
 						{

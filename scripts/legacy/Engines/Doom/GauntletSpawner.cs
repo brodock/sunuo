@@ -675,11 +675,11 @@ namespace Server.Engines.Doom
 	
 	public class GauntletRegion : Region
 	{
-		private GauntletSpawner m_Spawner;
+		//private GauntletSpawner m_Spawner;
 
 		public GauntletRegion( GauntletSpawner spawner, Map map ): base( "", spawner.TypeName, map )
 		{
-			m_Spawner = spawner;
+			//m_Spawner = spawner;
 
 			Priority = Region.TownPriority + 1;
 			LoadFromXml = false;

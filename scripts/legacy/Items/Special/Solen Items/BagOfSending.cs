@@ -225,7 +225,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Charges = reader.ReadEncodedInt();
 			m_BagOfSendingHue = (BagOfSendingHue) reader.ReadEncodedInt();

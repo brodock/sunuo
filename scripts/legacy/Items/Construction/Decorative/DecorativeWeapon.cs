@@ -27,7 +27,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -83,7 +83,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -111,7 +111,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -164,7 +164,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -216,7 +216,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as DecorativeSwordNorth;
 			}
@@ -271,7 +271,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -323,7 +323,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as DecorativeSwordWest;
 			}
@@ -378,7 +378,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -430,7 +430,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as DecorativeDAxeNorth;
 			}
@@ -485,7 +485,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -537,7 +537,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as DecorativeDAxeWest;
 			}

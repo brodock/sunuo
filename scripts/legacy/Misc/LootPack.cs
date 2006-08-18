@@ -478,8 +478,6 @@ namespace Server
 					if ( Core.AOS )
 					{
 						int bonusProps = GetBonusProperties();
-						int min = m_MinIntensity;
-						int max = m_MaxIntensity;
 
 						if ( bonusProps < m_MaxProps && LootPack.CheckLuck( luckChance ) )
 							++bonusProps;

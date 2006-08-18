@@ -27,7 +27,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 	[Flipable( 0x2798, 0x27E3 )]
@@ -67,7 +67,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -108,7 +108,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -147,7 +147,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -185,7 +185,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -223,7 +223,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -261,7 +261,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -299,7 +299,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -337,7 +337,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -375,7 +375,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -413,7 +413,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -451,7 +451,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -489,7 +489,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -527,7 +527,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -565,7 +565,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -632,7 +632,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Hue != 0x8A4 )
 				Hue = 0x8A4;
@@ -689,7 +689,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Hue != 0 && (Hue < 2101 || Hue > 2130) )
 				Hue = GetRandomHue();
@@ -730,7 +730,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -774,7 +774,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -812,7 +812,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -850,7 +850,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -888,7 +888,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -926,7 +926,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 

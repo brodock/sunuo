@@ -28,7 +28,7 @@ namespace Server.Engines.Quests.Hag
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 }

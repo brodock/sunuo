@@ -434,8 +434,6 @@ namespace Server.Multis
 		private static Direction BackwardRight = Direction.Down;
 		private static Direction Left = Direction.West;
 		private static Direction Right = Direction.East;
-		private static Direction Port = Left;
-		private static Direction Starboard = Right;
 
 		private bool m_Decaying;
 
@@ -1208,8 +1206,6 @@ namespace Server.Multis
 
 					if ( landTile.Z == p.Z && ((landTile.ID >= 168 && landTile.ID <= 171) || (landTile.ID >= 310 && landTile.ID <= 311)) )
 						hasWater = true;
-
-					int z = p.Z;
 
 					//int landZ = 0, landAvg = 0, landTop = 0;
 

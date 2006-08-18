@@ -80,7 +80,7 @@ namespace Server.Items
 			base.Deserialize( reader );
 			LootType = LootType.Blessed;
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override bool DisplayLootType{ get{ return false; } }

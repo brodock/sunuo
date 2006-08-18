@@ -468,7 +468,7 @@ namespace Server.Factions
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Faction = Faction.ReadReference( reader );
 			m_Town = Town.ReadReference( reader );
@@ -532,7 +532,7 @@ namespace Server.Factions
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Rider = reader.ReadMobile();
 

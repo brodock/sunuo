@@ -184,13 +184,12 @@ namespace Server.Scripts.Commands
 	{
 		private PropertyInfo[] m_PropertyInfoChain;
 		private ConditionOperator m_Operator;
-		private Mobile m_From;
 		private object m_Argument;
 		private bool m_LogicalNot;
 
 		public PropertyCondition( Mobile from, Type type, PropertyInfo[] props, string prop, string oper, string arg, bool logicalNot )
 		{
-			m_From = from;
+			/*m_From = from;*/
 			m_LogicalNot = logicalNot;
 
 			string failReason = "";

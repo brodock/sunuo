@@ -123,7 +123,7 @@ namespace Server.Engines.Quests.Doom
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Chyloth = reader.ReadMobile() as Chyloth;
 			m_Dragon = reader.ReadMobile() as SkeletalDragon;

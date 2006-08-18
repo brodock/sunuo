@@ -44,8 +44,6 @@ namespace Server.Engines.Help
 
 	public class PageQueueGump : Gump
 	{
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		private PageEntry[] m_List;
 
 		public PageQueueGump() : base( 30, 30 )

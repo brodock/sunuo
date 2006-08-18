@@ -25,7 +25,6 @@ namespace Server.Mobiles
 		{
 			// A Dummy Macer
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 125, 125, 90 );
@@ -89,7 +88,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -101,7 +100,6 @@ namespace Server.Mobiles
 		{
 			// A Dummy Fencer
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 125, 125, 90 );
@@ -165,7 +163,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -177,7 +175,6 @@ namespace Server.Mobiles
 		{
 			// A Dummy Swordsman
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 125, 125, 90 );
@@ -242,7 +239,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -313,7 +310,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -326,7 +323,6 @@ namespace Server.Mobiles
 
 			// A Dummy Stun Mage
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 90, 90, 125 );
@@ -407,7 +403,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -419,7 +415,6 @@ namespace Server.Mobiles
 		{
 			// A Dummy Super Mage
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 125, 125, 125 );
@@ -505,7 +500,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -517,7 +512,6 @@ namespace Server.Mobiles
 		{
 			// A Dummy Healer Mage
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 125, 125, 125 );
@@ -596,7 +590,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -608,7 +602,6 @@ namespace Server.Mobiles
 		{
 			// A Dummy Hybrid Assassin
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 105, 105, 105 );
@@ -715,7 +708,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -727,7 +720,6 @@ namespace Server.Mobiles
 		{
 			// A Dummy Hybrid Theif
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			// Skills and Stats
 			this.InitStats( 105, 105, 105 );
@@ -808,7 +800,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 }

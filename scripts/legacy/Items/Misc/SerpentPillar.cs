@@ -116,7 +116,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Active = reader.ReadBool();
 			m_Word = reader.ReadString();

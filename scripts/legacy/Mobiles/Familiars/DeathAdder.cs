@@ -52,7 +52,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 }

@@ -37,7 +37,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Hue == 0x562 )
 				Hue = 0x4FE;

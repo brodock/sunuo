@@ -246,7 +246,7 @@ namespace Server.Engines.Quests.Haven
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Step = (KillHordeMinionsStep) reader.ReadEncodedInt();
 		}
@@ -466,7 +466,7 @@ namespace Server.Engines.Quests.Haven
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Ambushed = reader.ReadBool();
 		}
@@ -573,7 +573,7 @@ namespace Server.Engines.Quests.Haven
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_CorpseWithBone = (Container) reader.ReadItem();
 		}

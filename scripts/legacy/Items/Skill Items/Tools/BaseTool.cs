@@ -86,8 +86,6 @@ namespace Server.Items
 				}
 				else
 				{
-					CraftContext context = system.GetContext( from );
-
 					from.SendGump( new CraftGump( from, system, this, null ) );
 				}
 			}

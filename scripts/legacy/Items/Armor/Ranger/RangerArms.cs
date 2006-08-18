@@ -45,7 +45,7 @@ namespace Server.Items
 		public override void Deserialize(GenericReader reader)
 		{
 			base.Deserialize( reader );
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Weight == 1.0 )
 				Weight = 4.0;

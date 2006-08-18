@@ -259,8 +259,6 @@ namespace Server.Engines.Craft
 					number = 500426; // You can't repair that.
 				}
 
-				CraftContext context = m_CraftSystem.GetContext( from );
-
 				from.SendGump( new CraftGump( from, m_CraftSystem, m_Tool, number ) );
 			}
 		}

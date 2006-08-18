@@ -42,7 +42,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Weight == 0.0 )
 				Weight = 3.0;
@@ -350,7 +350,6 @@ namespace Server.Items
 			}
 
 			Point3D center = prevHouse.Location;
-			Map map = prevHouse.Map;
 
 			prevHouse.Delete();
 

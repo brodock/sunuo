@@ -133,11 +133,6 @@ namespace Server.Items
 			attrs[attr] = Scale( min, max, low, high );
 		}
 
-		private static void ApplyAttribute( AosElementAttributes attrs, int min, int max, AosElementAttribute attr, int low, int high, int scale )
-		{
-			attrs[attr] = Scale( min, max, low / scale, high / scale ) * scale;
-		}
-
 		private static SkillName[] m_PossibleBonusSkills = new SkillName[]
 			{
 				SkillName.Swords,

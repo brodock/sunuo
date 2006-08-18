@@ -52,7 +52,7 @@ namespace Server.Factions
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 
@@ -79,7 +79,7 @@ namespace Server.Factions
 		public override void Deserialize( GenericReader reader )
 		{
 			base.Deserialize( reader );
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 }

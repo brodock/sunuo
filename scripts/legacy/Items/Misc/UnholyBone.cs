@@ -63,7 +63,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Timer = new SpawnTimer( this );
 			m_Timer.Start();

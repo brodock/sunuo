@@ -98,7 +98,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Active = reader.ReadBool();
 			m_PointDest = reader.ReadPoint3D();

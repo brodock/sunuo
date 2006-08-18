@@ -839,7 +839,6 @@ namespace Server.Mobiles
 
 			UpdateBuyInfo();
 
-			IBuyItemInfo[] buyInfo = this.GetBuyInfo();
 			IShopSellInfo[] info = GetSellInfo();
 			int totalCost = 0;
 			ArrayList validBuy = new ArrayList( list.Count );
@@ -1113,8 +1112,6 @@ namespace Server.Mobiles
 			int GiveGold = 0;
 			int Sold = 0;
 			Container cont;
-			ArrayList delete = new ArrayList();
-			ArrayList drop = new ArrayList();
 
 			foreach ( SellItemResponse resp in list )
 			{

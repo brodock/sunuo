@@ -77,8 +77,6 @@ namespace Server.Misc
 
 		private static void Restart( CrashedEventArgs e )
 		{
-			string root = GetRoot();
-
 			Console.Write( "Crash: Restarting..." );
 
 			try

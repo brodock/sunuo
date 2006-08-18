@@ -211,7 +211,7 @@ namespace Server.Engines.Quests.Hag
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_MaxProgress = reader.ReadInt();
 		}
@@ -286,7 +286,7 @@ namespace Server.Engines.Quests.Hag
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_ImpLocation = reader.ReadPoint3D();
 		}
@@ -482,7 +482,7 @@ namespace Server.Engines.Quests.Hag
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Ingredients = new Ingredient[reader.ReadEncodedInt()];
 			for ( int i = 0; i < m_Ingredients.Length; i++ )

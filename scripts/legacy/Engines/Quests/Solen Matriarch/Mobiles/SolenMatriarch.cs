@@ -276,7 +276,7 @@ namespace Server.Engines.Quests.Matriarch
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 
@@ -304,7 +304,7 @@ namespace Server.Engines.Quests.Matriarch
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 
@@ -332,7 +332,7 @@ namespace Server.Engines.Quests.Matriarch
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 }

@@ -161,8 +161,6 @@ namespace Server.Gumps
 					}
 				}
 
-				Mobile m = from;
-
 				Misc.Titles.AwardFame( from, -100, true ); // TODO: Proper fame loss
 
 				if ( !Core.AOS && from.ShortTermMurders >= 5 )

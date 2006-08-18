@@ -251,7 +251,7 @@ namespace Server.Engines.Quests.Collector
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Theater = (Theater) reader.ReadEncodedInt();
 		}
@@ -448,7 +448,7 @@ namespace Server.Engines.Quests.Collector
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			int count = reader.ReadEncodedInt();
 

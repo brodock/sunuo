@@ -122,8 +122,6 @@ namespace Server.Items
 
 		public override void OnDoubleClick( Mobile from )
 		{
-			BraceletOfBinding bound = this.Bound;
-
 			if ( Bound == null )
 			{
 				Bind( from );
@@ -428,7 +426,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Charges = reader.ReadEncodedInt();
 			m_Inscription = reader.ReadString();

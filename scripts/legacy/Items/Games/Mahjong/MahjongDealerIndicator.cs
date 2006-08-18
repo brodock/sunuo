@@ -63,7 +63,7 @@ namespace Server.Engines.Mahjong
 		{
 			m_Game = game;
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Position = reader.ReadPoint2D();
 			m_Direction = (MahjongPieceDirection) reader.ReadInt();

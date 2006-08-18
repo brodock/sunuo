@@ -138,7 +138,7 @@ namespace Server.Spells.Necromancy
 			}
 		}
 
-		private static Hashtable m_Table = new Hashtable();
+		//private static Hashtable m_Table = new Hashtable();
 
 		public override void OnResponse( NetState sender, RelayInfo info )
 		{

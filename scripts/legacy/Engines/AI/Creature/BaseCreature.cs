@@ -4406,8 +4406,6 @@ namespace Server.Mobiles
 					}
 					else if ( c.Controled && c.Commandable && c.Loyalty > PetLoyalty.None && c.Map != Map.Internal )
 					{
-						Mobile owner = c.ControlMaster;
-
 						// changed loyalty decrement
 						if ( hasHourElapsed )
 						{

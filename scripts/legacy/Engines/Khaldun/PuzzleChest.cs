@@ -124,7 +124,7 @@ namespace Server.Items
 
 		public PuzzleChestSolution( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			int length = reader.ReadEncodedInt();
 			for ( int i = 0; ; i++ )
@@ -170,7 +170,7 @@ namespace Server.Items
 
 		public PuzzleChestSolutionAndTime( GenericReader reader ) : base( reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_When = reader.ReadDeltaTime();
 		}
@@ -709,7 +709,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Solution = new PuzzleChestSolution( reader );
 
@@ -766,7 +766,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 
@@ -801,7 +801,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 }

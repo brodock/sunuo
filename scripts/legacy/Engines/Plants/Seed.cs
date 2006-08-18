@@ -177,7 +177,7 @@ namespace Server.Engines.Plants
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_PlantType = (PlantType)reader.ReadInt();
 			m_PlantHue = (PlantHue)reader.ReadInt();

@@ -163,7 +163,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_MaxElevation = reader.ReadEncodedInt();
 			m_MoveSound = reader.ReadEncodedInt();

@@ -12,7 +12,7 @@ namespace Server.Gumps
 	{
 		private int m_Idx;
 		private ArrayList m_Killers;
-		private Mobile m_Victum;
+		//private Mobile m_Victum;
 
 		public static void Initialize()
 		{
@@ -48,7 +48,7 @@ namespace Server.Gumps
 			{
 				int n = Notoriety.Compute( g, m );
 
-				int theirKarma = m.Karma, ourKarma = g.Karma;
+				int ourKarma = g.Karma;
 				bool innocent = ( n == Notoriety.Innocent );
 				bool criminal = ( n == Notoriety.Criminal || n == Notoriety.Murderer );
 
@@ -95,7 +95,7 @@ namespace Server.Gumps
 		private ReportMurdererGump( Mobile victum, ArrayList killers, int idx ) : base( 0, 0 )
 		{
 			m_Killers = killers;
-			m_Victum = victum;
+			//m_Victum = victum;
 			m_Idx = idx;
 			BuildGump();
 		}

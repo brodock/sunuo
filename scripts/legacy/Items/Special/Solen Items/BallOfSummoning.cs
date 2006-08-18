@@ -298,7 +298,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Charges = reader.ReadEncodedInt();
 			this.Pet = (BaseCreature) reader.ReadMobile();

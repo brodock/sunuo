@@ -173,7 +173,7 @@ namespace Server.Engines.Quests.Doom
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Daemon = reader.ReadMobile() as BoneDemon;
 			m_CorpseWithSkull = reader.ReadItem() as Corpse;

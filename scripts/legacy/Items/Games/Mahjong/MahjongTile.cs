@@ -84,7 +84,7 @@ namespace Server.Engines.Mahjong
 		{
 			m_Game = game;
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Number = reader.ReadInt();
 			m_Value = (MahjongTileType) reader.ReadInt();

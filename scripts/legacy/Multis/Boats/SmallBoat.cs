@@ -34,7 +34,7 @@ namespace Server.Multis
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override void Serialize( GenericWriter writer )
@@ -63,7 +63,7 @@ namespace Server.Multis
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override void Serialize( GenericWriter writer )
@@ -90,7 +90,7 @@ namespace Server.Multis
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override void Serialize( GenericWriter writer )

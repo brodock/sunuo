@@ -149,7 +149,7 @@ namespace Server.Engines.Quests.Doom
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Victoria = reader.ReadMobile() as Victoria;
 			m_WaitForSummon = reader.ReadBool();

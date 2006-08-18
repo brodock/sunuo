@@ -588,8 +588,6 @@ namespace Server.Mobiles
 
 		public override bool DoActionFlee()
 		{
-			Mobile c = m_Mobile.Combatant;
-
 			if ( (m_Mobile.Mana > 20 || m_Mobile.Mana == m_Mobile.ManaMax) && m_Mobile.Hits > (m_Mobile.HitsMax / 2) )
 			{
 				m_Mobile.DebugSay( "I am stronger now, my guard is up" );

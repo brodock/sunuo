@@ -50,7 +50,7 @@ namespace Server.Engines.Quests.Matriarch
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Friend = reader.ReadBool();
 		}
@@ -229,7 +229,7 @@ namespace Server.Engines.Quests.Matriarch
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Friend = reader.ReadBool();
 		}

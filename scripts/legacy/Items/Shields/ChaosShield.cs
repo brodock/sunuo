@@ -36,7 +36,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override void Serialize( GenericWriter writer )

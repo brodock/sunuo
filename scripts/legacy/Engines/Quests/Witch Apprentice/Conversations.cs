@@ -249,7 +249,7 @@ namespace Server.Engines.Quests.Hag
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_ImpLocation = reader.ReadPoint3D();
 		}
@@ -545,7 +545,7 @@ namespace Server.Engines.Quests.Hag
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Tricorne = reader.ReadBool();
 			m_Drunken = reader.ReadBool();
@@ -635,7 +635,7 @@ namespace Server.Engines.Quests.Hag
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_FirstMet = reader.ReadBool();
 		}

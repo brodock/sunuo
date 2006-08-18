@@ -1768,11 +1768,6 @@ namespace Server.Scripts.Commands
 			return new StreamWriter( Path.Combine( Path.Combine( m_RootDirectory, root ), name ) );
 		}
 
-		private static StreamWriter GetWriter( string path )
-		{
-			return new StreamWriter( Path.Combine( m_RootDirectory, path ) );
-		}
-
 		private static Type typeofItem = typeof( Item ), typeofMobile = typeof( Mobile ), typeofMap = typeof( Map );
 		private static Type typeofCustomEnum = typeof( CustomEnumAttribute );
 

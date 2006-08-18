@@ -493,8 +493,8 @@ namespace Server.Spells
 			return CheckTravel( null, map, loc, type );
 		}
 
-		private static Mobile m_TravelCaster;
-		private static TravelCheckType m_TravelType;
+		//private static Mobile m_TravelCaster;
+		//private static TravelCheckType m_TravelType;
 
 		public static bool CheckTravel( Mobile caster, Map map, Point3D loc, TravelCheckType type )
 		{
@@ -506,8 +506,8 @@ namespace Server.Spells
 				return false;
 			}
 
-			m_TravelCaster = caster;
-			m_TravelType = type;
+			//m_TravelCaster = caster;
+			//m_TravelType = type;
 
 			int v = (int)type;
 			bool isValid = true;

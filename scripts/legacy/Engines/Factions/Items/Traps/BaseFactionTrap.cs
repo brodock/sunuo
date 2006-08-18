@@ -118,8 +118,6 @@ namespace Server.Factions
 
 		public virtual int IsValidLocation( Point3D p, Map m )
 		{
-			Region r = Region.Find( p, m );
-
 			switch( AllowedPlacing )
 			{
 				case AllowedPlacing.FactionStronghold:
@@ -242,7 +240,7 @@ namespace Server.Factions
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Faction = Faction.ReadReference( reader );
 			m_Placer = reader.ReadMobile();

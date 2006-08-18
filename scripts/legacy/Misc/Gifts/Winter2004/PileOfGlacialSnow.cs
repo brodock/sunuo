@@ -90,13 +90,13 @@ namespace Server.Items
 
 		private class SnowTarget : Target
 		{
-			private Mobile m_Thrower;
-			private Item m_Snow;
+			//private Mobile m_Thrower;
+			//private Item m_Snow;
 
 			public SnowTarget( Mobile thrower, Item snow ) : base ( 10, false, TargetFlags.None )
 			{
-				m_Thrower = thrower;
-				m_Snow = snow;
+				//m_Thrower = thrower;
+				//m_Snow = snow;
 			}
 
 			protected override void OnTarget( Mobile from, object target )

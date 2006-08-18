@@ -22,8 +22,6 @@ namespace Server.Multis
 
 	public class HouseFoundation : BaseHouse
 	{
-		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
 		private DesignState m_Current; // State which is currently visible.
 		private DesignState m_Design;  // State of current design.
 		private DesignState m_Backup;  // State at last user backup.
@@ -2177,7 +2175,6 @@ namespace Server.Multis
 			Write( (byte) planeCount ); // Plane count
 		}
 
-		private static byte[] m_InflatedBuffer = new byte[0x2000];
 		private static byte[] m_DeflatedBuffer = new byte[0x2000];
 
 		private class SendQueueEntry

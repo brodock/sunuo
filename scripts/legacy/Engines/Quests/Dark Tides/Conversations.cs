@@ -453,7 +453,7 @@ namespace Server.Engines.Quests.Necro
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_FromMardoth = reader.ReadBool();
 		}

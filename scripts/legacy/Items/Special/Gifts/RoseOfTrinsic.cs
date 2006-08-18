@@ -149,7 +149,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Petals = reader.ReadEncodedInt();
 			m_NextSpawnTime = reader.ReadDeltaTime();
@@ -218,7 +218,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 }

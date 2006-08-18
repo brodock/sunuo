@@ -38,7 +38,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( ItemID == 0x13CB )
 				ItemID = 0x13D2;

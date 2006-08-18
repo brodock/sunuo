@@ -99,13 +99,13 @@ namespace Server.Items
 
 
 		[CommandProperty( AccessLevel.GameMaster )]
-		private bool FixedDirection{ get{ return m_FixedDirection; } set{ m_FixedDirection = value; } }
+		public bool FixedDirection{ get{ return m_FixedDirection; } set{ m_FixedDirection = value; } }
 
 		[CommandProperty( AccessLevel.GameMaster )]
-		private bool Explodes{ get{ return m_Explodes; } set{ m_Explodes = value; } }
+		public bool Explodes{ get{ return m_Explodes; } set{ m_Explodes = value; } }
 
 		[CommandProperty( AccessLevel.GameMaster )]
-		private bool PlaySoundAtTrigger{ get{ return m_PlaySoundAtTrigger; } set{ m_PlaySoundAtTrigger = value; } }
+		public bool PlaySoundAtTrigger{ get{ return m_PlaySoundAtTrigger; } set{ m_PlaySoundAtTrigger = value; } }
 
 
 		[CommandProperty( AccessLevel.GameMaster )]

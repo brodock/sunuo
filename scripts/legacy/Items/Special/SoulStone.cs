@@ -460,7 +460,6 @@ namespace Server.Items
 					return;
 				}
 
-				SkillName skill = m_Stone.Skill;
 				double skillValue = m_Stone.SkillValue;
 
 				Skill fromSkill = from.Skills[m_Stone.Skill];
@@ -639,7 +638,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Account = reader.ReadString();
 			m_NextUse = reader.ReadDateTime();

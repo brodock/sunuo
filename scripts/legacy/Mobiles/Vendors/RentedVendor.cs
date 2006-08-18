@@ -374,7 +374,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			int durationID = reader.ReadEncodedInt();
 			if ( durationID < VendorRentalDuration.Instances.Length )

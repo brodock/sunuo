@@ -70,7 +70,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Core.AOS && NameHue == 0x35 )
 				NameHue = -1;

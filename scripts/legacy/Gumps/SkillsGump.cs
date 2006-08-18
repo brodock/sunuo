@@ -165,8 +165,6 @@ namespace Server.Scripts.Gumps
 		public const int EntryHeight = PropsConfig.EntryHeight;
 		public const int BorderSize = PropsConfig.BorderSize;
 
-		private static bool PrevLabel = OldStyle, NextLabel = OldStyle;
-
 		private const int PrevLabelOffsetX = PrevWidth + 1;
 		private const int PrevLabelOffsetY = 0;
 

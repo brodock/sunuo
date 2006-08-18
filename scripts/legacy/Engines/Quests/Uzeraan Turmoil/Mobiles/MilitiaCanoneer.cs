@@ -114,7 +114,7 @@ namespace Server.Engines.Quests.Haven
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Active = reader.ReadBool();
 		}

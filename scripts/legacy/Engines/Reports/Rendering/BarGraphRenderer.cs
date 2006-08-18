@@ -69,7 +69,6 @@ namespace Server.Engines.Reports
 		// Legend related members
 		private bool	_displayLegend;
 		private float	_legendWidth;
-		private string	_longestLabel = string.Empty;	// Used to calculate legend width
 		private float	_maxLabelWidth = 0.0f;
 
 		public string FontFamily 
@@ -189,7 +188,6 @@ namespace Server.Engines.Reports
 						float currentWidth = CalculateImgFontWidth(currentLbl, _legendFontSize, FontFamily);
 						if(_maxLabelWidth < currentWidth)
 						{
-							_longestLabel = currentLbl;
 							_maxLabelWidth = currentWidth;
 						}
 					}
@@ -457,7 +455,7 @@ namespace Server.Engines.Reports
 									float startX = _xOrigin + (i * sectionWidth) + (sectionWidth/2);  // This draws the value on center of the bar
 									float startY = itemY - 2f - valFont.Height;					  // Positioned on top of each bar by 2 pixels
 									RectangleF recVal = new RectangleF(startX-((sectionWidth * _interval) / 2), startY, sectionWidth * _interval, valFont.Height);
-									SizeF sz = graph.MeasureString(item.Value.ToString("#,###.##"),valFont,recVal.Size,sfFormat);
+									//SizeF sz = graph.MeasureString(item.Value.ToString("#,###.##"),valFont,recVal.Size,sfFormat);
 									//using ( SolidBrush brsh = new SolidBrush( Color.FromArgb( 180, 255, 255, 255 ) ) )
 									//	graph.FillRectangle( brsh, new RectangleF(recVal.X+((recVal.Width-sz.Width)/2),recVal.Y+((recVal.Height-sz.Height)/2),sz.Width+4,sz.Height) );
 
@@ -504,7 +502,7 @@ namespace Server.Engines.Reports
 								float startX = _xOrigin + (j * sectionWidth) + (sectionWidth/2);  // This draws the value on center of the bar
 								float startY = itemY - 2f - valFont.Height;					  // Positioned on top of each bar by 2 pixels
 								RectangleF recVal = new RectangleF(startX-((sectionWidth * _interval) / 2), startY, sectionWidth * _interval, valFont.Height);
-								SizeF sz = graph.MeasureString(item.Value.ToString("#,###.##"),valFont,recVal.Size,sfFormat);
+								//SizeF sz = graph.MeasureString(item.Value.ToString("#,###.##"),valFont,recVal.Size,sfFormat);
 								//using ( SolidBrush brsh = new SolidBrush( Color.FromArgb( 48, 255, 255, 255 ) ) )
 								//	graph.FillRectangle( brsh, new RectangleF(recVal.X+((recVal.Width-sz.Width)/2),recVal.Y+((recVal.Height-sz.Height)/2),sz.Width+4,sz.Height) );
 
@@ -955,7 +953,7 @@ namespace Server.Engines.Reports
 		{
 			// White space between each bar is the same as bar width itself
 			_barWidth = barGraphWidth / (dataCount * 2);  // Each bar has 1 white space 
-			_barWidth =/* (float)Math.Floor(*/_barWidth/*)*/;
+			//_barWidth =/* (float)Math.Floor(*/_barWidth/*)*/;
 			_spaceBtwBars = _barWidth;
 		}
 

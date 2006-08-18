@@ -179,7 +179,7 @@ namespace Server.Engines.Quests.Haven
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Lantern = (Lantern)reader.ReadItem();
 		}

@@ -137,7 +137,7 @@ namespace Server.Engines.Chat
 				if ( user == null )
 					return;
 
-				string lang = pvSrc.ReadStringSafe( 4 );
+				/*string lang = */pvSrc.ReadStringSafe( 4 );
 				int actionID = pvSrc.ReadInt16();
 				string param = pvSrc.ReadUnicodeString();
 

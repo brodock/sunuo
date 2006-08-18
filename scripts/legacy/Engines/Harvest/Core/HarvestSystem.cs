@@ -142,7 +142,6 @@ namespace Server.Engines.Harvest
 			HarvestResource resource = MutateResource( from, tool, def, map, loc, vein, primary, fallback );
 
 			double skillBase = from.Skills[def.Skill].Base;
-			double skillValue = from.Skills[def.Skill].Value;
 
 			Type type = null;
 

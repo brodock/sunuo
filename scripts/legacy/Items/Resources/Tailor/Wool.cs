@@ -34,7 +34,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override Item Dupe( int amount )
@@ -95,8 +95,6 @@ namespace Server.Items
 
 				if ( wheel is Item )
 				{
-					Item item = (Item)wheel;
-
 					if ( !m_Wool.IsChildOf( from.Backpack ) )
 					{
 						from.SendLocalizedMessage( 1042001 ); // That must be in your pack for you to use it.

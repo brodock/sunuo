@@ -137,7 +137,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_RaisableItem = (RaisableItem) reader.ReadItem();
 
@@ -215,7 +215,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			Timer.DelayCall( TimeSpan.Zero, new TimerCallback( Refresh ) );
 		}

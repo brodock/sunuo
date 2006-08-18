@@ -1503,7 +1503,7 @@ namespace Server.Multis
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				Delete();
 			}
@@ -3449,12 +3449,12 @@ namespace Server.Multis
 	public class SetSecureLevelEntry : ContextMenuEntry
 	{
 		private Item m_Item;
-		private ISecurable m_Securable;
+		//private ISecurable m_Securable;
 
 		public SetSecureLevelEntry( Item item, ISecurable securable ) : base( 6203, 6 )
 		{
 			m_Item = item;
-			m_Securable = securable;
+			//m_Securable = securable;
 		}
 
 		public static ISecurable GetSecurable( Mobile from, Item item )

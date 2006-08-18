@@ -293,7 +293,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Charges = reader.ReadEncodedInt();
 			m_Receivers = reader.ReadItemList();
@@ -475,7 +475,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Sender = (BroadcastCrystal) reader.ReadItem();
 		}

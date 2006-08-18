@@ -169,7 +169,7 @@ namespace Server.Engines.Quests
 
 		public virtual void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 
 		public virtual void BaseSerialize( GenericWriter writer )

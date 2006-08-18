@@ -38,7 +38,6 @@ namespace Server.Engines.MyRunUO
 			if ( m_Command != null && !m_Command.HasCompleted )
 				return;
 
-			DateTime start = DateTime.Now;
 			Console.WriteLine( "MyRunUO: Updating status database" );
 
 			try

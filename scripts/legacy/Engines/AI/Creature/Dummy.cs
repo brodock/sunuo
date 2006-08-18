@@ -32,7 +32,6 @@ namespace Server.Mobiles
 			Team = Utility.Random(3);
 
 			int iHue = 20 + Team * 40;
-			int jHue = 25 + Team * 40;
 
 			Item hair = new Item( Utility.RandomList( 0x203C, 0x203B, 0x203C, 0x203D ) );
 			hair.Hue = iHue;
@@ -72,7 +71,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override bool HandlesOnSpeech( Mobile from )

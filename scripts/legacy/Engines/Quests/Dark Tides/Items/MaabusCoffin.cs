@@ -90,7 +90,7 @@ namespace Server.Engines.Quests.Necro
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Maabus = reader.ReadMobile() as Maabus;
 			m_SpawnLocation = reader.ReadPoint3D();
@@ -149,7 +149,7 @@ namespace Server.Engines.Quests.Necro
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_FullItemID = reader.ReadInt();
 			m_EmptyItemID = reader.ReadInt();

@@ -149,8 +149,6 @@ namespace Server.Engines.Reports
 
 			html.RenderBeginTag( HtmlTag.Center );
 			TimeZone tz = TimeZone.CurrentTimeZone;
-			bool isDaylight = tz.IsDaylightSavingTime( m_TimeStamp );
-			TimeSpan utcOffset = tz.GetUtcOffset( m_TimeStamp );
 
 			html.Write( "Snapshot taken at {0:d} {0:t}. All times are {1}.", m_TimeStamp, tz.StandardName );
 			html.RenderEndTag();
@@ -213,8 +211,6 @@ namespace Server.Engines.Reports
 			html.Write( "<br>" );
 
 			TimeZone tz = TimeZone.CurrentTimeZone;
-			bool isDaylight = tz.IsDaylightSavingTime( m_TimeStamp );
-			TimeSpan utcOffset = tz.GetUtcOffset( m_TimeStamp );
 
 			html.Write( "Snapshot taken at {0:d} {0:t}. All times are {1}.", m_TimeStamp, tz.StandardName );
 			html.RenderEndTag();

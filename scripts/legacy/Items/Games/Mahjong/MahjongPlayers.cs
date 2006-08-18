@@ -523,7 +523,7 @@ namespace Server.Engines.Mahjong
 			m_Game = game;
 			m_Spectators = new ArrayList();
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			int seats = reader.ReadInt();
 			m_Players = new Mobile[seats];

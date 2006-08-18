@@ -44,7 +44,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( ItemID == 0x1401 )
 				ItemID = 0x1400;

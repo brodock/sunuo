@@ -38,7 +38,7 @@ namespace Server.Engines.Quests.Necro
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 }

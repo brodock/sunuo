@@ -456,9 +456,6 @@ namespace Server
 
 		public static BaseDoor AddDoor( int x, int y, int z, DoorFacing facing )
 		{
-			int doorZ = z;
-			int doorTop = doorZ + 20;
-
 			if ( !m_Map.CanFit( x, y, z, 16, false, false ) )
 				return null;
 

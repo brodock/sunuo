@@ -175,7 +175,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -254,7 +254,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as AnkhWest;
 			}
@@ -341,7 +341,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -420,7 +420,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as AnkhEast;
 			}

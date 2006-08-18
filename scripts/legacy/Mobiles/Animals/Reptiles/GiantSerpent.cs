@@ -77,7 +77,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize(reader);
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( BaseSoundID == -1 )
 				BaseSoundID = 219;

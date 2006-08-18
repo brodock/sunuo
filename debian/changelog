@@ -18,6 +18,7 @@ sunuo (0.3.2) unstable; urgency=low
     - test center switch is feature "test-center"
     - launch www.sunuo.org instead of www.runuo.com
     - disambiguate Math.Floor() call
+    - fixed compiler warnings
   * upgraded log4net to 1.2.10
 
  --

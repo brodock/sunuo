@@ -334,21 +334,6 @@ namespace Server.Mobiles
 				}*/
 			}
 
-			private bool TimeToSpare()
-			{
-				return (m_Owner.NextCombatTime - DateTime.Now) > TimeSpan.FromSeconds( 1.0 );
-			}
-
-			private bool OutOfMaxDistance( Mobile target )
-			{
-				return !m_Owner.InRange( target, m_Owner.Weapon.MaxRange );
-			}
-
-			private bool InMinDistance( Mobile target )
-			{
-				return m_Owner.InRange( target, 4 );
-			}
-
 			private void TeleportTo( Mobile target )
 			{
 				Point3D from = m_Owner.Location;

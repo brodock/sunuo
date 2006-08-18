@@ -10,12 +10,12 @@ namespace Server.Factions
 	public class LeaveFactionGump : FactionGump
 	{
 		private PlayerMobile m_From;
-		private Faction m_Faction;
+		//private Faction m_Faction;
 
 		public LeaveFactionGump( PlayerMobile from, Faction faction ) : base( 20, 30 )
 		{
 			m_From = from;
-			m_Faction = faction;
+			//m_Faction = faction;
 
 			AddBackground( 0, 0, 270, 120, 5054 );
 			AddBackground( 10, 10, 250, 100, 3000 );

@@ -32,7 +32,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override void OnDoubleClick(Mobile from)
@@ -110,15 +110,6 @@ namespace Server.Items
 							{
 								from.SendLocalizedMessage( 1042278 ); // You review the corpse and find it worthy of a trophy.
 								from.SendLocalizedMessage( 1042602 ); // You use your kit up making the trophy.
-
-								Mobile hunter = null;
-								int weight = 0;
-
-								if ( targeted is BigFish )
-								{
-									hunter = ((BigFish)targeted).Fisher;
-									weight = (int) ((BigFish)targeted).Weight;
-								}
 
 								from.AddToBackpack( new TrophyDeed( (int)m_Table[i, 1] + 7, (int)m_Table[i, 1], (int)m_Table[i, 2], (int)m_Table[i, 3] ) );
 

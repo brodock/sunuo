@@ -41,7 +41,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public override bool OnDragDrop( Mobile from, Item dropped )

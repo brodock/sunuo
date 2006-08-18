@@ -101,7 +101,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_TreasureLevel = (TreasureLevel)reader.ReadByte();
 			m_MinSpawnTime = reader.ReadShort();

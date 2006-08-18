@@ -136,7 +136,7 @@ namespace Server.Engines.Quests.Necro
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Necromancer = reader.ReadMobile() as PlayerMobile;
 			m_ToDelete = reader.ReadBool();
@@ -240,7 +240,7 @@ namespace Server.Engines.Quests.Necro
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			Delete();
 		}

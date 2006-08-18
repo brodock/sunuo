@@ -25,7 +25,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( Weight == 3.0 )
 				Weight = 5.0;

@@ -82,7 +82,7 @@ namespace Server.Items
 		{
 			object[] states = (object[])state;
 
-			Mobile from = (Mobile)states[0];
+			/*Mobile from = (Mobile)states[0];*/
 			Point3D endLoc = (Point3D)states[1];
 			Map map = (Map)states[2];
 

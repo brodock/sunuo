@@ -123,7 +123,7 @@ namespace Server.Engines.Plants
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 
 		public static bool IsDirtPatch( object obj )

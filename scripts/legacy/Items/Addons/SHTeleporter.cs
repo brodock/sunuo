@@ -117,7 +117,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Active = reader.ReadBool();
 			m_TeleDest = reader.ReadItem() as SHTeleComponent;
@@ -435,7 +435,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_External = reader.ReadBool();
 

@@ -222,8 +222,6 @@ namespace Server.Scripts.Commands
 
 		public static string IncreaseValue( Mobile from, object o, string[] args )
 		{
-			Type type = o.GetType();
-
 			object[] realObjs = new object[args.Length/2];
 			PropertyInfo[] realProps = new PropertyInfo[args.Length/2];
 			int[] realValues = new int[args.Length/2];
@@ -294,11 +292,6 @@ namespace Server.Scripts.Commands
 				return "The properties have been increased.";
 
 			return "The properties have been decreased.";
-		}
-
-		private static string InternalGetValue( object o, PropertyInfo p )
-		{
-			return InternalGetValue( o, p, null );
 		}
 
 		private static string InternalGetValue( object o, PropertyInfo p, PropertyInfo[] chain )

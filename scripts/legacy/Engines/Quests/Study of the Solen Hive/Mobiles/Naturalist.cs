@@ -160,7 +160,7 @@ namespace Server.Engines.Quests.Naturalist
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 		}
 	}
 }

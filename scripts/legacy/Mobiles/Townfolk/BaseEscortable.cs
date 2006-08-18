@@ -386,7 +386,7 @@ namespace Server.Mobiles
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			if ( reader.ReadBool() )
 				m_DestinationString = reader.ReadString(); // NOTE: We cannot EDI.Find here, regions have not yet been loaded :-(
@@ -582,12 +582,12 @@ namespace Server.Mobiles
 	public class AbandonEscortEntry : ContextMenuEntry
 	{
 		private BaseEscortable m_Mobile;
-		private Mobile m_From;
+		//private Mobile m_From;
 
 		public AbandonEscortEntry( BaseEscortable m, Mobile from ) : base( 6102, 3 )
 		{
 			m_Mobile = m;
-			m_From = from;
+			//m_From = from;
 		}
 
 		public override void OnClick()

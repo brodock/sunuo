@@ -52,7 +52,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -104,7 +104,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry1N;
 			}
@@ -160,7 +160,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -212,7 +212,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry2N;
 			}
@@ -267,7 +267,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -319,7 +319,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry2W;
 			}
@@ -375,7 +375,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -427,7 +427,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry3N;
 			}
@@ -483,7 +483,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -535,7 +535,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry3W;
 			}
@@ -591,7 +591,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -643,7 +643,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry4N;
 			}
@@ -698,7 +698,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -751,7 +751,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry4W;
 			}
@@ -807,7 +807,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -859,7 +859,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry5N;
 			}
@@ -914,7 +914,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -967,7 +967,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry5W;
 			}
@@ -1023,7 +1023,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -1075,7 +1075,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry6N;
 			}
@@ -1130,7 +1130,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 
 			m_Item = reader.ReadItem() as InternalItem;
 		}
@@ -1183,7 +1183,7 @@ namespace Server.Items
 			{
 				base.Deserialize( reader );
 
-				int version = reader.ReadInt();
+				/*int version = */reader.ReadInt();
 
 				m_Item = reader.ReadItem() as Tapestry6W;
 			}

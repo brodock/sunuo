@@ -666,7 +666,6 @@ namespace Server.Items
 			BaseWeapon defWeapon = defender.Weapon as BaseWeapon;
 
 			Skill atkSkill = attacker.Skills[atkWeapon.Skill];
-			Skill defSkill = defender.Skills[defWeapon.Skill];
 
 			double atkValue = atkWeapon.GetAttackSkillValue( attacker, defender );
 			double defValue = defWeapon.GetDefendSkillValue( attacker, defender );

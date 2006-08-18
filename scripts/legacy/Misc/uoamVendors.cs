@@ -41,7 +41,6 @@ namespace Server
 
 			if ( File.Exists( vendor_path ) )
 			{
-				ArrayList list = new ArrayList();
 				from.SendMessage( "Generating Vendors..." );
 
 				using ( StreamReader ip = new StreamReader( vendor_path ) )

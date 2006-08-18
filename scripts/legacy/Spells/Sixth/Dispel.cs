@@ -30,7 +30,6 @@ namespace Server.Spells.Sixth
 
 		public void Target( Mobile m )
 		{
-			Type t = m.GetType();
 			bool dispellable = false;
 
 			if ( m is BaseCreature )

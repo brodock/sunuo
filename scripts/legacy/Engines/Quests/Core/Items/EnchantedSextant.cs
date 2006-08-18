@@ -50,14 +50,6 @@ namespace Server.Items
 				new Point2D( 5669, 3131 )
 			};
 
-		private static readonly Point2D[] m_IlshenarBanks = new Point2D[]
-			{
-				new Point2D( 854, 680 ),
-				new Point2D( 855, 603 ),
-				new Point2D( 1226, 554 ),
-				new Point2D( 1610, 556 )
-			};
-
 		private static readonly Point2D[] m_MalasBanks = new Point2D[]
 			{
 				new Point2D( 996, 519 ),
@@ -186,7 +178,7 @@ namespace Server.Items
 		{
 			base.Deserialize( reader );
 
-			int version = reader.ReadInt();
+			/*int version = */reader.ReadInt();
 		}
 	}
 }

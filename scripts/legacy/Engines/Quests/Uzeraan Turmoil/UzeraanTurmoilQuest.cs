@@ -129,7 +129,7 @@ namespace Server.Engines.Quests.Haven
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_HasLeftTheMansion = reader.ReadBool();
 		}

@@ -219,9 +219,6 @@ namespace Server.Engines.BulkOrders
 				}
 				default:
 				{
-					bool canDrop = m_Book.IsChildOf( m_From.Backpack );
-					bool canPrice = canDrop || (m_Book.RootParent is PlayerVendor);
-
 					index -= 4;
 
 					int type = index % 2;

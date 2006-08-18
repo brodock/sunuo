@@ -689,8 +689,8 @@ namespace Server.Scripts.Commands
 					for ( int i = 0; i < count; ++i )
 					{
 						int typeID = bin.ReadInt32();
-						int serial = bin.ReadInt32();
-						long pos = bin.ReadInt64();
+						/*int serial = */bin.ReadInt32();
+						/*long pos = */bin.ReadInt64();
 						int length = bin.ReadInt32();
 						Type objType = (Type)types[typeID];
 

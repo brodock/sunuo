@@ -86,7 +86,7 @@ namespace Server.Engines.Quests.Naturalist
 
 		public override void ChildDeserialize( GenericReader reader )
 		{
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Naturalist = (Naturalist) reader.ReadMobile();
 		}

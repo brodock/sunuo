@@ -114,7 +114,7 @@ namespace Server.Mobiles
 		{
 			m_House = house;
 
-			int version = reader.ReadEncodedInt();
+			/*int version = */reader.ReadEncodedInt();
 
 			m_Owner = reader.ReadMobile();
 			m_VendorName = reader.ReadString();
