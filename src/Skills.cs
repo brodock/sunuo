@@ -98,7 +98,7 @@ namespace Server
 	}
 
 	[PropertyObject]
-	public class Skill
+	public sealed class Skill
 	{
 		private Skills m_Owner;
 		private SkillInfo m_Info;
