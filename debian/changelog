@@ -19,7 +19,9 @@ sunuo (0.3.2) unstable; urgency=low
     - launch www.sunuo.org instead of www.runuo.com
     - disambiguate Math.Floor() call
     - fixed compiler warnings
-    - moved "Reports" engine into separate script library
+  * moved into separate script libraries:
+    - Engines.Reports
+    - Engines.RemoteAdmin
   * upgraded log4net to 1.2.10
 
  --
