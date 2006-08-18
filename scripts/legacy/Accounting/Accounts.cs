@@ -7,6 +7,8 @@ namespace Server.Accounting
 {
 	public class Accounts
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static Hashtable m_Accounts = new Hashtable();
 
 		public static void Configure()
@@ -171,9 +173,9 @@ namespace Server.Accounting
 
 					m_Accounts[acct.Username] = acct;
 				}
-				catch
+				catch(Exception e)
 				{
-					Console.WriteLine( "Warning: Account instance load failed" );
+					log.Error("Account instance load failed", e);
 				}
 			}
 		}

@@ -9,6 +9,8 @@ namespace Server
 {
 	public class AccessRestrictions
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static void Initialize()
 		{
 			EventSink.SocketConnect += new SocketConnectEventHandler( EventSink_SocketConnect );
@@ -22,16 +24,13 @@ namespace Server
 
 				if ( Firewall.IsBlocked( ip ) )
 				{
-					Console.WriteLine( "Client: {0}: Firewall blocked connection attempt.", ip );
+					log.Error(String.Format("Client: {0}: Firewall blocked connection attempt.", ip));
 					e.AllowConnection = false;
 					return;
 				}
 				else if ( IPLimiter.SocketBlock && !IPLimiter.Verify( ip ) )
 				{
-					Console.WriteLine( "Client: {0}: Past IP limit threshold", ip );
-
-					using ( StreamWriter op = new StreamWriter( "ipLimits.log", true ) )
-						op.WriteLine( "{0}\tPast IP limit threshold\t{1}", ip, DateTime.Now );
+					log.Error(String.Format("Client: {0}: Past IP limit threshold", ip));
 	
 					e.AllowConnection = false;
 					return;
