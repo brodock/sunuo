@@ -10,7 +10,7 @@ SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
 SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Network/PacketReader.cs src/Network/Listener.cs src/Network/SendQueue.cs src/Network/BufferPool.cs src/Network/PacketWriter.cs src/ClientVersion.cs src/Config.cs src/Timer.cs src/Insensitive.cs src/Network/PacketProfile.cs src/Attributes.cs src/Network/Compression.cs src/Network/PacketHandler.cs
 
-SCRIPTS = legacy profiler
+SCRIPTS = legacy reports profiler
 SCRIPTS_DLL = $(patsubst %,build/scripts/%.dll,$(SCRIPTS))
 
 all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe $(DISTDLL)) $(SCRIPTS_DLL)
@@ -43,10 +43,15 @@ $(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ util/UOGQuery.cs
 
-build/scripts/legacy.dll: LIBS = System.Drawing.dll System.Web.dll System.Data.dll System.Windows.Forms.dll log4net.dll
+build/scripts/legacy.dll: LIBS = System.Drawing.dll System.Web.dll System.Data.dll log4net.dll
 build/scripts/legacy.dll: $(DISTDIR)/SunUO.exe
 	mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -recurse:'scripts/legacy/*.cs'
+
+build/scripts/reports.dll: LIBS = System.Drawing.dll System.Web.dll System.Windows.Forms.dll log4net.dll
+build/scripts/reports.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
+	mkdir -p $(dir $@)
+	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/reports/*.cs'
 
 build/scripts/profiler.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
 	mkdir -p $(dir $@)
