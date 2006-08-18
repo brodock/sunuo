@@ -8,7 +8,14 @@ namespace Server.Misc
 {
 	public class ServerList
 	{
-		public const string ServerName = "RunUO Test Center";
+		public static string ServerName {
+			get {
+				string name = Core.Config.ServerName;
+				if (name == null)
+					name = "SunUO Test Center";
+				return name;
+			}
+		}
 
 		public static void Initialize()
 		{
