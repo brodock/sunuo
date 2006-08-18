@@ -12,7 +12,7 @@ namespace Server.Misc
 			get {
 				string name = Core.Config.ServerName;
 				if (name == null)
-					name = "SunUO Test Center";
+					name = "SunUO Test";
 				return name;
 			}
 		}
