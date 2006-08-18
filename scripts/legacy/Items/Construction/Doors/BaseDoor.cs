@@ -465,7 +465,7 @@ namespace Server.Items
 
 						foreach( Key k in items )
 						{
-							if ( k.KeyValue == this.KeyValue )
+							if ( k.KeyValue != 0 && k.KeyValue == this.KeyValue )
 							{
 								found = true;
 								from.LocalOverheadMessage( MessageType.Regular, 0x3B2, 501282 ); // You quickly unlock, open, and relock the door
