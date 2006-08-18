@@ -121,12 +121,12 @@ lib/Npgsql.dll: download/Npgsql1.0beta1-bin.tar.bz2
 	cp build/tmp/Npgsql/bin/mono/Npgsql.dll lib/
 	rm -rf build/tmp
 
-download/incubating-log4net-1.2.9-beta.zip:
+download/incubating-log4net-1.2.10.zip:
 	mkdir -p $(dir $@)
-	wget http://cvs.apache.org/dist/incubator/log4net/1.2.9/incubating-log4net-1.2.9-beta.zip -O $@.tmp
+	wget http://cvs.apache.org/dist/incubator/log4net/1.2.10/incubating-log4net-1.2.10.zip -O $@.tmp
 	mv $@.tmp $@
 
-lib/log4net.dll: download/incubating-log4net-1.2.9-beta.zip
+lib/log4net.dll: download/incubating-log4net-1.2.10.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
 	mkdir -p lib
