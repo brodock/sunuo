@@ -10,6 +10,8 @@ namespace Server
 {
 	public sealed class MovementPath
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Map m_Map;
 		private Point3D m_Start;
 		private Point3D m_Goal;
@@ -157,7 +159,8 @@ namespace Server
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine( "Warning: {0}: Pathing error from {1} to {2}", e.GetType().Name, start, goal );
+				log.Warn(String.Format("{0}: Pathing error from {1} to {2}",
+									   e.GetType().Name, start, goal));
 			}
 		}
 	}

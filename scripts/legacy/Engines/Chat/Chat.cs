@@ -8,6 +8,8 @@ namespace Server.Engines.Chat
 {
 	public class ChatSystem
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static bool m_Enabled = true;
 
 		public static bool Enabled
@@ -162,12 +164,13 @@ namespace Server.Engines.Chat
 				}
 				else
 				{
-					Console.WriteLine( "Client: {0}: Unknown chat action 0x{1:X}: {2}", state, actionID, param );
+					log.Warn(String.Format("Client: {0}: Unknown chat action 0x{1:X}: {2}",
+										   state, actionID, param));
 				}
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine( e );
+				log.Error( e );
 			}
 		}
 	}

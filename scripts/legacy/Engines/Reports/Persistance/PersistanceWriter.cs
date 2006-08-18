@@ -26,6 +26,8 @@ namespace Server.Engines.Reports
 
 	public sealed class XmlPersistanceWriter : PersistanceWriter
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string m_RealFilePath;
 		private string m_TempFilePath;
 
@@ -82,7 +84,7 @@ namespace Server.Engines.Reports
 
 		public override void WriteDocument( PersistableObject root )
 		{
-			Console.WriteLine( "Reports: Save started" );
+			log.Info( "Reports: Save started" );
 
 			m_Xml.Formatting = Formatting.Indented;
 			m_Xml.IndentChar = '\t';
@@ -92,7 +94,7 @@ namespace Server.Engines.Reports
 
 			root.Serialize( this );
 
-			Console.WriteLine( "Reports: Save complete" );
+			log.Info( "Reports: Save complete" );
 		}
 
 		public override void Close()
@@ -118,7 +120,7 @@ namespace Server.Engines.Reports
 			}
 			catch ( Exception ex )
 			{
-				Console.WriteLine( ex );
+				log.Error( ex );
 			}
 		}
 	}

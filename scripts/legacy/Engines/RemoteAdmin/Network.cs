@@ -9,6 +9,8 @@ namespace Server.Admin
 {
 	public class AdminNetwork
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static ArrayList m_Auth = new ArrayList();
 		private static bool m_NewLine = true;
 		private static StringBuilder m_ConsoleData = new StringBuilder();
@@ -103,7 +105,8 @@ namespace Server.Admin
 			}
 			else if ( !IsAuth( state ) )
 			{
-				Console.WriteLine( "ADMIN: Unauthorized packet from {0}, disconnecting", state );
+				log.Warn(String.Format("ADMIN: Unauthorized packet from {0}, disconnecting",
+									   state));
 				Disconnect( state );
 			}
 			else
@@ -133,30 +136,35 @@ namespace Server.Admin
 			if ( a == null )
 			{
 				state.Send( new Login( LoginResponse.NoUser ) );
-				Console.WriteLine( "ADMIN: Invalid username '{0}' from {1}", user, state );
+				log.Warn(String.Format("ADMIN: Invalid username '{0}' from {1}",
+									   user, state));
 				DelayedDisconnect( state );
 			}
 			else if ( !a.HasAccess( state ) )
 			{
 				state.Send( new Login( LoginResponse.BadIP ) );
-				Console.WriteLine( "ADMIN: Access to '{0}' from {1} denied.", user, state );
+				log.Warn(String.Format("ADMIN: Access to '{0}' from {1} denied.",
+									   user, state));
 				DelayedDisconnect( state );
 			}
 			else if ( !a.CheckPassword( pw ) )
 			{
 				state.Send( new Login( LoginResponse.BadPass ) );
-				Console.WriteLine( "ADMIN: Invalid password '{0}' for user '{1}' from {2}", pw, user, state );
+				log.Warn(String.Format("ADMIN: Invalid password '{0}' for user '{1}' from {2}",
+									   pw, user, state));
 				DelayedDisconnect( state );
 			}
 			else if ( a.AccessLevel != AccessLevel.Administrator || a.Banned )
 			{
-				Console.WriteLine( "ADMIN: Account '{0}' does not have admin access. Connection Denied.", user );
+				log.Warn(String.Format("ADMIN: Account '{0}' does not have admin access. Connection Denied.",
+									   user));
 				state.Send( new Login( LoginResponse.NoAccess ) ); 
 				DelayedDisconnect( state );
 			}
 			else
 			{
-				Console.WriteLine( "ADMIN: Access granted to '{0}' from {1}", user, state );
+				log.Warn(String.Format("ADMIN: Access granted to '{0}' from {1}",
+									   user, state));
 				state.Account = a;
 				a.LogAccess( state );
 				a.LastLogin = DateTime.Now;
@@ -198,7 +206,8 @@ namespace Server.Admin
 
 				if ( error != ZLibError.Z_OK )
 				{
-					Console.WriteLine( "WARNING: Unable to compress admin packet, zlib error: {0}", error );
+					log.Error(String.Format("Unable to compress admin packet, zlib error: {0}",
+											error));
 					return p;
 				}
 				else

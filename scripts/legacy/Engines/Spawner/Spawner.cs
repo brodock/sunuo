@@ -8,6 +8,8 @@ namespace Server.Mobiles
 {
 	public class Spawner : Item
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private int m_Team;
 		private int m_HomeRange;
 		private int m_Count;
@@ -714,7 +716,8 @@ namespace Server.Mobiles
 			{
 				try
 				{
-					Console.WriteLine( "Warning: {0} bad spawns detected, logged: 'badspawn.log'", m_List.Count );
+					log.Warn(String.Format("{0} bad spawns detected, logged: 'badspawn.log'",
+										   m_List.Count));
 
 					using ( StreamWriter op = new StreamWriter( "badspawn.log", true ) )
 					{

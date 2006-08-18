@@ -17,6 +17,8 @@ namespace Server.PathAlgorithms.SlowAStar
 
 	public class SlowAStarAlgorithm : PathAlgorithm
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static PathAlgorithm Instance = new SlowAStarAlgorithm();
 
 		private const int MaxDepth = 300;
@@ -131,7 +133,7 @@ namespace Server.PathAlgorithms.SlowAStar
 
 						if ( !found )
 						{
-							Console.WriteLine( "bugaboo.." );
+							log.Info( "bugaboo.." );
 							return null;
 						}
 

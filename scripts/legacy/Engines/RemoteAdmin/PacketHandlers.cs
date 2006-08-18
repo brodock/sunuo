@@ -10,6 +10,8 @@ namespace Server.Admin
 {
 	public class RemoteAdminHandlers
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public enum AcctSearchType : byte
 		{
 			Username = 0,
@@ -36,7 +38,8 @@ namespace Server.Admin
 		{
 			if ( m_Handlers[command] == null )
 			{
-				Console.WriteLine( "ADMIN: Invalid packet 0x{0:X2} from {1}, disconnecting", command, state );
+				log.Warn(String.Format("ADMIN: Invalid packet 0x{0:X2} from {1}, disconnecting",
+									   command, state));
 				return false;
 			}
 			else

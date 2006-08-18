@@ -44,6 +44,8 @@ namespace Server.Engines.Help
 
 	public class PageQueueGump : Gump
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private PageEntry[] m_List;
 
 		public PageQueueGump() : base( 30, 30 )
@@ -113,6 +115,8 @@ namespace Server.Engines.Help
 
 	public class PredefinedResponse
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string m_Title;
 		private string m_Message;
 
@@ -172,7 +176,7 @@ namespace Server.Engines.Help
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine( e );
+				log.Error( e );
 			}
 		}
 
@@ -212,7 +216,7 @@ namespace Server.Engines.Help
 				}
 				catch ( Exception e )
 				{
-					Console.WriteLine( e );
+					log.Error( e );
 				}
 			}
 
@@ -449,6 +453,8 @@ namespace Server.Engines.Help
 
 	public class PageEntryGump : Gump
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private PageEntry m_Entry;
 		private Mobile m_Mobile;
 
@@ -572,7 +578,7 @@ namespace Server.Engines.Help
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine(e);
+				log.Error(e);
 			}
 		}
 

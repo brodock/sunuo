@@ -26,6 +26,8 @@ namespace Server.Engines.Reports
 
 	public class XmlPersistanceReader : PersistanceReader
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private StreamReader m_Reader;
 		private XmlTextReader m_Xml;
 
@@ -98,12 +100,11 @@ namespace Server.Engines.Reports
 
 		public override void ReadDocument( PersistableObject root )
 		{
-			Console.Write( "Reports: Loading..." );
+			log.Info("Reports: Loading..." );
 			m_Xml.Read();
 			m_Xml.Read();
 			m_HasChild = !m_Xml.IsEmptyElement;
 			root.Deserialize( this );
-			Console.WriteLine( "done" );
 		}
 
 		public override void Close()
