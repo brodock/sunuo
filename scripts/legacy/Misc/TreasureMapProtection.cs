@@ -8,6 +8,8 @@ namespace Server
 { 
 	public class TreasureRegion : Region
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private const int Range = 5; // No house may be placed within 5 tiles of the treasure
 
 		public TreasureRegion( int x, int y, Map map ): base( "", "DynRegion", map )
@@ -50,7 +52,9 @@ namespace Server
 							}
 							catch ( Exception e )
 							{
-								Console.WriteLine( "{0} {1} {2} {3}", i, x, y, e );
+								log.Error(String.Format("{0} {1} {2}",
+														i, x, y),
+										  e);
 							}
 						}
 						catch

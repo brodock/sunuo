@@ -8,6 +8,8 @@ namespace Server
 {
 	public class NameList
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string m_Type;
 		private string[] m_List;
 
@@ -60,8 +62,7 @@ namespace Server
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine( "Warning: Exception caught loading name lists:" );
-				Console.WriteLine( e );
+				log.Error( "Warning: Exception caught loading name lists", e );
 			}
 		}
 

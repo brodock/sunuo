@@ -9,6 +9,8 @@ namespace Server.Misc
 {
 	public class Cleanup
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static void Initialize()
 		{
 			Timer.DelayCall( TimeSpan.FromSeconds( 2.5 ), new TimerCallback( Run ) );
@@ -100,9 +102,11 @@ namespace Server.Misc
 			if ( items.Count > 0 )
 			{
 				if ( boxes > 0 )
-					Console.WriteLine( "Cleanup: Detected {0} inaccessible items, including {1} bank boxes, removing..", items.Count, boxes );
+					log.Warn(String.Format("Cleanup: Detected {0} inaccessible items, including {1} bank boxes, removing..",
+										   items.Count, boxes));
 				else
-					Console.WriteLine( "Cleanup: Detected {0} inaccessible items, removing..", items.Count );
+					log.Warn(String.Format("Cleanup: Detected {0} inaccessible items, removing..",
+										   items.Count));
 
 				for ( int i = 0; i < items.Count; ++i )
 					((Item)items[i]).Delete();

@@ -8,6 +8,8 @@ namespace Server.Misc
 {
 	public class ProtocolExtensions
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static PacketHandler[] m_Handlers = new PacketHandler[0x100];
 
 		public static void Initialize()
@@ -54,7 +56,8 @@ namespace Server.Misc
 			{
 				if ( ph.Ingame && state.Mobile == null )
 				{
-					Console.WriteLine( "Client: {0}: Sent ingame packet (0xF0x{1:X2}) before having been attached to a mobile", state, packetID );
+					log.Warn(String.Format("Client: {0}: Sent ingame packet (0xF0x{1:X2}) before having been attached to a mobile",
+										   state, packetID));
 					state.Dispose();
 				}
 				else if ( ph.Ingame && state.Mobile.Deleted )

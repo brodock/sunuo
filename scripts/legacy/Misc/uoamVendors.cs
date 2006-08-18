@@ -10,6 +10,8 @@ namespace Server
 {
 	public class UOAMVendorGenerator
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static int m_Count;
 
 		//configuration
@@ -267,7 +269,8 @@ namespace Server
 					MakeSpawner( types, x, y, Map.Malas );
 					break;
 				default:
-					Console.WriteLine( "UOAM Vendor Parser: Warning, unknown map {0}", map );
+					log.Warn(String.Format("UOAM Vendor Parser: unknown map {0}",
+										   map));
 					break;
 			}
 		}
