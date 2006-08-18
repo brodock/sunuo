@@ -1640,12 +1640,6 @@ namespace Server
 			SavedFlags		= 0x02000000
 		}
 
-		private static void SetSaveFlag( ref SaveFlag flags, SaveFlag toSet, bool setIf )
-		{
-			if ( setIf )
-				flags |= toSet;
-		}
-
 		private static bool GetSaveFlag( SaveFlag flags, SaveFlag toGet )
 		{
 			return ( (flags & toGet) != 0 );
