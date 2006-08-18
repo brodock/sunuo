@@ -29,7 +29,7 @@ namespace Server.Misc
 			try
 			{
 				GameServerListConfig gsl = Core.Config.GameServerListConfig;
-				if (gsl == null) {
+				if (gsl == null || gsl.GameServers.Count == 0) {
 					IPAddress ipAddr;
 
 					if ( Resolve( Dns.GetHostName(), out ipAddr ) )
