@@ -8,6 +8,8 @@ namespace Server.Misc
 {
 	public class ServerList
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static string ServerName {
 			get {
 				string name = Core.Config.ServerName;
@@ -36,8 +38,9 @@ namespace Server.Misc
 						e.AddServer(gs.Name, gs.Address);
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				log.Fatal(ex);
 				e.Rejected = true;
 			}
 		}
