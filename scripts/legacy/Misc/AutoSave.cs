@@ -93,7 +93,7 @@ namespace Server.Misc
 			if ( m_Backups.Length == 0 )
 				return;
 
-			string root = Path.Combine( Core.BaseDirectory, Path.Combine("Backups", "Automatic") );
+			string root = Path.Combine( Core.Config.BackupDirectory, "Automatic" );
 
 			if ( !Directory.Exists( root ) )
 				Directory.CreateDirectory( root );
@@ -124,7 +124,7 @@ namespace Server.Misc
 				}
 			}
 
-			string saves = Path.Combine( Core.BaseDirectory, "Saves" );
+			string saves = Core.Config.SaveDirectory;
 
 			if ( Directory.Exists( saves ) )
 				Directory.Move( saves, FormatDirectory( root, m_Backups[m_Backups.Length - 1], GetTimeStamp() ) );
