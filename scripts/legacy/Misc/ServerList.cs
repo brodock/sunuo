@@ -21,12 +21,18 @@ namespace Server.Misc
 		{
 			try
 			{
-				IPAddress ipAddr;
+				GameServerListConfig gsl = Core.Config.GameServerListConfig;
+				if (gsl == null) {
+					IPAddress ipAddr;
 
-				if ( Resolve( Dns.GetHostName(), out ipAddr ) )
-					e.AddServer( ServerName, new IPEndPoint( ipAddr, Listener.Port ) );
-				else
-					e.Rejected = true;
+					if ( Resolve( Dns.GetHostName(), out ipAddr ) )
+						e.AddServer( ServerName, new IPEndPoint( ipAddr, Listener.Port ) );
+					else
+						e.Rejected = true;
+				} else {
+					foreach (GameServerConfig gs in gsl.GameServers)
+						e.AddServer(gs.Name, gs.Address);
+				}
 			}
 			catch
 			{
