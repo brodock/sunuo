@@ -30,12 +30,7 @@ namespace Server.Misc
 			{
 				GameServerListConfig gsl = Core.Config.GameServerListConfig;
 				if (gsl == null || gsl.GameServers.Count == 0) {
-					IPAddress ipAddr;
-
-					if ( Resolve( Dns.GetHostName(), out ipAddr ) )
-						e.AddServer( ServerName, new IPEndPoint( ipAddr, Listener.Port ) );
-					else
-						e.Rejected = true;
+					e.AddServer( ServerName, (IPEndPoint)e.State.Socket.LocalEndPoint );
 				} else {
 					foreach (GameServerConfig gs in gsl.GameServers)
 						e.AddServer(gs.Name, gs.Address);
@@ -45,34 +40,6 @@ namespace Server.Misc
 			{
 				e.Rejected = true;
 			}
-		}
-
-		public static bool Resolve( string addr, out IPAddress outValue )
-		{
-			try
-			{
-				outValue = IPAddress.Parse( addr );
-				return true;
-			}
-			catch
-			{
-				try
-				{
-					IPHostEntry iphe = Dns.Resolve( addr );
-
-					if ( iphe.AddressList.Length > 0 )
-					{
-						outValue = iphe.AddressList[iphe.AddressList.Length - 1];
-						return true;
-					}
-				}
-				catch
-				{
-				}
-			}
-
-			outValue = IPAddress.None;
-			return false;
 		}
 	}
 }
