@@ -30,11 +30,10 @@ namespace Server.Misc
 		{
 			try
 			{
-				GameServerListConfig gsl = Core.Config.GameServerListConfig;
-				if (gsl == null || gsl.GameServers.Count == 0) {
+				if (Core.Config.GameServers.Count == 0) {
 					e.AddServer( ServerName, (IPEndPoint)e.State.Socket.LocalEndPoint );
 				} else {
-					foreach (GameServerConfig gs in gsl.GameServers)
+					foreach (Config.GameServer gs in Core.Config.GameServers)
 						e.AddServer(gs.Name, gs.Address);
 				}
 			}
