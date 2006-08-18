@@ -7,6 +7,8 @@ namespace Server.Misc
 {
 	public class DataPath
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		/* If you have not installed Ultima Online,
 		 * or wish the server to use a seperate set of datafiles,
 		 * change the 'CustomPath' value, example:
@@ -46,12 +48,7 @@ namespace Server.Misc
 				Core.DataDirectories.Add( pathTD );
 
 			if ( Core.DataDirectories.Count == 0 )
-			{
-				Console.WriteLine( "Enter the Ultima Online directory:" );
-				Console.Write( "> " );
-
-				Core.DataDirectories.Add( Console.ReadLine() );
-			}
+				log.Error("please configure a data-path in etc/sunuo.xml");
 		}
 
 		private static string GetExePath( string subName )
