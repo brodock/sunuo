@@ -13,6 +13,7 @@ sunuo (0.3.2) unstable; urgency=low
     - display "SunUO" in UOGInfo packet
     - use Config.ConfigDirectory, Config.BackupDirectory
     - don't read data-path from stdin
+    - removed DataPath.CustomPath
 
  --
 

@@ -9,14 +9,6 @@ namespace Server.Misc
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		/* If you have not installed Ultima Online,
-		 * or wish the server to use a seperate set of datafiles,
-		 * change the 'CustomPath' value, example:
-		 * 
-		 * private const string CustomPath = @"C:\Program Files\Ultima Online";
-		 */
-		private static string CustomPath = null;
-
 		/* The following is a list of files which a required for proper execution:
 		 * 
 		 * Multi.idx
@@ -37,9 +29,6 @@ namespace Server.Misc
 		{
 			string pathReg = GetExePath( "Ultima Online" );
 			string pathTD = GetExePath( "Ultima Online Third Dawn" );
-
-			if ( CustomPath != null )
-				Core.DataDirectories.Add( CustomPath );
 
 			if ( pathReg != null )
 				Core.DataDirectories.Add( pathReg );
