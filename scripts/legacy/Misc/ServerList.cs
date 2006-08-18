@@ -8,20 +8,6 @@ namespace Server.Misc
 {
 	public class ServerList
 	{
-		/* Address:
-		 * 
-		 * The default setting, a value of 'null', will attempt to detect your IP address automatically:
-		 * private const string Address = null;
-		 * 
-		 * This detection, however, does not work for servers behind routers. If you're running behind a router, put in your IP:
-		 * private const string Address = "12.34.56.78";
-		 * 
-		 * If you need to resolve a DNS host name, you can do that too:
-		 * private const string Address = "shard.host.com";
-		 */
-
-		public const string Address = null;
-
 		public const string ServerName = "RunUO Test Center";
 
 		public static void Initialize()
@@ -37,7 +23,7 @@ namespace Server.Misc
 			{
 				IPAddress ipAddr;
 
-				if ( Resolve( Address != null && !IsLocalMachine( e.State ) ? Address : Dns.GetHostName(), out ipAddr ) )
+				if ( Resolve( Dns.GetHostName(), out ipAddr ) )
 					e.AddServer( ServerName, new IPEndPoint( ipAddr, Listener.Port ) );
 				else
 					e.Rejected = true;
@@ -74,24 +60,6 @@ namespace Server.Misc
 
 			outValue = IPAddress.None;
 			return false;
-		}
-
-		private static bool IsLocalMachine( NetState state )
-		{
-			Socket sock = state.Socket;
-
-			IPAddress theirAddress = ((IPEndPoint)sock.RemoteEndPoint).Address;
-
-			if ( IPAddress.IsLoopback( theirAddress ) )
-				return true;
-
-			bool contains = false;
-			IPHostEntry iphe = Dns.Resolve( Dns.GetHostName() );
-
-			for ( int i = 0; !contains && i < iphe.AddressList.Length; ++i )
-				contains = theirAddress.Equals( iphe.AddressList[i] );
-
-			return contains;
 		}
 	}
 }
