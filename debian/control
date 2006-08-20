@@ -60,6 +60,17 @@ Description: free Ultima Online server - legacy scripts
  .
  Home page: http://www.sunuo.org/
 
+Package: sunuo-scripts-myrunuo
+Architecture: all
+Depends: sunuo
+Suggests: sunuo-doc
+Description: free Ultima Online server - legacy scripts
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package provides the MyRunUO engine.
+ .
+ Home page: http://www.sunuo.org/
+
 Package: sunuo-scripts-profiler
 Architecture: all
 Depends: sunuo

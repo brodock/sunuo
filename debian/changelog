@@ -21,6 +21,7 @@ sunuo (0.3.2) unstable; urgency=low
     - fixed compiler warnings
     - Multis.MovingCrate: check ReadItem() result
   * moved into separate script libraries:
+    - Engines.MyRunUO
     - Engines.Reports
     - Engines.RemoteAdmin
   * upgraded log4net to 1.2.10

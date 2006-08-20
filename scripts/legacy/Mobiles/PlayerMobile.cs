@@ -2352,7 +2352,7 @@ namespace Server.Mobiles
 			if ( !Deleted && !m_ChangedMyRunUO )
 			{
 				m_ChangedMyRunUO = true;
-				Engines.MyRunUO.MyRunUO.QueueMobileUpdate( this );
+				Engines.MyRunUO.Stub.QueueMobileUpdate( this );
 			}
 		}
 
