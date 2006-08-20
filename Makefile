@@ -140,7 +140,7 @@ lib/log4net.dll: download/incubating-log4net-1.2.10.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
 	mkdir -p lib
-	cp build/tmp/bin/mono/1.0/release/log4net.dll lib/
+	cp build/tmp/log4net-1.2.10/bin/mono/1.0/release/log4net.dll lib/
 	rm -rf build/tmp
 
 # documentation targets
