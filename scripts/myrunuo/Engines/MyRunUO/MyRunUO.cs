@@ -16,6 +16,11 @@ namespace Server.Engines.MyRunUO
 		private static double CpuInterval = 0.1; // Processor runs every 0.1 seconds
 		private static double CpuPercent = 0.25; // Processor runs for 25% of Interval, or ~25ms. This should take around 25% cpu
 
+		public static void Configure()
+		{
+			Stub.m_QueueMobileUpdate += QueueMobileUpdate;
+		}
+
 		public static void Initialize()
 		{
 			if ( Config.Enabled )
