@@ -26,7 +26,7 @@ sunuo (0.3.2) unstable; urgency=low
     - Engines.RemoteAdmin
   * upgraded log4net to 1.2.10
 
- --
+ -- Max Kellermann <max@duempel.org>  Sun, 20 Aug 2006 21:51:47 +0200
 
 sunuo (0.3.1) unstable; urgency=low
 

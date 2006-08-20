@@ -10,7 +10,7 @@ SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
 SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Network/PacketReader.cs src/Network/Listener.cs src/Network/SendQueue.cs src/Network/BufferPool.cs src/Network/PacketWriter.cs src/ClientVersion.cs src/Config.cs src/Timer.cs src/Insensitive.cs src/Network/PacketProfile.cs src/Attributes.cs src/Network/Compression.cs src/Network/PacketHandler.cs
 
-SCRIPTS = legacy reports remote_admin myrunuo profiler
+SCRIPTS = legacy reports remote-admin myrunuo profiler
 SCRIPTS_DLL = $(patsubst %,build/scripts/%.dll,$(SCRIPTS))
 
 all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe $(DISTDLL)) $(SCRIPTS_DLL)
@@ -53,10 +53,10 @@ build/scripts/reports.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
 	mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/reports/*.cs'
 
-build/scripts/remote_admin.dll: LIBS = log4net.dll
-build/scripts/remote_admin.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
+build/scripts/remote-admin.dll: LIBS = log4net.dll
+build/scripts/remote-admin.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
 	mkdir -p $(dir $@)
-	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/remote_admin/*.cs'
+	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/remote-admin/*.cs'
 
 build/scripts/myrunuo.dll: LIBS = System.Data.dll log4net.dll
 build/scripts/myrunuo.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
