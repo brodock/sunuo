@@ -3,13 +3,13 @@ Section: games
 Priority: optional
 Maintainer: Max Kellermann <max@duempel.org>
 Standards-Version: 3.6.1
-Build-Depends-Indep: cdbs (>= 0.4.26), debhelper (>= 4.9.1), cli-common (>= 0.1.3), mono-mcs (>= 1.1.7), xsltproc, docbook-xsl
+Build-Depends-Indep: cdbs (>= 0.4.26), debhelper (>= 4.9.1), cli-common (>= 0.1.3), mono-mcs (>= 1.1.7), libmono-winforms1.0-cil, xsltproc, docbook-xsl
 
 Package: sunuo
 Architecture: all
 Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7), ruby1.8,
  ruby (>= 1.8), debconf (>= 1.4.30.13)
-Recommends: runuo-skeleton, sunuo-legacy-scripts
+Recommends: runuo-skeleton, sunuo-scripts-legacy
 Suggests: sunuo-doc
 Description: free Ultima Online server
  SunUO is a free Ultima Online server, based on RunUO.
@@ -24,6 +24,50 @@ Description: free Ultima Online server
  SunUO is a free Ultima Online server, based on RunUO.
  .
  This package contains the debug file.
+ .
+ Home page: http://www.sunuo.org/
+
+Package: sunuo-scripts-legacy
+Architecture: all
+Depends: sunuo
+Suggests: sunuo-doc
+Description: free Ultima Online server - legacy scripts
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package provides the base scripts.
+ .
+ Home page: http://www.sunuo.org/
+
+Package: sunuo-scripts-remote-admin
+Architecture: all
+Depends: sunuo, sunuo-scripts-legacy
+Suggests: sunuo-doc
+Description: free Ultima Online server - legacy scripts
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package provides the remote admin engine.
+ .
+ Home page: http://www.sunuo.org/
+
+Package: sunuo-scripts-reports
+Architecture: all
+Depends: sunuo
+Suggests: sunuo-doc
+Description: free Ultima Online server - legacy scripts
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package provides the reports engine.
+ .
+ Home page: http://www.sunuo.org/
+
+Package: sunuo-scripts-profiler
+Architecture: all
+Depends: sunuo
+Suggests: sunuo-doc
+Description: free Ultima Online server - legacy scripts
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package provides the profiler gump.
  .
  Home page: http://www.sunuo.org/
 
