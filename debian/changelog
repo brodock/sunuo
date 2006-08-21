@@ -31,6 +31,7 @@ sunuo (0.3.2) unstable; urgency=low
       - BaseCreature.m_Owners
       - GenericBuyInfo.Name
       - GenericBuyInfo.DisplayCache.m_Table
+      - GenericBuyInfo.DisplayCache.m_Mobiles
     - use XmlReader instead of XmlDocument.Load() to parse the accounts file
   * moved into separate script libraries:
     - Engines.MyRunUO

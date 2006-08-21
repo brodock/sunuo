@@ -28,7 +28,6 @@ namespace Server.Mobiles
 
 			public DisplayCache() : base( 0 )
 			{
-				m_Mobiles = new ArrayList();
 			}
 
 			public object Lookup( Type key )
@@ -49,8 +48,11 @@ namespace Server.Mobiles
 
 				if ( obj is Item )
 					AddItem( (Item) obj );
-				else if ( obj is Mobile )
+				else if ( obj is Mobile ) {
+					if (m_Mobiles == null)
+						m_Mobiles = new ArrayList();
 					m_Mobiles.Add( obj );
+				}
 			}
 
 			public DisplayCache( Serial serial ) : base( serial )
@@ -61,10 +63,13 @@ namespace Server.Mobiles
 			{
 				base.OnAfterDelete();
 
-				for ( int i = 0; i < m_Mobiles.Count; ++i )
-					((Mobile)m_Mobiles[i]).Delete();
+				if (m_Mobiles != null) {
+					for ( int i = 0; i < m_Mobiles.Count; ++i )
+						((Mobile)m_Mobiles[i]).Delete();
 
-				m_Mobiles.Clear();
+					m_Mobiles.Clear();
+					m_Mobiles = null;
+				}
 
 				for ( int i = Items.Count - 1; i >= 0; --i )
 				{
@@ -91,12 +96,15 @@ namespace Server.Mobiles
 
 				/*int version = */reader.ReadInt();
 
-				m_Mobiles = reader.ReadMobileList();
+				m_Mobiles = reader.ReadMobileListOrNull();
 
-				for ( int i = 0; i < m_Mobiles.Count; ++i )
-					((Mobile)m_Mobiles[i]).Delete();
+				if (m_Mobiles != null) {
+					for ( int i = 0; i < m_Mobiles.Count; ++i )
+						((Mobile)m_Mobiles[i]).Delete();
 
-				m_Mobiles.Clear();
+					m_Mobiles.Clear();
+					m_Mobiles = null;
+				}
 
 				for ( int i = Items.Count - 1; i >= 0; --i )
 				{
