@@ -1082,9 +1082,17 @@ namespace Server
 			m_Saving = false;
 		}
 
+		private static void MoveDirectoryContents(string src, string dst) {
+			foreach (string name in Directory.GetFileSystemEntries(src)) {
+				string baseName = Path.GetFileName(name);
+				if (baseName != "tmp")
+					Directory.Move(name, Path.Combine(dst, baseName));
+			}
+		}
+
 		public static void Save( bool message )
 		{
-			/* create "./Saves/tmp/new" */
+			/* create "./Saves/tmp/old" */
 
 			string saveDirectory = Core.Config.SaveDirectory;
 			if (!Directory.Exists(saveDirectory))
@@ -1097,45 +1105,31 @@ namespace Server
 				File.Delete(tmpDirectory);
 			Directory.CreateDirectory(tmpDirectory);
 
-			string newDirectory = Path.Combine(tmpDirectory, "new");
-
-			try {
-				Directory.CreateDirectory(newDirectory);
-
-				/* save to "./Saves/tmp/new/" */
-
-				Save(newDirectory, message);
-			} catch {
-				/* cleanup "./Saves/tmp" */
-				try {
-					Directory.Delete(tmpDirectory, true);
-				} catch {
-				}
-
-				throw;
-			}
-
-			/* move "./Saves/*" to "./Saves/tmp/old/" */
-
 			string oldDirectory = Path.Combine(tmpDirectory, "old");
 			Directory.CreateDirectory(oldDirectory);
 
-			foreach (string name in Directory.GetFileSystemEntries(saveDirectory)) {
-				string baseName = Path.GetFileName(name);
-				if (baseName != "tmp")
-					Directory.Move(name,
-								   Path.Combine(oldDirectory, baseName));
+			/* move current save to "./Saves/tmp/old/" */
+
+			MoveDirectoryContents(saveDirectory, oldDirectory);
+
+			try {
+				/* save to "./Saves/" */
+
+				Save(saveDirectory, message);
+
+			} catch {
+				/* rollback */
+
+				string newDirectory = Path.Combine(tmpDirectory, "new");
+				Directory.CreateDirectory(newDirectory);
+
+				MoveDirectoryContents(saveDirectory, newDirectory);
+				MoveDirectoryContents(oldDirectory, saveDirectory);
+
+				throw;
+			} finally {
+				Directory.Delete(tmpDirectory, true);
 			}
-
-			/* move "./Saves/tmp/new/*" to "./Saves/" */
-
-			foreach (string name in Directory.GetFileSystemEntries(newDirectory))
-				Directory.Move(name,
-							   Path.Combine(saveDirectory, Path.GetFileName(name)));
-
-			/* delete "./Saves/tmp" */
-
-			Directory.Delete(tmpDirectory, true);
 		}
 
 		private static void SaveMobiles(string mobileBase)
