@@ -1705,8 +1705,6 @@ namespace Server.Mobiles
 
 		public PlayerMobile()
 		{
-			m_AntiMacroTable = new Hashtable();
-
 			m_BOBFilter = new Engines.BulkOrders.BOBFilter();
 
 			m_GameTime = TimeSpan.Zero;
@@ -1780,7 +1778,6 @@ namespace Server.Mobiles
 
 		public PlayerMobile( Serial s ) : base( s )
 		{
-			m_AntiMacroTable = new Hashtable();
 			InvalidateMyRunUO();
 		}
 
@@ -1826,8 +1823,11 @@ namespace Server.Mobiles
 
 		public bool AntiMacroCheck( Skill skill, object obj )
 		{
-			if ( obj == null || m_AntiMacroTable == null || this.AccessLevel != AccessLevel.Player )
+			if ( obj == null || this.AccessLevel != AccessLevel.Player )
 				return true;
+
+			if (m_AntiMacroTable == null)
+				m_AntiMacroTable = new Hashtable();
 
 			Hashtable tbl = (Hashtable)m_AntiMacroTable[skill];
 			if ( tbl == null )
@@ -2045,8 +2045,11 @@ namespace Server.Mobiles
 			}
 		}
 		
-		public override void Serialize( GenericWriter writer )
+		private void CleanupAntiMacro()
 		{
+			if (m_AntiMacroTable == null)
+				return;
+
 			//cleanup our anti-macro table 
 			foreach ( Hashtable t in m_AntiMacroTable.Values )
 			{
@@ -2060,6 +2063,14 @@ namespace Server.Mobiles
 				for (int i=0;i<remove.Count;++i)
 					t.Remove( remove[i] );
 			}
+
+			if (m_AntiMacroTable.Count == 0)
+				m_AntiMacroTable = null;
+		}
+
+		public override void Serialize( GenericWriter writer )
+		{
+			CleanupAntiMacro();
 
 			//decay our kills
 			if ( m_ShortTermElapse < this.GameTime )
