@@ -414,11 +414,11 @@ namespace Server
 			{
 				while ( !m_Closing )
 				{
-					m_Now = DateTime.Now;
-
 					/* wait until event happens */
 
 					m_Signal.WaitOne();
+
+					m_Now = DateTime.Now;
 
 					ClockProfile(MainProfile.TimerId.Idle);
 
