@@ -59,24 +59,6 @@ namespace Server
 		public static bool Loaded{ get { return m_Loaded; } }
 		public static bool Loading{ get { return m_Loading; } }
 
-		private static string mobileBase = Path.Combine(Core.Config.SaveDirectory, "Mobiles");
-		private static string mobIdxPath = Path.Combine( mobileBase, "Mobiles.idx" );
-		private static string mobTdbPath = Path.Combine( mobileBase, "Mobiles.tdb" );
-		private static string mobBinPath = Path.Combine( mobileBase, "Mobiles.bin" );
-
-		private static string itemBase = Path.Combine(Core.Config.SaveDirectory, "Items");
-		private static string itemIdxPath = Path.Combine( itemBase, "Items.idx" );
-		private static string itemTdbPath = Path.Combine( itemBase, "Items.tdb" );
-		private static string itemBinPath = Path.Combine( itemBase, "Items.bin" );
-
-		private static string regionBase = Path.Combine(Core.Config.SaveDirectory, "Regions");
-		private static string regionIdxPath = Path.Combine( regionBase, "Regions.idx" );
-		private static string regionBinPath = Path.Combine( regionBase, "Regions.bin" );
-
-		private static string guildBase = Path.Combine(Core.Config.SaveDirectory, "Guilds");
-		private static string guildIdxPath = Path.Combine( guildBase, "Guilds.idx" );
-		private static string guildBinPath = Path.Combine( guildBase, "Guilds.bin" );
-
 		//static World()
 		//{
 		//	Load();
@@ -570,11 +552,16 @@ namespace Server
 			get{ return m_LoadingType; }
 		}
 
-		private static void LoadEntities() {
+		private static void LoadEntities(string saveDirectory) {
 			ItemEntry[] itemEntries = null;
 			MobileEntry[] mobileEntries = null;
 			GuildEntry[] guildEntries = null;
 			RegionEntry[] regionEntries = null;
+
+			string mobileBase = Path.Combine(saveDirectory, "Mobiles");
+			string mobIdxPath = Path.Combine(mobileBase, "Mobiles.idx");
+			string mobTdbPath = Path.Combine(mobileBase, "Mobiles.tdb");
+			string mobBinPath = Path.Combine(mobileBase, "Mobiles.bin");
 
 			if ( File.Exists( mobIdxPath ) && File.Exists( mobTdbPath ) )
 			{
@@ -587,6 +574,11 @@ namespace Server
 				m_Mobiles = new Hashtable();
 			}
 
+			string itemBase = Path.Combine(saveDirectory, "Items");
+			string itemIdxPath = Path.Combine(itemBase, "Items.idx");
+			string itemTdbPath = Path.Combine(itemBase, "Items.tdb");
+			string itemBinPath = Path.Combine(itemBase, "Items.bin");
+
 			if ( File.Exists( itemIdxPath ) && File.Exists( itemTdbPath ) )
 			{
 				log.Debug("loading item index");
@@ -597,6 +589,10 @@ namespace Server
 			{
 				m_Items = new Hashtable();
 			}
+
+			string guildBase = Path.Combine(saveDirectory, "Guilds");
+			string guildIdxPath = Path.Combine(guildBase, "Guilds.idx");
+			string guildBinPath = Path.Combine(guildBase, "Guilds.bin");
 
 			if ( File.Exists( guildIdxPath ) )
 			{
@@ -626,6 +622,10 @@ namespace Server
 					idxReader.Close();
 				}
 			}
+
+			string regionBase = Path.Combine(saveDirectory, "Regions");
+			string regionIdxPath = Path.Combine(regionBase, "Regions.idx");
+			string regionBinPath = Path.Combine(regionBase, "Regions.bin");
 
 			if ( File.Exists( regionIdxPath ) )
 			{
@@ -893,12 +893,25 @@ namespace Server
 						}
 					}
 
-					if (mobileEntries != null)
+					if (mobileEntries != null) {
+						if (!Directory.Exists(mobileBase))
+							Directory.CreateDirectory(mobileBase);
 						SaveIndex( mobileEntries, mobIdxPath );
-					if (itemEntries != null)
+					}
+
+					if (itemEntries != null) {
+						if (!Directory.Exists(itemBase))
+							Directory.CreateDirectory(itemBase);
 						SaveIndex( itemEntries, itemIdxPath );
-					if (guildEntries != null)
+					}
+
+					if (guildEntries != null) {
+						if (!Directory.Exists(guildBase))
+							Directory.CreateDirectory(guildBase);
+
 						SaveIndex( guildEntries, guildIdxPath );
+					}
+
 					if (regionEntries != null)
 						SaveIndex( regionEntries, regionIdxPath );
 				}
@@ -924,7 +937,7 @@ namespace Server
 			m_Loading = true;
 			m_DeleteList = new ArrayList();
 
-			LoadEntities();
+			LoadEntities(Core.Config.SaveDirectory);
 
 			EventSink.InvokeWorldLoad();
 
@@ -965,18 +978,6 @@ namespace Server
 
 		private static void SaveIndex( ICollection list, string path )
 		{
-			if ( !Directory.Exists( mobileBase ) )
-				Directory.CreateDirectory( mobileBase );
-
-			if ( !Directory.Exists( itemBase ) )
-				Directory.CreateDirectory( itemBase );
-
-			if ( !Directory.Exists( guildBase ) )
-				Directory.CreateDirectory( guildBase );
-
-			if ( !Directory.Exists( regionBase ) )
-				Directory.CreateDirectory( regionBase );
-
 			using ( FileStream idx = new FileStream( path, FileMode.Create, FileAccess.Write, FileShare.None ) )
 			{
 				BinaryWriter idxWriter = new BinaryWriter( idx );
@@ -1002,7 +1003,21 @@ namespace Server
 			Save( true );
 		}
 
-		public static void Save( bool message )
+		private class SaveItemsStart
+		{
+			private string itemBase;
+
+			public SaveItemsStart(string _itemBase)
+			{
+				itemBase = _itemBase;
+			}
+
+			public void SaveItems() {
+				World.SaveItems(itemBase);
+			}
+		}
+
+		public static void Save(string saveDirectory, bool message)
 		{
 			if ( m_Saving || AsyncWriter.ThreadCount > 0 ) 
 				return;
@@ -1018,34 +1033,30 @@ namespace Server
 
 			DateTime startTime = DateTime.Now;
 
-			if ( !Directory.Exists( mobileBase ) )
-				Directory.CreateDirectory( mobileBase );
-			if ( !Directory.Exists( itemBase ) )
-				Directory.CreateDirectory( itemBase );
-			if ( !Directory.Exists( guildBase ) )
-				Directory.CreateDirectory( guildBase );
-			if ( !Directory.Exists( regionBase ) )
-				Directory.CreateDirectory( regionBase );
+			string mobileBase = Path.Combine(saveDirectory, "Mobiles");
+			string itemBase = Path.Combine(saveDirectory, "Items");
+			string guildBase = Path.Combine(saveDirectory, "Guilds");
+			string regionBase = Path.Combine(saveDirectory, "Regions");
 
 			if (Core.Config.Features["multi-threading"])
 			{
-				Thread saveThread = new Thread( new ThreadStart( SaveItems ) );
+				Thread saveThread = new Thread(new ThreadStart(new SaveItemsStart(itemBase).SaveItems));
 
 				saveThread.Name = "Item Save Subset";
 				saveThread.Start();
 
-				SaveMobiles();
-				SaveGuilds();
-				SaveRegions();
+				SaveMobiles(mobileBase);
+				SaveGuilds(guildBase);
+				SaveRegions(regionBase);
 
 				saveThread.Join();
 			}
 			else
 			{
-				SaveMobiles();
-				SaveItems();
-				SaveGuilds();
-				SaveRegions();
+				SaveMobiles(mobileBase);
+				SaveItems(itemBase);
+				SaveGuilds(guildBase);
+				SaveRegions(regionBase);
 			}
 
 			log.InfoFormat("Entities saved in {0:F1} seconds.",
@@ -1074,13 +1085,25 @@ namespace Server
 			m_Saving = false;
 		}
 
-		private static void SaveMobiles()
+		public static void Save( bool message )
+		{
+			Save(Core.Config.SaveDirectory, message);
+		}
+
+		private static void SaveMobiles(string mobileBase)
 		{
 			ArrayList restock = new ArrayList();
 
 			GenericWriter idx;
 			GenericWriter tdb;
 			GenericWriter bin;
+
+			if (!Directory.Exists(mobileBase))
+				Directory.CreateDirectory(mobileBase);
+
+			string mobIdxPath = Path.Combine(mobileBase, "Mobiles.idx");
+			string mobTdbPath = Path.Combine(mobileBase, "Mobiles.tdb");
+			string mobBinPath = Path.Combine(mobileBase, "Mobiles.bin");
 
 			if ( SaveType == SaveOption.Normal )
 			{
@@ -1136,13 +1159,20 @@ namespace Server
 		internal static ArrayList m_ItemTypes = new ArrayList();
 		internal static ArrayList m_MobileTypes = new ArrayList();
 
-		private static void SaveItems()
+		private static void SaveItems(string itemBase)
 		{
+			string itemIdxPath = Path.Combine( itemBase, "Items.idx" );
+			string itemTdbPath = Path.Combine( itemBase, "Items.tdb" );
+			string itemBinPath = Path.Combine( itemBase, "Items.bin" );
+
 			ArrayList decaying = new ArrayList();
 
 			GenericWriter idx;
 			GenericWriter tdb;
 			GenericWriter bin;
+
+			if (!Directory.Exists(itemBase))
+				Directory.CreateDirectory(itemBase);
 
 			if ( SaveType == SaveOption.Normal )
 			{
@@ -1193,10 +1223,16 @@ namespace Server
 			}
 		}
 
-		private static void SaveGuilds()
+		private static void SaveGuilds(string guildBase)
 		{
+			string guildIdxPath = Path.Combine(guildBase, "Guilds.idx");
+			string guildBinPath = Path.Combine(guildBase, "Guilds.bin");
+
 			GenericWriter idx;
 			GenericWriter bin;
+
+			if (!Directory.Exists(guildBase))
+				Directory.CreateDirectory(guildBase);
 
 			if ( SaveType == SaveOption.Normal )
 			{
@@ -1227,11 +1263,17 @@ namespace Server
 			bin.Close();
 		}
 
-		private static void SaveRegions()
+		private static void SaveRegions(string regionBase)
 		{
+			string regionIdxPath = Path.Combine( regionBase, "Regions.idx" );
+			string regionBinPath = Path.Combine( regionBase, "Regions.bin" );
+
 			int count = 0;
 
 			GenericWriter bin;
+
+			if (!Directory.Exists(regionBase))
+				Directory.CreateDirectory(regionBase);
 
 			if ( SaveType == SaveOption.Normal )
 				bin = new BinaryFileWriter( regionBinPath, true );
