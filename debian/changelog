@@ -20,6 +20,7 @@ sunuo (0.3.2) unstable; urgency=low
     - disambiguate Math.Floor() call
     - fixed compiler warnings
     - Multis.MovingCrate: check ReadItem() result
+    - initialize BaseCreature.m_arSpellAttack and m_arSpellDefense on demand
   * moved into separate script libraries:
     - Engines.MyRunUO
     - Engines.Reports

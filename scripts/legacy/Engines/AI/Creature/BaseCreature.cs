@@ -159,8 +159,8 @@ namespace Server.Mobiles
 		private Point3D m_pHome;				// The home position of the creature, used by some AI
 		private int		m_iRangeHome = 10;		// The home range of the creature
 
-		ArrayList		m_arSpellAttack;		// List of attack spell/power
-		ArrayList		m_arSpellDefense;		// Liste of defensive spell/power
+		private ArrayList m_arSpellAttack;		// List of attack spell/power
+		private ArrayList m_arSpellDefense;		// Liste of defensive spell/power
 
 		private bool		m_bControled;		// Is controled
 		private Mobile		m_ControlMaster;	// My master
@@ -1111,9 +1111,6 @@ namespace Server.Mobiles
 
 			m_bDebugAI = false;
 
-			m_arSpellAttack = new ArrayList();
-			m_arSpellDefense = new ArrayList();
-
 			m_bControled = false;
 			m_ControlMaster = null;
 			m_ControlTarget = null;
@@ -1137,10 +1134,20 @@ namespace Server.Mobiles
 
 		public BaseCreature( Serial serial ) : base( serial )
 		{
-			m_arSpellAttack = new ArrayList();
-			m_arSpellDefense = new ArrayList();
-
 			m_bDebugAI = false;
+		}
+
+		private static void WriteTypeArray(GenericWriter writer, ArrayList types) {
+			if (types == null) {
+				writer.Write((int)0);
+			} else {
+				int count = types.Count;
+				writer.Write(count);
+
+				for (int i = 0; i < count; i++) {
+					writer.Write(types[i].ToString());
+				}
+			}
 		}
 
 		public override void Serialize( GenericWriter writer )
@@ -1168,19 +1175,8 @@ namespace Server.Mobiles
 			// Version 1
 			writer.Write( (int) m_iRangeHome );
 
-			int i=0;
-
-			writer.Write( (int) m_arSpellAttack.Count );
-			for ( i=0; i< m_arSpellAttack.Count; i++ )
-			{
-				writer.Write( m_arSpellAttack[i].ToString() );
-			}
-
-			writer.Write( (int) m_arSpellDefense.Count );
-			for ( i=0; i< m_arSpellDefense.Count; i++ )
-			{
-				writer.Write( m_arSpellDefense[i].ToString() );
-			}
+			WriteTypeArray(writer, m_arSpellAttack);
+			WriteTypeArray(writer, m_arSpellDefense);
 
 			// Version 2
 			writer.Write( (int) m_FightMode );
@@ -1265,6 +1261,23 @@ namespace Server.Mobiles
 				0.350, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.6, 2.0
 			};
 
+		private static ArrayList ReadTypeArray(GenericReader reader) {
+			int count = reader.ReadInt();
+			if (count == 0)
+				return null;
+
+			ArrayList result = new ArrayList(count);
+			for (int i = 0; i < count; i++) {
+				string str = reader.ReadString();
+				Type type = Type.GetType( str );
+
+				if (type != null)
+					result.Add(type);
+			}
+
+			return result;
+		}
+
 		public override void Deserialize( GenericReader reader )
 		{
 			base.Deserialize( reader );
@@ -1318,31 +1331,8 @@ namespace Server.Mobiles
 			{
 				m_iRangeHome = reader.ReadInt();
 
-				int i, iCount;
-				
-				iCount = reader.ReadInt();
-				for ( i=0; i< iCount; i++ )
-				{
-					string str = reader.ReadString();
-					Type type = Type.GetType( str );
-
-					if ( type != null )
-					{
-						m_arSpellAttack.Add( type );
-					}
-				}
-
-				iCount = reader.ReadInt();
-				for ( i=0; i< iCount; i++ )
-				{
-					string str = reader.ReadString();
-					Type type = Type.GetType( str );
-
-					if ( type != null )
-					{
-						m_arSpellDefense.Add( type );
-					}			
-				}
+ 				m_arSpellAttack = ReadTypeArray(reader);
+ 				m_arSpellDefense = ReadTypeArray(reader);
 			}
 			else
 			{
@@ -2863,17 +2853,23 @@ namespace Server.Mobiles
 
 		public void AddSpellAttack( Type type )
 		{
+			if (m_arSpellAttack == null)
+				m_arSpellAttack = new ArrayList(4);
+
 			m_arSpellAttack.Add ( type );
 		}
 
 		public void AddSpellDefense( Type type )
 		{
+			if (m_arSpellDefense == null)
+				m_arSpellDefense = new ArrayList(4);
+
 			m_arSpellDefense.Add ( type );
 		}
 
 		public Spell GetAttackSpellRandom()
 		{
-			if ( m_arSpellAttack.Count > 0 )
+			if ( m_arSpellAttack != null && m_arSpellAttack.Count > 0 )
 			{
 				Type type = (Type) m_arSpellAttack[Utility.Random(m_arSpellAttack.Count)];
 
@@ -2888,7 +2884,7 @@ namespace Server.Mobiles
 
 		public Spell GetDefenseSpellRandom()
 		{
-			if ( m_arSpellDefense.Count > 0 )
+			if ( m_arSpellDefense != null && m_arSpellDefense.Count > 0 )
 			{
 				Type type = (Type) m_arSpellDefense[Utility.Random(m_arSpellDefense.Count)];
 
@@ -2905,21 +2901,25 @@ namespace Server.Mobiles
 		{
 			int i;
 
-			for ( i=0; i< m_arSpellAttack.Count; i++ )
-			{
-				if ( m_arSpellAttack[i] == type )
+			if (m_arSpellAttack != null) {
+				for ( i=0; i< m_arSpellAttack.Count; i++ )
 				{
-					object[] args = {this, null};
-					return Activator.CreateInstance( type, args ) as Spell;
+					if ( m_arSpellAttack[i] == type )
+					{
+						object[] args = {this, null};
+						return Activator.CreateInstance( type, args ) as Spell;
+					}
 				}
 			}
 
-			for ( i=0; i< m_arSpellDefense.Count; i++ )
-			{
-				if ( m_arSpellDefense[i] == type )
+			if (m_arSpellDefense != null) {
+				for ( i=0; i< m_arSpellDefense.Count; i++ )
 				{
-					object[] args = {this, null};
-					return Activator.CreateInstance( type, args ) as Spell;
+					if ( m_arSpellDefense[i] == type )
+					{
+						object[] args = {this, null};
+						return Activator.CreateInstance( type, args ) as Spell;
+					}
 				}			
 			}
 
