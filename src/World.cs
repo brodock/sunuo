@@ -1087,7 +1087,58 @@ namespace Server
 
 		public static void Save( bool message )
 		{
-			Save(Core.Config.SaveDirectory, message);
+			/* create "./Saves/tmp/new" */
+
+			string saveDirectory = Core.Config.SaveDirectory;
+			if (!Directory.Exists(saveDirectory))
+				Directory.CreateDirectory(saveDirectory);
+
+			string tmpDirectory = Path.Combine(saveDirectory, "tmp");
+			if (Directory.Exists(tmpDirectory))
+				Directory.Delete(tmpDirectory, true);
+			else if (File.Exists(tmpDirectory))
+				File.Delete(tmpDirectory);
+			Directory.CreateDirectory(tmpDirectory);
+
+			string newDirectory = Path.Combine(tmpDirectory, "new");
+
+			try {
+				Directory.CreateDirectory(newDirectory);
+
+				/* save to "./Saves/tmp/new/" */
+
+				Save(newDirectory, message);
+			} catch {
+				/* cleanup "./Saves/tmp" */
+				try {
+					Directory.Delete(tmpDirectory, true);
+				} catch {
+				}
+
+				throw;
+			}
+
+			/* move "./Saves/*" to "./Saves/tmp/old/" */
+
+			string oldDirectory = Path.Combine(tmpDirectory, "old");
+			Directory.CreateDirectory(oldDirectory);
+
+			foreach (string name in Directory.GetFileSystemEntries(saveDirectory)) {
+				string baseName = Path.GetFileName(name);
+				if (baseName != "tmp")
+					Directory.Move(name,
+								   Path.Combine(oldDirectory, baseName));
+			}
+
+			/* move "./Saves/tmp/new/*" to "./Saves/" */
+
+			foreach (string name in Directory.GetFileSystemEntries(newDirectory))
+				Directory.Move(name,
+							   Path.Combine(saveDirectory, Path.GetFileName(name)));
+
+			/* delete "./Saves/tmp" */
+
+			Directory.Delete(tmpDirectory, true);
 		}
 
 		private static void SaveMobiles(string mobileBase)
