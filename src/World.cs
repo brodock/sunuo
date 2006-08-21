@@ -995,11 +995,8 @@ namespace Server
 			}
 		}
 
-		internal static int m_Saves;
-
 		public static void Save()
 		{
-			++m_Saves;
 			Save( true );
 		}
 
