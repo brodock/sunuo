@@ -332,7 +332,13 @@ namespace Server.Mobiles
 		public virtual FoodType FavoriteFood{ get{ return FoodType.Meat; } }
 		public virtual PackInstinct PackInstinct{ get{ return PackInstinct.None; } }
 
-		public ArrayList Owners{ get{ return m_Owners; } }
+		public ArrayList Owners {
+			get {
+				if (m_Owners == null)
+					m_Owners = new ArrayList(4);
+				return m_Owners;
+			}
+		}
 
 		public virtual bool AllowMaleTamer{ get{ return true; } }
 		public virtual bool AllowFemaleTamer{ get{ return true; } }
@@ -1118,8 +1124,6 @@ namespace Server.Mobiles
 
 			m_bTamable = false;
 
-			m_Owners = new ArrayList();
-
 			m_NextReaquireTime = DateTime.Now + ReaquireDelay;
 
 			ChangeAIType(AI);
@@ -1414,9 +1418,7 @@ namespace Server.Mobiles
 			}
 
 			if ( version >= 8 )
-				m_Owners = reader.ReadMobileList();
-			else
-				m_Owners = new ArrayList();
+				m_Owners = reader.ReadMobileListOrNull();
 
 			if ( version >= 10 )
 			{
