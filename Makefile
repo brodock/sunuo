@@ -22,8 +22,8 @@ clean:
 install: all
 	install -m 0755 $(DISTDIR)/SunUO.exe $(RUNUO_BASE)/
 	test -f $(DISTDIR)/SunUO.exe.mdb && install -m 0644 $(DISTDIR)/SunUO.exe.mdb $(RUNUO_BASE)/
-	test -f $(DISTDIR)/SunUO.exe.config || install -m 0644 SunUO.exe.config $(RUNUO_BASE)/
-	test -f $(DISTDIR)/SunLogin.exe.config || install -m 0644 SunLogin.exe.config $(RUNUO_BASE)/
+	test -f $(RUNUO_BASE)/SunUO.exe.config || install -m 0644 $(DISTDIR)/SunUO.exe.config $(RUNUO_BASE)/
+	test -f $(RUNUO_BASE)/SunLogin.exe.config || install -m 0644 $(DISTDIR)/SunLogin.exe.config $(RUNUO_BASE)/
 	install -d -m 0755 $(RUNUO_BASE)/local $(RUNUO_BASE)/local/lib
 	install -m 0644 $(addprefix $(DISTDIR)/,$(DISTDLL)) $(RUNUO_BASE)/
 	install -m 0644 $(SCRIPTS_DLL) $(RUNUO_BASE)/local/lib/
