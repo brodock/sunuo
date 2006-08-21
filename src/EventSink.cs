@@ -716,12 +716,17 @@ namespace Server
 
 	public class WorldSaveEventArgs : EventArgs
 	{
+		private string m_SaveDirectory;
 		private bool m_Msg;
 
+		public string SaveDirectory {
+			get { return m_SaveDirectory; }
+		}
 		public bool Message{ get{ return m_Msg; } }
 
-		public WorldSaveEventArgs( bool msg )
+		public WorldSaveEventArgs(string _saveDir, bool msg)
 		{
+			m_SaveDirectory = _saveDir;
 			m_Msg = msg;
 		}
 	}

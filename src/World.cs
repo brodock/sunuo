@@ -1063,7 +1063,7 @@ namespace Server
 
 			try
 			{
-				EventSink.InvokeWorldSave( new WorldSaveEventArgs( message ) );
+				EventSink.InvokeWorldSave(new WorldSaveEventArgs(saveDirectory, message));
 			}
 			catch ( Exception e )
 			{
