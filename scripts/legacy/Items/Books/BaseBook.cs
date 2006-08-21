@@ -8,6 +8,7 @@ namespace Server.Items
 {
 	public class BookPageInfo
 	{
+		private static readonly string[] empty = new string[0];
 		private string[] m_Lines;
 
 		public string[] Lines
@@ -18,20 +19,22 @@ namespace Server.Items
 			}
 			set
 			{
-				m_Lines = value;
+				m_Lines = value != null && value.Length == 0
+					? empty
+					: value;
 			}
 		}
 
 		public BookPageInfo()
 		{
-			m_Lines = new string[0];
+			m_Lines = empty;
 		}
 
 		public BookPageInfo( GenericReader reader )
 		{
 			int length = reader.ReadInt();
 
-			m_Lines = new string[length];
+			m_Lines = length == 0 ? empty : new string[length];
 
 			for ( int i = 0; i < m_Lines.Length; ++i )
 				m_Lines[i] = reader.ReadString();

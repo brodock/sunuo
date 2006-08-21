@@ -21,6 +21,7 @@ sunuo (0.3.2) unstable; urgency=low
     - fixed compiler warnings
     - Multis.MovingCrate: check ReadItem() result
     - initialize BaseCreature.m_arSpellAttack and m_arSpellDefense on demand
+    - don't allocate an empty array for empty book pages
   * moved into separate script libraries:
     - Engines.MyRunUO
     - Engines.Reports
