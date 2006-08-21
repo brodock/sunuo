@@ -26,6 +26,7 @@ sunuo (0.3.2) unstable; urgency=low
     - create PlayerMobile.m_VisList, PlayerMobile.m_PermaFlags,
       PlayerMobile.m_JusticeProtectors, BaseCreature.m_Owners,
       PlayerMobile.m_AntiMacroTable on demand
+    - use XmlReader instead of XmlDocument.Load() to parse the accounts file
   * moved into separate script libraries:
     - Engines.MyRunUO
     - Engines.Reports

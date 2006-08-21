@@ -163,12 +163,15 @@ namespace Server.Accounting
 				return;
 
 			XmlDocument doc = new XmlDocument();
-			doc.Load( filePath );
+			XmlReader reader = new XmlTextReader(filePath);
 
-			XmlElement root = doc["accounts"];
+			while (reader.Read()) {
+				if (reader.NodeType != XmlNodeType.Element ||
+					reader.Name != "account")
+					continue;
 
-			foreach ( XmlElement account in root.GetElementsByTagName( "account" ) )
-			{
+				XmlElement account = (XmlElement)doc.ReadNode(reader);
+
 				try
 				{
 					Account acct = new Account( account );
