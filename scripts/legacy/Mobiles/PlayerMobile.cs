@@ -1534,9 +1534,10 @@ namespace Server.Mobiles
 
 			SkillHandlers.StolenItem.ReturnOnDeath( this, c );
 
-			if ( m_PermaFlags.Count > 0 )
+			if ( m_PermaFlags != null && m_PermaFlags.Count > 0 )
 			{
 				m_PermaFlags.Clear();
+				m_PermaFlags = null;
 
 				if ( c is Corpse )
 					((Corpse)c).Criminal = true;
@@ -1700,7 +1701,6 @@ namespace Server.Mobiles
 
 		public PlayerMobile()
 		{
-			m_PermaFlags = new ArrayList();
 			m_AntiMacroTable = new Hashtable();
 
 			m_BOBFilter = new Engines.BulkOrders.BOBFilter();
@@ -1793,14 +1793,20 @@ namespace Server.Mobiles
 
 		public ArrayList PermaFlags
 		{
-			get{ return m_PermaFlags; }
+			get {
+				if (m_PermaFlags == null)
+					m_PermaFlags = new ArrayList(4);
+				return m_PermaFlags;
+			}
 		}
 
 		public override int Luck{ get{ return AosAttributes.GetValue( this, AosAttribute.Luck ); } }
 
 		public override bool IsHarmfulCriminal( Mobile target )
 		{
-			if ( SkillHandlers.Stealing.ClassicMode && target is PlayerMobile && ((PlayerMobile)target).m_PermaFlags.Count > 0 )
+			if ( SkillHandlers.Stealing.ClassicMode && target is PlayerMobile &&
+				 ((PlayerMobile)target).m_PermaFlags != null &&
+				 ((PlayerMobile)target).m_PermaFlags.Count > 0 )
 			{
 				int noto = Notoriety.Compute( this, target );
 
@@ -1975,7 +1981,7 @@ namespace Server.Mobiles
 				}
 				case 7:
 				{
-					m_PermaFlags = reader.ReadMobileList();
+					m_PermaFlags = reader.ReadMobileListOrNull();
 					goto case 6;
 				}
 				case 6:
@@ -2022,9 +2028,6 @@ namespace Server.Mobiles
 			// Professions weren't verified on 1.0 RC0
 			if ( !CharacterCreation.VerifyProfession( m_Profession ) )
 				m_Profession = 0;
-
-			if ( m_PermaFlags == null )
-				m_PermaFlags = new ArrayList();
 
 			if ( m_JusticeProtectors == null )
 				m_JusticeProtectors = new ArrayList();
