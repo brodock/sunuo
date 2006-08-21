@@ -25,6 +25,7 @@ install: all
 	test -f $(DISTDIR)/SunUO.exe.config || install -m 0644 SunUO.exe.config $(RUNUO_BASE)/
 	test -f $(DISTDIR)/SunLogin.exe.config || install -m 0644 SunLogin.exe.config $(RUNUO_BASE)/
 	install -m 0644 $(addprefix $(DISTDIR)/,$(DISTDLL)) $(RUNUO_BASE)/
+	install -m 0644 $(SCRIPTS_DLL) $(RUNUO_BASE)/local/lib/
 
 # compile targets
 
