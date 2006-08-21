@@ -320,7 +320,8 @@ namespace Server
 			if ( !m_Crashed )
 				EventSink.InvokeShutdown( new ShutdownEventArgs() );
 
-			timerThread.Join();
+			if (timerThread != null && timerThread.IsAlive)
+				timerThread.Join();
 			log.Info( "done" );
 		}
 
@@ -405,10 +406,6 @@ namespace Server
 			if ( BaseDirectory.Length > 0 )
 				Directory.SetCurrentDirectory( BaseDirectory );
 
-			Timer.TimerThread ttObj = new Timer.TimerThread();
-			timerThread = new Thread( new ThreadStart( ttObj.TimerMain ) );
-			timerThread.Name = "Timer Thread";
-
 			if (!ScriptCompiler.Compile(debug))
 				return;
 
@@ -448,6 +445,9 @@ namespace Server
 
 			m_MessagePump = new MessagePump( new Listener( Listener.Port ) );
 
+			Timer.TimerThread ttObj = new Timer.TimerThread();
+			timerThread = new Thread(new ThreadStart(ttObj.TimerMain));
+			timerThread.Name = "Timer Thread";
 			timerThread.Start();
 
 			NetState.Initialize();
