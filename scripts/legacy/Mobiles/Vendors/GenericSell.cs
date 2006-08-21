@@ -6,7 +6,7 @@ namespace Server.Mobiles
 {
 	public class GenericSellInfo : IShopSellInfo
 	{
-		private Hashtable m_Table = new Hashtable();
+		private Hashtable m_Table;
 		private Type[] m_Types;
 
 		public GenericSellInfo()
@@ -15,12 +15,18 @@ namespace Server.Mobiles
 
 		public void Add( Type type, int price )
 		{
+			if (m_Table == null)
+				m_Table = new Hashtable();
+
 			m_Table[type] = price;
 			m_Types = null;
 		}
 
 		public int GetSellPriceFor( Item item )
 		{
+			if (m_Table == null)
+				return 0;
+
 			int price = (int)m_Table[item.GetType()];
 
 			if ( item is BaseArmor )
@@ -83,10 +89,15 @@ namespace Server.Mobiles
 			return (int)( 1.90 * GetSellPriceFor( item ) );
 		}
 
+		private static Type[] emptyTypes = new Type[0];
+
 		public Type[] Types
 		{
 			get
 			{
+				if (m_Table == null)
+					return emptyTypes;
+
 				if ( m_Types == null )
 				{
 					m_Types = new Type[m_Table.Keys.Count];
@@ -123,6 +134,9 @@ namespace Server.Mobiles
 
 		public bool IsInList( Type type )
 		{
+			if (m_Table == null)
+				return false;
+
 			Object o = m_Table[type];
 
 			if ( o == null )
