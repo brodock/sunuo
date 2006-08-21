@@ -455,7 +455,7 @@ namespace Server
 
 			object[] ctorArgs = new object[1];
 
-			m_Mobiles = new Hashtable(count);
+			m_Mobiles = new Hashtable((count * 11) / 10);
 			MobileEntry[] entries = new MobileEntry[count];
 
 			for (int i = 0; i < count; ++i) {
@@ -503,7 +503,7 @@ namespace Server
 
 			object[] ctorArgs = new object[1];
 
-			m_Items = new Hashtable(count);
+			m_Items = new Hashtable((count * 11) / 10);
 			ItemEntry[] entries = new ItemEntry[count];
 
 			for (int i = 0; i < count; ++i) {
