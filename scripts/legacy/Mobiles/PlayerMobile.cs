@@ -1700,7 +1700,6 @@ namespace Server.Mobiles
 
 		public PlayerMobile()
 		{
-			m_VisList = new ArrayList();
 			m_PermaFlags = new ArrayList();
 			m_AntiMacroTable = new Hashtable();
 
@@ -1779,14 +1778,17 @@ namespace Server.Mobiles
 
 		public PlayerMobile( Serial s ) : base( s )
 		{
-			m_VisList = new ArrayList();
 			m_AntiMacroTable = new Hashtable();
 			InvalidateMyRunUO();
 		}
 
 		public ArrayList VisibilityList
 		{
-			get{ return m_VisList; }
+			get {
+				if (m_VisList == null)
+					m_VisList = new ArrayList(4);
+				return m_VisList;
+			}
 		}
 
 		public ArrayList PermaFlags
@@ -2172,7 +2174,8 @@ namespace Server.Mobiles
 
 		public override bool CanSee( Mobile m )
 		{
-			if ( m is PlayerMobile && ((PlayerMobile)m).m_VisList.Contains( this ) )
+			if ( m is PlayerMobile && ((PlayerMobile)m).m_VisList != null &&
+				 ((PlayerMobile)m).m_VisList.Contains( this ) )
 				return true;
 
 			return base.CanSee( m );
