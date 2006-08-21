@@ -157,7 +157,11 @@ namespace Server.Mobiles
 
 		public string Name
 		{
-			get{ return m_Name; }
+			get {
+				if (m_Name == null)
+					m_Name = (1020000 + (m_ItemID & 0x3FFF)).ToString();
+				return m_Name;
+			}
 			set{ m_Name = value; }
 		}
 
@@ -235,11 +239,7 @@ namespace Server.Mobiles
 			m_ItemID = itemID;
 			m_Hue = hue;
 			m_Args = args;
-
-			if ( name == null )
-				m_Name = (1020000 + (itemID & 0x3FFF)).ToString();
-			else
-				m_Name = name;
+			m_Name = name;
 		}
 
 		//get a new instance of an object (we just bought it)

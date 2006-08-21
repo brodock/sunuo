@@ -29,6 +29,7 @@ sunuo (0.3.2) unstable; urgency=low
       - PlayerMobile.m_JusticeProtectors
       - PlayerMobile.m_AntiMacroTable
       - BaseCreature.m_Owners
+      - GenericBuyInfo.Name
     - use XmlReader instead of XmlDocument.Load() to parse the accounts file
   * moved into separate script libraries:
     - Engines.MyRunUO
