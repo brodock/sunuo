@@ -28,19 +28,24 @@ namespace Server.Mobiles
 
 			public DisplayCache() : base( 0 )
 			{
-				m_Table = new Hashtable();
 				m_Mobiles = new ArrayList();
 			}
 
 			public object Lookup( Type key )
 			{
+				if (m_Table == null)
+					return null;
+
 				return m_Table[key];
 			}
 
 			public void Store( Type key, object obj, bool cache )
 			{
-				if ( cache )
+				if ( cache ) {
+					if (m_Table == null)
+						m_Table = new Hashtable();
 					m_Table[key] = obj;
+				}
 
 				if ( obj is Item )
 					AddItem( (Item) obj );
@@ -103,8 +108,6 @@ namespace Server.Mobiles
 					m_Cache = this;
 				else
 					Delete();
-
-				m_Table = new Hashtable();
 			}
 		}
 
