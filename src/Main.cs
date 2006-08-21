@@ -324,6 +324,57 @@ namespace Server
 			log.Info( "done" );
 		}
 
+		private static void Run() {
+			m_Now = DateTime.Now;
+			m_TotalProfile = new MainProfile(m_Now);
+			m_CurrentProfile = new MainProfile(m_Now);
+
+			while ( !m_Closing )
+			{
+				m_Now = DateTime.Now;
+
+				/* wait until event happens */
+
+				m_Signal.WaitOne();
+
+				ClockProfile(MainProfile.TimerId.Idle);
+
+				/* process mobiles */
+
+				Mobile.ProcessDeltaQueue();
+
+				ClockProfile(MainProfile.TimerId.MobileDelta);
+
+				/* process items */
+
+				Item.ProcessDeltaQueue();
+
+				ClockProfile(MainProfile.TimerId.ItemDelta);
+
+				/* process timers */
+
+				Timer.Slice();
+
+				ClockProfile(MainProfile.TimerId.Timers);
+
+				/* network */
+
+				m_MessagePump.Slice();
+
+				NetState.FlushAll();
+				NetState.ProcessDisposedQueue();
+
+				ClockProfile(MainProfile.TimerId.Network);
+
+				if ( Slice != null )
+					Slice();
+
+				/* done with this iteration */
+				m_TotalProfile.Next();
+				m_CurrentProfile.Next();
+			}
+		}
+
 		public static void Start(Config.Root _config, bool debug, bool _service, bool _profiling) {
 			config = _config;
 			m_Service = _service;
@@ -406,56 +457,9 @@ namespace Server
 
 			log.Info("SunUO initialized, entering main loop");
 
-			m_Now = DateTime.Now;
-			m_TotalProfile = new MainProfile(m_Now);
-			m_CurrentProfile = new MainProfile(m_Now);
-
 			try
 			{
-				while ( !m_Closing )
-				{
-					m_Now = DateTime.Now;
-
-					/* wait until event happens */
-
-					m_Signal.WaitOne();
-
-					ClockProfile(MainProfile.TimerId.Idle);
-
-					/* process mobiles */
-
-					Mobile.ProcessDeltaQueue();
-
-					ClockProfile(MainProfile.TimerId.MobileDelta);
-
-					/* process items */
-
-					Item.ProcessDeltaQueue();
-
-					ClockProfile(MainProfile.TimerId.ItemDelta);
-
-					/* process timers */
-
-					Timer.Slice();
-
-					ClockProfile(MainProfile.TimerId.Timers);
-
-					/* network */
-
-					m_MessagePump.Slice();
-
-					NetState.FlushAll();
-					NetState.ProcessDisposedQueue();
-
-					ClockProfile(MainProfile.TimerId.Network);
-
-					if ( Slice != null )
-						Slice();
-
-					/* done with this iteration */
-					m_TotalProfile.Next();
-					m_CurrentProfile.Next();
-				}
+				Run();
 			}
 			catch ( Exception e )
 			{
