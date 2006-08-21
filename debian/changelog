@@ -22,7 +22,8 @@ sunuo (0.3.2) unstable; urgency=low
     - Multis.MovingCrate: check ReadItem() result
     - initialize BaseCreature.m_arSpellAttack and m_arSpellDefense on demand
     - don't allocate an empty array for empty book pages
-    - create PlayerMobile.m_VisList, PlayerMobile.m_PermaFlags on demand
+    - create PlayerMobile.m_VisList, PlayerMobile.m_PermaFlags,
+      PlayerMobile.m_JusticeProtectors on demand
   * moved into separate script libraries:
     - Engines.MyRunUO
     - Engines.Reports

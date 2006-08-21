@@ -959,13 +959,16 @@ namespace Server.Mobiles
 						list.Add( new CallbackEntry( 6207, new ContextCallback( LeaveHouse ) ) );
 				}
 
-				if ( m_JusticeProtectors.Count > 0 )
+				if ( m_JusticeProtectors != null && m_JusticeProtectors.Count > 0 )
 					list.Add( new CallbackEntry( 6157, new ContextCallback( CancelProtection ) ) );
 			}
 		}
 
 		private void CancelProtection()
 		{
+			if (m_JusticeProtectors == null)
+				return;
+
 			for ( int i = 0; i < m_JusticeProtectors.Count; ++i )
 			{
 				Mobile prot = (Mobile)m_JusticeProtectors[i];
@@ -977,6 +980,7 @@ namespace Server.Mobiles
 			}
 
 			m_JusticeProtectors.Clear();
+			m_JusticeProtectors = null;
 		}
 
 		private void ToggleItemInsurance()
@@ -1709,8 +1713,6 @@ namespace Server.Mobiles
 			m_ShortTermElapse = TimeSpan.FromHours( 8.0 );
 			m_LongTermElapse = TimeSpan.FromHours( 40.0 );
 
-			m_JusticeProtectors = new ArrayList();
-
 			InvalidateMyRunUO();
 		}
 
@@ -1997,7 +1999,7 @@ namespace Server.Mobiles
 				case 4:
 				{
 					m_LastJusticeLoss = reader.ReadDeltaTime();
-					m_JusticeProtectors = reader.ReadMobileList();
+					m_JusticeProtectors = reader.ReadMobileListOrNull();
 					goto case 3;
 				}
 				case 3:
@@ -2028,9 +2030,6 @@ namespace Server.Mobiles
 			// Professions weren't verified on 1.0 RC0
 			if ( !CharacterCreation.VerifyProfession( m_Profession ) )
 				m_Profession = 0;
-
-			if ( m_JusticeProtectors == null )
-				m_JusticeProtectors = new ArrayList();
 
 			if ( m_BOBFilter == null )
 				m_BOBFilter = new Engines.BulkOrders.BOBFilter();
@@ -2601,7 +2600,14 @@ namespace Server.Mobiles
 		private ArrayList m_JusticeProtectors;
 
 		public DateTime LastJusticeLoss{ get{ return m_LastJusticeLoss; } set{ m_LastJusticeLoss = value; } }
-		public ArrayList JusticeProtectors{ get{ return m_JusticeProtectors; } set{ m_JusticeProtectors = value; } }
+		public ArrayList JusticeProtectors {
+			get {
+				if (m_JusticeProtectors == null)
+					m_JusticeProtectors = new ArrayList(4);
+
+				return m_JusticeProtectors;
+			}
+		}
 
 		private DateTime m_LastCompassionLoss;
 		private DateTime m_NextCompassionDay;
