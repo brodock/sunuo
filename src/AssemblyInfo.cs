@@ -35,7 +35,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Max Kellermann <max@duempel.org> http://max.kellermann.name/")]
 [assembly: AssemblyProduct("SunUO http://www.sunuo.org/")]
-[assembly: AssemblyCopyright("(c) 2005 Max Kellermann <max@duempel.org>")]
+[assembly: AssemblyCopyright("(c) 2005-2006 Max Kellermann <max@duempel.org>")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
