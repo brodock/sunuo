@@ -24,6 +24,8 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 
+[assembly: log4net.Config.XmlConfigurator(Watch=true)]
+
 namespace Server
 {
 	public class Bootstrap

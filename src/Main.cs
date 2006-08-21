@@ -37,8 +37,6 @@ using Server.Accounting;
 using Server.Gumps;
 using Server.Profiler;
 
-[assembly: log4net.Config.XmlConfigurator(Watch=true)]
-
 namespace Server
 {
 	public delegate void Slice();
