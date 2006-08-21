@@ -123,10 +123,11 @@ namespace Server.Accounting
 
 		public static void Save( WorldSaveEventArgs e )
 		{
-			if ( !Directory.Exists( "Saves/Accounts" ) )
-				Directory.CreateDirectory( "Saves/Accounts" );
+			string saveDirectory = Path.Combine(e.SaveDirectory, "Accounts");
+			if (!Directory.Exists(saveDirectory))
+				Directory.CreateDirectory(saveDirectory);
 
-			string filePath = Path.Combine( "Saves/Accounts", "accounts.xml" );
+			string filePath = Path.Combine(saveDirectory, "accounts.xml");
 
 			using ( StreamWriter op = new StreamWriter( filePath ) )
 			{
@@ -155,7 +156,8 @@ namespace Server.Accounting
 		{
 			m_Accounts = new Hashtable( 32, 1.0f, CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
 
-			string filePath = Path.Combine( "Saves/Accounts", "accounts.xml" );
+			string saveDirectory = Path.Combine(Core.Config.SaveDirectory, "Accounts");
+			string filePath = Path.Combine(saveDirectory, "accounts.xml");
 
 			if ( !File.Exists( filePath ) )
 				return;
