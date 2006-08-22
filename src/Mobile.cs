@@ -1017,7 +1017,9 @@ namespace Server
 
 		private void UpdateAggrExpire()
 		{
-			if ( m_Deleted || (m_Aggressors.Count == 0 && m_Aggressed.Count == 0) )
+			if (m_Deleted ||
+				((m_Aggressors == null || m_Aggressors.Count == 0) &&
+				 m_Aggressed.Count == 0))
 			{
 				StopAggrExpire();
 			}
@@ -1036,8 +1038,7 @@ namespace Server
 			m_ExpireAggrTimer = null;
 		}
 
-		private void CheckAggrExpire()
-		{
+		private void CheckAggressorsExpire() {
 			for ( int i = m_Aggressors.Count - 1; i >= 0; --i )
 			{
 				if ( i >= m_Aggressors.Count )
@@ -1057,6 +1058,15 @@ namespace Server
 						m_NetState.Send( new MobileIncoming( this, attacker ) );
 				}
 			}
+
+			if (m_Aggressors.Count == 0)
+				m_Aggressors = null;
+		}
+
+		private void CheckAggrExpire()
+		{
+			if (m_Aggressors != null)
+				CheckAggressorsExpire();
 
 			for ( int i = m_Aggressed.Count - 1; i >= 0; --i )
 			{
@@ -2078,6 +2088,8 @@ namespace Server
 		{
 			get
 			{
+				if (m_Aggressors == null)
+					m_Aggressors = new ArrayList(1);
 				return m_Aggressors;
 			}
 		}
@@ -2244,32 +2256,34 @@ namespace Server
 			bool addAggressor = true;
 
 			ArrayList list = m_Aggressors;
-
-			for ( int i = 0; i < list.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)list[i];
-
-				if ( info.Attacker == aggressor )
+			if (list != null) {
+				for ( int i = 0; i < list.Count; ++i )
 				{
-					info.Refresh();
-					info.CriminalAggression = criminal;
-					info.CanReportMurder = criminal;
+					AggressorInfo info = (AggressorInfo)list[i];
 
-					addAggressor = false;
+					if ( info.Attacker == aggressor )
+					{
+						info.Refresh();
+						info.CriminalAggression = criminal;
+						info.CanReportMurder = criminal;
+
+						addAggressor = false;
+					}
 				}
 			}
 
 			list = aggressor.m_Aggressors;
-
-			for ( int i = 0; i < list.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)list[i];
-
-				if ( info.Attacker == this )
+			if (list != null) {
+				for ( int i = 0; i < list.Count; ++i )
 				{
-					info.Refresh();
+					AggressorInfo info = (AggressorInfo)list[i];
 
-					addAggressor = false;
+					if ( info.Attacker == this )
+					{
+						info.Refresh();
+
+						addAggressor = false;
+					}
 				}
 			}
 
@@ -2309,6 +2323,9 @@ namespace Server
 
 			if ( addAggressor )
 			{
+				if (m_Aggressors == null)
+					m_Aggressors = new ArrayList(1);
+
 				m_Aggressors.Add( AggressorInfo.Create( aggressor, this, criminal ) ); // new AggressorInfo( aggressor, this, criminal, true ) );
 
 				if ( this.CanSee( aggressor ) && m_NetState != null )
@@ -2367,7 +2384,7 @@ namespace Server
 
 		public void RemoveAggressor( Mobile aggressor )
 		{
-			if ( m_Deleted )
+			if (m_Deleted || m_Aggressors == null)
 				return;
 
 			ArrayList list = m_Aggressors;
@@ -2379,6 +2396,9 @@ namespace Server
 				if ( info.Attacker == aggressor )
 				{
 					m_Aggressors.RemoveAt( i );
+					if (m_Aggressors.Count == 0)
+						m_Aggressors = null;
+
 					info.Free();
 
 					if ( m_NetState != null && this.CanSee( aggressor ) )
@@ -6951,8 +6971,9 @@ namespace Server
 					if ( m_HitsTimer != null )
 						m_HitsTimer.Stop();
 
-					for (int i=0;i<m_Aggressors.Count;i++)//reset reports on full HP
-						((AggressorInfo)m_Aggressors[i]).CanReportMurder = false;
+					if (m_Aggressors != null)
+						for (int i=0;i<m_Aggressors.Count;i++)//reset reports on full HP
+							((AggressorInfo)m_Aggressors[i]).CanReportMurder = false;
 
 					if ( m_DamageEntries.Count > 0 )
 						m_DamageEntries.Clear(); // reset damage entries on full HP
@@ -8971,7 +8992,6 @@ namespace Server
 		{
 			m_Region = Map.Internal.DefaultRegion;
 			m_Serial = serial;
-			m_Aggressors = new ArrayList( 1 );
 			m_Aggressed = new ArrayList( 1 );
 			m_NextSkillTime = DateTime.MinValue;
 			m_DamageEntries = new ArrayList( 1 );
@@ -9008,7 +9028,7 @@ namespace Server
 			m_StatMods = null;
 			Map = Map.Internal;
 			m_AutoPageNotify = true;
-			m_Aggressors = new ArrayList( 1 );
+			m_Aggressors = null;
 			m_Aggressed = new ArrayList( 1 );
 			m_Virtues = null;
 			m_Stabled = null;

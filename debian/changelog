@@ -29,6 +29,7 @@ sunuo (0.3.2) unstable; urgency=low
       - PlayerMobile.m_PermaFlags
       - PlayerMobile.m_JusticeProtectors
       - PlayerMobile.m_AntiMacroTable
+      - PlayerMobile.m_Aggressors
       - BaseCreature.m_Owners
       - GenericBuyInfo.Name
       - GenericBuyInfo.DisplayCache.m_Table
