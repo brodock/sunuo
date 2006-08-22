@@ -374,7 +374,7 @@ namespace Server
 			}
 		}
 
-		public static void Start(Config.Root _config, bool debug, bool _service, bool _profiling) {
+		public static void Initialize(Config.Root _config, bool _service, bool _profiling) {
 			config = _config;
 			m_Service = _service;
 			Profiling = _profiling;
@@ -403,7 +403,9 @@ namespace Server
 
 			if ( BaseDirectory.Length > 0 )
 				Directory.SetCurrentDirectory( BaseDirectory );
+		}
 
+		public static void Start(bool debug) {
 			if (!ScriptCompiler.Compile(debug))
 				return;
 

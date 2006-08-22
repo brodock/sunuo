@@ -129,7 +129,9 @@ namespace Server
 
 			/* enter stage II */
 
-			Core.Start(config, debug, service, profiling);
+			Core.Initialize(config, service, profiling);
+
+			Core.Start(debug);
 		}
 	}
 }
