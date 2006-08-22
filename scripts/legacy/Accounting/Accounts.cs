@@ -162,6 +162,8 @@ namespace Server.Accounting
 			if ( !File.Exists( filePath ) )
 				return;
 
+			log.Debug("loading accounts");
+
 			XmlDocument doc = new XmlDocument();
 			XmlReader reader = new XmlTextReader(filePath);
 
