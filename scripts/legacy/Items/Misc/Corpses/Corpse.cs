@@ -164,7 +164,7 @@ namespace Server.Items
 			if ( m_DecayTimer != null )
 				m_DecayTimer.Stop();
 
-			m_DecayTime = DateTime.Now + delay;
+			m_DecayTime = Core.Now + delay;
 
 			m_DecayTimer = new InternalTimer( this, delay );
 			m_DecayTimer.Start();
@@ -294,7 +294,7 @@ namespace Server.Items
 
 			m_CorpseName = GetCorpseName( owner );
 
-			m_TimeOfDeath = DateTime.Now;
+			m_TimeOfDeath = Core.Now;
 
 			m_AccessLevel = owner.AccessLevel;
 			m_Guild = owner.Guild as Guild;
@@ -323,10 +323,10 @@ namespace Server.Items
 			{
 				AggressorInfo info = (AggressorInfo)owner.Aggressors[i];
 
-				if ( (DateTime.Now - info.LastCombatTime) < lastTime )
+				if ( (Core.Now - info.LastCombatTime) < lastTime )
 				{
 					m_Killer = info.Attacker;
-					lastTime = (DateTime.Now - info.LastCombatTime);
+					lastTime = (Core.Now - info.LastCombatTime);
 				}
 
 				if ( addToAggressors && !info.CriminalAggression )
@@ -337,10 +337,10 @@ namespace Server.Items
 			{
 				AggressorInfo info = (AggressorInfo)owner.Aggressed[i];
 
-				if ( (DateTime.Now - info.LastCombatTime) < lastTime )
+				if ( (Core.Now - info.LastCombatTime) < lastTime )
 				{
 					m_Killer = info.Defender;
-					lastTime = (DateTime.Now - info.LastCombatTime);
+					lastTime = (Core.Now - info.LastCombatTime);
 				}
 
 				if ( addToAggressors )
@@ -474,7 +474,7 @@ namespace Server.Items
 				case 7:
 				{
 					if ( reader.ReadBool() )
-						BeginDecay( reader.ReadDeltaTime() - DateTime.Now );
+						BeginDecay( reader.ReadDeltaTime() - Core.Now );
 
 					goto case 6;
 				}
@@ -518,7 +518,7 @@ namespace Server.Items
 				case 0:
 				{
 					if ( version < 10 )
-						m_TimeOfDeath = DateTime.Now;
+						m_TimeOfDeath = Core.Now;
 
 					if ( version < 7 )
 						BeginDecay( m_DefaultDecayTime );

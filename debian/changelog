@@ -39,6 +39,7 @@ sunuo (0.3.2) unstable; urgency=low
       - GenericBuyInfo.DisplayCache.m_Mobiles
       - GenericSellInfo.m_Table
     - use XmlReader instead of XmlDocument.Load() to parse the accounts file
+    - use DateTime.Now cache
   * moved into separate script libraries:
     - Engines.MyRunUO
     - Engines.Reports

@@ -58,7 +58,7 @@ namespace Server.Items
 			{
 				if ( m_Duration != TimeSpan.Zero && m_Burning )
 				{
-					return m_End - DateTime.Now;
+					return m_End - Core.Now;
 				}
 				else
 					return m_Duration;
@@ -124,7 +124,7 @@ namespace Server.Items
 			if ( m_BurntOut )
 				m_Duration = TimeSpan.Zero;
 			else if ( m_Duration != TimeSpan.Zero )
-				m_Duration = m_End - DateTime.Now;
+				m_Duration = m_End - Core.Now;
 
 			if ( m_Timer != null )
 				m_Timer.Stop();
@@ -148,7 +148,7 @@ namespace Server.Items
 			if ( delay == TimeSpan.Zero )
 				return;
 
-			m_End = DateTime.Now + delay;
+			m_End = Core.Now + delay;
 
 			m_Timer = new InternalTimer( this, delay );
 			m_Timer.Start();
@@ -206,7 +206,7 @@ namespace Server.Items
 					m_Protected = reader.ReadBool();
 
 					if ( m_Burning && m_Duration != TimeSpan.Zero )
-						DoTimer( reader.ReadDeltaTime() - DateTime.Now );
+						DoTimer( reader.ReadDeltaTime() - Core.Now );
 
 					break;
 				}

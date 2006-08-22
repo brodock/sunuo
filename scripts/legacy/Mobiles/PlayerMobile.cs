@@ -77,7 +77,7 @@ namespace Server.Mobiles
 			public int Count 
 			{ 
 				get { return m_Count; } 
-				set	{ m_Count = value; m_Stamp = DateTime.Now; } 
+				set	{ m_Count = value; m_Stamp = Core.Now; } 
 			}
 		}
 
@@ -608,7 +608,7 @@ namespace Server.Mobiles
 
 			if ( pm != null )
 			{
-				pm.m_SessionStart = DateTime.Now;
+				pm.m_SessionStart = Core.Now;
 
 				if ( pm.m_Quest != null )
 					pm.m_Quest.StartTimer();
@@ -650,7 +650,7 @@ namespace Server.Mobiles
 
 			if ( pm != null )
 			{
-				pm.m_GameTime += (DateTime.Now - pm.m_SessionStart);
+				pm.m_GameTime += (Core.Now - pm.m_SessionStart);
 
 				if ( pm.m_Quest != null )
 					pm.m_Quest.StopTimer();
@@ -1550,7 +1550,7 @@ namespace Server.Mobiles
 					Criminal = true;
 			}
 
-			if ( this.Kills >= 5 && DateTime.Now >= m_NextJustAward )
+			if ( this.Kills >= 5 && Core.Now >= m_NextJustAward )
 			{
 				Mobile m = FindMostRecentDamager( false );
 
@@ -1581,7 +1581,7 @@ namespace Server.Mobiles
 						m.FixedParticles( 0x375A, 9, 20, 5027, EffectLayer.Waist );
 						m.PlaySound( 0x1F7 );
 
-						m_NextJustAward = DateTime.Now + TimeSpan.FromMinutes( pointsToGain * 2 );
+						m_NextJustAward = Core.Now + TimeSpan.FromMinutes( pointsToGain * 2 );
 					}
 				}
 			}
@@ -1646,7 +1646,7 @@ namespace Server.Mobiles
 		{
 			get
 			{
-				TimeSpan ts = m_SavagePaintExpiration - DateTime.Now;
+				TimeSpan ts = m_SavagePaintExpiration - Core.Now;
 
 				if ( ts < TimeSpan.Zero )
 					ts = TimeSpan.Zero;
@@ -1655,7 +1655,7 @@ namespace Server.Mobiles
 			}
 			set
 			{
-				m_SavagePaintExpiration = DateTime.Now + value;
+				m_SavagePaintExpiration = Core.Now + value;
 			}
 		}
 
@@ -1664,7 +1664,7 @@ namespace Server.Mobiles
 		{
 			get
 			{
-				TimeSpan ts = m_NextSmithBulkOrder - DateTime.Now;
+				TimeSpan ts = m_NextSmithBulkOrder - Core.Now;
 
 				if ( ts < TimeSpan.Zero )
 					ts = TimeSpan.Zero;
@@ -1673,7 +1673,7 @@ namespace Server.Mobiles
 			}
 			set
 			{
-				try{ m_NextSmithBulkOrder = DateTime.Now + value; }
+				try{ m_NextSmithBulkOrder = Core.Now + value; }
 				catch{}
 			}
 		}
@@ -1683,7 +1683,7 @@ namespace Server.Mobiles
 		{
 			get
 			{
-				TimeSpan ts = m_NextTailorBulkOrder - DateTime.Now;
+				TimeSpan ts = m_NextTailorBulkOrder - Core.Now;
 
 				if ( ts < TimeSpan.Zero )
 					ts = TimeSpan.Zero;
@@ -1692,7 +1692,7 @@ namespace Server.Mobiles
 			}
 			set
 			{
-				try{ m_NextTailorBulkOrder = DateTime.Now + value; }
+				try{ m_NextTailorBulkOrder = Core.Now + value; }
 				catch{}
 			}
 		}
@@ -1836,7 +1836,7 @@ namespace Server.Mobiles
 			CountAndTimeStamp count = (CountAndTimeStamp)tbl[obj];
 			if ( count != null )
 			{
-				if ( count.TimeStamp + SkillCheck.AntiMacroExpire <= DateTime.Now )
+				if ( count.TimeStamp + SkillCheck.AntiMacroExpire <= Core.Now )
 				{
 					count.Count = 1;
 					return true;
@@ -2056,7 +2056,7 @@ namespace Server.Mobiles
 				ArrayList remove = new ArrayList();
 				foreach ( CountAndTimeStamp time in t.Values )
 				{
-					if ( time.TimeStamp + SkillCheck.AntiMacroExpire <= DateTime.Now )
+					if ( time.TimeStamp + SkillCheck.AntiMacroExpire <= Core.Now )
 						remove.Add( time );
 				}
 
@@ -2179,7 +2179,7 @@ namespace Server.Mobiles
 			get
 			{
 				if ( NetState != null )
-					return m_GameTime + (DateTime.Now - m_SessionStart);
+					return m_GameTime + (Core.Now - m_SessionStart);
 				else
 					return m_GameTime;
 			}
@@ -2472,16 +2472,16 @@ namespace Server.Mobiles
 			if ( pm.m_NextMovementTime == DateTime.MinValue )
 			{
 				// has not yet moved
-				pm.m_NextMovementTime = DateTime.Now;
+				pm.m_NextMovementTime = Core.Now;
 				return true;
 			}
 
-			TimeSpan ts = pm.m_NextMovementTime - DateTime.Now;
+			TimeSpan ts = pm.m_NextMovementTime - Core.Now;
 
 			if ( ts < TimeSpan.Zero )
 			{
 				// been a while since we've last moved
-				pm.m_NextMovementTime = DateTime.Now;
+				pm.m_NextMovementTime = Core.Now;
 				return true;
 			}
 
@@ -2672,9 +2672,9 @@ namespace Server.Mobiles
 			if ( this.Quest != null && this.Quest.IgnoreYoungProtection( from ) )
 				return false;
 
-			if ( DateTime.Now - m_LastYoungMessage > TimeSpan.FromMinutes( 1.0 ) )
+			if ( Core.Now - m_LastYoungMessage > TimeSpan.FromMinutes( 1.0 ) )
 			{
-				m_LastYoungMessage = DateTime.Now;
+				m_LastYoungMessage = Core.Now;
 				SendLocalizedMessage( 1019067 ); // A monster looks at you menacingly but does not attack.  You would be under attack now if not for your status as a new citizen of Britannia.
 			}
 
@@ -2685,9 +2685,9 @@ namespace Server.Mobiles
 
 		public bool CheckYoungHealTime()
 		{
-			if ( DateTime.Now - m_LastYoungHeal > TimeSpan.FromMinutes( 5.0 ) )
+			if ( Core.Now - m_LastYoungHeal > TimeSpan.FromMinutes( 5.0 ) )
 			{
-				m_LastYoungHeal = DateTime.Now;
+				m_LastYoungHeal = Core.Now;
 				return true;
 			}
 

@@ -835,7 +835,7 @@ namespace Server.Mobiles
 					m_Mobile.FocusMob = null;
 					m_Mobile.Combatant = null;
 					m_Mobile.CurrentSpeed = m_Mobile.ActiveSpeed;
-					m_NextStopGuard = DateTime.Now + TimeSpan.FromSeconds( 10 );
+					m_NextStopGuard = Core.Now + TimeSpan.FromSeconds( 10 );
 					m_Mobile.CurrentSpeed = m_Mobile.ActiveSpeed;
 					break;
 
@@ -922,7 +922,7 @@ namespace Server.Mobiles
 
 		public virtual bool DoActionGuard()
 		{
-			if ( DateTime.Now < m_NextStopGuard )
+			if ( Core.Now < m_NextStopGuard )
 			{
 				m_Mobile.DebugSay("I am on guard");
 				//m_Mobile.Turn( Utility.Random(0, 2) - 1 );
@@ -1767,7 +1767,7 @@ namespace Server.Mobiles
 
 		public virtual bool DoBardPacified()
 		{
-			if ( DateTime.Now < m_Mobile.BardEndTime )
+			if ( Core.Now < m_Mobile.BardEndTime )
 			{
 				m_Mobile.DebugSay( "I am pacified, I wait" );
 				m_Mobile.Combatant = null;
@@ -1785,7 +1785,7 @@ namespace Server.Mobiles
 
 		public virtual bool DoBardProvoked()
 		{
-			if ( DateTime.Now >= m_Mobile.BardEndTime && (m_Mobile.BardMaster == null || m_Mobile.BardMaster.Deleted || m_Mobile.BardMaster.Map != m_Mobile.Map || m_Mobile.GetDistanceToSqrt( m_Mobile.BardMaster ) > m_Mobile.RangePerception) )
+			if ( Core.Now >= m_Mobile.BardEndTime && (m_Mobile.BardMaster == null || m_Mobile.BardMaster.Deleted || m_Mobile.BardMaster.Map != m_Mobile.Map || m_Mobile.GetDistanceToSqrt( m_Mobile.BardMaster ) > m_Mobile.RangePerception) )
 			{
 				m_Mobile.DebugSay( "I have lost my provoker" );
 				m_Mobile.BardProvoked = false;
@@ -1927,7 +1927,7 @@ namespace Server.Mobiles
 
 		public virtual bool CheckMove()
 		{
-			return ( DateTime.Now >= m_NextMove );
+			return ( Core.Now >= m_NextMove );
 		}
 
 		public virtual bool DoMove( Direction d )
@@ -1958,8 +1958,8 @@ namespace Server.Mobiles
 
 			m_NextMove += delay;
 
-			if ( m_NextMove < DateTime.Now )
-				m_NextMove = DateTime.Now;
+			if ( m_NextMove < Core.Now )
+				m_NextMove = Core.Now;
 
 			m_Mobile.Pushing = false;
 
@@ -2359,13 +2359,13 @@ namespace Server.Mobiles
 				return false;
 			}
 
-			if ( m_Mobile.NextReaquireTime > DateTime.Now )
+			if ( m_Mobile.NextReaquireTime > Core.Now )
 			{
 				m_Mobile.FocusMob = null;
 				return false;
 			}
 
-			m_Mobile.NextReaquireTime = DateTime.Now + m_Mobile.ReaquireDelay;
+			m_Mobile.NextReaquireTime = Core.Now + m_Mobile.ReaquireDelay;
 
 			Map map = m_Mobile.Map;
 
@@ -2592,7 +2592,7 @@ namespace Server.Mobiles
 				m_Owner = owner;
 
 				//m_bDetectHidden = false;
-				//m_NextDetectHidden = DateTime.Now;
+				//m_NextDetectHidden = Core.Now;
 
 				Priority = TimerPriority.FiftyMS;				
 			}
