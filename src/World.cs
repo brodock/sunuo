@@ -954,6 +954,7 @@ namespace Server
 			}
 
 			m_DeleteList.Clear();
+			m_DeleteList = null;
 
 			foreach ( Item item in m_Items.Values )
 			{
