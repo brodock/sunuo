@@ -1019,7 +1019,7 @@ namespace Server
 		{
 			if (m_Deleted ||
 				((m_Aggressors == null || m_Aggressors.Count == 0) &&
-				 m_Aggressed.Count == 0))
+				 (m_Aggressed == null || m_Aggressed.Count == 0)))
 			{
 				StopAggrExpire();
 			}
@@ -1063,11 +1063,7 @@ namespace Server
 				m_Aggressors = null;
 		}
 
-		private void CheckAggrExpire()
-		{
-			if (m_Aggressors != null)
-				CheckAggressorsExpire();
-
+		private void CheckAggressedExpire() {
 			for ( int i = m_Aggressed.Count - 1; i >= 0; --i )
 			{
 				if ( i >= m_Aggressed.Count )
@@ -1087,6 +1083,18 @@ namespace Server
 						m_NetState.Send( new MobileIncoming( this, defender ) );
 				}
 			}
+
+			if (m_Aggressed.Count == 0)
+				m_Aggressed = null;
+		}
+
+		private void CheckAggrExpire()
+		{
+			if (m_Aggressors != null)
+				CheckAggressorsExpire();
+
+			if (m_Aggressed != null)
+				CheckAggressedExpire();
 
 			UpdateAggrExpire();
 		}
@@ -2098,6 +2106,8 @@ namespace Server
 		{
 			get
 			{
+				if (m_Aggressed == null)
+					m_Aggressed = new ArrayList(1);
 				return m_Aggressed;
 			}
 		}
@@ -2290,32 +2300,34 @@ namespace Server
 			bool addAggressed = true;
 
 			list = m_Aggressed;
-
-			for ( int i = 0; i < list.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)list[i];
-
-				if ( info.Defender == aggressor )
+			if (list != null) {
+				for ( int i = 0; i < list.Count; ++i )
 				{
-					info.Refresh();
+					AggressorInfo info = (AggressorInfo)list[i];
 
-					addAggressed = false;
+					if ( info.Defender == aggressor )
+					{
+						info.Refresh();
+
+						addAggressed = false;
+					}
 				}
 			}
 
 			list = aggressor.m_Aggressed;
-
-			for ( int i = 0; i < list.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)list[i];
-
-				if ( info.Defender == this )
+			if (list != null) {
+				for ( int i = 0; i < list.Count; ++i )
 				{
-					info.Refresh();
-					info.CriminalAggression = criminal;
-					info.CanReportMurder = criminal;
+					AggressorInfo info = (AggressorInfo)list[i];
 
-					addAggressed = false;
+					if ( info.Defender == this )
+					{
+						info.Refresh();
+						info.CriminalAggression = criminal;
+						info.CanReportMurder = criminal;
+
+						addAggressed = false;
+					}
 				}
 			}
 
@@ -2339,6 +2351,9 @@ namespace Server
 
 			if ( addAggressed )
 			{
+				if (m_Aggressed == null)
+					m_Aggressed = new ArrayList(1);
+
 				aggressor.m_Aggressed.Add( AggressorInfo.Create( aggressor, this, criminal ) ); // new AggressorInfo( aggressor, this, criminal, false ) );
 
 				if ( this.CanSee( aggressor ) && m_NetState != null )
@@ -2358,7 +2373,7 @@ namespace Server
 
 		public void RemoveAggressed( Mobile aggressed )
 		{
-			if ( m_Deleted )
+			if (m_Deleted || m_Aggressed == null)
 				return;
 
 			ArrayList list = m_Aggressed;
@@ -2370,6 +2385,9 @@ namespace Server
 				if ( info.Defender == aggressed )
 				{
 					m_Aggressed.RemoveAt( i );
+					if (m_Aggressed.Count == 0)
+						m_Aggressed = null;
+
 					info.Free();
 
 					if ( m_NetState != null && this.CanSee( aggressed ) )
@@ -8992,7 +9010,6 @@ namespace Server
 		{
 			m_Region = Map.Internal.DefaultRegion;
 			m_Serial = serial;
-			m_Aggressed = new ArrayList( 1 );
 			m_NextSkillTime = DateTime.MinValue;
 			m_DamageEntries = new ArrayList( 1 );
 
@@ -9029,7 +9046,7 @@ namespace Server
 			Map = Map.Internal;
 			m_AutoPageNotify = true;
 			m_Aggressors = null;
-			m_Aggressed = new ArrayList( 1 );
+			m_Aggressed = null;
 			m_Virtues = null;
 			m_Stabled = null;
 			m_DamageEntries = new ArrayList( 1 );
