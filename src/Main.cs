@@ -405,7 +405,7 @@ namespace Server
 				Directory.SetCurrentDirectory( BaseDirectory );
 		}
 
-		public static void Start(bool debug) {
+		public static void Start(bool debug, bool repair) {
 			if (!ScriptCompiler.Compile(debug))
 				return;
 
@@ -433,6 +433,15 @@ namespace Server
 				config.Save();
 
 			World.Load();
+			if (World.LoadErrors > 0) {
+				log.ErrorFormat("There were {0} errors during world load.", World.LoadErrors);
+				if (repair) {
+					log.Error("The world load errors are being ignored for now, and will not reappear once you save this world.");
+				} else {
+					log.Error("Try 'SunUO --repair' to repair this world save, or restore an older non-corrupt save.");
+					return;
+				}
+			}
 
 			try {
 				ScriptCompiler.Initialize();

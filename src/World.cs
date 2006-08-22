@@ -50,12 +50,16 @@ namespace Server
 		private static Hashtable m_Mobiles;
 		private static Hashtable m_Items;
 
+		private static int m_LoadErrors;
 		private static bool m_Loading;
 		private static bool m_Loaded;
 		private static bool m_Saving;
 		private static ArrayList m_DeleteList;
 
 		public static bool Saving{ get { return m_Saving; } }
+		public static int LoadErrors {
+			get { return m_LoadErrors; }
+		}
 		public static bool Loaded{ get { return m_Loaded; } }
 		public static bool Loading{ get { return m_Loading; } }
 
@@ -417,25 +421,20 @@ namespace Server
 				Type t = ScriptCompiler.FindTypeByFullName(typeName);
 
 				if (t == null) {
-					Console.WriteLine( "failed" );
-					Console.WriteLine( "Error: Type '{0}' was not found. Delete all of those types? (y/n)", typeName );
-
-					if ( Console.ReadLine() == "y" ) {
-						Console.Write( "World: Loading..." );
-						continue;
-					}
-
-					Console.WriteLine( "Types will not be deleted. An exception will be thrown when you press return" );
-					throw new Exception( String.Format( "Bad type '{0}'", typeName ) );
+					log.ErrorFormat("Type '{0}' was not found. All entities referring to it will be deleted.",
+									typeName);
+					continue;
 				}
 
 				ConstructorInfo ctor = t.GetConstructor( ctorTypes );
 
-				if ( ctor != null ) {
-					types[i] = new EntityType(typeName, ctor);
-				} else {
-					throw new Exception( String.Format( "Type '{0}' does not have a serialization constructor", t ) );
+				if (ctor == null) {
+					log.ErrorFormat("Type '{0}' does not have a serialization constructor. All entities referring to it will be deleted.",
+									typeName);
+					continue;
 				}
+
+				types[i] = new EntityType(typeName, ctor);
 			}
 
 			return types;
@@ -451,7 +450,7 @@ namespace Server
 
 		private static MobileEntry[] LoadMobileIndex(BinaryReader idxReader,
 													 EntityType[] types) {
-			int count = idxReader.ReadInt32();
+			int count = idxReader.ReadInt32(), skipped = 0;
 
 			object[] ctorArgs = new object[1];
 
@@ -464,12 +463,17 @@ namespace Server
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
 
-				if (serial == Serial.MinusOne)
+				if (serial == Serial.MinusOne ||
+					typeID < 0 || typeID >= types.Length) {
+					++skipped;
 					continue;
+				}
 
 				EntityType type = types[typeID];
-				if (type.Constructor == null)
+				if (type.Constructor == null) {
+					++skipped;
 					continue;
+				}
 
 				Mobile m = null;
 
@@ -479,10 +483,18 @@ namespace Server
 				} catch {
 				}
 
-				if (m != null) {
-					entries[i] = new MobileEntry(m, typeID, type.Name, pos, length);
-					AddMobile(m);
+				if (m == null) {
+					++skipped;
+					continue;
 				}
+
+				entries[i] = new MobileEntry(m, typeID, type.Name, pos, length);
+				AddMobile(m);
+			}
+
+			if (skipped > 0) {
+				log.WarnFormat("{0} mobiles were skipped", skipped);
+				m_LoadErrors += skipped;
 			}
 
 			return entries;
@@ -499,7 +511,7 @@ namespace Server
 
 		private static ItemEntry[] LoadItemIndex(BinaryReader idxReader,
 												 EntityType[] types) {
-			int count = idxReader.ReadInt32();
+			int count = idxReader.ReadInt32(), skipped = 0;
 
 			object[] ctorArgs = new object[1];
 
@@ -512,12 +524,17 @@ namespace Server
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
 
-				if (serial == Serial.MinusOne)
+				if (serial == Serial.MinusOne ||
+					typeID < 0 || typeID >= types.Length) {
+					++skipped;
 					continue;
+				}
 
 				EntityType type = types[typeID];
-				if (type.Constructor == null)
+				if (type.Constructor == null) {
+					++skipped;
 					continue;
+				}
 
 				Item item = null;
 
@@ -527,10 +544,18 @@ namespace Server
 				} catch {
 				}
 
-				if (item != null) {
-					entries[i] = new ItemEntry(item, typeID, type.Name, pos, length);
-					AddItem(item);
+				if (item == null) {
+					++skipped;
+					continue;
 				}
+
+				entries[i] = new ItemEntry(item, typeID, type.Name, pos, length);
+				AddItem(item);
+			}
+
+			if (skipped > 0) {
+				log.WarnFormat("{0} items were skipped", skipped);
+				m_LoadErrors += skipped;
 			}
 
 			return entries;
@@ -661,12 +686,6 @@ namespace Server
 				}
 			}
 
-			bool failedMobiles = false, failedItems = false, failedGuilds = false, failedRegions = false;
-			Type failedType = null;
-			Serial failedSerial = Serial.Zero;
-			Exception failed = null;
-			int failedTypeID = 0;
-
 			if ( File.Exists( mobBinPath ) )
 			{
 				log.Debug("loading mobiles");
@@ -695,15 +714,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Error("failed to load mobile", e);
-								mobileEntries[i].Clear();
-
-								failed = e;
-								failedMobiles = true;
-								failedType = m.GetType();
-								failedTypeID = entry.TypeID;
-								failedSerial = m.Serial;
-
-								break;
+								++m_LoadErrors;
 							}
 						}
 					}
@@ -711,11 +722,10 @@ namespace Server
 					reader.Close();
 				}
 
-				if (!failedMobiles)
-					mobileEntries = null;
+				mobileEntries = null;
 			}
 
-			if ( !failedMobiles && File.Exists( itemBinPath ) )
+			if ( File.Exists( itemBinPath ) )
 			{
 				log.Debug("loading items");
 
@@ -743,15 +753,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load item", e);
-								itemEntries[i].Clear();
-
-								failed = e;
-								failedItems = true;
-								failedType = item.GetType();
-								failedTypeID = entry.TypeID;
-								failedSerial = item.Serial;
-
-								break;
+								++m_LoadErrors;
 							}
 						}
 					}
@@ -759,11 +761,10 @@ namespace Server
 					reader.Close();
 				}
 
-				if (!failedItems)
-					itemEntries = null;
+				itemEntries = null;
 			}
 
-			if ( !failedMobiles && !failedItems && File.Exists( guildBinPath ) )
+			if ( File.Exists( guildBinPath ) )
 			{
 				log.Debug("loading guilds");
 
@@ -790,15 +791,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load guild", e);
-								guildEntries[i].Clear();
-
-								failed = e;
-								failedGuilds = true;
-								failedType = typeof( BaseGuild );
-								failedTypeID = g.Id;
-								failedSerial = g.Id;
-
-								break;
+								++m_LoadErrors;
 							}
 						}
 					}
@@ -806,11 +799,10 @@ namespace Server
 					reader.Close();
 				}
 
-				if (!failedGuilds)
-					guildEntries = null;
+				guildEntries = null;
 			}
 
-			if ( !failedMobiles && !failedItems && File.Exists( regionBinPath ) )
+			if ( File.Exists( regionBinPath ) )
 			{
 				log.Debug("loading regions");
 
@@ -837,15 +829,7 @@ namespace Server
 							catch ( Exception e )
 							{
 								log.Fatal("failed to load region", e);
-								regionEntries[i].Clear();
-
-								failed = e;
-								failedRegions = true;
-								failedType = r.GetType();
-								failedTypeID = entry.TypeID;
-								failedSerial = r.UId;
-
-								break;
+								++m_LoadErrors;
 							}
 						}
 					}
@@ -853,73 +837,7 @@ namespace Server
 					reader.Close();
 				}
 
-				if (!failedRegions)
-					regionEntries = null;
-			}
-
-			if ( failedItems || failedMobiles || failedGuilds || failedRegions )
-			{
-				Console.WriteLine( "An error was encountered while loading a saved object" );
-
-				Console.WriteLine( " - Type: {0}", failedType );
-				Console.WriteLine( " - Serial: {0}", failedSerial );
-
-				Console.WriteLine( "Delete the object? (y/n)" );
-
-				if ( Console.ReadLine() == "y" )
-				{
-					if ( failedType != typeof( BaseGuild ) && !failedType.IsSubclassOf( typeof( Region ) ) )
-					{
-						Console.WriteLine( "Delete all objects of that type? (y/n)" );
-
-						if ( Console.ReadLine() == "y" )
-						{
-							if ( failedMobiles )
-							{
-								for ( int i = 0; i < mobileEntries.Length; ++i)
-								{
-									if (mobileEntries[i].TypeID == failedTypeID)
-										mobileEntries[i].Clear();
-								}
-							}
-							else if ( failedItems )
-							{
-								for ( int i = 0; i < itemEntries.Length; ++i)
-								{
-									if (itemEntries[i].TypeID == failedTypeID)
-										itemEntries[i].Clear();
-								}
-							}
-						}
-					}
-
-					if (mobileEntries != null) {
-						if (!Directory.Exists(mobileBase))
-							Directory.CreateDirectory(mobileBase);
-						SaveIndex( mobileEntries, mobIdxPath );
-					}
-
-					if (itemEntries != null) {
-						if (!Directory.Exists(itemBase))
-							Directory.CreateDirectory(itemBase);
-						SaveIndex( itemEntries, itemIdxPath );
-					}
-
-					if (guildEntries != null) {
-						if (!Directory.Exists(guildBase))
-							Directory.CreateDirectory(guildBase);
-
-						SaveIndex( guildEntries, guildIdxPath );
-					}
-
-					if (regionEntries != null)
-						SaveIndex( regionEntries, regionIdxPath );
-				}
-
-				Console.WriteLine( "After pressing return an exception will be thrown and the server will terminate" );
-				Console.ReadLine();
-
-				throw new Exception( String.Format( "Load failed (items={0}, mobiles={1}, guilds={2}, regions={3}, type={4}, serial={5})", failedItems, failedMobiles, failedGuilds, failedRegions, failedType, failedSerial ), failed );
+				regionEntries = null;
 			}
 		}
 
@@ -934,6 +852,7 @@ namespace Server
 
 			DateTime start = DateTime.Now;
 
+			m_LoadErrors = 0;
 			m_Loading = true;
 			m_DeleteList = new ArrayList();
 
@@ -975,25 +894,6 @@ namespace Server
 			}
 
 			log.Info(String.Format("World loaded: {1} items, {2} mobiles ({0:F1} seconds)", (DateTime.Now-start).TotalSeconds, m_Items.Count, m_Mobiles.Count));
-		}
-
-		private static void SaveIndex( ICollection list, string path )
-		{
-			using ( FileStream idx = new FileStream( path, FileMode.Create, FileAccess.Write, FileShare.None ) )
-			{
-				BinaryWriter idxWriter = new BinaryWriter( idx );
-
-				idxWriter.Write( list.Count );
-
-				foreach (IEntityEntry e in list) {
-					idxWriter.Write( e.TypeID );
-					idxWriter.Write( e.Serial );
-					idxWriter.Write( e.Position );
-					idxWriter.Write( e.Length );
-				}
-				
-				idxWriter.Close();
-			}
 		}
 
 		public static void Save()
