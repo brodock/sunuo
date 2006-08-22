@@ -46,7 +46,7 @@ namespace Server
 
 			/* parse command line */
 
-			bool debug = false, repair = false, service = false, profiling = false;
+			bool repair = false, service = false, profiling = false;
 
 			string baseDirectory = null;
 			string configFile = null;
@@ -56,7 +56,7 @@ namespace Server
 				switch (args[i]) {
 				case "-debug":
 				case "--debug":
-					debug = true;
+					/* deprecated, debug is always on */
 					break;
 
 				case "--repair":
@@ -135,7 +135,7 @@ namespace Server
 
 			Core.Initialize(config, service, profiling);
 
-			Core.Start(debug, repair);
+			Core.Start(repair);
 		}
 	}
 }

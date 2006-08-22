@@ -405,8 +405,8 @@ namespace Server
 				Directory.SetCurrentDirectory( BaseDirectory );
 		}
 
-		public static void Start(bool debug, bool repair) {
-			if (!ScriptCompiler.Compile(debug))
+		public static void Start(bool repair) {
+			if (!ScriptCompiler.Compile(true))
 				return;
 
 			m_ItemCount = 0;

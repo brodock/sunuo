@@ -5,6 +5,7 @@ sunuo (0.3.2) unstable; urgency=low
   * transactional world save
   * non-interactive world repair
   * reserve 10% space in mobile/item hash tables
+  * script debugging is always enabled
   * added legacy scripts
     - blank keys should not be able to unlock doors with KeyValue 0 (patch
       from Kai Sassmannshausen)
