@@ -459,7 +459,7 @@ namespace Server
 
 			for (int i = 0; i < count; ++i) {
 				int typeID = idxReader.ReadInt32();
-				int serial = idxReader.ReadInt32();
+				Serial serial = (Serial)idxReader.ReadInt32();
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
 
@@ -478,11 +478,11 @@ namespace Server
 				Mobile m = null;
 
 				try {
-					ctorArgs[0] = (Serial)serial;
+					ctorArgs[0] = serial;
 					m = (Mobile)type.Constructor.Invoke(ctorArgs);
 				} catch (Exception e) {
 					log.Error(String.Format("Error while creating mobile {0} of type {1}",
-											(Serial)serial, type.Name),
+											serial, type.Name),
 							  e);
 				}
 
@@ -518,7 +518,7 @@ namespace Server
 
 			for (int i = 0; i < count; ++i) {
 				int typeID = idxReader.ReadInt32();
-				int serial = idxReader.ReadInt32();
+				Serial serial = (Serial)idxReader.ReadInt32();
 				long pos = idxReader.ReadInt64();
 				int length = idxReader.ReadInt32();
 
@@ -537,11 +537,11 @@ namespace Server
 				Item item = null;
 
 				try {
-					ctorArgs[0] = (Serial)serial;
+					ctorArgs[0] = serial;
 					item = (Item)type.Constructor.Invoke(ctorArgs);
 				} catch (Exception e) {
 					log.Error(String.Format("Error while creating item {0} of type {1}",
-											(Serial)serial, type.Name),
+											serial, type.Name),
 							  e);
 					++skipped;
 					continue;
