@@ -522,13 +522,18 @@ namespace Server
 					m.Deserialize(reader);
 				} catch (Exception e) {
 					log.Error("failed to load mobile", e);
+					m.Delete();
+					entries[i].Clear();
 					++m_LoadErrors;
+					continue;
 				}
 
 				if (reader.Position != entry.Position + entry.Length) {
 					log.ErrorFormat("Bad deserialize on mobile {0}, type {1}: position={2}, should be {3}",
 									entry.Serial, entry.TypeName,
 									reader.Position, entry.Position + entry.Length);
+					m.Delete();
+					entries[i].Clear();
 					++m_LoadErrors;
 				}
 			}
@@ -563,13 +568,18 @@ namespace Server
 					item.Deserialize(reader);
 				} catch (Exception e) {
 					log.Error("failed to load item", e);
+					item.Delete();
+					entries[i].Clear();
 					++m_LoadErrors;
+					continue;
 				}
 
 				if (reader.Position != entry.Position + entry.Length) {
 					log.ErrorFormat("Bad deserialize on item {0}, type {1}: position={2}, should be {3}",
 									entry.Serial, entry.TypeName,
 									reader.Position, entry.Position + entry.Length);
+					item.Delete();
+					entries[i].Clear();
 					++m_LoadErrors;
 				}
 			}
@@ -603,13 +613,18 @@ namespace Server
 					guild.Deserialize(reader);
 				} catch (Exception e) {
 					log.Error("failed to load guild", e);
+					BaseGuild.List.Remove(guild.Id);
+					entries[i].Clear();
 					++m_LoadErrors;
+					continue;
 				}
 
 				if (reader.Position != entry.Position + entry.Length) {
 					log.ErrorFormat("Bad deserialize on guild {0}, type {1}: position={2}, should be {3}",
 									guild.Id, guild.GetType(),
 									reader.Position, entry.Position + entry.Length);
+					BaseGuild.List.Remove(guild.Id);
+					entries[i].Clear();
 					++m_LoadErrors;
 				}
 			}
@@ -644,6 +659,7 @@ namespace Server
 				} catch (Exception e) {
 					log.Error("failed to load region", e);
 					++m_LoadErrors;
+					continue;
 				}
 
 				if (reader.Position != entry.Position + entry.Length) {
