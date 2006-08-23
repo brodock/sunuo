@@ -507,6 +507,152 @@ namespace Server
 			}
 		}
 
+		private static void LoadMobiles(BinaryFileReader reader,
+										MobileEntry[] entries) {
+			for (int i = 0; i < entries.Length; ++i) {
+				MobileEntry entry = entries[i];
+				Mobile m = (Mobile)entry.Object;
+				if (m == null)
+					continue;
+
+				reader.Seek(entry.Position, SeekOrigin.Begin);
+
+				try {
+					m_LoadingType = entry.TypeName;
+					m.Deserialize(reader);
+
+					if (reader.Position != entry.Position + entry.Length)
+						throw new Exception(String.Format("***** Bad serialize on {0} *****", m.GetType()));
+				} catch (Exception e) {
+					log.Error("failed to load mobile", e);
+					++m_LoadErrors;
+				}
+			}
+		}
+
+		private static void LoadMobiles(string path,
+										MobileEntry[] entries) {
+			using (FileStream bin = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader binReader = new BinaryReader(bin)) {
+					BinaryFileReader reader = new BinaryFileReader(binReader);
+					try {
+						LoadMobiles(reader, entries);
+					} finally {
+						reader.Close();
+					}
+				}
+			}
+		}
+
+		private static void LoadItems(BinaryFileReader reader,
+									  ItemEntry[] entries) {
+			for (int i = 0; i < entries.Length; ++i) {
+				ItemEntry entry = entries[i];
+				Item item = (Item)entry.Object;
+				if (item == null)
+					continue;
+
+				reader.Seek(entry.Position, SeekOrigin.Begin);
+
+				try {
+					m_LoadingType = entry.TypeName;
+					item.Deserialize(reader);
+
+					if (reader.Position != entry.Position + entry.Length)
+						throw new Exception(String.Format("***** Bad serialize on {0} *****", item.GetType()));
+				} catch (Exception e) {
+					log.Error("failed to load item", e);
+					++m_LoadErrors;
+				}
+			}
+		}
+
+		private static void LoadItems(string path,
+									  ItemEntry[] entries) {
+			using (FileStream bin = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader binReader = new BinaryReader(bin)) {
+					BinaryFileReader reader = new BinaryFileReader(binReader);
+					try {
+						LoadItems(reader, entries);
+					} finally {
+						reader.Close();
+					}
+				}
+			}
+		}
+
+		private static void LoadGuilds(BinaryFileReader reader,
+									   GuildEntry[] entries) {
+			for (int i = 0; i < entries.Length; ++i) {
+				GuildEntry entry = entries[i];
+				BaseGuild guild = (BaseGuild)entry.Object;
+				if (guild == null)
+					continue;
+
+				reader.Seek(entry.Position, SeekOrigin.Begin);
+
+				try {
+					guild.Deserialize(reader);
+
+					if (reader.Position != entry.Position + entry.Length)
+						throw new Exception(String.Format("***** Bad serialize on {0} *****", guild.GetType()));
+				} catch (Exception e) {
+					log.Error("failed to load guild", e);
+					++m_LoadErrors;
+				}
+			}
+		}
+
+		private static void LoadGuilds(string path,
+									   GuildEntry[] entries) {
+			using (FileStream bin = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader binReader = new BinaryReader(bin)) {
+					BinaryFileReader reader = new BinaryFileReader(binReader);
+					try {
+						LoadGuilds(reader, entries);
+					} finally {
+						reader.Close();
+					}
+				}
+			}
+		}
+
+		private static void LoadRegions(BinaryFileReader reader,
+										RegionEntry[] entries) {
+			for (int i = 0; i < entries.Length; ++i) {
+				RegionEntry entry = entries[i];
+				Region region = (Region)entry.Object;
+				if (region == null)
+					continue;
+
+				reader.Seek(entry.Position, SeekOrigin.Begin);
+
+				try {
+					region.Deserialize(reader);
+
+					if (reader.Position != entry.Position + entry.Length)
+						throw new Exception(String.Format("***** Bad serialize on {0} *****", region.GetType()));
+				} catch (Exception e) {
+					log.Error("failed to load region", e);
+					++m_LoadErrors;
+				}
+			}
+		}
+
+		private static void LoadRegions(string path,
+										RegionEntry[] entries) {
+			using (FileStream bin = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader binReader = new BinaryReader(bin)) {
+					BinaryFileReader reader = new BinaryFileReader(binReader);
+					try {
+						LoadRegions(reader, entries);
+					} finally {
+						reader.Close();
+					}
+				}
+			}
+		}
+
 		private static ItemEntry[] LoadItemIndex(BinaryReader idxReader,
 												 EntityType[] types) {
 			int count = idxReader.ReadInt32(), skipped = 0;
@@ -719,38 +865,7 @@ namespace Server
 			{
 				log.Debug("loading mobiles");
 
-				using ( FileStream bin = new FileStream( mobBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
-
-					for ( int i = 0; i < mobileEntries.Length; ++i )
-					{
-						MobileEntry entry = mobileEntries[i];
-						Mobile m = (Mobile)entry.Object;
-
-						if ( m != null )
-						{
-							reader.Seek( entry.Position, SeekOrigin.Begin );
-
-							try
-							{
-								m_LoadingType = entry.TypeName;
-								m.Deserialize( reader );
-
-								if ( reader.Position != (entry.Position + entry.Length) )
-									throw new Exception( String.Format( "***** Bad serialize on {0} *****", m.GetType() ) );
-							}
-							catch ( Exception e )
-							{
-								log.Error("failed to load mobile", e);
-								++m_LoadErrors;
-							}
-						}
-					}
-
-					reader.Close();
-				}
-
+				LoadMobiles(mobBinPath, mobileEntries);
 				mobileEntries = null;
 			}
 
@@ -758,38 +873,7 @@ namespace Server
 			{
 				log.Debug("loading items");
 
-				using ( FileStream bin = new FileStream( itemBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
-
-					for ( int i = 0; i < itemEntries.Length; ++i )
-					{
-						ItemEntry entry = itemEntries[i];
-						Item item = (Item)entry.Object;
-
-						if ( item != null )
-						{
-							reader.Seek( entry.Position, SeekOrigin.Begin );
-
-							try
-							{
-								m_LoadingType = entry.TypeName;
-								item.Deserialize( reader );
-
-								if ( reader.Position != (entry.Position + entry.Length) )
-									throw new Exception( String.Format( "***** Bad serialize on {0} *****", item.GetType() ) );
-							}
-							catch ( Exception e )
-							{
-								log.Fatal("failed to load item", e);
-								++m_LoadErrors;
-							}
-						}
-					}
-
-					reader.Close();
-				}
-
+				LoadItems(itemBinPath, itemEntries);
 				itemEntries = null;
 			}
 
@@ -797,37 +881,7 @@ namespace Server
 			{
 				log.Debug("loading guilds");
 
-				using ( FileStream bin = new FileStream( guildBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
-
-					for ( int i = 0; i < guildEntries.Length; ++i )
-					{
-						GuildEntry entry = guildEntries[i];
-						BaseGuild g = (BaseGuild)entry.Object;
-
-						if ( g != null )
-						{
-							reader.Seek( entry.Position, SeekOrigin.Begin );
-
-							try
-							{
-								g.Deserialize( reader );
-
-								if ( reader.Position != (entry.Position + entry.Length) )
-									throw new Exception( String.Format( "***** Bad serialize on Guild {0} *****", g.Id ) );
-							}
-							catch ( Exception e )
-							{
-								log.Fatal("failed to load guild", e);
-								++m_LoadErrors;
-							}
-						}
-					}
-
-					reader.Close();
-				}
-
+				LoadGuilds(guildBinPath, guildEntries);
 				guildEntries = null;
 			}
 
@@ -835,37 +889,7 @@ namespace Server
 			{
 				log.Debug("loading regions");
 
-				using ( FileStream bin = new FileStream( regionBinPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryFileReader reader = new BinaryFileReader( new BinaryReader( bin ) );
-
-					for ( int i = 0; i < regionEntries.Length; ++i )
-					{
-						RegionEntry entry = regionEntries[i];
-						Region r = (Region)entry.Object;
-
-						if ( r != null )
-						{
-							reader.Seek( entry.Position, SeekOrigin.Begin );
-
-							try
-							{
-								r.Deserialize( reader );
-
-								if ( reader.Position != (entry.Position + entry.Length) )
-									throw new Exception( String.Format( "***** Bad serialize on {0} *****", r.GetType() ) );
-							}
-							catch ( Exception e )
-							{
-								log.Fatal("failed to load region", e);
-								++m_LoadErrors;
-							}
-						}
-					}
-
-					reader.Close();
-				}
-
+				LoadRegions(regionBinPath, regionEntries);
 				regionEntries = null;
 			}
 		}
