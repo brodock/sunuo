@@ -520,11 +520,15 @@ namespace Server
 				try {
 					m_LoadingType = entry.TypeName;
 					m.Deserialize(reader);
-
-					if (reader.Position != entry.Position + entry.Length)
-						throw new Exception(String.Format("***** Bad serialize on {0} *****", m.GetType()));
 				} catch (Exception e) {
 					log.Error("failed to load mobile", e);
+					++m_LoadErrors;
+				}
+
+				if (reader.Position != entry.Position + entry.Length) {
+					log.ErrorFormat("Bad deserialize on mobile {0}, type {1}: position={2}, should be {3}",
+									entry.Serial, entry.TypeName,
+									reader.Position, entry.Position + entry.Length);
 					++m_LoadErrors;
 				}
 			}
@@ -557,11 +561,15 @@ namespace Server
 				try {
 					m_LoadingType = entry.TypeName;
 					item.Deserialize(reader);
-
-					if (reader.Position != entry.Position + entry.Length)
-						throw new Exception(String.Format("***** Bad serialize on {0} *****", item.GetType()));
 				} catch (Exception e) {
 					log.Error("failed to load item", e);
+					++m_LoadErrors;
+				}
+
+				if (reader.Position != entry.Position + entry.Length) {
+					log.ErrorFormat("Bad deserialize on item {0}, type {1}: position={2}, should be {3}",
+									entry.Serial, entry.TypeName,
+									reader.Position, entry.Position + entry.Length);
 					++m_LoadErrors;
 				}
 			}
@@ -593,11 +601,15 @@ namespace Server
 
 				try {
 					guild.Deserialize(reader);
-
-					if (reader.Position != entry.Position + entry.Length)
-						throw new Exception(String.Format("***** Bad serialize on {0} *****", guild.GetType()));
 				} catch (Exception e) {
 					log.Error("failed to load guild", e);
+					++m_LoadErrors;
+				}
+
+				if (reader.Position != entry.Position + entry.Length) {
+					log.ErrorFormat("Bad deserialize on guild {0}, type {1}: position={2}, should be {3}",
+									guild.Id, guild.GetType(),
+									reader.Position, entry.Position + entry.Length);
 					++m_LoadErrors;
 				}
 			}
@@ -629,11 +641,15 @@ namespace Server
 
 				try {
 					region.Deserialize(reader);
-
-					if (reader.Position != entry.Position + entry.Length)
-						throw new Exception(String.Format("***** Bad serialize on {0} *****", region.GetType()));
 				} catch (Exception e) {
 					log.Error("failed to load region", e);
+					++m_LoadErrors;
+				}
+
+				if (reader.Position != entry.Position + entry.Length) {
+					log.ErrorFormat("Bad deserialize on region {0}, type {1}: position={2}, should be {3}",
+									region.UId, region.GetType(),
+									reader.Position, entry.Position + entry.Length);
 					++m_LoadErrors;
 				}
 			}
