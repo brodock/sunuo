@@ -480,12 +480,10 @@ namespace Server
 				try {
 					ctorArgs[0] = (Serial)serial;
 					m = (Mobile)type.Constructor.Invoke(ctorArgs);
-				} catch {
-				}
-
-				if (m == null) {
-					++skipped;
-					continue;
+				} catch (Exception e) {
+					log.Error(String.Format("Error while creating mobile {0} of type {1}",
+											(Serial)serial, type.Name),
+							  e);
 				}
 
 				entries[i] = new MobileEntry(m, typeID, type.Name, pos, length);
@@ -541,10 +539,10 @@ namespace Server
 				try {
 					ctorArgs[0] = (Serial)serial;
 					item = (Item)type.Constructor.Invoke(ctorArgs);
-				} catch {
-				}
-
-				if (item == null) {
+				} catch (Exception e) {
+					log.Error(String.Format("Error while creating item {0} of type {1}",
+											(Serial)serial, type.Name),
+							  e);
 					++skipped;
 					continue;
 				}
@@ -566,6 +564,86 @@ namespace Server
 			using (FileStream idx = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
 				using (BinaryReader idxReader = new BinaryReader(idx)) {
 					return LoadItemIndex(idxReader, ctors);
+				}
+			}
+		}
+
+		private static GuildEntry[] LoadGuildIndex(BinaryReader idxReader) {
+			int count = idxReader.ReadInt32(), skipped = 0;
+
+			GuildEntry[] entries = new GuildEntry[count];
+
+			CreateGuildEventArgs createEventArgs = new CreateGuildEventArgs(-1);
+			for (int i = 0; i < count; ++i) {
+				idxReader.ReadInt32();//no typeid for guilds
+				int id = idxReader.ReadInt32();
+				long pos = idxReader.ReadInt64();
+				int length = idxReader.ReadInt32();
+
+				createEventArgs.Id = id;
+				BaseGuild guild = EventSink.InvokeCreateGuild(createEventArgs);
+				if (guild == null) {
+					++skipped;
+					continue;
+				}
+
+				entries[i] = new GuildEntry(guild, pos, length);
+			}
+
+			if (skipped > 0) {
+				log.WarnFormat("{0} guilds were skipped", skipped);
+				m_LoadErrors += skipped;
+			}
+
+			return entries;
+		}
+
+		private static GuildEntry[] LoadGuildIndex(string path) {
+			using (FileStream idx = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader idxReader = new BinaryReader(idx)) {
+					return LoadGuildIndex(idxReader);
+				}
+			}
+		}
+
+		private static RegionEntry[] LoadRegionIndex(BinaryReader idxReader) {
+			int count = idxReader.ReadInt32(), skipped = 0;
+
+			RegionEntry[] entries = new RegionEntry[count];
+
+			for (int i = 0; i < count; ++i) {
+				idxReader.ReadInt32();//no typeid for regions
+				int serial = idxReader.ReadInt32();
+				long pos = idxReader.ReadInt64();
+				int length = idxReader.ReadInt32();
+
+				if (serial == Serial.MinusOne) {
+					++skipped;
+					continue;
+				}
+
+				Region region = Region.FindByUId(serial);
+				if (region == null) {
+					++skipped;
+					continue;
+				}
+
+				entries[i] = new RegionEntry(region, pos, length);
+				Region.AddRegion(region);
+			}
+
+			if (skipped > 0) {
+				log.WarnFormat("{0} regions were skipped", skipped);
+				m_LoadErrors += skipped;
+			}
+
+			return entries;
+		}
+
+		private static RegionEntry[] LoadRegionIndex(string path) {
+			using (FileStream idx = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+				using (BinaryReader idxReader = new BinaryReader(idx)) {
+					return LoadRegionIndex(idxReader);
 				}
 			}
 		}
@@ -623,29 +701,7 @@ namespace Server
 			{
 				log.Debug("loading guild index");
 
-				using ( FileStream idx = new FileStream( guildIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryReader idxReader = new BinaryReader( idx );
-
-					int count = idxReader.ReadInt32();
-					guildEntries = new GuildEntry[count];
-
-					CreateGuildEventArgs createEventArgs = new CreateGuildEventArgs( -1 );
-					for ( int i = 0; i < count; ++i )
-					{
-						idxReader.ReadInt32();//no typeid for guilds
-						int id = idxReader.ReadInt32();
-						long pos = idxReader.ReadInt64();
-						int length = idxReader.ReadInt32();
-
-						createEventArgs.Id = id;
-						BaseGuild guild = EventSink.InvokeCreateGuild( createEventArgs );//new Guild( id );
-						if ( guild != null )
-							guildEntries[i] = new GuildEntry( guild, pos, length );
-					}
-
-					idxReader.Close();
-				}
+				guildEntries = LoadGuildIndex(guildIdxPath);
 			}
 
 			string regionBase = Path.Combine(saveDirectory, "Regions");
@@ -656,34 +712,7 @@ namespace Server
 			{
 				log.Debug("loading region index");
 
-				using ( FileStream idx = new FileStream( regionIdxPath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-				{
-					BinaryReader idxReader = new BinaryReader( idx );
-
-					int count = idxReader.ReadInt32();
-					regionEntries = new RegionEntry[count];
-
-					for ( int i = 0; i < count; ++i )
-					{
-						idxReader.ReadInt32(); /* typeID */
-						int serial = idxReader.ReadInt32();
-						long pos = idxReader.ReadInt64();
-						int length = idxReader.ReadInt32();
-
-						if (serial == Serial.MinusOne)
-							continue;
-
-						Region r = Region.FindByUId( serial );
-
-						if ( r != null )
-						{
-							regionEntries[i] = new RegionEntry( r, pos, length );
-							Region.AddRegion( r );
-						}
-					}
-
-					idxReader.Close();
-				}
+				regionEntries = LoadRegionIndex(regionIdxPath);
 			}
 
 			if ( File.Exists( mobBinPath ) )
