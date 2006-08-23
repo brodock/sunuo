@@ -636,7 +636,7 @@ namespace Server.Network
 			if ( Core.Now < m_NextCheckActivity )
 				return true;
 
-			log.Info(String.Format("Client: {0}: Disconnecting due to inactivity...", this));
+			log.InfoFormat("Client: {0}: Disconnecting due to inactivity...", this);
 
 			Dispose();
 			return false;
@@ -787,9 +787,11 @@ namespace Server.Network
 				NetState ns = (NetState)m_Disposed.Dequeue();
 
 				if ( ns.m_Account != null )
-					log.Info(String.Format("Client: {0}: Disconnected. [{1} Online] [{2}]", ns, m_Instances.Count, ns.m_Account));
+					log.InfoFormat("Client: {0}: Disconnected. [{1} Online] [{2}]",
+								   ns, m_Instances.Count, ns.m_Account);
 				else
-					log.Info(String.Format("Client: {0}: Disconnected. [{1} Online]", ns, m_Instances.Count));
+					log.InfoFormat("Client: {0}: Disconnected. [{1} Online]",
+								   ns, m_Instances.Count);
 
 				Mobile m = ns.m_Mobile;
 

@@ -67,7 +67,7 @@ namespace Server
 			}
 			else
 			{
-				log.Warn(String.Format("{0} does not exist", path));
+				log.WarnFormat("{0} does not exist", path);
 
 				m_Bounds = new Rectangle2D[0x4000];
 			}

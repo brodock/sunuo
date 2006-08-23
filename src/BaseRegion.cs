@@ -806,7 +806,7 @@ namespace Server
 
 			if ( !System.IO.File.Exists( path ) )
 			{
-				log.Error(String.Format("{0} does not exist", path));
+				log.ErrorFormat("{0} does not exist", path);
 				return;
 			}
 
@@ -825,7 +825,7 @@ namespace Server
 				catch {}
 				if ( map == null || map == Map.Internal )
 				{
-					log.Error(String.Format("Regions.xml: Invalid facet name '{0}'", facetName));
+					log.ErrorFormat("Regions.xml: Invalid facet name '{0}'", facetName);
 					continue;
 				}
 
@@ -844,8 +844,8 @@ namespace Server
 					}
 					else if ( !r.LoadFromXml )
 					{
-						log.Error(String.Format("Regions.xml: Region '{0}' has an XML entry, but is set not to LoadFromXml.",
-												name));
+						log.ErrorFormat("Regions.xml: Region '{0}' has an XML entry, but is set not to LoadFromXml.",
+										name);
 						continue;
 					}
 

@@ -250,7 +250,8 @@ namespace Server.Network
 			{
 				if ( ph.Ingame && state.Mobile == null )
 				{
-					log.Warn(String.Format("Client: {0}: Sent ingame packet (0xD7x{1:X2}) before having been attached to a mobile", state, packetID));
+					log.WarnFormat("Client: {0}: Sent ingame packet (0xD7x{1:X2}) before having been attached to a mobile",
+								   state, packetID);
 					state.Dispose();
 				}
 				else if ( ph.Ingame && state.Mobile.Deleted )
@@ -790,7 +791,8 @@ namespace Server.Network
 				}
 				default:
 				{
-					log.Warn(String.Format("Client: {0}: Unknown text-command type 0x{1:X2}: {2}", state, type, command));
+					log.WarnFormat("Client: {0}: Unknown text-command type 0x{1:X2}: {2}",
+								   state, type, command);
 					break;
 				}
 			}
@@ -1543,7 +1545,8 @@ namespace Server.Network
 			{
 				if ( ph.Ingame && state.Mobile == null )
 				{
-					log.Warn(String.Format("Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile", state, packetID));
+					log.WarnFormat("Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile",
+								   state, packetID);
 					state.Dispose();
 				}
 				else if ( ph.Ingame && state.Mobile.Deleted )
@@ -1898,7 +1901,7 @@ namespace Server.Network
 			{
 				if ( m_State.Socket != null )
 				{
-					log.Warn(String.Format("Client: {0}: Disconnecting, bad version", m_State));
+					log.WarnFormat("Client: {0}: Disconnecting, bad version", m_State);
 					m_State.Dispose();
 				}
 			}
@@ -1972,7 +1975,7 @@ namespace Server.Network
 
 					if ( check != null && check.Map != Map.Internal && check != m )
 					{
-						log.Info(String.Format("Login: {0}: Account in use", state));
+						log.InfoFormat("Login: {0}: Account in use", state);
 						state.Send( new PopupMessage( PMMessage.CharInWorld ) );
 						return;
 					}
@@ -2105,7 +2108,7 @@ namespace Server.Network
 
 					if ( check != null && check.Map != Map.Internal )
 					{
-						log.Info(String.Format("Login: {0}: Account in use", state));
+						log.InfoFormat("Login: {0}: Account in use", state);
 						state.Send( new PopupMessage( PMMessage.CharInWorld ) );
 						return;
 					}
@@ -2240,19 +2243,19 @@ namespace Server.Network
 
 			if ( !IsValidAuthID( authID ) )
 			{
-				log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", state));
+				log.WarnFormat("Login: {0}: Invalid client detected, disconnecting", state);
 				state.Dispose();
 				return;
 			}
 			else if ( state.m_AuthID != 0 && authID != state.m_AuthID )
 			{
-				log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", state));
+				log.WarnFormat("Login: {0}: Invalid client detected, disconnecting", state);
 				state.Dispose();
 				return;
 			}
 			else if ( state.m_AuthID == 0 && authID != state.m_Seed )
 			{
-				log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", state));
+				log.WarnFormat("Login: {0}: Invalid client detected, disconnecting", state);
 				state.Dispose();
 				return;
 			}

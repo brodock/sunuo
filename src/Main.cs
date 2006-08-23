@@ -139,7 +139,7 @@ namespace Server
 			}
 
 			if (log.IsWarnEnabled)
-				log.Warn(String.Format("Warning: data file {0} not found", path));
+				log.WarnFormat("Warning: data file {0} not found", path);
 			return null;
 		}
 
@@ -414,13 +414,13 @@ namespace Server
 			foreach (Library l in ScriptCompiler.Libraries) {
 				int itemCount = 0, mobileCount = 0;
 				l.Verify(ref itemCount, ref mobileCount);
-				log.Info(String.Format("Library {0} verified: {1} items, {2} mobiles",
-									   l.Name, itemCount, mobileCount));
+				log.InfoFormat("Library {0} verified: {1} items, {2} mobiles",
+							   l.Name, itemCount, mobileCount);
 				m_ItemCount += itemCount;
 				m_MobileCount += mobileCount;
 			}
-			log.Info(String.Format("All libraries verified: {0} items, {1} mobiles)",
-								   m_ItemCount, m_MobileCount));
+			log.InfoFormat("All libraries verified: {0} items, {1} mobiles)",
+						   m_ItemCount, m_MobileCount);
 
 			try {
 				ScriptCompiler.Configure();

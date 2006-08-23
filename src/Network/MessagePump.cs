@@ -79,7 +79,8 @@ namespace Server.Network
 					ns.Start();
 
 					if ( ns.Running )
-						log.Info(String.Format("Client: {0}: Connected. [{1} Online]", ns, NetState.Instances.Count));
+						log.InfoFormat("Client: {0}: Connected. [{1} Online]",
+									   ns, NetState.Instances.Count);
 				}
 			}
 		}
@@ -142,7 +143,7 @@ namespace Server.Network
 
 						if ( seed == 0 )
 						{
-							log.Warn(String.Format("Login: {0}: Invalid client detected, disconnecting", ns));
+							log.WarnFormat("Login: {0}: Invalid client detected, disconnecting", ns);
 							ns.Dispose();
 							return false;
 						}
@@ -162,7 +163,7 @@ namespace Server.Network
 
 					if ( !ns.SentFirstPacket && packetID != 0xF1 && packetID != 0xCF && packetID != 0x80 && packetID != 0x91 && packetID != 0xA4 && packetID != 0xBF )
 					{
-						log.Warn(String.Format("Client: {0}: Encrypted client detected, disconnecting", ns));
+						log.WarnFormat("Client: {0}: Encrypted client detected, disconnecting", ns);
 						ns.Dispose();
 						break;
 					}
@@ -203,7 +204,8 @@ namespace Server.Network
 					{
 						if ( handler.Ingame && ns.Mobile == null )
 						{
-							log.Warn(String.Format("Client: {0}: Sent ingame packet (0x{1:X2}) before having been attached to a mobile", ns, packetID));
+							log.WarnFormat("Client: {0}: Sent ingame packet (0x{1:X2}) before having been attached to a mobile",
+										   ns, packetID);
 							ns.Dispose();
 							break;
 						}

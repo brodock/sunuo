@@ -922,7 +922,9 @@ namespace Server
 				m.ClearProperties();
 			}
 
-			log.Info(String.Format("World loaded: {1} items, {2} mobiles ({0:F1} seconds)", (DateTime.Now-start).TotalSeconds, m_Items.Count, m_Mobiles.Count));
+			log.InfoFormat("World loaded: {1} items, {2} mobiles ({0:F1} seconds)",
+						   (DateTime.Now-start).TotalSeconds,
+						   m_Items.Count, m_Mobiles.Count);
 		}
 
 		public static void Save()
@@ -1003,8 +1005,8 @@ namespace Server
 			//System.GC.Collect();
 
 			DateTime endTime = DateTime.Now;
-			log.Info(String.Format("World saved in {0:F1} seconds.",
-								   (endTime - startTime).TotalSeconds));
+			log.InfoFormat("World saved in {0:F1} seconds.",
+						   (endTime - startTime).TotalSeconds);
 
 			if ( message )
 				Broadcast( 0x35, true, "World save complete. The entire process took {0:F1} seconds.", (endTime - startTime).TotalSeconds );

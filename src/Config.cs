@@ -304,7 +304,7 @@ namespace Server.Config {
 				try {
 					IPHostEntry he = Dns.Resolve(splitted[0]);
 					if (he.AddressList.Length == 0) {
-						log.Warn(String.Format("Failed to resolve {0}", splitted[0]));
+						log.WarnFormat("Failed to resolve {0}", splitted[0]);
 						continue;
 					}
 					ip = he.AddressList[he.AddressList.Length - 1];
@@ -460,8 +460,8 @@ namespace Server.Config {
 			foreach (DirectoryInfo sub in src.GetDirectories()) {
 				string libName = sub.Name.ToLower();
 				if (libraryConfig.ContainsKey(libName)) {
-					log.Warn(String.Format("duplicate library '{0}' in '{1}'",
-										   libName, sub.FullName));
+					log.WarnFormat("duplicate library '{0}' in '{1}'",
+								   libName, sub.FullName);
 					continue;
 				}
 
@@ -475,8 +475,8 @@ namespace Server.Config {
 				string fileName = libFile.Name;
 				string libName = fileName.Substring(0, fileName.Length - 4).ToLower();
 				if (libraryConfig.ContainsKey(libName)) {
-					log.Warn(String.Format("duplicate library '{0}' in '{1}'",
-										   libName, libFile));
+					log.WarnFormat("duplicate library '{0}' in '{1}'",
+								   libName, libFile);
 					continue;
 				}
 
@@ -557,8 +557,7 @@ namespace Server.Config {
 						break;
 
 					default:
-						log.Warn(String.Format("Invalid element global/{0}",
-											   node.Name));
+						log.WarnFormat("Invalid element global/{0}", node.Name);
 						break;
 					}
 				}
@@ -589,8 +588,8 @@ namespace Server.Config {
 						break;
 
 					default:
-						log.Warn(String.Format("Ignoring unknown location tag in {0}: {1}",
-											   filename, el.Name));
+						log.WarnFormat("Ignoring unknown location tag in {0}: {1}",
+									   filename, el.Name);
 						break;
 					}
 				}

@@ -79,8 +79,8 @@ namespace Server.Network
 				ArrayList list = new ArrayList();
 				list.Add( IPAddress.Loopback );
 
-				log.Info(String.Format("Listening on {0}:{1}",
-									   IPAddress.Loopback, port));
+				log.InfoFormat("Listening on {0}:{1}",
+							   IPAddress.Loopback, port);
 
 				IPAddress[] ips = iphe.AddressList;
 
@@ -90,8 +90,8 @@ namespace Server.Network
 					{
 						list.Add( ips[i] );
 
-						log.Info(String.Format("Listening on {0}:{1}",
-											   ips[i], port));
+						log.InfoFormat("Listening on {0}:{1}",
+									   ips[i], port);
 					}
 				}
 			}
