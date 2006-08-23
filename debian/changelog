@@ -40,6 +40,7 @@ sunuo (0.3.2) unstable; urgency=low
       - GenericSellInfo.m_Table
       - BaseWeapon.m_AosAttributes
       - BaseWeapon.m_AosWeaponAttributes
+      - Guild.m_Allies, Guild.m_Enemies
     - use XmlReader instead of XmlDocument.Load() to parse the accounts file
     - use DateTime.Now cache
   * moved into separate script libraries:

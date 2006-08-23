@@ -72,6 +72,7 @@ namespace Server
 		public abstract ArrayList ReadMobileListOrNull();
 		public abstract ArrayList ReadMobileList();
 		public abstract ArrayList ReadGuildList();
+		public abstract ArrayList ReadGuildListOrNull();
 
 		public abstract bool End();
 	}
@@ -551,6 +552,11 @@ namespace Server
 
 		public override void WriteGuildList( ArrayList list, bool tidy )
 		{
+			if (list == null) {
+				Write((int)0);
+				return;
+			}
+
 			if ( tidy )
 			{
 				for ( int i = 0; i < list.Count; )
@@ -789,9 +795,11 @@ namespace Server
 				: list;
 		}
 
-		public override ArrayList ReadGuildList()
+		public override ArrayList ReadGuildListOrNull()
 		{
 			int count = ReadInt();
+			if (count == 0)
+				return null;
 
 			ArrayList list = new ArrayList( count );
 
@@ -804,6 +812,14 @@ namespace Server
 			}
 
 			return list;
+		}
+
+		public override ArrayList ReadGuildList()
+		{
+			ArrayList list = ReadGuildListOrNull();
+			return list == null
+				? new ArrayList(2)
+				: list;
 		}
 
 		public override bool End()

@@ -57,8 +57,6 @@ namespace Server.Guilds
 			m_Leader = leader;
 
 			m_Members = new ArrayList();
-			m_Allies = new ArrayList();
-			m_Enemies = new ArrayList();
 			m_WarDeclarations = new ArrayList();
 			m_WarInvitations = new ArrayList();
 			m_AllyDeclarations = new ArrayList();
@@ -153,8 +151,8 @@ namespace Server.Guilds
 					m_Name = reader.ReadString();
 					m_Abbreviation = reader.ReadString();
 
-					m_Allies = reader.ReadGuildList();
-					m_Enemies = reader.ReadGuildList();
+					m_Allies = reader.ReadGuildListOrNull();
+					m_Enemies = reader.ReadGuildListOrNull();
 					m_WarDeclarations = reader.ReadGuildList();
 					m_WarInvitations = reader.ReadGuildList();
 
@@ -219,6 +217,9 @@ namespace Server.Guilds
 
 		public void AddAlly( Guild g )
 		{
+			if (m_Allies == null)
+				m_Allies = new ArrayList();
+
 			if ( !m_Allies.Contains( g ) )
 			{
 				m_Allies.Add( g );
@@ -229,9 +230,11 @@ namespace Server.Guilds
 
 		public void RemoveAlly( Guild g )
 		{
-			if ( m_Allies.Contains( g ) )
+			if (m_Allies != null && m_Allies.Contains( g ) )
 			{
 				m_Allies.Remove( g );
+				if (m_Allies.Count == 0)
+					m_Allies = null;
 
 				g.RemoveAlly( this );
 			}
@@ -239,6 +242,9 @@ namespace Server.Guilds
 
 		public void AddEnemy( Guild g )
 		{
+			if (m_Enemies == null)
+				m_Enemies = new ArrayList();
+
 			if ( !m_Enemies.Contains( g ) )
 			{
 				m_Enemies.Add( g );
@@ -252,6 +258,8 @@ namespace Server.Guilds
 			if ( m_Enemies != null && m_Enemies.Contains( g ) )
 			{
 				m_Enemies.Remove( g );
+				if (m_Enemies.Count == 0)
+					m_Enemies = null;
 
 				g.RemoveEnemy( this );
 			}
@@ -282,13 +290,15 @@ namespace Server.Guilds
 
 			m_Members.Clear();
 
-			for ( int i = m_Allies.Count - 1; i >= 0; --i )
-				if ( i < m_Allies.Count )
-					RemoveAlly( (Guild) m_Allies[i] );
+			if (m_Allies != null)
+				for ( int i = m_Allies.Count - 1; i >= 0; --i )
+					if ( i < m_Allies.Count )
+						RemoveAlly( (Guild) m_Allies[i] );
 
-			for ( int i = m_Enemies.Count - 1; i >= 0; --i )
-				if ( i < m_Enemies.Count )
-					RemoveEnemy( (Guild) m_Enemies[i] );
+			if (m_Enemies != null)
+				for ( int i = m_Enemies.Count - 1; i >= 0; --i )
+					if ( i < m_Enemies.Count )
+						RemoveEnemy( (Guild) m_Enemies[i] );
 
 			if ( m_Guildstone != null )
 			{
@@ -488,6 +498,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_Allies == null)
+					m_Allies = new ArrayList();
 				return m_Allies;
 			}
 		}
@@ -496,6 +508,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_Enemies == null)
+					m_Enemies = new ArrayList();
 				return m_Enemies;
 			}
 		}
@@ -563,7 +577,7 @@ namespace Server.Guilds
 
 		public bool IsAlly( Guild g )
 		{
-			return m_Allies.Contains( g );
+			return m_Allies != null && m_Allies.Contains( g );
 		}
 
 		public bool IsEnemy( Guild g )
@@ -571,12 +585,12 @@ namespace Server.Guilds
 			if ( m_Type != GuildType.Regular && g.m_Type != GuildType.Regular && m_Type != g.m_Type )
 				return true;
 
-			return m_Enemies.Contains( g );
+			return IsWar(g);
 		}
 
 		public bool IsWar( Guild g )
 		{
-			return m_Enemies.Contains( g );
+			return m_Enemies != null && m_Enemies.Contains( g );
 		}
 
 		public override void OnDelete( Mobile mob )
