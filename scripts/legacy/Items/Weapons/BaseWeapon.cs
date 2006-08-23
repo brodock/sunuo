@@ -121,11 +121,36 @@ namespace Server.Items
 		public virtual int InitMinHits{ get{ return 0; } }
 		public virtual int InitMaxHits{ get{ return 0; } }
 
-		public override int PhysicalResistance{ get{ return m_AosWeaponAttributes.ResistPhysicalBonus; } }
-		public override int FireResistance{ get{ return m_AosWeaponAttributes.ResistFireBonus; } }
-		public override int ColdResistance{ get{ return m_AosWeaponAttributes.ResistColdBonus; } }
-		public override int PoisonResistance{ get{ return m_AosWeaponAttributes.ResistPoisonBonus; } }
-		public override int EnergyResistance{ get{ return m_AosWeaponAttributes.ResistEnergyBonus; } }
+		public override int PhysicalResistance {
+			get {
+				return m_AosWeaponAttributes == null
+					? 0 : m_AosWeaponAttributes.ResistPhysicalBonus;
+			}
+		}
+		public override int FireResistance {
+			get {
+				return m_AosWeaponAttributes == null
+					? 0 : m_AosWeaponAttributes.ResistFireBonus;
+			}
+		}
+		public override int ColdResistance {
+			get {
+				return m_AosWeaponAttributes == null
+					? 0 : m_AosWeaponAttributes.ResistColdBonus;
+			}
+		}
+		public override int PoisonResistance {
+			get {
+				return m_AosWeaponAttributes == null
+					? 0 : m_AosWeaponAttributes.ResistPoisonBonus;
+			}
+		}
+		public override int EnergyResistance {
+			get {
+				return m_AosWeaponAttributes == null
+					? 0 : m_AosWeaponAttributes.ResistEnergyBonus;
+			}
+		}
 
 		[CommandProperty( AccessLevel.GameMaster )]
 		public AosAttributes Attributes
@@ -141,7 +166,11 @@ namespace Server.Items
 		[CommandProperty( AccessLevel.GameMaster )]
 		public AosWeaponAttributes WeaponAttributes
 		{
-			get{ return m_AosWeaponAttributes; }
+			get {
+				if (m_AosWeaponAttributes == null)
+					m_AosWeaponAttributes = new AosWeaponAttributes(this);
+				return m_AosWeaponAttributes;
+			}
 			set{}
 		}
 
@@ -421,7 +450,8 @@ namespace Server.Items
 
 			if ( Core.AOS )
 			{
-				bonus += m_AosWeaponAttributes.DurabilityBonus;
+				if (m_AosWeaponAttributes != null)
+					bonus += m_AosWeaponAttributes.DurabilityBonus;
 
 				CraftResourceInfo resInfo = CraftResources.GetInfo( m_Resource );
 				CraftAttributeInfo attrInfo = null;
@@ -441,7 +471,9 @@ namespace Server.Items
 			if ( !Core.AOS )
 				return 0;
 
-			int v = m_AosWeaponAttributes.LowerStatReq;
+			int v = 0;
+			if (m_AosWeaponAttributes != null)
+				v += m_AosWeaponAttributes.LowerStatReq;
 
 			CraftResourceInfo info = CraftResources.GetInfo( m_Resource );
 
@@ -557,7 +589,8 @@ namespace Server.Items
 				from.AddSkillMod( m_SkillMod );
 			}
 
-			if ( Core.AOS && m_AosWeaponAttributes.MageWeapon != 0 && m_AosWeaponAttributes.MageWeapon != 30 )
+			if (Core.AOS && m_AosWeaponAttributes != null &&
+				m_AosWeaponAttributes.MageWeapon != 0 && m_AosWeaponAttributes.MageWeapon != 30)
 			{
 				if ( m_MageMod != null )
 					m_MageMod.Remove();
@@ -625,7 +658,8 @@ namespace Server.Items
 		{
 			SkillName sk;
 
-			if ( checkSkillAttrs && m_AosWeaponAttributes.UseBestSkill != 0 )
+			if (checkSkillAttrs && m_AosWeaponAttributes != null &&
+				m_AosWeaponAttributes.UseBestSkill != 0)
 			{
 				double swrd = m.Skills[SkillName.Swords].Value;
 				double fenc = m.Skills[SkillName.Fencing].Value;
@@ -638,7 +672,8 @@ namespace Server.Items
 				if ( fenc > val ){ sk = SkillName.Fencing; val = fenc; }
 				if ( mcng > val ){ sk = SkillName.Macing; val = mcng; }
 			}
-			else if ( m_AosWeaponAttributes.MageWeapon != 0 )
+			else if (m_AosWeaponAttributes != null &&
+					 m_AosWeaponAttributes.MageWeapon != 0)
 			{
 				if ( m.Skills[SkillName.Magery].Value > m.Skills[Skill].Value )
 					sk = SkillName.Magery;
@@ -1217,14 +1252,16 @@ namespace Server.Items
 				int stamLeech = 0;//m_AosWeaponAttributes.HitLeechStam;
 				int manaLeech = 0;//m_AosWeaponAttributes.HitLeechMana;
 
-				if ( m_AosWeaponAttributes.HitLeechHits > Utility.Random( 100 ) )
-					lifeLeech += 30; // HitLeechHits% chance to leech 30% of damage as hit points
+				if (m_AosWeaponAttributes != null) {
+					if ( m_AosWeaponAttributes.HitLeechHits > Utility.Random( 100 ) )
+						lifeLeech += 30; // HitLeechHits% chance to leech 30% of damage as hit points
 
-				if ( m_AosWeaponAttributes.HitLeechStam > Utility.Random( 100 ) )
-					stamLeech += 100; // HitLeechStam% chance to leech 100% of damage as stamina
+					if ( m_AosWeaponAttributes.HitLeechStam > Utility.Random( 100 ) )
+						stamLeech += 100; // HitLeechStam% chance to leech 100% of damage as stamina
 
-				if ( m_AosWeaponAttributes.HitLeechMana > Utility.Random( 100 ) )
-					manaLeech += 40; // HitLeechMana% chance to leech 40% of damage as mana
+					if ( m_AosWeaponAttributes.HitLeechMana > Utility.Random( 100 ) )
+						manaLeech += 40; // HitLeechMana% chance to leech 40% of damage as mana
+				}
 
 				if ( m_Cursed )
 					lifeLeech += 50; // Additional 50% life leech for cursed weapons (necro spell)
@@ -1255,7 +1292,8 @@ namespace Server.Items
 				if ( MaxRange <= 1 && (defender is Slime || defender is ToxicElemental) )
 					attacker.LocalOverheadMessage( MessageType.Regular, 0x3B2, 500263 ); // *Acid blood scars your weapon!*
 
-				if ( Core.AOS && m_AosWeaponAttributes.SelfRepair > Utility.Random( 10 ) )
+				if (Core.AOS && m_AosWeaponAttributes != null &&
+					m_AosWeaponAttributes.SelfRepair > Utility.Random(10))
 				{
 					Hits += 2;
 				}
@@ -1293,7 +1331,7 @@ namespace Server.Items
 					bc.Hits += damage;
 			}
 
-			if ( Core.AOS )
+			if (Core.AOS && m_AosWeaponAttributes != null)
 			{
 				int physChance = m_AosWeaponAttributes.HitPhysicalArea;
 				int fireChance = m_AosWeaponAttributes.HitFireArea;
@@ -2079,7 +2117,7 @@ namespace Server.Items
 			SetSaveFlag( ref flags, SaveFlag.Animation,			m_Animation != (WeaponAnimation)(-1) );
 			SetSaveFlag( ref flags, SaveFlag.Resource,			m_Resource != CraftResource.Iron );
 			SetSaveFlag( ref flags, SaveFlag.xAttributes,		m_AosAttributes != null && !m_AosAttributes.IsEmpty );
-			SetSaveFlag( ref flags, SaveFlag.xWeaponAttributes,	!m_AosWeaponAttributes.IsEmpty );
+			SetSaveFlag( ref flags, SaveFlag.xWeaponAttributes,	m_AosWeaponAttributes != null && !m_AosWeaponAttributes.IsEmpty );
 			SetSaveFlag( ref flags, SaveFlag.PlayerConstructed,	m_PlayerConstructed );
 			SetSaveFlag( ref flags, SaveFlag.SkillBonuses,		!m_AosSkillBonuses.IsEmpty );
 
@@ -2332,8 +2370,6 @@ namespace Server.Items
 
 					if ( GetSaveFlag( flags, SaveFlag.xWeaponAttributes ) )
 						m_AosWeaponAttributes = new AosWeaponAttributes( this, reader );
-					else
-						m_AosWeaponAttributes = new AosWeaponAttributes( this );
 
 					if ( UseSkillMod && m_AccuracyLevel != WeaponAccuracyLevel.Regular && Parent is Mobile )
 					{
@@ -2341,10 +2377,14 @@ namespace Server.Items
 						((Mobile)Parent).AddSkillMod( m_SkillMod );
 					}
 
-					if ( version < 7 && m_AosWeaponAttributes.MageWeapon != 0 )
+					if (version < 7 && m_AosWeaponAttributes != null &&
+						m_AosWeaponAttributes.MageWeapon != 0)
 						m_AosWeaponAttributes.MageWeapon = 30 - m_AosWeaponAttributes.MageWeapon;
 
-					if ( Core.AOS && m_AosWeaponAttributes.MageWeapon != 0 && m_AosWeaponAttributes.MageWeapon != 30 && Parent is Mobile )
+					if (Core.AOS && m_AosWeaponAttributes != null &&
+						m_AosWeaponAttributes.MageWeapon != 0 &&
+						m_AosWeaponAttributes.MageWeapon != 30 &&
+						Parent is Mobile)
 					{
 						m_MageMod = new DefaultSkillMod( SkillName.Magery, true, -30 + m_AosWeaponAttributes.MageWeapon );
 						((Mobile)Parent).AddSkillMod( m_MageMod );
@@ -2390,10 +2430,7 @@ namespace Server.Items
 						m_MaxRange = 1; // default
 
 					if ( version < 5 )
-					{
 						m_Resource = CraftResource.Iron;
-						m_AosWeaponAttributes = new AosWeaponAttributes( this );
-					}
 
 					m_MinDamage = reader.ReadInt();
 					m_MaxDamage = reader.ReadInt();
@@ -2524,7 +2561,6 @@ namespace Server.Items
 
 			m_Resource = CraftResource.Iron;
 
-			m_AosWeaponAttributes = new AosWeaponAttributes( this );
 			m_AosSkillBonuses = new AosSkillBonuses( this );
 		}
 
@@ -2655,7 +2691,8 @@ namespace Server.Items
 
 			int prop;
 
-			if ( (prop = m_AosWeaponAttributes.UseBestSkill) != 0 )
+			if (m_AosWeaponAttributes != null &&
+				(prop = m_AosWeaponAttributes.UseBestSkill) != 0)
 				list.Add( 1060400 ); // use best weapon skill
 
 			prop = GetDamageBonus();
@@ -2687,50 +2724,52 @@ namespace Server.Items
 			if (prop != 0)
 				list.Add( 1060415, prop.ToString() ); // hit chance increase ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitColdArea) != 0 )
-				list.Add( 1060416, prop.ToString() ); // hit cold area ~1_val~%
+			if (m_AosWeaponAttributes != null) {
+				if ( (prop = m_AosWeaponAttributes.HitColdArea) != 0 )
+					list.Add( 1060416, prop.ToString() ); // hit cold area ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitDispel) != 0 )
-				list.Add( 1060417, prop.ToString() ); // hit dispel ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitDispel) != 0 )
+					list.Add( 1060417, prop.ToString() ); // hit dispel ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitEnergyArea) != 0 )
-				list.Add( 1060418, prop.ToString() ); // hit energy area ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitEnergyArea) != 0 )
+					list.Add( 1060418, prop.ToString() ); // hit energy area ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitFireArea) != 0 )
-				list.Add( 1060419, prop.ToString() ); // hit fire area ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitFireArea) != 0 )
+					list.Add( 1060419, prop.ToString() ); // hit fire area ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitFireball) != 0 )
-				list.Add( 1060420, prop.ToString() ); // hit fireball ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitFireball) != 0 )
+					list.Add( 1060420, prop.ToString() ); // hit fireball ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitHarm) != 0 )
-				list.Add( 1060421, prop.ToString() ); // hit harm ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitHarm) != 0 )
+					list.Add( 1060421, prop.ToString() ); // hit harm ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitLeechHits) != 0 )
-				list.Add( 1060422, prop.ToString() ); // hit life leech ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitLeechHits) != 0 )
+					list.Add( 1060422, prop.ToString() ); // hit life leech ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitLightning) != 0 )
-				list.Add( 1060423, prop.ToString() ); // hit lightning ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitLightning) != 0 )
+					list.Add( 1060423, prop.ToString() ); // hit lightning ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitLowerAttack) != 0 )
-				list.Add( 1060424, prop.ToString() ); // hit lower attack ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitLowerAttack) != 0 )
+					list.Add( 1060424, prop.ToString() ); // hit lower attack ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitLowerDefend) != 0 )
-				list.Add( 1060425, prop.ToString() ); // hit lower defense ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitLowerDefend) != 0 )
+					list.Add( 1060425, prop.ToString() ); // hit lower defense ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitMagicArrow) != 0 )
-				list.Add( 1060426, prop.ToString() ); // hit magic arrow ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitMagicArrow) != 0 )
+					list.Add( 1060426, prop.ToString() ); // hit magic arrow ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitLeechMana) != 0 )
-				list.Add( 1060427, prop.ToString() ); // hit mana leech ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitLeechMana) != 0 )
+					list.Add( 1060427, prop.ToString() ); // hit mana leech ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitPhysicalArea) != 0 )
-				list.Add( 1060428, prop.ToString() ); // hit physical area ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitPhysicalArea) != 0 )
+					list.Add( 1060428, prop.ToString() ); // hit physical area ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitPoisonArea) != 0 )
-				list.Add( 1060429, prop.ToString() ); // hit poison area ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitPoisonArea) != 0 )
+					list.Add( 1060429, prop.ToString() ); // hit poison area ~1_val~%
 
-			if ( (prop = m_AosWeaponAttributes.HitLeechStam) != 0 )
-				list.Add( 1060430, prop.ToString() ); // hit stamina leech ~1_val~%
+				if ( (prop = m_AosWeaponAttributes.HitLeechStam) != 0 )
+					list.Add( 1060430, prop.ToString() ); // hit stamina leech ~1_val~%
+			}
 
 			if (m_AosAttributes != null) {
 				if ( (prop = m_AosAttributes.BonusHits) != 0 )
@@ -2755,7 +2794,8 @@ namespace Server.Items
 			if (prop != 0)
 				list.Add( 1060436, prop.ToString() ); // luck ~1_val~
 
-			if ( (prop = m_AosWeaponAttributes.MageWeapon) != 0 )
+			if (m_AosWeaponAttributes != null &&
+				(prop = m_AosWeaponAttributes.MageWeapon) != 0)
 				list.Add( 1060438, (30 - prop).ToString() ); // mage weapon -~1_val~ skill
 
 			if (m_AosAttributes != null) {
@@ -2778,7 +2818,8 @@ namespace Server.Items
 					list.Add( 1060444, prop.ToString() ); // hit point regeneration ~1_val~
 			}
 
-			if ( (prop = m_AosWeaponAttributes.SelfRepair) != 0 )
+			if (m_AosWeaponAttributes != null &&
+				(prop = m_AosWeaponAttributes.SelfRepair) != 0)
 				list.Add( 1060450, prop.ToString() ); // self repair ~1_val~
 
 			if (m_AosAttributes != null) {
@@ -2833,7 +2874,8 @@ namespace Server.Items
 			else
 				list.Add( 1061824 ); // one-handed weapon
 
-			if ( m_AosWeaponAttributes.UseBestSkill == 0 )
+			if (m_AosWeaponAttributes != null &&
+				m_AosWeaponAttributes.UseBestSkill == 0)
 			{
 				switch ( Skill )
 				{

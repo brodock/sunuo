@@ -39,6 +39,7 @@ sunuo (0.3.2) unstable; urgency=low
       - GenericBuyInfo.DisplayCache.m_Mobiles
       - GenericSellInfo.m_Table
       - BaseWeapon.m_AosAttributes
+      - BaseWeapon.m_AosWeaponAttributes
     - use XmlReader instead of XmlDocument.Load() to parse the accounts file
     - use DateTime.Now cache
   * moved into separate script libraries:
