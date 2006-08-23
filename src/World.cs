@@ -521,7 +521,8 @@ namespace Server
 					m_LoadingType = entry.TypeName;
 					m.Deserialize(reader);
 				} catch (Exception e) {
-					log.Error("failed to load mobile", e);
+					log.Error(String.Format("failed to load mobile {0}", m),
+							  e);
 					m.Delete();
 					entries[i].Clear();
 					++m_LoadErrors;
@@ -567,7 +568,8 @@ namespace Server
 					m_LoadingType = entry.TypeName;
 					item.Deserialize(reader);
 				} catch (Exception e) {
-					log.Error("failed to load item", e);
+					log.Error(String.Format("failed to load item {0}", item),
+							  e);
 					item.Delete();
 					entries[i].Clear();
 					++m_LoadErrors;
@@ -612,7 +614,8 @@ namespace Server
 				try {
 					guild.Deserialize(reader);
 				} catch (Exception e) {
-					log.Error("failed to load guild", e);
+					log.Error(String.Format("failed to load guild", guild),
+							  e);
 					BaseGuild.List.Remove(guild.Id);
 					entries[i].Clear();
 					++m_LoadErrors;
@@ -657,7 +660,8 @@ namespace Server
 				try {
 					region.Deserialize(reader);
 				} catch (Exception e) {
-					log.Error("failed to load region", e);
+					log.Error(String.Format("failed to load region", region),
+							  e);
 					++m_LoadErrors;
 					continue;
 				}
