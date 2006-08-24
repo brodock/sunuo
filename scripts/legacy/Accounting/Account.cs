@@ -86,7 +86,11 @@ namespace Server.Accounting
 		/// </summary>
 		public ArrayList Comments
 		{
-			get{ return m_Comments; }
+			get {
+				if (m_Comments == null)
+					m_Comments = new ArrayList(2);
+				return m_Comments;
+			}
 		}
 
 		/// <summary>
@@ -529,7 +533,6 @@ namespace Server.Accounting
 			m_Created = m_LastLogin = DateTime.Now;
 			m_TotalGameTime = TimeSpan.Zero;
 
-			m_Comments = new ArrayList();
 			m_Tags = new ArrayList();
 
 			m_Mobiles = new Mobile[6];
@@ -711,11 +714,13 @@ namespace Server.Accounting
 		/// <returns>Comment list. Value will never be null.</returns>
 		public static ArrayList LoadComments( XmlElement node )
 		{
-			ArrayList list = new ArrayList();
+			ArrayList list;
 			XmlElement comments = node["comments"];
 
 			if ( comments != null )
 			{
+				list = new ArrayList();
+
 				foreach ( XmlElement comment in comments.GetElementsByTagName( "comment" ) )
 				{
 					try { list.Add( new AccountComment( comment ) ); }
@@ -925,7 +930,7 @@ namespace Server.Accounting
 
 			xml.WriteEndElement();
 
-			if ( m_Comments.Count > 0 )
+			if ( m_Comments != null && m_Comments.Count > 0 )
 			{
 				xml.WriteStartElement( "comments" );
 
