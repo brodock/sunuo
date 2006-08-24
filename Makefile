@@ -45,7 +45,7 @@ $(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ util/UOGQuery.cs
 
-build/scripts/legacy.dll: LIBS = System.Drawing.dll System.Web.dll System.Data.dll log4net.dll
+build/scripts/legacy.dll: LIBS = System.Web.dll System.Data.dll log4net.dll
 build/scripts/legacy.dll: $(DISTDIR)/SunUO.exe
 	mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -recurse:'scripts/legacy/*.cs'
