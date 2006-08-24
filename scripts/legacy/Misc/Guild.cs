@@ -57,10 +57,6 @@ namespace Server.Guilds
 			m_Leader = leader;
 
 			m_Members = new ArrayList();
-			m_WarDeclarations = new ArrayList();
-			m_WarInvitations = new ArrayList();
-			m_AllyDeclarations = new ArrayList();
-			m_AllyInvitations = new ArrayList();
 			m_Candidates = new ArrayList();
 			m_Accepted = new ArrayList();
 
@@ -122,8 +118,8 @@ namespace Server.Guilds
 			{
 				case 4:
 				{
-					m_AllyDeclarations = reader.ReadGuildList();
-					m_AllyInvitations = reader.ReadGuildList();
+					m_AllyDeclarations = reader.ReadGuildListOrNull();
+					m_AllyInvitations = reader.ReadGuildListOrNull();
 
 					goto case 3;
 				}
@@ -153,8 +149,8 @@ namespace Server.Guilds
 
 					m_Allies = reader.ReadGuildListOrNull();
 					m_Enemies = reader.ReadGuildListOrNull();
-					m_WarDeclarations = reader.ReadGuildList();
-					m_WarInvitations = reader.ReadGuildList();
+					m_WarDeclarations = reader.ReadGuildListOrNull();
+					m_WarInvitations = reader.ReadGuildListOrNull();
 
 					m_Members = reader.ReadMobileList();
 					m_Candidates = reader.ReadMobileList();
@@ -169,12 +165,6 @@ namespace Server.Guilds
 					break;
 				}
 			}
-
-			if ( m_AllyDeclarations == null )
-				m_AllyDeclarations = new ArrayList();
-
-			if ( m_AllyInvitations == null )
-				m_AllyInvitations = new ArrayList();
 
 			if ( m_Guildstone == null || m_Members.Count == 0 )
 				Disband(); 
@@ -518,6 +508,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_AllyDeclarations == null)
+					m_AllyDeclarations = new ArrayList();
 				return m_AllyDeclarations;
 			}
 		}
@@ -526,6 +518,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_AllyInvitations == null)
+					m_AllyInvitations = new ArrayList();
 				return m_AllyInvitations;
 			}
 		}
@@ -534,6 +528,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_WarDeclarations == null)
+					m_WarDeclarations = new ArrayList();
 				return m_WarDeclarations;
 			}
 		}
@@ -542,6 +538,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_WarInvitations == null)
+					m_WarInvitations = new ArrayList();
 				return m_WarInvitations;
 			}
 		}
