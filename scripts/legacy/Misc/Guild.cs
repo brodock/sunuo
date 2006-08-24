@@ -57,8 +57,6 @@ namespace Server.Guilds
 			m_Leader = leader;
 
 			m_Members = new ArrayList();
-			m_Candidates = new ArrayList();
-			m_Accepted = new ArrayList();
 
 			m_LastFealty = DateTime.Now;
 
@@ -153,8 +151,8 @@ namespace Server.Guilds
 					m_WarInvitations = reader.ReadGuildListOrNull();
 
 					m_Members = reader.ReadMobileList();
-					m_Candidates = reader.ReadMobileList();
-					m_Accepted = reader.ReadMobileList(); 
+					m_Candidates = reader.ReadMobileListOrNull();
+					m_Accepted = reader.ReadMobileListOrNull(); 
 
 					m_Guildstone = reader.ReadItem();
 					m_Teleporter = reader.ReadItem();
@@ -548,6 +546,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_Candidates == null)
+					m_Candidates = new ArrayList();
 				return m_Candidates;
 			}
 		}
@@ -556,6 +556,8 @@ namespace Server.Guilds
 		{
 			get
 			{
+				if (m_Accepted == null)
+					m_Accepted = new ArrayList();
 				return m_Accepted;
 			}
 		}
