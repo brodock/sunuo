@@ -98,7 +98,11 @@ namespace Server.Accounting
 		/// </summary>
 		public ArrayList Tags
 		{
-			get{ return m_Tags; }
+			get {
+				if (m_Tags == null)
+					m_Tags = new ArrayList(4);
+				return m_Tags;
+			}
 		}
 
 		/// <summary>
@@ -260,6 +264,8 @@ namespace Server.Accounting
 		/// <param name="value">New tag value.</param>
 		public void AddTag( string name, string value )
 		{
+			if (m_Tags == null)
+				m_Tags = new ArrayList(4);
 			m_Tags.Add( new AccountTag( name, value ) );
 		}
 
@@ -269,6 +275,9 @@ namespace Server.Accounting
 		/// <param name="name">Tag name to remove.</param>
 		public void RemoveTag( string name )
 		{
+			if (m_Tags == null)
+				return;
+
 			for ( int i = m_Tags.Count - 1; i >= 0; --i )
 			{
 				if ( i >= m_Tags.Count )
@@ -288,6 +297,9 @@ namespace Server.Accounting
 		/// <param name="value">Tag value.</param>
 		public void SetTag( string name, string value )
 		{
+			if (m_Tags == null)
+				m_Tags = new ArrayList(4);
+
 			for ( int i = 0; i < m_Tags.Count; ++i )
 			{
 				AccountTag tag = (AccountTag)m_Tags[i];
@@ -308,6 +320,9 @@ namespace Server.Accounting
 		/// <param name="name">Name of the desired tag value.</param>
 		public string GetTag( string name )
 		{
+			if (m_Tags == null)
+				return null;
+
 			for ( int i = 0; i < m_Tags.Count; ++i )
 			{
 				AccountTag tag = (AccountTag)m_Tags[i];
@@ -533,8 +548,6 @@ namespace Server.Accounting
 			m_Created = m_LastLogin = DateTime.Now;
 			m_TotalGameTime = TimeSpan.Zero;
 
-			m_Tags = new ArrayList();
-
 			m_Mobiles = new Mobile[6];
 
 			m_IPRestrictions = new string[0];
@@ -692,11 +705,13 @@ namespace Server.Accounting
 		/// <returns>Tag list. Value will never be null.</returns>
 		public static ArrayList LoadTags( XmlElement node )
 		{
-			ArrayList list = new ArrayList();
+			ArrayList list = null;
 			XmlElement tags = node["tags"];
 
 			if ( tags != null )
 			{
+				list = new ArrayList();
+
 				foreach ( XmlElement tag in tags.GetElementsByTagName( "tag" ) )
 				{
 					try { list.Add( new AccountTag( tag ) ); }
@@ -714,7 +729,7 @@ namespace Server.Accounting
 		/// <returns>Comment list. Value will never be null.</returns>
 		public static ArrayList LoadComments( XmlElement node )
 		{
-			ArrayList list;
+			ArrayList list = null;
 			XmlElement comments = node["comments"];
 
 			if ( comments != null )
@@ -940,7 +955,7 @@ namespace Server.Accounting
 				xml.WriteEndElement();
 			}
 
-			if ( m_Tags.Count > 0 )
+			if ( m_Tags != null && m_Tags.Count > 0 )
 			{
 				xml.WriteStartElement( "tags" );
 
