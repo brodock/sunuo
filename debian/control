@@ -8,6 +8,7 @@ Build-Depends-Indep: cdbs (>= 0.4.26), debhelper (>= 4.9.1), cli-common (>= 0.1.
 Package: sunuo
 Architecture: all
 Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7),
+ liblog4net1.2-cil (>= 1.2.8), libmono-npgsql1.0-cil (>= 1.1.13),
  ruby (>= 1.8), debconf (>= 1.4.30.13)
 Recommends: sunuo-skeleton, sunuo-scripts-legacy
 Suggests: sunuo-doc

@@ -164,6 +164,10 @@ when 'create'
     File.symlink('/usr/share/sunuo/SunUO.exe.mdb', "#{base_dir}/SunUO.exe.mdb")
     File.symlink("#{conf_dir}/SunUO.exe.config", "#{base_dir}/SunUO.exe.config")
 
+    File.symlink('/usr/lib/cli/log4net-1.2/log4net.dll', "#{base_dir}/log4net.dll")
+    File.symlink('/usr/lib/mono/1.0/Npgsql.dll', "#{base_dir}/Npgsql.dll")
+    File.symlink('/usr/share/sunuo/MySql.Data.dll', "#{base_dir}/MySql.Data.dll")
+
     FileUtils.chown_R('sunuo', 'sunuo',
                       [ log_dir, cache_dir, base_dir ])
 
