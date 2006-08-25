@@ -58,6 +58,7 @@ sunuo (0.3.2) unstable; urgency=low
     - Engines.Reports
     - Engines.RemoteAdmin
   * upgraded log4net to 1.2.10
+  * imported RunUO data directory
 
  --
 
