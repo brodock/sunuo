@@ -51,6 +51,8 @@ sunuo (0.3.2) unstable; urgency=low
     - Mobile: added AggressorsOrNull, FindAggressorByAttacker(),
       FindAggressorByDefender(), AggressedOrNull, FindAggressedByAttacker(),
       FindAggressedByDefender(), Peaceful
+    - Mobile.Stabled: HasStabled(), AddStabled(), RemoveStabled(),
+      StabledOrNull
   * moved into separate script libraries:
     - Engines.MyRunUO
     - Engines.Reports

@@ -1099,6 +1099,39 @@ namespace Server
 			UpdateAggrExpire();
 		}
 
+		public bool HasStabled() {
+			return m_Stabled != null && m_Stabled.Count > 0;
+		}
+
+		public bool HasStabled(Mobile pet) {
+			return m_Stabled != null && m_Stabled.Contains(pet);
+		}
+
+		public void AddStabled(Mobile pet) {
+			if (pet == null || pet.Deleted)
+				return;
+
+			if (m_Stabled == null)
+				m_Stabled = new ArrayList(2);
+
+			m_Stabled.Add(pet);
+		}
+
+		public void RemoveStabled(Mobile pet) {
+			if (m_Stabled == null)
+				return;
+
+			m_Stabled.Remove(pet);
+			if (m_Stabled.Count == 0)
+				m_Stabled = null;
+		}
+
+		public IList StabledOrNull {
+			get {
+				return m_Stabled;
+			}
+		}
+
 		public ArrayList Stabled {
 			get {
 				if (m_Stabled == null)

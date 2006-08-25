@@ -216,7 +216,7 @@ namespace Server.Items
 			{
 				MessageHelper.SendLocalizedMessageTo( this, from, 1054125, 0x5 ); // The Crystal Ball fills with a blue mist. Your pet is not responding to the summons.
 			}
-			else if ( ( !pet.Controled || pet.ControlMaster != from ) && !from.Stabled.Contains( pet ) )
+			else if ((!pet.Controled || pet.ControlMaster != from) && !from.HasStabled(pet))
 			{
 				MessageHelper.SendLocalizedMessageTo( this, from, 1054126, 0x8FD ); // The Crystal Ball fills with a grey mist. You are not the owner of the pet you are attempting to summon.
 			}
@@ -243,7 +243,7 @@ namespace Server.Items
 					pet.ControlOrder = OrderType.Follow;
 
 					pet.IsStabled = false;
-					from.Stabled.Remove( pet );
+					from.RemoveStabled(pet);
 				}
 
 				pet.MoveToWorld( from.Location, from.Map );

@@ -126,7 +126,7 @@ namespace Server.Mobiles
 			{
 				list.Add( new StableEntry( this, from ) );
 
-				if ( from.Stabled.Count > 0 )
+				if (from.HasStabled())
 					list.Add( new ClaimAllEntry( this, from ) );
 			}
 
@@ -213,7 +213,8 @@ namespace Server.Mobiles
 
 		public void EndClaimList( Mobile from, BaseCreature pet )
 		{
-			if ( pet == null || pet.Deleted || from.Map != this.Map || !from.InRange( this, 14 ) || !from.Stabled.Contains( pet ) || !from.CheckAlive() )
+			if (pet == null || pet.Deleted || from.Map != this.Map || !from.InRange(this, 14) ||
+				!from.HasStabled(pet) || !from.CheckAlive())
 				return;
 
 			if ( (from.Followers + pet.ControlSlots) <= from.FollowersMax )
@@ -229,7 +230,7 @@ namespace Server.Mobiles
 				pet.MoveToWorld( from.Location, from.Map );
 
 				pet.IsStabled = false;
-				from.Stabled.Remove( pet );
+				from.RemoveStabled(pet);
 
 				SayTo( from, 1042559 ); // Here you go... and good day to you!
 			}
@@ -244,7 +245,7 @@ namespace Server.Mobiles
 			if ( Deleted || !from.CheckAlive() )
 				return;
 
-			if ( from.Stabled.Count >= GetMaxStabled( from ) )
+			if (from.HasStabled() && from.Stabled.Count >= GetMaxStabled(from))
 			{
 				SayTo( from, 1042565 ); // You have too many pets in the stables!
 			}
@@ -288,7 +289,7 @@ namespace Server.Mobiles
 			{
 				SayTo( from, 1042564 ); // I'm sorry.  Your pet seems to be busy.
 			}
-			else if ( from.Stabled.Count >= GetMaxStabled( from ) )
+			else if (from.HasStabled() && from.Stabled.Count >= GetMaxStabled(from))
 			{
 				SayTo( from, 1042565 ); // You have too many pets in the stables!
 			}
@@ -306,7 +307,7 @@ namespace Server.Mobiles
 					pet.SummonMaster = null;
 
 					pet.IsStabled = true;
-					from.Stabled.Add( pet );
+					from.AddStabled(pet);
 
 					SayTo( from, 502679 ); // Very well, thy pet is stabled. Thou mayst recover it by saying 'claim' to me. In one real world week, I shall sell it off if it is not claimed!
 				}
