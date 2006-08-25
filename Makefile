@@ -89,14 +89,19 @@ $(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config
 $(DISTDIR)/changelog: debian/changelog
 	cp $< $@
 
-.PHONY: export-scripts
+.PHONY: export-scripts export-data
+
 export-scripts:
 	rm -rf $(DISTDIR)/Scripts $(DISTDIR)/local/src/profiler
 	mkdir -p $(DISTDIR)/local/src
 	svn export scripts/legacy $(DISTDIR)/Scripts 
 	svn export scripts/profiler $(DISTDIR)/local/src/profiler
 
-build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog $(DISTDLL)) export-scripts
+export-data:
+	rm -rf $(DISTDIR)/Data
+	svn export data $(DISTDIR)/Data
+
+build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog $(DISTDLL)) export-scripts export-data
 	mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
 
