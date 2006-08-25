@@ -9,7 +9,7 @@ Package: sunuo
 Architecture: all
 Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7), ruby1.8,
  ruby (>= 1.8), debconf (>= 1.4.30.13)
-Recommends: runuo-skeleton, sunuo-scripts-legacy
+Recommends: sunuo-skeleton, sunuo-scripts-legacy
 Suggests: sunuo-doc
 Description: free Ultima Online server
  SunUO is a free Ultima Online server, based on RunUO.
@@ -24,6 +24,17 @@ Description: free Ultima Online server
  SunUO is a free Ultima Online server, based on RunUO.
  .
  This package contains the debug file.
+ .
+ Home page: http://www.sunuo.org/
+
+Package: sunuo-skeleton
+Architecture: all
+Depends: sunuo (= ${Source-Version})
+Conflicts: runuo-skeleton
+Description: free Ultima Online server - basic data
+ SunUO is a free Ultima Online server, based on RunUO.
+ .
+ This package provides basic configuration data.
  .
  Home page: http://www.sunuo.org/
 

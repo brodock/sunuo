@@ -9,4 +9,5 @@ export MONO_SHARED_DIR = $(HOME)/.wapi
 
 DEB_MAKE_BUILD_TARGET := all docs MCS=/usr/bin/mcs
 
+DEB_DH_INSTALL_ARGS := -X.svn
 DEB_DH_INSTALLINIT_ARGS := --no-restart-on-upgrade
