@@ -51,7 +51,9 @@ namespace Server.Items
 			{
 				Mobile m = (Mobile)list[i];
 
-				if ( m != defender && m != attacker && SpellHelper.ValidIndirectTarget( attacker, m ) && (p == null || !p.Contains( m )) )
+				if (m != defender && m != attacker &&
+					SpellHelper.ValidIndirectTarget(attacker, m) &&
+					(p == null || !p.Contains(m)))
 				{
 					if ( m == null || m.Deleted || attacker.Deleted || m.Map != attacker.Map || !m.Alive || !attacker.Alive || !attacker.CanSee( m ) )
 						continue;
