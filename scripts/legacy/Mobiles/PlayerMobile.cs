@@ -2034,9 +2034,8 @@ namespace Server.Mobiles
 			if ( m_BOBFilter == null )
 				m_BOBFilter = new Engines.BulkOrders.BOBFilter();
 
-			ArrayList list = this.Stabled;
-
-			for ( int i = 0; i < list.Count; ++i )
+			IList list = this.StabledOrNull;
+			for (int i = 0; list != null && i < list.Count; ++i)
 			{
 				BaseCreature bc = list[i] as BaseCreature;
 
