@@ -131,8 +131,8 @@ when 'create'
         Dir.mkdir(conf_dir)
     end
 
-    if File.directory?('/var/lib/sunuo/skel')
-        FileUtils.cp_r('/var/lib/sunuo/skel', base_dir)
+    if File.directory?('/usr/share/sunuo/skeleton')
+        FileUtils.cp_r('/usr/share/sunuo/skeleton', base_dir)
     else
         Dir.mkdir(base_dir)
     end
