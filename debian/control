@@ -12,19 +12,10 @@ Depends: mono (>= 1.1.7), libgdiplus (>= 1.1.7),
  ruby (>= 1.8), debconf (>= 1.4.30.13)
 Recommends: sunuo-skeleton, sunuo-scripts-legacy
 Suggests: sunuo-doc
+Replaces: sunuo-dbg
+Conflicts: sunuo-dbg
 Description: free Ultima Online server
  SunUO is a free Ultima Online server, based on RunUO.
- .
- Home page: http://www.sunuo.org/
-
-Package: sunuo-dbg
-Architecture: all
-Depends: sunuo (= ${Source-Version})
-Enhances: sunuo (= ${Source-Version})
-Description: free Ultima Online server
- SunUO is a free Ultima Online server, based on RunUO.
- .
- This package contains the debug file.
  .
  Home page: http://www.sunuo.org/
 
