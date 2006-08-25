@@ -41,7 +41,7 @@ Description: free Ultima Online server - basic data
 
 Package: sunuo-scripts-legacy
 Architecture: all
-Depends: sunuo
+Depends: sunuo, libmono-system-web1.0-cil
 Suggests: sunuo-doc
 Description: free Ultima Online server - legacy scripts
  SunUO is a free Ultima Online server, based on RunUO.
@@ -63,7 +63,7 @@ Description: free Ultima Online server - legacy scripts
 
 Package: sunuo-scripts-reports
 Architecture: all
-Depends: sunuo
+Depends: sunuo, libmono-system-web1.0-cil
 Suggests: sunuo-doc
 Description: free Ultima Online server - legacy scripts
  SunUO is a free Ultima Online server, based on RunUO.
