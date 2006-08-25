@@ -53,6 +53,7 @@ namespace Server.Items
 
 				if (m != defender && m != attacker &&
 					SpellHelper.ValidIndirectTarget(attacker, m) &&
+					attacker.CanBeHarmful(m, false) &&
 					(p == null || !p.Contains(m)))
 				{
 					if ( m == null || m.Deleted || attacker.Deleted || m.Map != attacker.Map || !m.Alive || !attacker.Alive || !attacker.CanSee( m ) )
