@@ -366,31 +366,9 @@ namespace Server.Misc
 			return ( c != null && /*c.Controled &&*/ c.Summoned );
 		}
 
-		public static bool CheckAggressor( ArrayList list, Mobile target )
-		{
-			for ( int i = 0; i < list.Count; ++i )
-				if ( ((AggressorInfo)list[i]).Attacker == target )
-					return true;
-
-			return false;
-		}
-
 		private static bool CheckAggressor( Mobile from, Mobile target )
 		{
 			return from.FindAggressorByAttacker(target) != null;
-		}
-
-		public static bool CheckAggressed( ArrayList list, Mobile target )
-		{
-			for ( int i = 0; i < list.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)list[i];
-
-				if ( !info.CriminalAggression && info.Defender == target )
-					return true;
-			}
-
-			return false;
 		}
 
 		private static bool CheckAggressed( Mobile from, Mobile target )
