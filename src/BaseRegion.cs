@@ -403,7 +403,7 @@ namespace Server
 
 		public virtual TimeSpan GetLogoutDelay( Mobile m )
 		{
-			if ( m.Aggressors.Count == 0 && m.Aggressed.Count == 0 && IsInInn( m.Location ) )
+			if (m.Peaceful && IsInInn( m.Location ) )
 				return m_InnLogoutDelay;
 			else if ( m.AccessLevel >= AccessLevel.GameMaster )
 				return m_GMLogoutDelay;

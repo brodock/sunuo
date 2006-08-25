@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Server;
 using Server.Items;
 using Server.Guilds;
@@ -122,20 +123,19 @@ namespace Server.Spells
 			if ( !RestrictTravelCombat )
 				return false;
 
-			for ( int i = 0; i < m.Aggressed.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)m.Aggressed[i];
-
+			IList list = m.AggressedOrNull;
+			for (int i = 0; list != null && i < list.Count; ++i) {
+				AggressorInfo info = (AggressorInfo)list[i];
 				if ( info.Defender.Player && (DateTime.Now - info.LastCombatTime) < CombatHeatDelay )
 					return true;
 			}
 
 
-			if( Core.AOS )
+			if (Core.AOS && (list = m.AggressorsOrNull) != null)
 			{
-				for ( int i = 0; i < m.Aggressors.Count; ++i )
+				for ( int i = 0; i < list.Count; ++i )
 				{
-					AggressorInfo info = (AggressorInfo)m.Aggressors[i];
+					AggressorInfo info = (AggressorInfo)list[i];
 
 					if ( info.Attacker.Player && (DateTime.Now - info.LastCombatTime) < CombatHeatDelay )
 						return true;

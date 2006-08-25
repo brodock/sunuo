@@ -106,7 +106,10 @@ namespace Server.Misc
 
 			if ( !from.Player && !(from is BaseCreature && (((BaseCreature)from).Controled || ((BaseCreature)from).Summoned)) )
 			{
-				if ( !CheckAggressor( from.Aggressors, target ) && !CheckAggressed( from.Aggressed, target ) && target is PlayerMobile && ((PlayerMobile)target).CheckYoungProtection( from ) )
+				if (!CheckAggressor(from, target) &&
+					!CheckAggressed(from, target) &&
+					target is PlayerMobile &&
+					((PlayerMobile)target).CheckYoungProtection(from))
 					return false;
 
 				return true; // Uncontroled NPCs are only restricted by the young system
@@ -311,10 +314,8 @@ namespace Server.Misc
 					return Notoriety.CanBeAttacked;
 			}
 
-			if ( CheckAggressor( source.Aggressors, target ) )
-				return Notoriety.CanBeAttacked;
-
-			if ( CheckAggressed( source.Aggressed, target ) )
+			if (CheckAggressor(source, target) ||
+				CheckAggressed(source, target))
 				return Notoriety.CanBeAttacked;
 
 			if ( target is BaseCreature )
@@ -330,7 +331,7 @@ namespace Server.Misc
 				BaseCreature bc = (BaseCreature)source;
 
 				Mobile master = bc.GetMaster();
-				if( master != null && CheckAggressor( master.Aggressors, target ))
+				if (master != null && CheckAggressor(master, target))
 					return Notoriety.CanBeAttacked;
 			}
 
@@ -374,6 +375,11 @@ namespace Server.Misc
 			return false;
 		}
 
+		private static bool CheckAggressor( Mobile from, Mobile target )
+		{
+			return from.FindAggressorByAttacker(target) != null;
+		}
+
 		public static bool CheckAggressed( ArrayList list, Mobile target )
 		{
 			for ( int i = 0; i < list.Count; ++i )
@@ -385,6 +391,12 @@ namespace Server.Misc
 			}
 
 			return false;
+		}
+
+		private static bool CheckAggressed( Mobile from, Mobile target )
+		{
+			AggressorInfo info = from.FindAggressedByDefender(target);
+			return info != null && !info.CriminalAggression;
 		}
 	}
 }

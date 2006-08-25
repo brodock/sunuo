@@ -46,6 +46,10 @@ sunuo (0.3.2) unstable; urgency=low
       - Account.m_Comments, Account.m_Tags
     - use XmlReader instead of XmlDocument.Load() to parse the accounts file
     - use DateTime.Now cache
+  * extended API for optimization
+    - Mobile: added AggressorsOrNull, FindAggressorByAttacker(),
+      FindAggressorByDefender(), AggressedOrNull, FindAggressedByAttacker(),
+      FindAggressedByDefender(), Peaceful
   * moved into separate script libraries:
     - Engines.MyRunUO
     - Engines.Reports

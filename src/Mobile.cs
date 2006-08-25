@@ -2057,7 +2057,7 @@ namespace Server
 
 			protected override void OnTick()
 			{
-				if ( m_Mobile.Deleted || (m_Mobile.Aggressors.Count == 0 && m_Mobile.Aggressed.Count == 0) )
+				if (m_Mobile.Deleted || m_Mobile.Peaceful)
 					m_Mobile.StopAggrExpire();
 				else
 					m_Mobile.CheckAggrExpire();
@@ -2092,6 +2092,14 @@ namespace Server
 			}
 		}
 
+		public IList AggressorsOrNull
+		{
+			get
+			{
+				return m_Aggressors;
+			}
+		}
+
 		public ArrayList Aggressors
 		{
 			get
@@ -2102,6 +2110,40 @@ namespace Server
 			}
 		}
 
+		public AggressorInfo FindAggressorByAttacker(Mobile attacker) {
+			if (m_Aggressors == null)
+				return null;
+
+			for (int i = 0; i < m_Aggressors.Count; ++i) {
+				AggressorInfo info = (AggressorInfo)m_Aggressors[i];
+				if (info.Attacker == attacker)
+					return info;
+			}
+
+			return null;
+		}
+
+		public AggressorInfo FindAggressorByDefender(Mobile defender) {
+			if (m_Aggressors == null)
+				return null;
+
+			for (int i = 0; i < m_Aggressors.Count; ++i) {
+				AggressorInfo info = (AggressorInfo)m_Aggressors[i];
+				if (info.Defender == defender)
+					return info;
+			}
+
+			return null;
+		}
+
+		public IList AggressedOrNull
+		{
+			get
+			{
+				return m_Aggressed;
+			}
+		}
+
 		public ArrayList Aggressed
 		{
 			get
@@ -2109,6 +2151,39 @@ namespace Server
 				if (m_Aggressed == null)
 					m_Aggressed = new ArrayList(1);
 				return m_Aggressed;
+			}
+		}
+
+		public AggressorInfo FindAggressedByAttacker(Mobile attacker) {
+			if (m_Aggressed == null)
+				return null;
+
+			for (int i = 0; i < m_Aggressed.Count; ++i) {
+				AggressorInfo info = (AggressorInfo)m_Aggressed[i];
+				if (info.Attacker == attacker)
+					return info;
+			}
+
+			return null;
+		}
+
+		public AggressorInfo FindAggressedByDefender(Mobile defender) {
+			if (m_Aggressed == null)
+				return null;
+
+			for (int i = 0; i < m_Aggressed.Count; ++i) {
+				AggressorInfo info = (AggressorInfo)m_Aggressed[i];
+				if (info.Defender == defender)
+					return info;
+			}
+
+			return null;
+		}
+
+		public bool Peaceful {
+			get {
+				return (m_Aggressors == null || m_Aggressors.Count == 0) &&
+					(m_Aggressed == null || m_Aggressed.Count == 0);
 			}
 		}
 
@@ -2265,70 +2340,34 @@ namespace Server
 
 			bool addAggressor = true;
 
-			ArrayList list = m_Aggressors;
-			if (list != null) {
-				for ( int i = 0; i < list.Count; ++i )
-				{
-					AggressorInfo info = (AggressorInfo)list[i];
-
-					if ( info.Attacker == aggressor )
-					{
-						info.Refresh();
-						info.CriminalAggression = criminal;
-						info.CanReportMurder = criminal;
-
-						addAggressor = false;
-					}
-				}
+			AggressorInfo info = FindAggressorByAttacker(aggressor);
+			if (info != null) {
+				info.Refresh();
+				info.CriminalAggression = criminal;
+				info.CanReportMurder = criminal;
+				addAggressor = false;
 			}
 
-			list = aggressor.m_Aggressors;
-			if (list != null) {
-				for ( int i = 0; i < list.Count; ++i )
-				{
-					AggressorInfo info = (AggressorInfo)list[i];
-
-					if ( info.Attacker == this )
-					{
-						info.Refresh();
-
-						addAggressor = false;
-					}
-				}
+			info = aggressor.FindAggressorByAttacker(this);
+			if (info != null) {
+				info.Refresh();
+				addAggressor = false;
 			}
 
 			bool addAggressed = true;
 
-			list = m_Aggressed;
-			if (list != null) {
-				for ( int i = 0; i < list.Count; ++i )
-				{
-					AggressorInfo info = (AggressorInfo)list[i];
-
-					if ( info.Defender == aggressor )
-					{
-						info.Refresh();
-
-						addAggressed = false;
-					}
-				}
+			info = FindAggressedByDefender(aggressor);
+			if (info != null) {
+				info.Refresh();
+				addAggressed = false;
 			}
 
-			list = aggressor.m_Aggressed;
-			if (list != null) {
-				for ( int i = 0; i < list.Count; ++i )
-				{
-					AggressorInfo info = (AggressorInfo)list[i];
-
-					if ( info.Defender == this )
-					{
-						info.Refresh();
-						info.CriminalAggression = criminal;
-						info.CanReportMurder = criminal;
-
-						addAggressed = false;
-					}
-				}
+			info = aggressor.FindAggressedByDefender(this);
+			if (info != null) {
+				info.Refresh();
+				info.CriminalAggression = criminal;
+				info.CanReportMurder = criminal;
+				addAggressed = false;
 			}
 
 			bool setCombatant = false;

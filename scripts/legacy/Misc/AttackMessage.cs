@@ -35,25 +35,13 @@ namespace Server.Misc
 
 		public static bool CheckAggressions( Mobile m1, Mobile m2 )
 		{
-			ArrayList list = m1.Aggressors;
+			AggressorInfo info = m1.FindAggressorByAttacker(m2);
+			if (info != null && Core.Now < (info.LastCombatTime + Delay))
+				return true;
 
-			for ( int i = 0; i < list.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)list[i];
-
-				if ( info.Attacker == m2 && Core.Now < (info.LastCombatTime + Delay) )
-					return true;
-			}
-
-			list = m2.Aggressors;
-
-			for ( int i = 0; i < list.Count; ++i )
-			{
-				AggressorInfo info = (AggressorInfo)list[i];
-
-				if ( info.Attacker == m1 && Core.Now < (info.LastCombatTime + Delay) )
-					return true;
-			}
+			info = m2.FindAggressorByAttacker(m1);
+			if (info != null && Core.Now < (info.LastCombatTime + Delay))
+				return true;
 
 			return false;
 		}
