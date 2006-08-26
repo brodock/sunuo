@@ -145,7 +145,8 @@ namespace Server.Network
 				state.SentFirstPacket = false;
 				state.Send( new PlayServerAck( si ) );
 
-				log.Info(String.Format("Client {0} playing server '{1}'", state, si.Name));
+				log.InfoFormat("Client {0} playing server '{1}'",
+							   state, si.Name);
 			}
 		}
 
@@ -220,7 +221,8 @@ namespace Server.Network
 			{
 				if ( ph.Ingame && state.Mobile == null )
 				{
-					log.Warn(String.Format("Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile", state, packetID));
+					log.WarnFormat("Client: {0}: Sent ingame packet (0xBFx{1:X2}) before having been attached to a mobile",
+								   state, packetID);
 					state.Dispose();
 				}
 				else if ( ph.Ingame && state.Mobile.Deleted )
@@ -247,7 +249,7 @@ namespace Server.Network
 			if ( cmd != 0xFF )
 				return;
 
-			log.Info(String.Format("Client {0} querying UOG status", state));
+			log.InfoFormat("Client {0} querying UOG status", state);
 
 			string name = Core.Config.ServerName;
 			if (name == null)

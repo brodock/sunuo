@@ -75,7 +75,8 @@ namespace Server.Accounting {
 						if (CheckAccountCountPerIP(e.State)) {
 							e.RejectReason = ALRReason.Invalid;
 						} else {
-							log.Info(String.Format("Login: {0}: Creating account '{1}'", e.State, e.Username));
+							log.InfoFormat("Login: {0}: Creating account '{1}'",
+										   e.State, e.Username);
 							e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
 							e.Accepted = true;
 						}
@@ -85,17 +86,21 @@ namespace Server.Accounting {
 						return;
 					}
 				} else {
-					log.Warn(String.Format("Login: {0}: Invalid username '{1}'", e.State, e.Username));
+					log.WarnFormat("Login: {0}: Invalid username '{1}'",
+								   e.State, e.Username);
 					e.RejectReason = ALRReason.Invalid;
 				}
 			} else if (!account.CheckPassword(e.Password)) {
-				log.Warn(String.Format("Login: {0}: Invalid password for '{1}'", e.State, e.Username));
+				log.WarnFormat("Login: {0}: Invalid password for '{1}'",
+							   e.State, e.Username);
 				e.RejectReason = ALRReason.BadPass;
 			} else if (account.Banned) {
-				log.Warn(String.Format("Login: {0}: Banned account '{1}'", e.State, e.Username));
+				log.WarnFormat("Login: {0}: Banned account '{1}'",
+							   e.State, e.Username);
 				e.RejectReason = ALRReason.Blocked;
 			} else {
-				log.Info(String.Format("Login: {0}: Valid credentials for '{1}'", e.State, e.Username));
+				log.InfoFormat("Login: {0}: Valid credentials for '{1}'",
+							   e.State, e.Username);
 				e.State.Account = account;
 				e.Accepted = true;
 			}
