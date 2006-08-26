@@ -927,6 +927,8 @@ namespace Server.Network
 
 	public sealed class EquipUpdate : Packet
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public EquipUpdate( Item item ) : base( 0x2E, 15 )
 		{
 			Serial parentSerial;
@@ -937,7 +939,7 @@ namespace Server.Network
 			}
 			else
 			{
-				Console.WriteLine( "Warning: EquipUpdate on item with !(parent is Mobile)" );
+				log.Warn("EquipUpdate on item with !(parent is Mobile)");
 				parentSerial = Serial.Zero;
 			}
 
@@ -1503,6 +1505,8 @@ namespace Server.Network
 
 	public sealed class ContainerContentUpdate : Packet
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public ContainerContentUpdate( Item item ) : base( 0x25, 20 )
 		{
 			Serial parentSerial;
@@ -1513,7 +1517,7 @@ namespace Server.Network
 			}
 			else
 			{
-				Console.WriteLine( "Warning: ContainerContentUpdate on item with !(parent is Item)" );
+				log.Warn("ContainerContentUpdate on item with !(parent is Item)");
 				parentSerial = Serial.Zero;
 			}
 
@@ -3251,6 +3255,8 @@ namespace Server.Network
 
 	public abstract class Packet
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		protected PacketWriter m_Stream;
 		private int m_PacketID;
 		private int m_Length;
@@ -3322,7 +3328,8 @@ namespace Server.Network
 			{
 				int diff = (int)m_Stream.Length - m_Length;
 
-				Console.WriteLine( "Packet: 0x{0:X2}: Bad packet length! ({1}{2} bytes)", m_PacketID, diff >= 0 ? "+" : "", diff );
+				log.ErrorFormat("Packet: 0x{0:X2}: Bad packet length! ({1}{2} bytes)",
+								m_PacketID, diff >= 0 ? "+" : "", diff );
 			}
 
 			MemoryStream ms = m_Stream.UnderlyingStream;
@@ -3340,7 +3347,8 @@ namespace Server.Network
 				}
 				catch ( IndexOutOfRangeException )
 				{
-					Console.WriteLine( "Warning: Compression buffer overflowed on packet 0x{0:X2} ('{1}') (length={2})", m_PacketID, GetType().Name, length );
+					log.WarnFormat("Compression buffer overflowed on packet 0x{0:X2} ('{1}') (length={2})",
+								   m_PacketID, GetType().Name, length );
 
 					m_CompiledBuffer = null;
 				}

@@ -11,6 +11,8 @@ namespace Server.Network.Encryption
 	// This class handles OSI client encryption for clients newer than 2.0.3. (not including 2.0.3)
 	public class Encryption : IPacketEncoder
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		// Encryption state information
 		private uint m_Seed;
 		private bool m_Seeded;
@@ -70,7 +72,8 @@ namespace Server.Network.Encryption
 		public void RejectNoEncryption(NetState ns)
 		{
 			// Log it on the console
-			Console.WriteLine( "Client: {0}: Unencrypted client detected, disconnected", ns );
+			log.InfoFormat("Client: {0}: Unencrypted client detected, disconnected",
+						   ns);
 
 			// Send the client the typical "Bad communication" packet and also a sysmessage stating the error
 			ns.Send(new AsciiMessage( Server.Serial.MinusOne, -1, MessageType.Label, 0x35, 3, "System", "Unencrypted connections are not allowed on this server." ) );
@@ -203,7 +206,8 @@ namespace Server.Network.Encryption
 						LoginEncryption encryption = new LoginEncryption();
 						if (encryption.init(m_Seed, buffer, packetOffset, packetLength)) 
 						{
-							Console.WriteLine( "Client: {0}: Encrypted client detected, using keys of client {1}", from, encryption.Name );
+							log.InfoFormat("Client: {0}: Encrypted client detected, using keys of client {1}",
+										   from, encryption.Name);
 							m_Encryption = encryption;
 
 							byte[] packet = new byte[packetLength];
@@ -213,7 +217,7 @@ namespace Server.Network.Encryption
 						} 
 						else 
 						{
-							Console.WriteLine("Detected an unknown client.");
+							log.Warn("Detected an unknown client.");
 						}
 					}
 				} 

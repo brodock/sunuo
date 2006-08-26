@@ -33,6 +33,8 @@ namespace Server.Network
 	/// </summary>
 	public class PacketWriter
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static Stack m_Pool = new Stack();
 
 		public static PacketWriter CreateInstance()
@@ -81,9 +83,9 @@ namespace Server.Network
 							op.WriteLine( "{0}\tInstance pool contains writer", DateTime.Now );
 						}
 					}
-					catch
+					catch(Exception e)
 					{
-						Console.WriteLine( "net error" );
+						log.Error("net error", e);
 					}
 				}
 			}
@@ -205,7 +207,7 @@ namespace Server.Network
 		{
 			if ( value == null )
 			{
-				Console.WriteLine( "Network: Attempted to WriteAsciiFixed() with null value" );
+				log.Error("Attempted to WriteAsciiFixed() with null value");
 				value = String.Empty;
 			}
 
@@ -229,7 +231,7 @@ namespace Server.Network
 		{
 			if ( value == null )
 			{
-				Console.WriteLine( "Network: Attempted to WriteAsciiNull() with null value" );
+				log.Error("Attempted to WriteAsciiNull() with null value");
 				value = String.Empty;
 			}
 
@@ -246,7 +248,7 @@ namespace Server.Network
 		{
 			if ( value == null )
 			{
-				Console.WriteLine( "Network: Attempted to WriteLittleUniNull() with null value" );
+				log.Error("Attempted to WriteLittleUniNull() with null value");
 				value = String.Empty;
 			}
 
@@ -266,7 +268,7 @@ namespace Server.Network
 		{
 			if ( value == null )
 			{
-				Console.WriteLine( "Network: Attempted to WriteLittleUniFixed() with null value" );
+				log.Error("Attempted to WriteLittleUniFixed() with null value");
 				value = String.Empty;
 			}
 
@@ -292,7 +294,7 @@ namespace Server.Network
 		{
 			if ( value == null )
 			{
-				Console.WriteLine( "Network: Attempted to WriteBigUniNull() with null value" );
+				log.Error("Attempted to WriteBigUniNull() with null value");
 				value = String.Empty;
 			}
 
@@ -312,7 +314,7 @@ namespace Server.Network
 		{
 			if ( value == null )
 			{
-				Console.WriteLine( "Network: Attempted to WriteBigUniFixed() with null value" );
+				log.Error("Attempted to WriteBigUniFixed() with null value");
 				value = String.Empty;
 			}
 

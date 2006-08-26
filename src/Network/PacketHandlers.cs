@@ -437,9 +437,8 @@ namespace Server.Network
 				int type = pvSrc.ReadByte();
 				int num1 = pvSrc.ReadInt32();
 
-				Console.WriteLine( "God Client: {0}: Game central moniter", state );
-				Console.WriteLine( " - Type: {0}", type );
-				Console.WriteLine( " - Number: {0}", num1 );
+				log.InfoFormat("God Client: {0}: Game central moniter; Type={1} Number={2}",
+							   state, type, num1);
 
 				pvSrc.Trace( state );
 			}
@@ -449,7 +448,8 @@ namespace Server.Network
 		{
 			if ( VerifyGC( state ) )
 			{
-				Console.WriteLine( "God Client: {0}: Godview query 0x{1:X}", state, pvSrc.ReadByte() );
+				log.InfoFormat("God Client: {0}: Godview query 0x{1:X}",
+							   state, pvSrc.ReadByte());
 			}
 		}
 
@@ -560,7 +560,8 @@ namespace Server.Network
 				int y = pvSrc.ReadInt16();
 				int z = pvSrc.ReadSByte();
 
-				Console.WriteLine( "God Client: {0}: Change Z ({1}, {2}, {3})", state, x, y, z );
+				log.InfoFormat("God Client: {0}: Change Z ({1}, {2}, {3})",
+							   state, x, y, z );
 			}
 		}
 
@@ -591,7 +592,8 @@ namespace Server.Network
 				int z = pvSrc.ReadSByte();
 				int hue = pvSrc.ReadUInt16();
 
-				Console.WriteLine( "God Client: {0}: Edit {6} ({1}, {2}, {3}) 0x{4:X} (0x{5:X})", state, x, y, z, id, hue, type );
+				log.InfoFormat("God Client: {0}: Edit {6} ({1}, {2}, {3}) 0x{4:X} (0x{5:X})",
+							   state, x, y, z, id, hue, type );
 			}
 		}
 
@@ -604,7 +606,8 @@ namespace Server.Network
 				int z = pvSrc.ReadInt16();
 				int id = pvSrc.ReadUInt16();
 
-				Console.WriteLine( "God Client: {0}: Delete Static ({1}, {2}, {3}) 0x{4:X}", state, x, y, z, id );
+				log.InfoFormat("God Client: {0}: Delete Static ({1}, {2}, {3}) 0x{4:X}",
+							   state, x, y, z, id );
 			}
 		}
 
@@ -612,7 +615,7 @@ namespace Server.Network
 		{
 			if ( VerifyGC( state ) )
 			{
-				Console.WriteLine( "God Client: {0}: New tile animation", state );
+				log.InfoFormat("God Client: {0}: New tile animation", state);
 
 				pvSrc.Trace( state );
 			}
@@ -628,7 +631,8 @@ namespace Server.Network
 				int width = pvSrc.ReadInt16();
 				int height = pvSrc.ReadInt16();
 
-				Console.WriteLine( "God Client: {0}: New Terrain ({1}, {2})+({3}, {4}) 0x{5:X4}", state, x, y, width, height, id );
+				log.InfoFormat("God Client: {0}: New Terrain ({1}, {2})+({3}, {4}) 0x{5:X4}",
+							   state, x, y, width, height, id );
 			}
 		}
 
@@ -651,7 +655,8 @@ namespace Server.Network
 				/*int dungeon = */pvSrc.ReadByte();
 				/*int light = */pvSrc.ReadInt16();
 
-				Console.WriteLine( "God Client: {0}: New Region '{1}' ('{2}')", state, name, desc );
+				log.InfoFormat("God Client: {0}: New Region '{1}' ('{2}')",
+							   state, name, desc);
 			}
 		}
 
@@ -664,7 +669,8 @@ namespace Server.Network
 			if ( state.Mobile == null || state.Mobile.AccessLevel <= AccessLevel.Counselor )
 			{
 				if ( state.Running )
-					Console.WriteLine( "Warning: {0}: Player using godclient, disconnecting", state );
+					log.WarnFormat("Player {0} using godclient, disconnecting",
+								   state);
 
 				state.Dispose();
 				return false;
@@ -1176,7 +1182,8 @@ namespace Server.Network
 
 					if ( switchCount < 0 || switchCount > gump.m_Switches )
 					{
-						Console.WriteLine( "Client: {0}: Invalid gump response, disconnecting...", state );
+						log.InfoFormat("Client: {0}: Invalid gump response, disconnecting...",
+									   state);
 						state.Dispose();
 						return;
 					}
@@ -1190,7 +1197,7 @@ namespace Server.Network
 
 					if ( textCount < 0 || textCount > gump.m_TextEntries )
 					{
-						Console.WriteLine( "Client: {0}: Invalid gump response, disconnecting...", state );
+						log.InfoFormat("Client: {0}: Invalid gump response, disconnecting...", state );
 						state.Dispose();
 						return;
 					}
@@ -1922,7 +1929,8 @@ namespace Server.Network
 					case 0x00: // Unknown, sent by godclient
 					{
 						if ( VerifyGC( state ) )
-							Console.WriteLine( "God Client: {0}: Query 0x{1:X2} on {2} '{3}'", state, type, m.Serial, m.Name );
+							log.InfoFormat("God Client: {0}: Query 0x{1:X2} on {2} '{3}'",
+										   state, type, m.Serial, m.Name);
 
 						break;
 					}
@@ -2094,9 +2102,6 @@ namespace Server.Network
 
 			if ( info == null || a == null || cityIndex < 0 || cityIndex >= info.Length )
 			{
-				Console.WriteLine( cityIndex );
-				if (info != null)
-					Console.WriteLine( info.Length );
 				state.Dispose();
 			}
 			else
@@ -2275,8 +2280,8 @@ namespace Server.Network
 			if ( e.Accepted )
 			{
 				if (state.Account == null) {
-					Console.WriteLine("BUG: GameLogin state.Account==null (username {0})",
-									  username);
+					log.ErrorFormat("BUG: GameLogin state.Account==null (username {0})",
+									username);
 					state.Dispose();
 					return;
 				}
@@ -2379,7 +2384,8 @@ namespace Server.Network
 
 		private static void OnAddAuthID( NetState state, PacketReader pvSrc ) {
 			if (!state.Super) {
-				Console.WriteLine("Client {0} attempted to inject an AuthID", state);
+				log.WarnFormat("Client {0} attempted to inject an AuthID",
+							   state);
 				state.Dispose(false);
 				return;
 			}

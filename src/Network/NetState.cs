@@ -1,5 +1,5 @@
 /***************************************************************************
- *                                NetState.cs
+ *                                Net-State.cs
  *                            -------------------
  *   begin                : May 1, 2002
  *   copyright            : (C) The RunUO Software Team
@@ -258,7 +258,8 @@ namespace Server.Network
 
 			if ( m_Menus.Count >= m_MenuCap )
 			{
-				Console.WriteLine( "Client: {0}: Exceeded menu cap, disconnecting...", this );
+				log.WarnFormat("Client: {0}: Exceeded menu cap, disconnecting...",
+							   this);
 				Dispose();
 			}
 			else
@@ -282,7 +283,8 @@ namespace Server.Network
 
 			if ( m_HuePickers.Count >= m_HuePickerCap )
 			{
-				Console.WriteLine( "Client: {0}: Exceeded hue picker cap, disconnecting...", this );
+				log.WarnFormat("Client: {0}: Exceeded hue picker cap, disconnecting...",
+							   this);
 				Dispose();
 			}
 			else
@@ -306,7 +308,8 @@ namespace Server.Network
 
 			if ( m_Gumps.Count >= m_GumpCap )
 			{
-				Console.WriteLine( "Client: {0}: Exceeded gump cap, disconnecting...", this );
+				log.WarnFormat("Client: {0}: Exceeded gump cap, disconnecting...",
+							   this);
 				Dispose();
 			}
 			else
@@ -330,7 +333,8 @@ namespace Server.Network
 
 			if ( m_StringQueries.Count >= m_StringQueryCap )
 			{
-				Console.WriteLine( "Client: {0}: Exceeded string query cap, disconnecting...", this );
+				log.WarnFormat("Client: {0}: Exceeded string query cap, disconnecting...",
+							   this);
 				Dispose();
 			}
 			else

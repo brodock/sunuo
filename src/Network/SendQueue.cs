@@ -29,6 +29,8 @@ namespace Server.Network
 {
 	public class SendQueue
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private class Entry
 		{
 			public byte[] m_Buffer;
@@ -103,7 +105,7 @@ namespace Server.Network
 		public static void ReleaseBuffer( byte[] buffer )
 		{
 			if ( buffer == null )
-				Console.WriteLine( "Warning: Attempting to release null packet buffer" );
+				log.Warn("Attempting to release null packet buffer");
 			else if ( buffer.Length == m_CoalesceBufferSize )
 				m_UnusedBuffers.ReleaseBuffer( buffer );
 		}
@@ -185,7 +187,7 @@ namespace Server.Network
 		{
 			if ( buffer == null )
 			{
-				Console.WriteLine( "Warning: Attempting to send null packet buffer" );
+				log.Warn("Attempting to send null packet buffer");
 				return false;
 			}
 
