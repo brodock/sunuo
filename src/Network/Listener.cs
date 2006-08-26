@@ -41,8 +41,6 @@ namespace Server.Network
 
 		private AsyncCallback m_OnAccept;
 
-		private static Socket[] m_EmptySockets = new Socket[0];
-
 		[Obsolete]
 		public int UsedPort {
 			get {
@@ -139,7 +137,7 @@ namespace Server.Network
 			lock ( m_Accepted.SyncRoot )
 			{
 				if ( m_Accepted.Count == 0 )
-					return m_EmptySockets;
+					return null;
 
 				object[] array = m_Accepted.ToArray();
 				m_Accepted.Clear();

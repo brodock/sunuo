@@ -79,6 +79,8 @@ namespace Server.Network
 			for ( int j = 0; j < m_Listeners.Length; ++j )
 			{
 				Socket[] accepted = m_Listeners[j].Slice();
+				if (accepted == null)
+					continue;
 
 				for ( int i = 0; i < accepted.Length; ++i )
 				{
