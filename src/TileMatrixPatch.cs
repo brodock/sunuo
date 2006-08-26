@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 
 namespace Server
 {
-	public class TileMatrixPatch
+	public sealed class TileMatrixPatch
 	{
 		private int m_LandBlocks, m_StaticBlocks;
 

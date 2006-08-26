@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 
 namespace Server
 {
-	public class TileMatrix
+	public sealed class TileMatrix
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -328,7 +328,7 @@ namespace Server
 			m_LandPatches[x][y >> 5] |= 1 << (y & 0x1F);
 		}
 
-		public Tile[] GetLandBlock( int x, int y )
+		private Tile[] GetLandBlock( int x, int y )
 		{
 			if ( x < 0 || y < 0 || x >= m_BlockWidth || y >= m_BlockHeight || m_Map == null )
 				return m_InvalidLandBlock;
