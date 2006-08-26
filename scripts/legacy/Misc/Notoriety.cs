@@ -299,7 +299,8 @@ namespace Server.Misc
 			if ( srcFaction != null && trgFaction != null && srcFaction != trgFaction && source.Map == Faction.Facet )
 				return Notoriety.Enemy;
 
-			if ( SkillHandlers.Stealing.ClassicMode && target is PlayerMobile && ((PlayerMobile)target).PermaFlags.Contains( source ) )
+			if (SkillHandlers.Stealing.ClassicMode && target is PlayerMobile &&
+				((PlayerMobile)target).IsPermaFlaggedTo(source))
 				return Notoriety.CanBeAttacked;
 
 			if ( target is BaseCreature && ((BaseCreature)target).AlwaysAttackable )

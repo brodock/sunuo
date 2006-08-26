@@ -2673,7 +2673,7 @@ namespace Server.Mobiles
 			if ( target is BaseCreature && ((BaseCreature)target).InitialInnocent && !((BaseCreature)target).Controled )
 				return false;
 
-			if ( target is PlayerMobile && ((PlayerMobile)target).PermaFlags.Count > 0 )
+			if (target is PlayerMobile && ((PlayerMobile)target).HasPermaFlags())
 				return false;
 
 			return base.IsHarmfulCriminal( target );

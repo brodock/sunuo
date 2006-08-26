@@ -1538,16 +1538,18 @@ namespace Server.Mobiles
 
 			SkillHandlers.StolenItem.ReturnOnDeath( this, c );
 
-			if ( m_PermaFlags != null && m_PermaFlags.Count > 0 )
-			{
-				m_PermaFlags.Clear();
+			if (m_PermaFlags != null) {
+				if (m_PermaFlags.Count > 0) {
+					m_PermaFlags.Clear();
+
+					if ( c is Corpse )
+						((Corpse)c).Criminal = true;
+					
+					if ( SkillHandlers.Stealing.ClassicMode )
+						Criminal = true;
+				}
+
 				m_PermaFlags = null;
-
-				if ( c is Corpse )
-					((Corpse)c).Criminal = true;
-
-				if ( SkillHandlers.Stealing.ClassicMode )
-					Criminal = true;
 			}
 
 			if ( this.Kills >= 5 && Core.Now >= m_NextJustAward )
@@ -1806,13 +1808,20 @@ namespace Server.Mobiles
 			}
 		}
 
+		public bool HasPermaFlags() {
+			return m_PermaFlags != null && m_PermaFlags.Count > 0;
+		}
+
+		public bool IsPermaFlaggedTo(Mobile m) {
+			return m_PermaFlags != null && m_PermaFlags.Contains(m);
+		}
+
 		public override int Luck{ get{ return AosAttributes.GetValue( this, AosAttribute.Luck ); } }
 
 		public override bool IsHarmfulCriminal( Mobile target )
 		{
 			if ( SkillHandlers.Stealing.ClassicMode && target is PlayerMobile &&
-				 ((PlayerMobile)target).m_PermaFlags != null &&
-				 ((PlayerMobile)target).m_PermaFlags.Count > 0 )
+				 ((PlayerMobile)target).HasPermaFlags())
 			{
 				int noto = Notoriety.Compute( this, target );
 
