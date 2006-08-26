@@ -57,6 +57,7 @@ sunuo (0.3.2) unstable; urgency=low
       FindAggressedByDefender(), Peaceful
     - Mobile.Stabled: HasStabled(), AddStabled(), RemoveStabled(),
       StabledOrNull
+    - Mobile.VisibilityList: ClearVisibilityList()
   * gameplay related bugfixes
     - blank keys should not be able to unlock doors with KeyValue 0 (patch
       from Kai Sassmannshausen)

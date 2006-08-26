@@ -23,7 +23,7 @@ namespace Server.Scripts.Commands
 			{
 				PlayerMobile pm = (PlayerMobile)e.Mobile;
 
-				pm.VisibilityList.Clear();
+				pm.ClearVisibilityList();
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace Server.Scripts.Commands
 				PlayerMobile pm = (PlayerMobile)e.Mobile;
 				ArrayList list = new ArrayList( pm.VisibilityList );
 				
-				pm.VisibilityList.Clear();
+				pm.ClearVisibilityList();
 				pm.SendMessage( "Your visibility list has been cleared." );
 
 				for ( int i = 0; i < list.Count; ++i )

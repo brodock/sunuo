@@ -1790,6 +1790,13 @@ namespace Server.Mobiles
 			}
 		}
 
+		public void ClearVisibilityList() {
+			if (m_VisList != null) {
+				m_VisList.Clear();
+				m_VisList = null;
+			}
+		}
+
 		public ArrayList PermaFlags
 		{
 			get {
