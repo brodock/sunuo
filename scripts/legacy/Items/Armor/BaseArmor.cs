@@ -655,7 +655,7 @@ namespace Server.Items
 				Mobile from = (Mobile)parent;
 
 				if ( Core.AOS )
-					this.AosSkillBonuses.AddTo( from );
+					this.SkillBonuses.AddTo( from );
 
 				from.Delta( MobileDelta.Armor ); // Tell them armor rating has changed
 			}
