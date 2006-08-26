@@ -146,7 +146,8 @@ namespace Server.Network
 
 						int seed = (m_Peek[0] << 24) | (m_Peek[1] << 16) | (m_Peek[2] << 8) | m_Peek[3];
 
-						//Console.WriteLine( "Login: {0}: Seed is 0x{1:X8}", ns, seed );
+						if (log.IsDebugEnabled)
+							log.DebugFormat("Login: {0}: Seed is 0x{1:X8}", ns, seed);
 
 						if ( seed == 0 )
 						{
@@ -161,8 +162,6 @@ namespace Server.Network
 
 					return true;
 				}
-
-				//Console.WriteLine( "{" );
 
 				while ( length > 0 && ns.Running )
 				{
@@ -228,11 +227,8 @@ namespace Server.Network
 							if ( throttler != null && !throttler( ns ) )
 							{
 								m_Throttled.Enqueue( ns );
-								//Console.WriteLine( "}" );
 								return false;
 							}
-
-							//Console.WriteLine( handler.OnReceive.Method.Name );
 
 							PacketProfile profile = PacketProfile.GetIncomingProfile( packetID );
 							DateTime start = ( profile == null ? DateTime.MinValue : DateTime.Now );
@@ -262,9 +258,6 @@ namespace Server.Network
 
 							if ( profile != null )
 								profile.Record( packetLength, DateTime.Now - start );
-
-							//Console.WriteLine( "Client: {0}: Unhandled packet 0x{1:X2}", ns, packetID );
-							//Utility.FormatBuffer( Console.Out, new System.IO.MemoryStream( r.Buffer ), r.Buffer.Length );
 						}
 					}
 					else
@@ -272,8 +265,6 @@ namespace Server.Network
 						break;
 					}
 				}
-
-				//Console.WriteLine( "}" );
 			}
 
 			return true;
