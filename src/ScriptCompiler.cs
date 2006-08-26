@@ -269,7 +269,8 @@ namespace Server
 			string[] files = new string[fileColl.Count];
 			fileColl.CopyTo(files, 0);
 
-			Console.Write("{0}[VB,{1}", libConfig.Name, files.Length);
+			log.InfoFormat("Compiling library {0}, {1} C# sources",
+						   libConfig.Name, files.Length);
 
 			CompilerResults results = compiler.CompileAssemblyFromFileBatch( new CompilerParameters( GetReferenceAssemblies(), assemblyFile, true ), files );
 
@@ -287,20 +288,25 @@ namespace Server
 						++errorCount;
 				}
 
-				Console.WriteLine();
 				if ( errorCount > 0 )
-					Console.WriteLine( "failed ({0} errors, {1} warnings)", errorCount, warningCount );
+					log.ErrorFormat("Compilation failed ({0} errors, {1} warnings)",
+									errorCount, warningCount);
 				else
-					Console.WriteLine( "done ({0} errors, {1} warnings)", errorCount, warningCount );
+					log.InfoFormat("Compilation complete ({0} warnings)", warningCount);
 
 				foreach ( CompilerError e in results.Errors )
 				{
-					Console.WriteLine( " - {0}: {1}: {2}: (line {3}, column {4}) {5}", e.IsWarning ? "Warning" : "Error", e.FileName, e.ErrorNumber, e.Line, e.Column, e.ErrorText );
+					String msg = String.Format("{0}: {1}: (line {2}, column {3}) {4}",
+											   e.FileName, e.ErrorNumber, e.Line, e.Column, e.ErrorText);
+					if (e.IsWarning)
+						log.Warn(msg);
+					else
+						log.Error(msg);
 				}
 			}
 			else
 			{
-				Console.Write("] ");
+				log.Info("Compilation complete");
 			}
 
 			return results;
@@ -407,7 +413,7 @@ namespace Server
 					libraries.Add(new Library(libConfig,
 											  Assembly.LoadFrom(vbFile)));
 					m_AdditionalReferences.Add(vbFile);
-					Console.Write("{0}/VB. ", libConfig.Name);
+					log.InfoFormat("Loaded binary library {0}/VB", libConfig.Name);
 				} else {
 					/* workaround again */
 					ArrayList sorted = new ArrayList(files.Keys);

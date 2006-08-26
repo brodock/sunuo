@@ -27,6 +27,8 @@ using System.Reflection;
 
 namespace Server {
 	public class Library {
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string name;
 		private Assembly assembly;
 		private Type[] types;
@@ -101,38 +103,21 @@ namespace Server {
 					else
 						++mobileCount;
 
-					bool warned = false;
-
 					try {
 						if ( t.GetConstructor( ctorTypes ) == null )
 						{
-							if ( !warned )
-								Console.WriteLine( "Warning: {0}", t );
-
-							warned = true;
-							Console.WriteLine( "       - No serialization constructor" );
+							log.WarnFormat("{0} has no serialization constructor", t);
 						}
 
 						if ( t.GetMethod( "Serialize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly ) == null )
 						{
-							if ( !warned )
-								Console.WriteLine( "Warning: {0}", t );
-
-							warned = true;
-							Console.WriteLine( "       - No Serialize() method" );
+							log.WarnFormat("{0} has no Serialize() method", t);
 						}
 
 						if ( t.GetMethod( "Deserialize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly ) == null )
 						{
-							if ( !warned )
-								Console.WriteLine( "Warning: {0}", t );
-
-							warned = true;
-							Console.WriteLine( "       - No Deserialize() method" );
+							log.WarnFormat("{0} has no Deserialize() method", t);
 						}
-
-						if ( warned )
-							Console.WriteLine();
 					}
 					catch
 					{

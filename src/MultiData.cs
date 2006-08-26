@@ -29,6 +29,8 @@ namespace Server
 {
 	public class MultiData
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static MultiComponentList[] m_Components;
 
 		private static FileStream m_Index, m_Stream;
@@ -126,7 +128,7 @@ namespace Server
 			}
 			else
 			{
-				Console.WriteLine( "Warning: Multi data files not found" );
+				log.Error("Multi data files not found");
 
 				m_Components = new MultiComponentList[0];
 			}
