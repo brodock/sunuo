@@ -7,6 +7,7 @@ sunuo (0.3.2) unstable; urgency=low
   * reserve 10% space in mobile/item hash tables
   * script debugging is always enabled
   * explicit TileData initialization
+  * added Config.Network
   * added legacy scripts
     - use log4net for logging
     - removed Address from ServerList

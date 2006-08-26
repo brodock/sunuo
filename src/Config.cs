@@ -214,6 +214,14 @@ namespace Server.Config {
 		}
 	}
 
+	public class Network {
+		public Network() {
+		}
+
+		public Network(XmlElement el) {
+		}
+	}
+
 	public class Login {
 		private bool ignoreAuthID, autoCreateAccounts;
 		private string accountDatabase;
@@ -384,6 +392,7 @@ namespace Server.Config {
 			m_SaveDirectory, m_BackupDirectory;
 		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
+		private Network m_Network;
 		private Login loginConfig;
 		private GameServerList gameServers;
 
@@ -440,6 +449,10 @@ namespace Server.Config {
 		}
 		public ICollection Libraries {
 			get { return libraryConfig.Values; }
+		}
+
+		public Network Network {
+			get { return m_Network; }
 		}
 
 		public Login Login {
@@ -633,6 +646,12 @@ namespace Server.Config {
 
 			if (!libraryConfig.ContainsKey("legacy"))
 				libraryConfig["legacy"] = new Library("legacy");
+
+			// section "network"
+			XmlElement networkEl = GetConfiguration("network");
+			m_Network = networkEl == null
+				? new Network()
+				: new Network(networkEl);
 
 			// section "login"
 			XmlElement loginEl = GetConfiguration("login");
