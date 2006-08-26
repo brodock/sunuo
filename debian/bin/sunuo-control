@@ -164,6 +164,16 @@ when 'create'
     File.symlink('/usr/share/sunuo/SunUO.exe.mdb', "#{base_dir}/SunUO.exe.mdb")
     File.symlink("#{conf_dir}/SunUO.exe.config", "#{base_dir}/SunUO.exe.config")
 
+    Dir['/usr/share/sunuo/lib/*.dll'].each do |path|
+        base = File.basename(path)
+        dest = "#{base_dir}/local/lib/#{base}"
+        unless File.exists?(dest)
+            File.unlink("#{dest}.mdb") if File.exists?("#{dest}.mdb")
+            File.symlink(path, dest)
+            File.symlink("#{path}.mdb", "#{dest}.mdb") if File.exists?("#{path}.mdb")
+        end
+    end
+
     File.symlink('/usr/lib/cli/log4net-1.2/log4net.dll', "#{base_dir}/log4net.dll")
     File.symlink('/usr/lib/mono/1.0/Npgsql.dll', "#{base_dir}/Npgsql.dll")
     File.symlink('/usr/share/sunuo/MySql.Data.dll', "#{base_dir}/MySql.Data.dll")
