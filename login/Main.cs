@@ -24,6 +24,7 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Reflection;
 using System.Collections;
@@ -231,7 +232,9 @@ namespace Server
 			if (!config.Exists)
 				config.Save();
 
-			m_MessagePump = new MessagePump( new Listener( Listener.Port ) );
+			m_MessagePump = new MessagePump();
+			foreach (IPEndPoint ipep in Config.Network.Bind)
+				m_MessagePump.AddListener(new Listener(ipep));
 
 			timerThread.Start();
 

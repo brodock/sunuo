@@ -454,7 +454,9 @@ namespace Server
 
 			Region.Load();
 
-			m_MessagePump = new MessagePump( new Listener( Listener.Port ) );
+			m_MessagePump = new MessagePump();
+			foreach (IPEndPoint ipep in Config.Network.Bind)
+				m_MessagePump.AddListener(new Listener(ipep));
 
 			Timer.TimerThread ttObj = new Timer.TimerThread();
 			timerThread = new Thread(new ThreadStart(ttObj.TimerMain));

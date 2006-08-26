@@ -41,12 +41,17 @@ namespace Server.Network
 		private Queue m_Throttled;
 		private byte[] m_Peek;
 
-		public MessagePump( Listener l )
+		public MessagePump()
 		{
-			m_Listeners = new Listener[]{ l };
+			m_Listeners = new Listener[0];
 			m_Queue = new Queue();
 			m_Throttled = new Queue();
 			m_Peek = new byte[4];
+		}
+
+		public MessagePump( Listener l ) : this()
+		{
+			AddListener(l);
 		}
 
 		public Listener[] Listeners

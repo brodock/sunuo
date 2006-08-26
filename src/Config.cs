@@ -215,10 +215,40 @@ namespace Server.Config {
 	}
 
 	public class Network {
+		private IPEndPoint[] m_Bind;
+
 		public Network() {
 		}
 
-		public Network(XmlElement el) {
+		public Network(XmlElement networkEl) {
+			XmlNodeList nl = networkEl.GetElementsByTagName("bind");
+			if (nl.Count == 0) {
+				DefaultBind();
+			} else {
+				m_Bind = new IPEndPoint[nl.Count];
+				for (int i = 0; i < nl.Count; ++i)
+					m_Bind[i] = ParseEndPoint((XmlElement)nl[i]);
+			}
+		}
+
+		private void DefaultBind() {
+			m_Bind = new IPEndPoint[1];
+			m_Bind[0] = new IPEndPoint(IPAddress.Any, 2593);
+		}
+
+		private static IPEndPoint ParseEndPoint(XmlElement el) {
+			IPAddress address = IPAddress.Any;
+			int port = 2593;
+
+			string portString = el.GetAttribute("port");
+			if (portString != null && portString != "")
+				port = Int32.Parse(portString);
+
+			return new IPEndPoint(address, port);
+		}
+
+		public IPEndPoint[] Bind {
+			get { return m_Bind; }
 		}
 	}
 

@@ -8,6 +8,7 @@ sunuo (0.3.2) unstable; urgency=low
   * script debugging is always enabled
   * explicit TileData initialization
   * added Config.Network
+    - configure Listeners
   * added legacy scripts
     - use log4net for logging
     - removed Address from ServerList
