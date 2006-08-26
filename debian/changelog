@@ -10,6 +10,8 @@ sunuo (0.3.2) unstable; urgency=low
   * added Config.Network
     - configure Listeners
   * Listener.Slice() returns null when idle
+  * ScriptCompiler ignores control directories of common revision control
+    systems
   * login: optionally limit the number of account creations per IP (patch
     from Patrick Reinhardt)
   * added legacy scripts

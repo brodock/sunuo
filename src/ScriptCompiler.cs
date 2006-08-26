@@ -674,8 +674,15 @@ namespace Server
 
 		private static void GetScripts(Config.Library libConfig,
 									   Hashtable list, string path, string type) {
-			foreach ( string dir in Directory.GetDirectories( path ) )
+			foreach (string dir in Directory.GetDirectories(path)) {
+				string baseName = Path.GetFileName(dir).ToLower();
+				if (baseName == ".svn" || baseName == "_svn" ||
+					baseName == "_darcs" || baseName == ".git" ||
+					baseName == ".hg" || baseName == "cvs")
+					continue;
+
 				GetScripts(libConfig, list, dir, type);
+			}
 
 			foreach (string filename in Directory.GetFiles(path, type)) {
 				/* XXX: pass relative filename only */
