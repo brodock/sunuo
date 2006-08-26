@@ -36,7 +36,6 @@ namespace Server.Network
 
 		private Socket m_Listener;
 		private bool m_Disposed;
-		private int m_ThisPort;
 
 		private Queue m_Accepted;
 
@@ -44,66 +43,40 @@ namespace Server.Network
 
 		private static Socket[] m_EmptySockets = new Socket[0];
 
-		public int UsedPort
-		{
-			get{ return m_ThisPort; }
+		[Obsolete]
+		public int UsedPort {
+			get {
+				return ((IPEndPoint)m_Listener.LocalEndPoint).Port;
+			}
 		}
 
-		private static int m_Port = 2593;
-
+		[Obsolete]
 		public static int Port
 		{
 			get
 			{
-				return m_Port;
+				return 2593;
 			}
-			set
-			{
-				m_Port = value;
+			set {
 			}
 		}
 
-		public Listener( int port )
+		public Listener(IPEndPoint ipep)
 		{
-			m_ThisPort = port;
 			m_Disposed = false;
 			m_Accepted = new Queue();
 			m_OnAccept = new AsyncCallback( OnAccept );
 
-			m_Listener = Bind( IPAddress.Any, port );
+			m_Listener = Bind(ipep);
 
-			try
-			{
-				IPHostEntry iphe = Dns.Resolve( Dns.GetHostName() );
-
-				ArrayList list = new ArrayList();
-				list.Add( IPAddress.Loopback );
-
-				log.InfoFormat("Listening on {0}:{1}",
-							   IPAddress.Loopback, port);
-
-				IPAddress[] ips = iphe.AddressList;
-
-				for ( int i = 0; i < ips.Length; ++i )
-				{
-					if ( !list.Contains( ips[i] ) )
-					{
-						list.Add( ips[i] );
-
-						log.InfoFormat("Listening on {0}:{1}",
-									   ips[i], port);
-					}
-				}
-			}
-			catch
-			{
-			}
+			log.InfoFormat("Listening on {0}", ipep);
 		}
 
-		private Socket Bind( IPAddress ip, int port )
-		{
-			IPEndPoint ipep = new IPEndPoint( ip, port );
+		[Obsolete("use Listener(IPEndPoint)")] 
+		public Listener(int port) : this(new IPEndPoint(IPAddress.Any, port)) {}
 
+		private Socket Bind(IPEndPoint ipep)
+		{
 			Socket s = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
 
 			try
