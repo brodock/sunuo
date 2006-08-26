@@ -38,6 +38,20 @@ namespace Server.Accounting {
 			accountDB = new AccountDB(connectString);
 		}
 
+		private static bool CheckAccountCountPerIP(NetState ns) {
+			int maxCreatedAccountsPerIP = Core.Config.Login.MaxCreatedAccountsPerIP;
+			if (maxCreatedAccountsPerIP <= 0)
+				return true;
+
+			int createdAccounts = accountDB.GetAccountCountPerIP(ns.Address.ToString());
+			if (createdAccounts < maxCreatedAccountsPerIP)
+				return true;
+
+			log.WarnFormat("Login: {0}: Account creation blocked, already {1}/{2} accounts registered for IP {3}",
+						   ns, createdAccounts, maxCreatedAccountsPerIP, ns.Address.ToString());
+			return false;
+		}
+
 		public static void EventSink_AccountLogin(AccountLoginEventArgs e) {
 			e.Accepted = false;
 
@@ -58,10 +72,7 @@ namespace Server.Accounting {
 			if (account == null) {
 				if (Core.Config.Login.AutoCreateAccounts) {
 					try {
-						int maxCreatedAccountsPerIP = Core.Config.Login.MaxCreatedAccountsPerIP;
-						int createdAccounts = accountDB.GetAccountCountPerIP(e.State.Address.ToString());
-						if (maxCreatedAccountsPerIP > 0 && createdAccounts >= maxCreatedAccountsPerIP) {
-							log.Warn(String.Format("Login: {0}: Account creation blocked, already {1}/{2} accounts registered for IP {3}", e.State, createdAccounts, maxCreatedAccountsPerIP, e.State.Address.ToString()));
+						if (CheckAccountCountPerIP(e.State)) {
 							e.RejectReason = ALRReason.Invalid;
 						} else {
 							log.Info(String.Format("Login: {0}: Creating account '{1}'", e.State, e.Username));
