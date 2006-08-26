@@ -32,7 +32,7 @@ using Server.Network;
 
 namespace Server.Network
 {
-	public class MessagePump
+	public sealed class MessagePump
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -49,11 +49,13 @@ namespace Server.Network
 			m_Peek = new byte[4];
 		}
 
+		[Obsolete]
 		public MessagePump( Listener l ) : this()
 		{
 			AddListener(l);
 		}
 
+		[Obsolete]
 		public Listener[] Listeners
 		{
 			get{ return m_Listeners; }
@@ -125,7 +127,7 @@ namespace Server.Network
 		private const int BufferSize = 1024;
 		private BufferPool m_Buffers = new BufferPool( 4, BufferSize );
 
-		public bool HandleReceive( NetState ns )
+		private bool HandleReceive( NetState ns )
 		{
 			lock ( ns )
 			{
