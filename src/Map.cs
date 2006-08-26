@@ -865,8 +865,10 @@ namespace Server
 		{
 			get
 			{
-				if ( m_Tiles == null )
+				if (m_Tiles == null) {
+					log.DebugFormat("Loading TileMatrix of map {0}", this);
 					m_Tiles = new TileMatrix( this, m_FileIndex, m_MapID, m_Width, m_Height );
+				}
 
 				return m_Tiles;
 			}
