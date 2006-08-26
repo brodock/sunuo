@@ -2425,8 +2425,8 @@ namespace Server
 
 			if ( addAggressed )
 			{
-				if (m_Aggressed == null)
-					m_Aggressed = new ArrayList(1);
+				if (aggressor.m_Aggressed == null)
+					aggressor.m_Aggressed = new ArrayList(1);
 
 				aggressor.m_Aggressed.Add( AggressorInfo.Create( aggressor, this, criminal ) ); // new AggressorInfo( aggressor, this, criminal, false ) );
 
