@@ -51,6 +51,24 @@ namespace Server.Config {
 			string value = ((XmlElement)nl[0]).GetAttribute("value");
 			return Parser.ParseBool(value);
 		}
+
+		public static int GetElementInt(XmlElement parent, string tag, int defaultValue)
+		{
+			if (parent == null)
+				return defaultValue;
+			XmlNodeList nl = parent.GetElementsByTagName(tag);
+			if (nl.Count == 0)
+				return defaultValue;
+			string value = ((XmlElement)nl[0]).GetAttribute("value");
+			try
+			{
+				return Int32.Parse(value);
+			}
+			catch
+			{
+				return defaultValue;
+			}
+		}
 	}
 
 	public class Features {
