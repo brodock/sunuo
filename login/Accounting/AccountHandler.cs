@@ -58,9 +58,16 @@ namespace Server.Accounting {
 			if (account == null) {
 				if (Core.Config.Login.AutoCreateAccounts) {
 					try {
-						log.Info(String.Format("Login: {0}: Creating account '{1}'", e.State, e.Username));
-						e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
-						e.Accepted = true;
+						int maxCreatedAccountsPerIP = Core.Config.Login.MaxCreatedAccountsPerIP;
+						int createdAccounts = accountDB.GetAccountCountPerIP(e.State.Address.ToString());
+						if (maxCreatedAccountsPerIP > 0 && createdAccounts >= maxCreatedAccountsPerIP) {
+							log.Warn(String.Format("Login: {0}: Account creation blocked, already {1}/{2} accounts registered for IP {3}", e.State, createdAccounts, maxCreatedAccountsPerIP, e.State.Address.ToString()));
+							e.RejectReason = ALRReason.Invalid;
+						} else {
+							log.Info(String.Format("Login: {0}: Creating account '{1}'", e.State, e.Username));
+							e.State.Account = accountDB.CreateAccount(e.State, e.Username, e.Password);
+							e.Accepted = true;
+						}
 					} catch (Exception ex) {
 						log.Error("AccountDB.CreateAccount failed", ex);
 						e.RejectReason = ALRReason.Blocked;

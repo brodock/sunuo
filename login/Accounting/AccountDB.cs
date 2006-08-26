@@ -107,6 +107,36 @@ namespace Server.Accounting {
 			}
 		}
 
+		private int CountAccountsPerIP(string IP) {
+			IDbCommand dbcmd = dbcon.CreateCommand();
+			dbcmd.CommandText = "SELECT count(*) FROM users WHERE CreationIP=?CreationIP";
+			IDataParameter p = (IDataParameter)dbcmd.CreateParameter();
+			p.ParameterName = "?CreationIP";
+			p.DbType = DbType.String;
+			p.Value = IP;
+			dbcmd.Parameters.Add(p);
+			
+			IDataReader reader = dbcmd.ExecuteReader();
+			int ret;
+			if (reader.Read())
+			    ret = (int)reader.GetInt64(0);
+			else
+			    ret = 0;
+			reader.Close();
+			return ret;
+		}
+
+		private int CountAccountsPerIPAutoR(string IP) {
+			try {
+			    return CountAccountsPerIP(IP);
+			} catch (Exception e) {
+			    log.Warn("Connection to DB lost?", e);
+			    Reconnect();
+			    log.Info("Reconnected DB.");
+			    return CountAccountsPerIP(IP);
+			}
+		}
+
 		private void UpdateAccountRecord(string username) {
 			IDbCommand dbcmd = dbcon.CreateCommand();
 			dbcmd.CommandText = "UPDATE users SET LastLogin=?LastLogin WHERE Username=?Username";
@@ -197,6 +227,10 @@ namespace Server.Accounting {
 			} else {
 				return null;
 			}
+		}
+		
+		public int GetAccountCountPerIP(string ip) {
+			return CountAccountsPerIPAutoR(ip);
 		}
 	}
 }
