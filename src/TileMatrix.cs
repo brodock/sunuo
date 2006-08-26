@@ -31,6 +31,8 @@ namespace Server
 {
 	public class TileMatrix
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Tile[][][][][] m_StaticTiles;
 		private Tile[][][] m_LandTiles;
 
@@ -447,7 +449,8 @@ namespace Server
 			{
 				if ( Core.Now >= m_NextStaticWarning )
 				{
-					Console.WriteLine( "Warning: Static EOS for {0} ({1}, {2})", m_Owner, x, y );
+					log.WarnFormat("Static EOS for {0} ({1}, {2})",
+								   m_Owner, x, y);
 					m_NextStaticWarning = Core.Now + TimeSpan.FromMinutes( 1.0 );
 				}
 
@@ -484,7 +487,8 @@ namespace Server
 			{
 				if ( Core.Now >= m_NextLandWarning )
 				{
-					Console.WriteLine( "Warning: Land EOS for {0} ({1}, {2})", m_Owner, x, y );
+					log.WarnFormat("Land EOS for {0} ({1}, {2})",
+								   m_Owner, x, y);
 					m_NextLandWarning = Core.Now + TimeSpan.FromMinutes( 1.0 );
 				}
 

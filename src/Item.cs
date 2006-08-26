@@ -2543,14 +2543,16 @@ namespace Server
 			}
 			else if ( item == this )
 			{
-				Console.WriteLine( "Warning: Adding item to itself: [0x{0:X} {1}].AddItem( [0x{2:X} {3}] )", this.Serial.Value, this.GetType().Name, item.Serial.Value, item.GetType().Name );
-				Console.WriteLine( new System.Diagnostics.StackTrace() );
+				log.FatalFormat("Adding item to itself: [0x{0:X} {1}].AddItem( [0x{2:X} {3}] )",
+								this.Serial.Value, this.GetType().Name,
+								item.Serial.Value, item.GetType().Name);
 				return;
 			}
 			else if ( IsChildOf( item ) )
 			{
-				Console.WriteLine( "Warning: Adding parent item to child: [0x{0:X} {1}].AddItem( [0x{2:X} {3}] )", this.Serial.Value, this.GetType().Name, item.Serial.Value, item.GetType().Name );
-				Console.WriteLine( new System.Diagnostics.StackTrace() );
+				log.FatalFormat("Adding parent item to child: [0x{0:X} {1}].AddItem( [0x{2:X} {3}] )",
+								this.Serial.Value, this.GetType().Name,
+								item.Serial.Value, item.GetType().Name);
 				return;
 			}
 			else if ( item.m_Parent is Mobile )
@@ -3326,7 +3328,8 @@ namespace Server
 						InvalidateProperties();
 
 					if ( !Stackable && m_Amount > 1 )
-						Console.WriteLine( "Warning: 0x{0:X}: Amount changed for non-stackable item '{2}'. ({1})", m_Serial.Value, m_Amount, GetType().Name );
+						log.WarnFormat("0x{0:X}: Amount changed for non-stackable item '{2}'. ({1})",
+									   m_Serial.Value, m_Amount, GetType().Name);
 				}
 			}
 		}
@@ -4151,13 +4154,14 @@ namespace Server
 
 	public class EmptyArrayList : ArrayList
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public override bool IsReadOnly{ get{ return true; } }
 		public override bool IsFixedSize{ get{ return true; } }
 
 		private void OnPopulate()
 		{
-			Console.WriteLine( "Warning: Attempted to populate a static empty ArrayList" );
-			Console.WriteLine( new System.Diagnostics.StackTrace() );
+			log.WarnFormat("Attempted to populate a static empty ArrayList");
 		}
 
 		public override int Add( object value )

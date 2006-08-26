@@ -8,6 +8,8 @@ namespace Server
 {
 	public class StringList
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private Hashtable m_Table;
 		private StringEntry[] m_Entries;
 		private string m_Language;
@@ -45,12 +47,12 @@ namespace Server
 
 			if ( path == null )
 			{
-				Console.WriteLine( "Warning: cliloc.{0} not found", language );
+				log.WarnFormat("cliloc.{0} not found", language);
 				m_Entries = new StringEntry[0];
 				return;
 			}
 
-			Console.Write( "Localization strings: Loading..." );
+			log.InfoFormat("Localization strings: Loading...");
 
 			ArrayList list = new ArrayList();
 
@@ -80,8 +82,6 @@ namespace Server
 			}
 
 			m_Entries = (StringEntry[])list.ToArray( typeof( StringEntry ) );
-
-			Console.WriteLine( "done" );
 		}
 
 		//C# argument support

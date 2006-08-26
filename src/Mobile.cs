@@ -475,6 +475,8 @@ namespace Server
 	/// </summary>
 	public class Mobile : IEntity, IPoint3D, IHued
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		protected static readonly bool OldschoolRules = Core.Config.Features["oldschool"];
 		protected static readonly bool PreferAscii = Core.Config.Features["prefer-ascii"];
 
@@ -3216,7 +3218,7 @@ namespace Server
 			set
 			{
 				if ( m_Spell != null && value != null )
-					Console.WriteLine( "Warning: Spell has been overwritten" );
+					log.Warn("Spell has been overwritten");
 
 				m_Spell = value;
 			}
@@ -9444,8 +9446,9 @@ namespace Server
 				try {
 					mobile.ProcessDelta();
 				} catch (Exception e) {
-					Console.WriteLine("Exception disarmed in Mobile.ProcessDeltaQueue in {0}: {1}",
-									  mobile, e);
+					log.Fatal(String.Format("Exception disarmed in Mobile.ProcessDeltaQueue in {0}: {1}",
+											mobile),
+							  e);
 				}
 			}
 		}

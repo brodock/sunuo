@@ -57,6 +57,8 @@ namespace Server
 	//[CustomEnum( new string[]{ "Felucca", "Trammel", "Ilshenar", "Malas", "Internal" } )]
 	public sealed class Map
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public const int SectorSize = 16;
 		public const int SectorShift = 4;
 		public static int SectorActiveRange = 2;
@@ -1017,7 +1019,7 @@ namespace Server
 				++m_Depth;
 
 				if ( m_Depth >= 5 )
-					Console.WriteLine( "Warning: Make sure to call .Free() on pooled enumerables." );
+					log.WarnFormat("Make sure to call .Free() on pooled enumerables.");
 
 				PooledEnumerable e;
 
@@ -1680,7 +1682,7 @@ namespace Server
 			}
 			else
 			{
-				Console.WriteLine( "Warning: Invalid object ({0}) in line of sight", o );
+				log.WarnFormat("Invalid object ({0}) in line of sight", o);
 				p = Point3D.Zero;
 			}
 
