@@ -7,6 +7,8 @@ namespace Server.Engines.MyRunUO
 {
 	public class MyRunUOStatus
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static void Initialize()
 		{
 			if ( Config.Enabled )
@@ -38,7 +40,7 @@ namespace Server.Engines.MyRunUO
 			if ( m_Command != null && !m_Command.HasCompleted )
 				return;
 
-			Console.WriteLine( "MyRunUO: Updating status database" );
+			log.Info("MyRunUO: Updating status database");
 
 			try
 			{
@@ -59,8 +61,8 @@ namespace Server.Engines.MyRunUO
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine( "MyRunUO: Error updating status database" );
-				Console.WriteLine( e );
+				log.Error("MyRunUO: Error updating status database",
+						  e);
 			}
 
 			if ( m_Command != null )

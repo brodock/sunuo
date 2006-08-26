@@ -13,6 +13,8 @@ namespace Server.Engines.MyRunUO
 {
 	public class MyRunUO : Timer
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private static double CpuInterval = 0.1; // Processor runs every 0.1 seconds
 		private static double CpuPercent = 0.25; // Processor runs for 25% of Interval, or ~25ms. This should take around 25% cpu
 
@@ -127,7 +129,7 @@ namespace Server.Engines.MyRunUO
 			m_Collecting = new ArrayList();
 
 			m_StartTime = DateTime.Now;
-			Console.WriteLine( "MyRunUO: Updating character database" );
+			log.Info("MyRunUO: Updating character database");
 		}
 
 		protected override void OnTick()
@@ -139,12 +141,14 @@ namespace Server.Engines.MyRunUO
 				shouldExit = Process( DateTime.Now + TimeSpan.FromSeconds( CpuInterval * CpuPercent ) );
 
 				if ( shouldExit )
-					Console.WriteLine( "MyRunUO: Database statements compiled in {0:F2} seconds", (DateTime.Now - m_StartTime).TotalSeconds );
+					log.InfoFormat("MyRunUO: Database statements compiled in {0:F2} seconds",
+								   (DateTime.Now - m_StartTime).TotalSeconds );
 			}
 			catch ( Exception e )
 			{
-				Console.WriteLine( "MyRunUO: {0}: Exception cought while processing", m_Stage );
-				Console.WriteLine( e );
+				log.Error(String.Format("MyRunUO: {0}: Exception cought while processing",
+										m_Stage),
+						  e);
 				shouldExit = true;
 			}
 

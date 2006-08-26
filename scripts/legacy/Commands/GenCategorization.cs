@@ -291,6 +291,8 @@ namespace Server.Custom
 
 	public class CategoryEntry
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		private string m_Title;
 		private Type[] m_Matches;
 		private CategoryEntry[] m_SubCategories;
@@ -358,7 +360,7 @@ namespace Server.Custom
 				Type type = ScriptCompiler.FindTypeByName( split[i].Trim() );
 
 				if ( type == null )
-					Console.WriteLine( "Match type not found ('{0}')", split[i].Trim() );
+					log.WarnFormat("Match type not found ('{0}')", split[i].Trim());
 				else
 					list.Add( type );
 			}

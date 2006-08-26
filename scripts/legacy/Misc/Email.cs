@@ -7,6 +7,8 @@ namespace Server.Misc
 {
 	public class Email
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		/* In order to support emailing, fill in EmailServer:
 		 * Example:
 		 *  public static readonly string EmailServer = "mail.domain.com";
@@ -55,9 +57,11 @@ namespace Server.Misc
 			MailMessage message = (MailMessage) state;
 
 			if ( Send( message ) )
-				Console.WriteLine( "Sent e-mail '{0}' to '{1}'.", message.Subject, message.To );
+				log.InfoFormat("Sent e-mail '{0}' to '{1}'.",
+							   message.Subject, message.To);
 			else
-				Console.WriteLine( "Failure sending e-mail '{0}' to '{1}'.", message.Subject, message.To );
+				log.ErrorFormat("Failure sending e-mail '{0}' to '{1}'.",
+								message.Subject, message.To);
 		}
 	}
 }
