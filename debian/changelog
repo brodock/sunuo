@@ -6,6 +6,7 @@ sunuo (0.3.2) unstable; urgency=low
   * non-interactive world repair
   * reserve 10% space in mobile/item hash tables
   * script debugging is always enabled
+  * explicit TileData initialization
   * added legacy scripts
     - use log4net for logging
     - removed Address from ServerList

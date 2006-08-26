@@ -423,6 +423,8 @@ namespace Server
 						   m_ItemCount, m_MobileCount);
 
 			try {
+				TileData.Configure();
+
 				ScriptCompiler.Configure();
 			} catch (TargetInvocationException e) {
 				log.Fatal("Configure exception: {0}", e.InnerException);

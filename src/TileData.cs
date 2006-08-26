@@ -234,7 +234,7 @@ namespace Server
 			return Encoding.ASCII.GetString( m_StringBuffer, 0, count );
 		}
 
-		static TileData()
+		public static void Configure()
 		{
 			string filePath = Core.FindDataFile( "TileData.mul" );
 
