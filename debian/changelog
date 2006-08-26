@@ -44,6 +44,8 @@ sunuo (0.3.2) unstable; urgency=low
       - GenericSellInfo.m_Table
       - BaseWeapon: m_AosAttributes, m_AosWeaponAttributes
       - BaseArmor: m_AosAttributes, m_AosArmorAttributes, m_AosSkillBonuses
+      - BaseClothing: m_AosAttributes, m_AosClothingAttributes,
+        m_AosSkillBonuses, m_AosResistances
       - Guild.m_Allies, Guild.m_Enemies, Guild.m_WarDeclarations,
         Guild.m_WarInvitations, Guild.m_AllyDeclarations,
         Guild.m_AllyInvitations, Guild.m_Candidates, Guild.m_Accepted
