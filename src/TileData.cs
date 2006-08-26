@@ -238,7 +238,7 @@ namespace Server
 		{
 			string filePath = Core.FindDataFile( "TileData.mul" );
 
-			if ( File.Exists( filePath ) )
+			if (filePath != null)
 			{
 				using ( FileStream fs = new FileStream( filePath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
 				{
@@ -285,7 +285,7 @@ namespace Server
 			}
 			else
 			{
-				throw new Exception( String.Format( "TileData: {0} not found", filePath ) );
+				throw new Exception("TileData.mul was not found");
 			}
 		}
 	}
