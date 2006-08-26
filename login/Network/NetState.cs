@@ -282,9 +282,9 @@ namespace Server.Network
 						m_Sending = true;
 						//Console.WriteLine( "Send: {0}: Begin send of {1} bytes", this, sendLength );
 					}
-					catch // ( Exception ex )
+					catch (Exception ex)
 					{
-						//Console.WriteLine(ex);
+						log.Error(ex);
 						Dispose( false );
 					}
 				}
@@ -332,9 +332,9 @@ namespace Server.Network
 					return true;
 					//Console.WriteLine( "Flush: {0}: Begin send of {1} bytes", this, length );
 				}
-				catch // ( Exception ex )
+				catch (Exception ex)
 				{
-					//Console.WriteLine(ex);
+					log.Error(ex);
 					Dispose( false );
 				}
 			}
@@ -392,9 +392,9 @@ namespace Server.Network
 					//Console.WriteLine( "OnSend: {0}: Begin send of {1} bytes", this, length );
 				}
 			}
-			catch // ( Exception ex )
+			catch (Exception ex)
 			{
-				//Console.WriteLine(ex);
+				log.Error(ex);
 				Dispose( false );
 			}
 		}
@@ -420,9 +420,9 @@ namespace Server.Network
 					m_Socket.BeginReceive( m_RecvBuffer, 0, 4, SocketFlags.None, m_OnReceive, null );
 				}
 			}
-			catch // ( Exception ex )
+			catch (Exception ex)
 			{
-				//Console.WriteLine(ex);
+				log.Error(ex);
 				Dispose( false );
 			}
 		}
@@ -457,9 +457,9 @@ namespace Server.Network
 			{
 				m_Socket.BeginReceive( m_RecvBuffer, 0, 2048, SocketFlags.None, m_OnReceive, null );
 			}
-			catch // ( Exception ex )
+			catch (Exception ex)
 			{
-				//Console.WriteLine(ex);
+				log.Error(ex);
 				Dispose( false );
 			}
 		}
@@ -520,9 +520,9 @@ namespace Server.Network
 						Dispose( false );
 					}
 				}
-				catch // ( Exception ex )
+				catch (Exception ex)
 				{
-					//Console.WriteLine(ex);
+					log.Error(ex);
 					Dispose( false );
 				}
 			}
@@ -608,9 +608,9 @@ namespace Server.Network
 				for ( int i = 0; i < m_Instances.Count; ++i )
 					((NetState)m_Instances[i]).CheckAlive();
 			}
-			catch // ( Exception ex )
+			catch (Exception ex)
 			{
-				//Console.WriteLine(ex);
+				log.Error(ex);
 			}
 		}
 
