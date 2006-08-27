@@ -7938,7 +7938,7 @@ namespace Server
 		/// </summary>
 		public virtual void OnPoisoned( Mobile from, Poison poison, Poison oldPoison )
 		{
-			if ( poison != null )
+			if (poison != null && poison.Level >= 0 && poison.Level <= 4)
 			{
 				this.LocalOverheadMessage( MessageType.Regular, 0x22, 1042857 + (poison.Level * 2) );
 				this.NonlocalOverheadMessage( MessageType.Regular, 0x22, 1042858 + (poison.Level * 2), Name );
