@@ -416,8 +416,6 @@ namespace Server
 				if (typeName == null || typeName == "")
 					continue;
 
-				typeName = string.Intern(typeName);
-
 				Type t = ScriptCompiler.FindTypeByFullName(typeName);
 
 				if (t == null) {

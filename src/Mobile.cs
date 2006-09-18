@@ -366,7 +366,7 @@ namespace Server
 		public StatMod( StatType type, string name, int offset, TimeSpan duration )
 		{
 			m_Type = type;
-			m_Name = string.Intern(name);
+			m_Name = name;
 			m_Offset = offset;
 			m_Duration = duration;
 			m_Added = Core.Now;

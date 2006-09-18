@@ -602,7 +602,7 @@ namespace Server
 		public override string ReadString()
 		{
 			if ( ReadByte() != 0 )
-				return string.Intern(m_File.ReadString());
+				return m_File.ReadString();
 			else
 				return null;
 		}
