@@ -15,18 +15,19 @@ SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Netw
 SCRIPTS = legacy reports remote-admin myrunuo profiler
 SCRIPTS_DLL = $(patsubst %,build/scripts/%.dll,$(SCRIPTS))
 
-all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe $(DISTDLL)) $(SCRIPTS_DLL)
+all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe etc/sunuo.xml $(DISTDLL)) $(SCRIPTS_DLL)
 
 clean:
 	rm -f doc/sunuo.html
 	rm -rf build
 
 install: all
-	install -d -m 0755 $(SUNUO_BASE) $(SUNUO_BASE)/local $(SUNUO_BASE)/local/lib
+	install -d -m 0755 $(SUNUO_BASE) $(SUNUO_BASE)/etc $(SUNUO_BASE)/local $(SUNUO_BASE)/local/lib
 	install -m 0755 $(DISTDIR)/SunUO.exe $(SUNUO_BASE)/
 	test -f $(DISTDIR)/SunUO.exe.mdb && install -m 0644 $(DISTDIR)/SunUO.exe.mdb $(SUNUO_BASE)/
 	test -f $(SUNUO_BASE)/SunUO.exe.config || install -m 0644 $(DISTDIR)/SunUO.exe.config $(SUNUO_BASE)/
 	test -f $(SUNUO_BASE)/SunLogin.exe.config || install -m 0644 $(DISTDIR)/SunLogin.exe.config $(SUNUO_BASE)/
+	test -f $(SUNUO_BASE)/etc/sunuo.xml || install -m 0644 $(DISTDIR)/etc/sunuo.xml $(SUNUO_BASE)/etc/
 	install -m 0644 $(addprefix $(DISTDIR)/,$(DISTDLL)) $(SUNUO_BASE)/
 	install -m 0644 $(SCRIPTS_DLL) $(SUNUO_BASE)/local/lib/
 
@@ -83,6 +84,10 @@ $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 	cp $< $@
 
 $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
+	cp $< $@
+
+$(DISTDIR)/etc/sunuo.xml: conf/sunuo.xml
+	mkdir -p $(DISTDIR)/etc
 	cp $< $@
 
 $(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config

@@ -1,4 +1,4 @@
-debian/sunuo.xml etc/sunuo/skel
+conf/sunuo.xml etc/sunuo/skel
 conf/SunUO.exe.config etc/sunuo/skel
 build/sunuo-*-bin/SunUO.exe{,.mdb} usr/share/sunuo
 build/sunuo-*-bin/{log4net.dll,MySql.Data.dll} usr/share/sunuo
