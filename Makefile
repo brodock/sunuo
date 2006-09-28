@@ -1,4 +1,6 @@
-include config.mk
+MCS := $(word 1,$(shell which mcs) mcs)
+
+RUNUO_BASE = $(HOME)/dl/runuo
 
 VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
 DISTDIR = build/sunuo-$(VERSION)-bin
