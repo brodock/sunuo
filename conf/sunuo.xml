@@ -11,6 +11,9 @@
     <library name="legacy">
       <ignore-source name="Misc/ZLib.cs" />
     </library>
+    <library name="myrunuo" disabled="yes" />
+    <library name="remote-admin" disabled="yes" />
+    <library name="reports" disabled="yes" />
   </libraries>
   <login>
     <ignore-auth-id value="off" />
