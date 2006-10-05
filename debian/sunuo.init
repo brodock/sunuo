@@ -2,7 +2,7 @@
 #
 # sunuo init script
 #
-# Author:	Max Kellermann <mk@cm4all.com>
+# Author:	Max Kellermann <max@duempel.org>
 #
 
 set -e
