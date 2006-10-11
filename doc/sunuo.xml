@@ -498,7 +498,7 @@ mono SunUO.exe</programlisting>
           array indices as an identification for factions and faction
           towns. These are broken when the order of source code on the
           hard disk changes, which can happen for many reasons
-          (editing with an editor creating backupn files).
+          (editing with an editor creating backup files).
         </para>
         <para>
           SunUO 0.1.4 introduced a workaround which sorts the list of
