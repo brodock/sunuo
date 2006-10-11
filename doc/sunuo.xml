@@ -242,6 +242,22 @@ mono SunUO.exe</programlisting>
       </para>
 
       <section>
+        <title>Networking</title>
+
+        <para>
+          In the <varname>network</varname> section, you can configure
+          which ports SunUO listens on:
+        </para>
+
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;network&gt;
+    &lt;bind port="2593"/&gt;
+    &lt;bind port="2594"/&gt;
+  &lt;/network&gt;
+&lt;/sunuo-config&gt;</programlisting>
+      </section>
+
+      <section>
         <title>Features</title>
         <para>
           The "feature" element is used by SunUO to enable features in
