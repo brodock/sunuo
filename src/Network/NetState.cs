@@ -728,7 +728,7 @@ namespace Server.Network
 				FinishDispose();
 		}
 
-		public void FinishDispose() {
+		private void FinishDisposeNoLock() {
 			if (m_DisposeFinished)
 				return;
 
@@ -758,6 +758,11 @@ namespace Server.Network
 				lock ( m_SendQueue )
 					m_SendQueue.Clear();
 			}
+		}
+
+		public void FinishDispose() {
+			lock(this)
+				FinishDisposeNoLock();
 		}
 
 		public static void Initialize()
