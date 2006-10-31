@@ -251,10 +251,23 @@ mono SunUO.exe</programlisting>
 
         <programlisting>&lt;sunuo-config&gt;
   &lt;network&gt;
-    &lt;bind port="2593"/&gt;
+    &lt;bind address="127.0.0.1" port="2593"/&gt;
     &lt;bind port="2594"/&gt;
   &lt;/network&gt;
 &lt;/sunuo-config&gt;</programlisting>
+
+        <para>
+          If you have more than one public IP, you can bind several
+          SunUO instances on the same port, but on different IPs.
+        </para>
+
+        <para>
+          If you omit the <varname>address</varname> attribute, SunUO
+          listens on all interfaces.  The default port is 2593.  When
+          no <varname>bind</varname> configuration is present at all,
+          SunUO creates one listener which binds to all interfaces on
+          port 2593.
+        </para>
       </section>
 
       <section>

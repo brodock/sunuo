@@ -240,6 +240,10 @@ namespace Server.Config {
 			IPAddress address = IPAddress.Any;
 			int port = 2593;
 
+			string addressString = el.GetAttribute("address");
+			if (addressString != null && addressString != "")
+				address = IPAddress.Parse(addressString);
+
 			string portString = el.GetAttribute("port");
 			if (portString != null && portString != "")
 				port = Int32.Parse(portString);
