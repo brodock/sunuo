@@ -575,9 +575,14 @@ namespace Server.Mobiles
 				else
 				{
 					int total = 0;
-					foreach ( VendorItem vi in m_SellItems.Values )
-					{
-						total += vi.Price;
+					try {
+						foreach ( VendorItem vi in m_SellItems.Values )
+						{
+							total += checked(vi.Price);
+						}
+					} catch (OverflowException e) {
+						/* don't let players provoke an integer overflow */
+						total = Int32.MaxValue;
 					}
 
 					total -= 500;
@@ -597,9 +602,14 @@ namespace Server.Mobiles
 				if ( BaseHouse.NewVendorSystem )
 				{
 					int total = 0;
-					foreach ( VendorItem vi in m_SellItems.Values )
-					{
-						total += vi.Price;
+					try {
+						foreach ( VendorItem vi in m_SellItems.Values )
+						{
+							total += checked(vi.Price);
+						}
+					} catch (OverflowException e) {
+						/* don't let players provoke an integer overflow */
+						total = Int32.MaxValue;
 					}
 
 					return 60 + (total / 500) * 3;
