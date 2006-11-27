@@ -123,10 +123,6 @@ $(DISTDIR)/changelog: debian/changelog
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
-$(DISTDIR)/etc/sunuo.xml: conf/sunuo.xml
-	@mkdir -p $(dir $@)
-	cp $(CP_FLAGS) $< $@
-
 $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
