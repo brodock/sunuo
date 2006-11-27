@@ -19,6 +19,7 @@ sunuo (0.3.2) unstable; urgency=low
   * disable some of the string.Intern() calls because they were poisoning
     the intern tables
   * synchronize NetState.FinishDispose()
+  * implemented feature "manual-gc" for manual garbage collection
   * added legacy scripts
     - use log4net for logging
     - removed Address from ServerList

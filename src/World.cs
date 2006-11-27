@@ -39,6 +39,8 @@ namespace Server
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+		protected static readonly bool ManualGC = Core.Config.Features["manual-gc"];
+
 		public enum SaveOption
 		{
 			Normal,
@@ -980,6 +982,11 @@ namespace Server
 				m.ClearProperties();
 			}
 
+			if (ManualGC) {
+				log.Debug("Manual garbage collection");
+				System.GC.Collect();
+			}
+
 			log.InfoFormat("World loaded: {1} items, {2} mobiles ({0:F1} seconds)",
 						   (DateTime.Now-start).TotalSeconds,
 						   m_Items.Count, m_Mobiles.Count);
@@ -1060,7 +1067,10 @@ namespace Server
 				throw new Exception( "World Save event threw an exception.  Save failed!", e );
 			}
 
-			//System.GC.Collect();
+			if (ManualGC) {
+				log.Debug("Manual garbage collection");
+				System.GC.Collect();
+			}
 
 			DateTime endTime = DateTime.Now;
 			log.InfoFormat("World saved in {0:F1} seconds.",

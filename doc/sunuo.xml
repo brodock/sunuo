@@ -302,6 +302,14 @@ mono SunUO.exe</programlisting>
             </thead>
             <tbody>
               <row>
+                <entry>manual-gc</entry>
+                <entry>
+                  run the CLI's garbage collector manually after world
+                  load and world save; this is recommended for Mono's
+                  non-generational GC
+                </entry>
+              </row>
+              <row>
                 <entry>disable-tile-patch</entry>
                 <entry>
                   don't load <filename>mapdif*.mul</filename>,
