@@ -12,7 +12,7 @@
     </author>
   </bookinfo>
 
-  <preface>
+  <preface id="preface">
     <title>
       What is SunUO?
     </title>
@@ -25,9 +25,9 @@
     </para>
   </preface>
 
-  <chapter>
+  <chapter id="installation">
     <title>Installation</title>
-    <section>
+    <section id="requirements">
       <title>Requirements</title>
       <itemizedlist>
         <listitem>
@@ -66,7 +66,7 @@
       </itemizedlist>
     </section>
 
-    <section>
+    <section id="installing_mono">
       <title>Installing Mono</title>
       <para>
         SunUO requires Mono; please use the most recent version.
@@ -127,7 +127,7 @@ make install</programlisting>
       </para>
     </section>
 
-    <section>
+    <section id="uo_data_files">
       <title>Installing the UO data files</title>
       <para>
         SunUO needs the <filename>*.mul</filename> and
@@ -143,7 +143,7 @@ make install</programlisting>
       </para>
     </section>
 
-    <section>
+    <section id="installing_new_server">
       <title>Installing a new server</title>
       <para>
         Unzip RunUO 1.0.0 and SunUO, and copy
@@ -164,7 +164,7 @@ mono SunUO.exe</programlisting>
       </para>
     </section>
 
-    <section>
+    <section id="migrating_from_runuo">
       <title>Upgrading a shard from RunUO</title>
       <important>
         Don't forget to back up your old server!
@@ -180,7 +180,7 @@ mono SunUO.exe</programlisting>
       </para>
     </section>
 
-    <section>
+    <section id="compiling">
       <title>Compiling SunUO from the sources</title>
       <para>
         If you are on Unix with Mono, edit the file config.mk and
@@ -199,7 +199,7 @@ mono SunUO.exe</programlisting>
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="upgrading">
     <title>Upgrading</title>
     <para>
       Before you upgrade SunUO, back up your whole shard.  Then copy
@@ -212,7 +212,7 @@ mono SunUO.exe</programlisting>
       smooth upgrade.
     </para>
 
-    <section>
+    <section id="upgrading_to_0_3_0">
       <title>Upgrading to 0.3.0</title>
       <para>
         The <filename>ZLib.cs</filename> workaround was removed from
@@ -228,9 +228,9 @@ mono SunUO.exe</programlisting>
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="configuration">
     <title>Configuration</title>
-    <section>
+    <section id="config_basics">
       <title>Basics</title>
       <para>
         In RunUO, much of the configuration is done by editing the
@@ -241,7 +241,7 @@ mono SunUO.exe</programlisting>
         important. SunUO creates this file on its first run.
       </para>
 
-      <section>
+      <section id="config_net">
         <title>Networking</title>
 
         <para>
@@ -270,7 +270,7 @@ mono SunUO.exe</programlisting>
         </para>
       </section>
 
-      <section>
+      <section id="config_features">
         <title>Features</title>
         <para>
           The "feature" element is used by SunUO to enable features in
@@ -291,7 +291,7 @@ mono SunUO.exe</programlisting>
           SunUO core:
         </para>
 
-        <table>
+        <table id="feature_flags">
           <title>Feature flags</title>
           <tgroup cols="2">
             <thead>
@@ -352,7 +352,7 @@ mono SunUO.exe</programlisting>
         </table>
       </section>
 
-      <section>
+      <section id="config_encryption">
         <title>Encryption</title>
         <para>
           Starting with version 0.2.0, SunUO has out-of-the-box
@@ -389,10 +389,10 @@ mono SunUO.exe</programlisting>
       </section>
     </section>
 
-    <section>
+    <section id="config_tricks">
       <title>Tricks</title>
 
-      <section>
+      <section id="multithreading">
         <title>Multithreading</title>
         <para>
           If you have multiple CPUs (SMP), you can take advantage of
@@ -408,7 +408,7 @@ mono SunUO.exe</programlisting>
 &lt;/sunuo-config&gt;</programlisting>
       </section>
 
-      <section>
+      <section id="login_server">
         <title>Separating login server from shard server</title>
         <para>
           To make SunUO ignore the AuthID, configure:
@@ -427,7 +427,7 @@ mono SunUO.exe</programlisting>
       </section>
     </section>
 
-    <section>
+    <section id="runuo_bugs">
       <title>Working around RunUO bugs</title>
       <anchor id="working_around_runuo_bugs"/>
       <para>
@@ -435,7 +435,7 @@ mono SunUO.exe</programlisting>
         buggy. This section is a collection of workarounds.
       </para>
 
-      <section>
+      <section id="bugged_restart">
         <title>Making <command>[restart</command> work</title>
         <para>
           On Unix / Linux, server restart does not work. This is
@@ -461,7 +461,7 @@ mono SunUO.exe</programlisting>
         <programlisting>Process.Start( "mono", Core.ExePath );</programlisting>
       </section>
 
-      <section>
+      <section id="bugged_restart_binfmt_misc">
         <title>Making <command>[restart</command> work with <filename>BINFMT_MISC</filename></title>
         <para>
           If your linux kernel supports
@@ -478,7 +478,7 @@ mono SunUO.exe</programlisting>
         </para>
       </section>
 
-      <section>
+      <section id="custom_houses">
         <title>Customized houses</title>
         <para>
           RunUO imports code from <filename>zlib.dll</filename> on
@@ -489,7 +489,7 @@ mono SunUO.exe</programlisting>
         </para>
       </section>
 
-      <section>
+      <section id="gdiplus_crash">
         <title>GDIPlus related crashes</title>
         <para>
           On many Mono installations, <filename>libgdiplus</filename>
@@ -504,7 +504,7 @@ mono SunUO.exe</programlisting>
 &lt;/libraries&gt;</programlisting>
       </section>
 
-      <section>
+      <section id="faction_direntry_order">
         <title>The RunUO faction direntry order bug</title>
         <para>
           I reported a bug to the RunUO bug tracker:
@@ -529,7 +529,7 @@ mono SunUO.exe</programlisting>
         </para>
       </section>
 
-      <section>
+      <section id="arya_auction">
         <title>Arya's auction</title>
         <para>
           Arya's auction was released in the <ulink
@@ -597,7 +597,7 @@ perl -pi -e 's,\r,\n,gs' local/src/Auction/AuctionItem.cs</programlisting>
       </section>
     </section>
 
-    <section>
+    <section id="logging">
       <title>Logging</title>
       <para>
         SunUO includes the <ulink
@@ -645,7 +645,7 @@ try {
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="scripts">
     <title>Scripts</title>
     <para>
       SunUO consists of two parts: the core, and the scripts. Scripts
@@ -673,7 +673,7 @@ try {
   &lt;libraries&gt;
 &lt;/sunuo-config&gt;</programlisting>
 
-    <section>
+    <section id="why_script_libs">
       <title>Why script libraries?</title>
       <para>
         Whether you use script libraries is a matter of taste. There
@@ -713,7 +713,7 @@ try {
       </itemizedlist>
     </section>
 
-    <section>
+    <section id="library_path">
       <title>Library path</title>
       <para>
         You can specify an arbitrary path where SunUO should compile
@@ -724,7 +724,7 @@ try {
 &lt;/library&gt;</programlisting>
     </section>
 
-    <section>
+    <section id="library_excludes">
       <title>Excludes</title>
     <programlisting>&lt;library name="foo"&gt;
   &lt;ignore-source name="Bar.cs"/&gt;
@@ -737,7 +737,7 @@ try {
       </para>
     </section>
 
-    <section>
+    <section id="library_disable">
       <title>Disabling a library</title>
       <programlisting>&lt;library name="foo" disabled="true"/&gt;</programlisting>
       <para>
@@ -747,7 +747,7 @@ try {
       </para>
     </section>
 
-    <section>
+    <section id="library_deps">
       <title>Dependencies</title>
       <para>
         In many cases, you want to use classes from another script
@@ -775,7 +775,7 @@ try {
       </para>
     </section>
 
-    <section>
+    <section id="library_overlays">
       <title>Overlays</title>
       <para>
         To configure RunUO, you need to edit the original RunUO
@@ -801,7 +801,7 @@ try {
       
     </section>
 
-    <section>
+    <section id="compiler_warnings">
       <title>Taming the warnings</title>
       <para>
         It is obvious that you should pay attention to compiler
@@ -818,10 +818,10 @@ try {
     </section>
   </chapter>
 
-  <chapter>
+  <chapter id="troubleshooting">
     <title>Troubleshooting</title>
 
-    <section>
+    <section id="getting_help">
       <title>Getting help</title>
       <para>
         There is a <ulink url="http://sunuo.free-forums.org/">web
