@@ -57,7 +57,7 @@ namespace Server.Config {
 			if (nl.Count == 0)
 				return defaultValue;
 			string value = ((XmlElement)nl[0]).GetAttribute("value");
-			return Parser.ParseBool(value, true);
+			return ParseBool(value, true);
 		}
 
 		public static int GetElementInt(XmlElement parent, string tag, int defaultValue)
