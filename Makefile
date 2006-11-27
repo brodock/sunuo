@@ -55,41 +55,41 @@ install: all
 
 build/SunUO.exe: $(SUNUO_SOURCES) lib/MySql.Data.dll lib/Npgsql.dll lib/log4net.dll
 	@mkdir -p $(dir $@)
-	rm -f $@.mdb
+	@rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
 
 build/SunLogin.exe: $(SUNLOGIN_SOURCES) lib/MySql.Data.dll lib/log4net.dll
 	@mkdir -p $(dir $@)
-	rm -f $@.mdb
+	@rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
 
 build/UOGQuery.exe: util/UOGQuery.cs
 	@mkdir -p $(dir $@)
-	rm -f $@.mdb
+	@rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ util/UOGQuery.cs
 
 build/scripts/legacy.dll: LIBS = System.Web.dll System.Data.dll log4net.dll
 build/scripts/legacy.dll: build/SunUO.exe
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -recurse:'scripts/legacy/*.cs'
 
 build/scripts/reports.dll: LIBS = System.Drawing.dll System.Web.dll System.Windows.Forms.dll log4net.dll
 build/scripts/reports.dll: build/SunUO.exe build/scripts/legacy.dll
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/reports/*.cs'
 
 build/scripts/remote-admin.dll: LIBS = log4net.dll
 build/scripts/remote-admin.dll: build/SunUO.exe build/scripts/legacy.dll
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/remote-admin/*.cs'
 
 build/scripts/myrunuo.dll: LIBS = System.Data.dll log4net.dll
 build/scripts/myrunuo.dll: build/SunUO.exe build/scripts/legacy.dll
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/myrunuo/*.cs'
 
 build/scripts/profiler.dll: build/SunUO.exe build/scripts/legacy.dll
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/profiler/*.cs'
 
 # dist targets
@@ -130,7 +130,7 @@ $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 
 export-scripts:
 	rm -rf $(DISTDIR)/Scripts $(DISTDIR)/local/src/profiler
-	mkdir -p $(DISTDIR)/local/src
+	@mkdir -p $(DISTDIR)/local/src
 	svn export scripts/legacy $(DISTDIR)/Scripts 
 	svn export scripts/profiler $(DISTDIR)/local/src/profiler
 
@@ -143,56 +143,56 @@ export-saves:
 	svn export saves $(DISTDIR)/Saves
 
 build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog $(DISTDLL)) export-scripts export-data export-saves
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
 
 .PHONY: svn-export
 svn-export:
 	rm -rf build/tmp
-	mkdir -p build/tmp
+	@mkdir -p build/tmp
 	svn export . build/tmp/sunuo-$(VERSION)
 
 build/dist/sunuo-$(VERSION).zip: svn-export
-	mkdir -p build/tmp/sunuo-$(VERSION)/lib
+	@mkdir -p build/tmp/sunuo-$(VERSION)/lib
 	cp $(addprefix lib/,$(DISTDLL)) build/tmp/sunuo-$(VERSION)/lib/
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	cd build/tmp && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
 # auto-download targets
 
 download/mysql-connector-net-1.0.7-noinstall.zip:
-	mkdir -p download
+	@mkdir -p download
 	wget http://sunsite.informatik.rwth-aachen.de/mysql/Downloads/Connector-Net/mysql-connector-net-1.0.7-noinstall.zip -O $@.tmp
 	mv $@.tmp $@
 
 lib/MySql.Data.dll: download/mysql-connector-net-1.0.7-noinstall.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
-	mkdir -p lib
+	@mkdir -p lib
 	cp build/tmp/bin/mono-1.0/release/MySql.Data.dll lib/
 	rm -rf build/tmp
 
 download/Npgsql1.0beta1-bin.tar.bz2:
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	wget http://pgfoundry.org/frs/download.php/531/Npgsql1.0beta1-bin.tar.bz2 -O $@.tmp
 	mv $@.tmp $@
 
 lib/Npgsql.dll: download/Npgsql1.0beta1-bin.tar.bz2
 	rm -rf build/tmp && mkdir -p build/tmp
 	tar xjfC $< build/tmp
-	mkdir -p lib
+	@mkdir -p lib
 	cp build/tmp/Npgsql/bin/mono/Npgsql.dll lib/
 	rm -rf build/tmp
 
 download/incubating-log4net-1.2.10.zip:
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	wget http://cvs.apache.org/dist/incubator/log4net/1.2.10/incubating-log4net-1.2.10.zip -O $@.tmp
 	mv $@.tmp $@
 
 lib/log4net.dll: download/incubating-log4net-1.2.10.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
-	mkdir -p lib
+	@mkdir -p lib
 	cp build/tmp/log4net-1.2.10/bin/mono/1.0/release/log4net.dll lib/
 	rm -rf build/tmp
 
