@@ -162,8 +162,7 @@ namespace Server.Config {
 			depends = LowerStringArray(CollectStringArray(libConfigEl, "depends", "name"));
 
 			string disabledString = libConfigEl.GetAttribute("disabled");
-			disabled = disabledString != null && disabledString != ""
-				&& Boolean.Parse(disabledString);
+			disabled = Parser.ParseBool(disabledString, false);
 
 			string warnString = libConfigEl.GetAttribute("warn");
 			if (warnString != null && warnString != "")
