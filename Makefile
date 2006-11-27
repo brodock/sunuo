@@ -15,7 +15,7 @@ SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Netw
 SCRIPTS = legacy reports remote-admin myrunuo profiler
 SCRIPTS_DLL = $(patsubst %,build/scripts/%.dll,$(SCRIPTS))
 
-all: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe etc/sunuo.xml $(DISTDLL)) $(SCRIPTS_DLL)
+all: build/SunUO.exe build/SunLogin.exe build/UOGQuery.exe $(SCRIPTS_DLL)
 
 clean:
 	rm -f doc/sunuo.html
@@ -23,57 +23,54 @@ clean:
 
 install: all
 	install -d -m 0755 $(SUNUO_BASE) $(SUNUO_BASE)/etc $(SUNUO_BASE)/local $(SUNUO_BASE)/local/lib
-	install -m 0755 $(DISTDIR)/SunUO.exe $(SUNUO_BASE)/
-	test -f $(DISTDIR)/SunUO.exe.mdb && install -m 0644 $(DISTDIR)/SunUO.exe.mdb $(SUNUO_BASE)/
-	test -f $(SUNUO_BASE)/SunUO.exe.config || install -m 0644 $(DISTDIR)/SunUO.exe.config $(SUNUO_BASE)/
-	test -f $(SUNUO_BASE)/SunLogin.exe.config || install -m 0644 $(DISTDIR)/SunLogin.exe.config $(SUNUO_BASE)/
-	test -f $(SUNUO_BASE)/etc/sunuo.xml || install -m 0644 $(DISTDIR)/etc/sunuo.xml $(SUNUO_BASE)/etc/
-	install -m 0644 $(addprefix $(DISTDIR)/,$(DISTDLL)) $(SUNUO_BASE)/
+	install -m 0755 build/SunUO.exe $(SUNUO_BASE)/
+	test -f build/SunUO.exe.mdb && install -m 0644 build/SunUO.exe.mdb $(SUNUO_BASE)/
+	test -f $(SUNUO_BASE)/SunUO.exe.config || install -m 0644 conf/SunUO.exe.config $(SUNUO_BASE)/
+	test -f $(SUNUO_BASE)/SunLogin.exe.config || install -m 0644 conf/SunLogin.exe.config $(SUNUO_BASE)/
+	test -f $(SUNUO_BASE)/etc/sunuo.xml || install -m 0644 conf/sunuo.xml $(SUNUO_BASE)/etc/
+	install -m 0644 $(addprefix lib/,$(DISTDLL)) $(SUNUO_BASE)/
 	install -m 0644 $(SCRIPTS_DLL) $(SUNUO_BASE)/local/lib/
 
 # compile targets
 
-$(DISTDIR)/SunUO.exe: $(SUNUO_SOURCES) lib/MySql.Data.dll lib/Npgsql.dll lib/log4net.dll
-	mkdir -p $(DISTDIR)
+build/SunUO.exe: $(SUNUO_SOURCES) lib/MySql.Data.dll lib/Npgsql.dll lib/log4net.dll
+	@mkdir -p $(dir $@)
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
 
-$(DISTDIR)/SunLogin.exe: $(SUNLOGIN_SOURCES) lib/MySql.Data.dll lib/log4net.dll
-	mkdir -p $(DISTDIR)
+build/SunLogin.exe: $(SUNLOGIN_SOURCES) lib/MySql.Data.dll lib/log4net.dll
+	@mkdir -p $(dir $@)
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
 
-$(DISTDIR)/UOGQuery.exe: util/UOGQuery.cs
-	mkdir -p $(DISTDIR)
+build/UOGQuery.exe: util/UOGQuery.cs
+	@mkdir -p $(dir $@)
 	rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ util/UOGQuery.cs
 
 build/scripts/legacy.dll: LIBS = System.Web.dll System.Data.dll log4net.dll
-build/scripts/legacy.dll: $(DISTDIR)/SunUO.exe
+build/scripts/legacy.dll: build/SunUO.exe
 	mkdir -p $(dir $@)
-	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -recurse:'scripts/legacy/*.cs'
+	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -recurse:'scripts/legacy/*.cs'
 
 build/scripts/reports.dll: LIBS = System.Drawing.dll System.Web.dll System.Windows.Forms.dll log4net.dll
-build/scripts/reports.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
+build/scripts/reports.dll: build/SunUO.exe build/scripts/legacy.dll
 	mkdir -p $(dir $@)
-	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/reports/*.cs'
+	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/reports/*.cs'
 
 build/scripts/remote-admin.dll: LIBS = log4net.dll
-build/scripts/remote-admin.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
+build/scripts/remote-admin.dll: build/SunUO.exe build/scripts/legacy.dll
 	mkdir -p $(dir $@)
-	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/remote-admin/*.cs'
+	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/remote-admin/*.cs'
 
 build/scripts/myrunuo.dll: LIBS = System.Data.dll log4net.dll
-build/scripts/myrunuo.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
+build/scripts/myrunuo.dll: build/SunUO.exe build/scripts/legacy.dll
 	mkdir -p $(dir $@)
-	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/myrunuo/*.cs'
+	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build $(addprefix -r:,$(LIBS)) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/myrunuo/*.cs'
 
-build/scripts/profiler.dll: $(DISTDIR)/SunUO.exe build/scripts/legacy.dll
+build/scripts/profiler.dll: build/SunUO.exe build/scripts/legacy.dll
 	mkdir -p $(dir $@)
-	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:$(DISTDIR) -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/profiler/*.cs'
-
-$(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
-	cp $< $@
+	$(MCS) $(MCS_FLAGS) -target:library -out:$@ -lib:build -r:SunUO.exe -lib:build/scripts -r:legacy.dll -recurse:'scripts/profiler/*.cs'
 
 # dist targets
 
@@ -81,19 +78,32 @@ $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 dist: build/dist/sunuo-$(VERSION)-bin.zip build/dist/sunuo-$(VERSION).zip
 
 $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
+	@mkdir -p $(dir $@)
 	cp $< $@
 
+$(DISTDIR)/SunUO.exe $(DISTDIR)/SunLogin.exe $(DISTDIR)/UOGQuery.exe: $(DISTDIR)/%: build/%
+	@mkdir -p $(dir $@)
+	test -f $<.mdb && cp $<.mdb $(DISTDIR)/
+	cp $< $(DISTDIR)/
+
 $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
+	@mkdir -p $(dir $@)
 	cp $< $@
 
 $(DISTDIR)/etc/sunuo.xml: conf/sunuo.xml
-	mkdir -p $(DISTDIR)/etc
+	@mkdir -p $(dir $@)
 	cp $< $@
 
 $(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config
+	@mkdir -p $(dir $@)
 	cp $< $@
 
 $(DISTDIR)/changelog: debian/changelog
+	@mkdir -p $(dir $@)
+	cp $< $@
+
+$(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
+	@mkdir -p $(dir $@)
 	cp $< $@
 
 .PHONY: export-scripts export-data export-saves
