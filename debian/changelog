@@ -20,6 +20,7 @@ sunuo (0.3.2) unstable; urgency=low
     the intern tables
   * synchronize NetState.FinishDispose()
   * implemented feature "manual-gc" for manual garbage collection
+  * parsing boolean values from the configuration file is now strict
   * added legacy scripts
     - use log4net for logging
     - removed Address from ServerList

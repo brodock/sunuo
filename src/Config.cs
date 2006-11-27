@@ -29,9 +29,17 @@ using System.Net;
 
 namespace Server.Config {
 	class Parser {
-		public static bool ParseBool(string value) {
-			return value == null || value == "" ||
-				value == "true" || value == "on" || value == "yes";
+		public static bool ParseBool(string value, bool defaultValue) {
+			if (value == null || value == "")
+				return defaultValue;
+
+			if (value == "true" || value == "on" || value == "yes")
+				return true;
+
+			if (value == "false" || value == "off" || value == "no")
+				return false;
+
+			throw new FormatException("Cannot parse boolean value");
 		}
 
 		public static string GetElementString(XmlElement parent, string tag) {
@@ -49,7 +57,7 @@ namespace Server.Config {
 			if (nl.Count == 0)
 				return defaultValue;
 			string value = ((XmlElement)nl[0]).GetAttribute("value");
-			return Parser.ParseBool(value);
+			return Parser.ParseBool(value, true);
 		}
 
 		public static int GetElementInt(XmlElement parent, string tag, int defaultValue)
@@ -620,12 +628,12 @@ namespace Server.Config {
 
 					case "multi-threading":
 						m_Features[node.Name]
-							= Parser.ParseBool(el.GetAttribute("value"));
+							= Parser.ParseBool(el.GetAttribute("value"), true);
 						break;
 
 					case "feature":
 						m_Features[el.GetAttribute("name")]
-							= Parser.ParseBool(el.GetAttribute("value"));
+							= Parser.ParseBool(el.GetAttribute("value"), true);
 						break;
 
 					default:
