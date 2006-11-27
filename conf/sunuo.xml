@@ -9,7 +9,9 @@
   </locations>
   <libraries>
     <library name="legacy">
+      <!--
       <ignore-source name="Misc/ZLib.cs" />
+      -->
     </library>
     <library name="myrunuo" disabled="yes" />
     <library name="remote-admin" disabled="yes" />
@@ -20,5 +22,12 @@
   </login>
   <global>
     <multi-threading value="off" />
+    <feature name="manual-gc" />
   </global>
+  <network>
+    <bind port="2593"/>
+    <!--
+    <bind address="1.2.3.4" port="2594"/>
+    -->
+  </network>
 </sunuo-config>
