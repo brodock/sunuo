@@ -205,7 +205,7 @@ $(addprefix build/,$(DISTDLL)): build/%: lib/%
 
 .PHONY: docs
 docs: doc/sunuo.html
-doc/sunuo.html: doc/sunuo.xml
+doc/sunuo.html: doc/sunuo.xml /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/xhtml/docbook.xsl
 	xsltproc -o $@ /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/xhtml/docbook.xsl $<
 
 $(DISTDIR)/sunuo.html: doc/sunuo.html
