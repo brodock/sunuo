@@ -26,7 +26,8 @@ VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changel
 DISTDIR = build/sunuo-$(VERSION)-bin
 DISTDLL = MySql.Data.dll Npgsql.dll log4net.dll
 
-MCS_FLAGS += -define:MONO -debug -lib:lib
+MCS_FLAGS += -define:MONO -debug -lib:build
+CP_FLAGS = -lf
 
 SUNUO_SOURCES := $(shell find src -name "*.cs" )
 SUNLOGIN_SOURCES := src/AssemblyInfo.cs $(shell find login -name "*.cs" ) $(shell find src/Network/Encryption -name "*.cs" )
@@ -53,12 +54,12 @@ install: all
 
 # compile targets
 
-build/SunUO.exe: $(SUNUO_SOURCES) lib/MySql.Data.dll lib/Npgsql.dll lib/log4net.dll
+build/SunUO.exe: $(SUNUO_SOURCES) $(addprefix build/,$(DISTDLL))
 	@mkdir -p $(dir $@)
 	@rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
 
-build/SunLogin.exe: $(SUNLOGIN_SOURCES) lib/MySql.Data.dll lib/log4net.dll
+build/SunLogin.exe: $(SUNLOGIN_SOURCES) build/MySql.Data.dll build/log4net.dll
 	@mkdir -p $(dir $@)
 	@rm -f $@.mdb
 	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
@@ -99,32 +100,32 @@ dist: build/dist/sunuo-$(VERSION)-bin.zip build/dist/sunuo-$(VERSION).zip
 
 $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/SunUO.exe $(DISTDIR)/SunLogin.exe $(DISTDIR)/UOGQuery.exe: $(DISTDIR)/%: build/%
 	@mkdir -p $(dir $@)
 	test -f $<.mdb && cp $<.mdb $(DISTDIR)/
-	cp $< $(DISTDIR)/
+	cp $(CP_FLAGS) $< $(DISTDIR)/
 
 $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/etc/sunuo.xml: conf/sunuo.xml
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/changelog: debian/changelog
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp $(CP_FLAGS) $< $@
 
 $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp $(CP_FLAGS) $< $@
 
 .PHONY: export-scripts export-data export-saves
 
@@ -196,6 +197,10 @@ lib/log4net.dll: download/incubating-log4net-1.2.10.zip
 	cp build/tmp/log4net-1.2.10/bin/mono/1.0/release/log4net.dll lib/
 	rm -rf build/tmp
 
+$(addprefix build/,$(DISTDLL)): build/%: lib/%
+	mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
 # documentation targets
 
 .PHONY: docs
@@ -204,7 +209,7 @@ doc/sunuo.html: doc/sunuo.xml
 	xsltproc -o $@ /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/xhtml/docbook.xsl $<
 
 $(DISTDIR)/sunuo.html: doc/sunuo.html
-	cp $< $@
+	cp $(CP_FLAGS) $< $@
 
 # release targets
 
