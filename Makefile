@@ -18,7 +18,7 @@
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-MCS := $(word 1,$(shell which mcs) mcs)
+MCS := mcs
 
 SUNUO_BASE = $(HOME)/dl/runuo
 
