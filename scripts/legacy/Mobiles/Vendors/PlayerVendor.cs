@@ -580,7 +580,7 @@ namespace Server.Mobiles
 						{
 							total += checked(vi.Price);
 						}
-					} catch (OverflowException e) {
+					} catch (OverflowException) {
 						/* don't let players provoke an integer overflow */
 						total = Int32.MaxValue;
 					}
@@ -607,7 +607,7 @@ namespace Server.Mobiles
 						{
 							total += checked(vi.Price);
 						}
-					} catch (OverflowException e) {
+					} catch (OverflowException) {
 						/* don't let players provoke an integer overflow */
 						total = Int32.MaxValue;
 					}
