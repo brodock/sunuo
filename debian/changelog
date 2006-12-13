@@ -62,6 +62,7 @@ sunuo (0.3.2) unstable; urgency=low
     - use XmlReader instead of XmlDocument.Load() to parse the accounts file
     - use DateTime.Now cache
     - removed from Notoriety: CheckAggressor(), CheckAggressed()
+    - [docgen is disabled by default
   * extended API for optimization
     - Mobile: added AggressorsOrNull, FindAggressorByAttacker(),
       FindAggressorByDefender(), AggressedOrNull, FindAggressedByAttacker(),

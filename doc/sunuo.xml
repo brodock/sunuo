@@ -347,6 +347,12 @@ mono SunUO.exe</programlisting>
                   enable SE features (set <varname>Core.SE</varname>)
                 </entry>
               </row>
+              <row>
+                <entry>allow-docgen</entry>
+                <entry>
+                  enable the [docgen command
+                </entry>
+              </row>
             </tbody>
           </tgroup>
         </table>

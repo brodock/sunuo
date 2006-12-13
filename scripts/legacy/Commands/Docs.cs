@@ -11,9 +11,12 @@ namespace Server.Scripts.Commands
 {
 	public class Docs
 	{
+		private static readonly bool Enabled = Core.Config.Features["allow-docgen"];
+
 		public static void Initialize()
 		{
-			Server.Commands.Register( "DocGen", AccessLevel.Administrator, new CommandEventHandler( DocGen_OnCommand ) );
+			if (Enabled)
+				Server.Commands.Register( "DocGen", AccessLevel.Administrator, new CommandEventHandler( DocGen_OnCommand ) );
 		}
 
 		[Usage( "DocGen" )]
