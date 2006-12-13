@@ -19,6 +19,8 @@ namespace Server.Admin
 
 		public static void Configure()
 		{
+			Stub.m_IsAuth += IsAuth;
+
 			PacketHandlers.Register( 0xF1, 0, false, new OnPacketReceive( OnReceive ) );
 
 			Core.MultiConsoleOut.Add( new EventTextWriter( new EventTextWriter.OnConsoleChar( OnConsoleChar ), new EventTextWriter.OnConsoleLine( OnConsoleLine ), new EventTextWriter.OnConsoleStr( OnConsoleString ) ) );
