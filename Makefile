@@ -44,7 +44,7 @@ clean:
 
 install: all
 	install -d -m 0755 $(SUNUO_BASE) $(SUNUO_BASE)/etc $(SUNUO_BASE)/local $(SUNUO_BASE)/local/lib
-	install -m 0755 build/SunUO.exe $(SUNUO_BASE)/
+	install -m 0755 sunuo.sh build/SunUO.exe $(SUNUO_BASE)/
 	test -f build/SunUO.exe.mdb && install -m 0644 build/SunUO.exe.mdb $(SUNUO_BASE)/
 	test -f $(SUNUO_BASE)/SunUO.exe.config || install -m 0644 conf/SunUO.exe.config $(SUNUO_BASE)/
 	test -f $(SUNUO_BASE)/SunLogin.exe.config || install -m 0644 conf/SunLogin.exe.config $(SUNUO_BASE)/
