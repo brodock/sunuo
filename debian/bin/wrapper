@@ -61,11 +61,6 @@ export HOME="$SUNUO_BASE"
 
 export SUNUO_LOG="/var/log/sunuo/$SHARD"
 
-export LANG=C
-export LC_ALL=C
-
-unset DISPLAY XAUTHORITY
-
 mkdir --mode=0700 -p "$MONO_SHARED_DIR"
 chown sunuo:sunuo "$MONO_SHARED_DIR"
 
@@ -73,7 +68,6 @@ chown sunuo:sunuo "$MONO_SHARED_DIR"
 
 exec start-stop-daemon --start \
     --pidfile "/var/run/sunuo/$SHARD.pid" --make-pidfile \
-    --chdir "$SUNUO_BASE" --chuid sunuo --exec $MONO \
+    --chdir "$SUNUO_BASE" --chuid sunuo --exec /usr/share/sunuo/libexec/sunuo.sh \
     -- \
-    --server -O=all,-shared --debug \
-    "$SUNUO_BASE/SunUO.exe" --base "$SUNUO_BASE" "$@"
+    --base "$SUNUO_BASE" "$@"
