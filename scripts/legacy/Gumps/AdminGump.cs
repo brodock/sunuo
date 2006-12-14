@@ -2575,10 +2575,7 @@ namespace Server.Gumps
 			if ( save )
 				InvokeCommand( "Save" );
 
-			if ( restart )
-				Process.Start( Core.ExePath );
-
-			Core.Process.Kill();
+			Core.Shutdown(restart);
 		}
 
 		private void InvokeCommand( string ip )

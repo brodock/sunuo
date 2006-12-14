@@ -323,6 +323,34 @@ namespace Server
 			log.Info( "done" );
 		}
 
+		public static void Shutdown(bool restart) {
+			int sunuo_exit = -1;
+			try {
+				/* the environment variable SUNUO_EXIT specifies which
+				   exit code expresses "we're exiting and don't want
+				   to be restarted"; at the same time, we know we've
+				   been started from sunuo.sh */
+				string value = Environment.GetEnvironmentVariable("SUNUO_EXIT");
+				if (value != null)
+					sunuo_exit = Int32.Parse(value);
+			} catch (Exception e) {
+				log.Error(e);
+			}
+
+			if (sunuo_exit >= 0)
+				Environment.Exit(restart ? 0 : sunuo_exit);
+
+			if (restart) {
+				try {
+					Process.Start(ExePath);
+				} catch (Exception e) {
+					log.Fatal(e);
+				}
+			}
+
+			Core.Process.Kill();
+		}
+
 		private static void Run() {
 			m_Now = DateTime.Now;
 			m_TotalProfile = new MainProfile(m_Now);
