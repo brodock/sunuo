@@ -37,14 +37,17 @@ export LC_ALL=C
 
 unset DISPLAY XAUTHORITY
 
+export SUNUO_EXIT=99
+
 # our main loop
 while :; do
     # start SunUO.exe
     ${MONO:-mono} ${MONO_OPTS:---server --debug -O=all,-shared} SunUO.exe "$@"
-    echo "SunUO.exe exited with status $?" >&2
+    STATUS=$?
+    echo "SunUO.exe exited with status $STATUS" >&2
 
     # exit status 99 means "really exit, do not restart"
-    [ $? == 99 ] && break
+    [ $STATUS == $SUNUO_EXIT ] && break
 
     # sleep for a reasonable duration and restart
     sleep 10
