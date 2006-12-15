@@ -32,7 +32,7 @@ Valid commands:
   pid NAME          print a shard\'s pid
   status [NAME ..]  show shard status
   start NAME ...    start one or more shards in background
-  stop [NAME ...]   shut down shards         
+  stop [NAME ...]   shut down shards
   run NAME          run a shard in foreground
   help              print this text
 EOT
