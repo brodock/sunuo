@@ -82,6 +82,7 @@ sunuo (0.3.2) unstable; urgency=low
     - Engines.RemoteAdmin
   * upgraded log4net to 1.2.10
   * use log4net from Debian package
+  * don't link core and scripts with mysql and postgresql drivers
   * imported RunUO data and saves directory
   * run SunUO in a loop
     - added Core.Shutdown() supporting the environment variable SUNUO_EXIT

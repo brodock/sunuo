@@ -15,7 +15,7 @@ build: debian/stamp-build
 debian/stamp-build:
 	dh_testdir
 
-	$(MAKE) all docs MCS=$(MCS) DEBIAN=1
+	$(MAKE) debian-all MCS=$(MCS) DEBIAN=1
 
 	touch debian/stamp-build
 

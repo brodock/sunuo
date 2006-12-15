@@ -175,8 +175,6 @@ when 'create'
     end
 
     File.symlink('/usr/share/sunuo/log4net.dll', "#{base_dir}/log4net.dll")
-    File.symlink('/usr/lib/mono/1.0/Npgsql.dll', "#{base_dir}/Npgsql.dll")
-    File.symlink('/usr/share/sunuo/MySql.Data.dll', "#{base_dir}/MySql.Data.dll")
 
     FileUtils.chown_R('sunuo', 'sunuo',
                       [ log_dir, cache_dir, base_dir ])

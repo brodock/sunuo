@@ -37,13 +37,15 @@ SCRIPTS = legacy reports remote-admin myrunuo profiler
 SCRIPTS_DLL = $(patsubst %,build/scripts/%.dll,$(SCRIPTS))
 
 ifeq ($(DEBIAN),1)
-LOG4NET_LIBS := $(shell pkg-config log4net --libs)
+export MONO_PATH:=$(MONO_PATH):/usr/lib/cli/log4net-1.2
 else
-LOG4NET_LIBS := -r:log4net.dll
 LOG4NET_DEPS := build/log4net.dll
 endif
 
 all: build/SunUO.exe build/SunLogin.exe build/UOGQuery.exe $(SCRIPTS_DLL)
+
+.PHONY: sunuo
+debian-all: build/SunUO.exe $(SCRIPTS_DLL) docs
 
 clean:
 	rm -f doc/sunuo.html
@@ -64,12 +66,12 @@ install: all
 build/SunUO.exe: $(SUNUO_SOURCES) $(LOG4NET_DEPS)
 	@mkdir -p $(dir $@)
 	@rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll $(LOG4NET_LIBS) $(SUNUO_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:log4net.dll $(SUNUO_SOURCES)
 
 build/SunLogin.exe: $(SUNLOGIN_SOURCES) build/MySql.Data.dll $(LOG4NET_DEPS)
 	@mkdir -p $(dir $@)
 	@rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data $(LOG4NET_LIBS) $(SUNLOGIN_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
 
 build/UOGQuery.exe: util/UOGQuery.cs
 	@mkdir -p $(dir $@)
@@ -168,6 +170,8 @@ build/dist/sunuo-$(VERSION).zip: svn-export
 
 # auto-download targets
 
+ifneq ($(DEBIAN),1)
+
 download/mysql-connector-net-1.0.7-noinstall.zip:
 	@mkdir -p download
 	wget http://sunsite.informatik.rwth-aachen.de/mysql/Downloads/Connector-Net/mysql-connector-net-1.0.7-noinstall.zip -O $@.tmp
@@ -207,6 +211,8 @@ lib/log4net.dll: download/incubating-log4net-1.2.10.zip
 $(addprefix build/,$(DISTDLL)): build/%: lib/%
 	mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
+
+endif
 
 # documentation targets
 
