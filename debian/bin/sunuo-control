@@ -75,7 +75,7 @@ class Shard
                 $stdin.reopen(null)
             end
             File.open("/var/log/sunuo/#{@name}/console.log",
-                      File.APPEND|File.CREAT|File.WRONLY, 0640) do
+                      File::APPEND|File::CREAT|File::WRONLY, 0640) do
                 |logfile|
                 $stdout.reopen(logfile)
                 $stderr.reopen(logfile)
