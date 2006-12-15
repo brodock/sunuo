@@ -36,6 +36,13 @@ SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Netw
 SCRIPTS = legacy reports remote-admin myrunuo profiler
 SCRIPTS_DLL = $(patsubst %,build/scripts/%.dll,$(SCRIPTS))
 
+ifeq ($(DEBIAN),1)
+LOG4NET_LIBS := $(shell pkg-config log4net --libs)
+else
+LOG4NET_LIBS := -r:log4net.dll
+LOG4NET_DEPS := build/log4net.dll
+endif
+
 all: build/SunUO.exe build/SunLogin.exe build/UOGQuery.exe $(SCRIPTS_DLL)
 
 clean:
@@ -54,15 +61,15 @@ install: all
 
 # compile targets
 
-build/SunUO.exe: $(SUNUO_SOURCES) $(addprefix build/,$(DISTDLL))
+build/SunUO.exe: $(SUNUO_SOURCES) $(LOG4NET_DEPS)
 	@mkdir -p $(dir $@)
 	@rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll -r:log4net.dll $(SUNUO_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:Npgsql.dll $(LOG4NET_LIBS) $(SUNUO_SOURCES)
 
-build/SunLogin.exe: $(SUNLOGIN_SOURCES) build/MySql.Data.dll build/log4net.dll
+build/SunLogin.exe: $(SUNLOGIN_SOURCES) build/MySql.Data.dll $(LOG4NET_DEPS)
 	@mkdir -p $(dir $@)
 	@rm -f $@.mdb
-	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data -r:log4net.dll $(SUNLOGIN_SOURCES)
+	$(MCS) $(MCS_FLAGS) -out:$@ -r:System.Data.dll -r:MySql.Data $(LOG4NET_LIBS) $(SUNLOGIN_SOURCES)
 
 build/UOGQuery.exe: util/UOGQuery.cs
 	@mkdir -p $(dir $@)
