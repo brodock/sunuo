@@ -2,3 +2,12 @@
 # automatically on boot
 
 AUTO_SHARDS=""
+
+# GC_ENABLE_INCREMENTAL: enable incremental garbage collection (may be
+# dangerous)
+
+#export GC_ENABLE_INCREMENTAL=1
+
+# GC_PRINT_STATS: make the garbage collector verbose
+
+#export GC_PRINT_STATS=1
