@@ -25,6 +25,7 @@ clean:
 	rm -f debian/stamp-build install*-stamp
 
 	-$(MAKE) clean
+	-chmod a-x build/*.dll
 
 	dh_clean
 
