@@ -49,13 +49,14 @@ class Shard
 
     def pid
         pidfile = "/var/run/sunuo/#{@name}.pid"
+        pid_value = nil
         File.open(pidfile) do |file|
-            pid = file.read
+            pid_value = file.read
         end
-        return unless pid =~ /(\d+)/
-        pid = $1
-        return unless File.directory?("/proc/#{pid}")
-        pid.to_i
+        return unless pid_value =~ /(\d+)/
+        pid_value = $1
+        return unless File.directory?("/proc/#{pid_value}")
+        pid_value.to_i
     rescue Errno::ENOENT
         nil
     end
