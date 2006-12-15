@@ -1,13 +1,62 @@
 #!/usr/bin/make -f
 # -*- mode: makefile; coding: utf-8 -*-
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/makefile.mk
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export DH_COMPAT = 5
+
+MCS = /usr/bin/mcs
 
 # hack for mono+fakeroot
 export MONO_SHARED_DIR = $(HOME)/.wapi
 
-DEB_MAKE_BUILD_TARGET := all docs MCS=/usr/bin/mcs
+build: debian/stamp-build
+debian/stamp-build:
+	dh_testdir
 
-DEB_DH_INSTALL_ARGS := -X.svn
-DEB_DH_INSTALLINIT_ARGS := --no-restart-on-upgrade
+	$(MAKE) all docs MCS=$(MCS)
+
+	touch debian/stamp-build
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f debian/stamp-build install*-stamp
+
+	-$(MAKE) clean
+
+	dh_clean
+
+install: debian/stamp-install
+debian/stamp-install: debian/stamp-build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	touch debian/stamp-install
+
+# Build architecture-independent files here.
+binary-indep: build install
+	dh_testdir -i
+	dh_testroot -i
+	dh_installdocs -i -A AUTHORS NEWS README
+	dh_installchangelogs -i
+	dh_install -i -X.svn
+	dh_installinit -i --no-restart-on-upgrade
+	dh_link -i
+	dh_strip -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+source diff:                                                                  
+	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
+
+binary: binary-indep
+.PHONY: build clean binary-indep binary install
