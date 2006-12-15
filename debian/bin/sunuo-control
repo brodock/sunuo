@@ -49,7 +49,9 @@ class Shard
 
     def pid
         pidfile = "/var/run/sunuo/#{@name}.pid"
-        pid = File.open(pidfile).read
+        File.open(pidfile) do |file|
+            pid = file.read
+        end
         return unless pid =~ /(\d+)/
         pid = $1
         return unless File.directory?("/proc/#{pid}")
