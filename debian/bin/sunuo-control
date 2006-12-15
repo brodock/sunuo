@@ -68,6 +68,16 @@ class Shard
 
     def start(*args)
         fork do
+            File.open('/dev/null') do |null|
+                $stdin.reopen(null)
+            end
+            File.open("/var/log/sunuo/#{@name}/console.log",
+                      File.APPEND|File.CREAT|File.WRONLY, 0640) do
+                |logfile|
+                $stdout.reopen(logfile)
+                $stderr.reopen(logfile)
+            end
+            Process.setsid
             run('--service', *args)
         end
     end

@@ -86,6 +86,7 @@ sunuo (0.3.2) unstable; urgency=low
   * imported RunUO data and saves directory
   * run SunUO in a loop
     - added Core.Shutdown() supporting the environment variable SUNUO_EXIT
+  * sunuo-control: append output to console.log; start new session
 
  --
 
