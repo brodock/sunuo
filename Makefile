@@ -44,10 +44,13 @@ else
 LOG4NET_DEPS := build/log4net.dll
 endif
 
-all: build/SunUO.exe build/SunLogin.exe build/UOGQuery.exe $(SCRIPTS_DLL)
+.PHONY: all core debian-all clean install
 
-.PHONY: sunuo
-debian-all: build/SunUO.exe $(SCRIPTS_DLL) docs
+all: core build/SunLogin.exe build/UOGQuery.exe $(SCRIPTS_DLL)
+
+core: build/SunUO.exe
+
+debian-all: core $(SCRIPTS_DLL) docs
 
 clean:
 	rm -f doc/sunuo.html
