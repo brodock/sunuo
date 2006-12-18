@@ -122,6 +122,10 @@ $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
+$(DISTDIR)/sunuo.sh: sunuo.sh
+	@mkdir -p $(dir $@)
+	install -m 0755 $< $@
+
 $(DISTDIR)/etc/sunuo.xml: conf/sunuo.xml
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
@@ -154,7 +158,7 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL)) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.sh sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL)) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
 
