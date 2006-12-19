@@ -272,7 +272,7 @@ namespace Server.Config {
 
 		public Login(XmlElement el) {
 			ignoreAuthID = Parser.GetElementBool(el, "ignore-auth-id", false);
-			autoCreateAccounts = Parser.GetElementBool(el, "auto-create-accounts", false);
+			autoCreateAccounts = Parser.GetElementBool(el, "auto-create-accounts", true);
 			accountDatabase = Parser.GetElementString(el, "account-database");
 
 			maxCreatedAccountsPerIP = Parser.GetElementInt(el, "max-created-accounts-per-ip", 0);

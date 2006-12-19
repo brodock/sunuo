@@ -21,6 +21,7 @@ sunuo (0.3.2) unstable; urgency=low
   * synchronize NetState.FinishDispose()
   * implemented feature "manual-gc" for manual garbage collection
   * parsing boolean values from the configuration file is now strict
+  * enable AutoAccountCreation by default
   * added legacy scripts
     - use log4net for logging
     - removed Address from ServerList
