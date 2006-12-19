@@ -23,7 +23,7 @@ MCS := mcs
 SUNUO_BASE = $(HOME)/dl/runuo
 
 VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
-DISTDIR = build/sunuo-$(VERSION)-bin
+DISTDIR = build/sunuo-$(VERSION)
 DISTDLL = MySql.Data.dll Npgsql.dll log4net.dll
 
 MCS_FLAGS += -define:MONO -debug -lib:build
@@ -110,7 +110,7 @@ build/scripts/profiler.dll: build/SunUO.exe build/scripts/legacy.dll
 # dist targets
 
 .PHONY: dist
-dist: build/dist/sunuo-$(VERSION)-bin.zip build/dist/sunuo-$(VERSION).zip
+dist: build/dist/sunuo-$(VERSION).zip build/dist/sunuo-$(VERSION)-src.zip
 
 $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 	@mkdir -p $(dir $@)
@@ -161,21 +161,21 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION)-bin.zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.sh sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL)) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.sh sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL)) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
-	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-bin
+	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
 .PHONY: svn-export
 svn-export:
 	rm -rf build/tmp
 	@mkdir -p build/tmp
-	svn export . build/tmp/sunuo-$(VERSION)
+	svn export . build/tmp/sunuo-$(VERSION)-src
 
-build/dist/sunuo-$(VERSION).zip: svn-export
-	@mkdir -p build/tmp/sunuo-$(VERSION)/lib
-	cp $(addprefix lib/,$(DISTDLL)) build/tmp/sunuo-$(VERSION)/lib/
+build/dist/sunuo-$(VERSION)-src.zip: svn-export
+	@mkdir -p build/tmp/sunuo-$(VERSION)-src/lib
+	cp $(addprefix lib/,$(DISTDLL)) build/tmp/sunuo-$(VERSION)-src/lib/
 	@mkdir -p $(dir $@)
-	cd build/tmp && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
+	cd build/tmp && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-src
 
 # auto-download targets
 
