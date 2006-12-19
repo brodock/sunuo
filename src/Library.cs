@@ -124,6 +124,21 @@ namespace Server {
 			}
 		}
 
+		private void InvokeAll(string methodName) {
+			ArrayList invoke = new ArrayList();
+
+			foreach (Type type in types) {
+				MethodInfo m = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
+				if (m != null)
+					invoke.Add(m);
+			}
+
+			invoke.Sort(new CallPriorityComparer());
+
+			foreach (MethodInfo m in invoke)
+				m.Invoke(null, null);
+		}
+
 		public void Configure() {
 			if (name == "core") {
 				configured = true;
@@ -133,18 +148,7 @@ namespace Server {
 			if (configured)
 				throw new ApplicationException("already configured");
 
-			ArrayList invoke = new ArrayList();
-
-			foreach (Type type in types) {
-				MethodInfo m = type.GetMethod("Configure", BindingFlags.Static | BindingFlags.Public);
-				if (m != null)
-					invoke.Add(m);
-			}
-
-			invoke.Sort(new CallPriorityComparer());
-
-			foreach (MethodInfo m in invoke)
-				m.Invoke(null, null);
+			InvokeAll("Configure");
 
 			configured = true;
 		}
@@ -160,18 +164,7 @@ namespace Server {
 			if (initialized)
 				throw new ApplicationException("already initialized");
 
-			ArrayList invoke = new ArrayList();
-
-			foreach (Type type in types) {
-				MethodInfo m = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
-				if (m != null)
-					invoke.Add(m);
-			}
-
-			invoke.Sort(new CallPriorityComparer());
-
-			foreach (MethodInfo m in invoke)
-				m.Invoke(null, null);
+			InvokeAll("Initialized");
 
 			initialized = true;
 		}
