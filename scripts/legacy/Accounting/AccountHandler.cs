@@ -222,7 +222,7 @@ namespace Server.Misc
 				{
 					++count;
 
-					if ( count >= MaxAccountsPerIP )
+					if (MaxAccountsPerIP > 0 && count >= MaxAccountsPerIP)
 					{
 						log.Info(String.Format("Login: {0}: Account '{1}' not created, ip already has {2} account{3}.", state, un, MaxAccountsPerIP, MaxAccountsPerIP == 1 ? "" : "s"));
 						return null;
