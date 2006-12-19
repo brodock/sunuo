@@ -42,10 +42,10 @@ namespace Server.Misc
 
 			MailMessage message = new MailMessage();
 
-			message.Subject = "Automated RunUO Crash Report";
-			message.From = "RunUO";
+			message.Subject = "Automated SunUO Crash Report";
+			message.From = "SunUO";
 			message.To = Email.CrashAddresses;
-			message.Body = "Automated RunUO Crash Report. See attachment for details.";
+			message.Body = "Automated SunUO Crash Report. See attachment for details.";
 
 			message.Attachments.Add( new MailAttachment( filePath ) );
 
@@ -182,7 +182,7 @@ namespace Server.Misc
 					op.WriteLine( "Server Crash Report" );
 					op.WriteLine( "===================" );
 					op.WriteLine();
-					op.WriteLine( "RunUO Version {0}.{1}.{3}, Build {2}", ver.Major, ver.Minor, ver.Revision, ver.Build );
+					op.WriteLine( "SunUO Version {0}.{1}.{3}, Build {2}", ver.Major, ver.Minor, ver.Revision, ver.Build );
 					op.WriteLine( "Operating System: {0}", Environment.OSVersion );
 					op.WriteLine( ".NET Framework: {0}", Environment.Version );
 					op.WriteLine( "Time: {0}", DateTime.Now );
