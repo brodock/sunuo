@@ -167,7 +167,7 @@ build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.con
 
 .PHONY: svn-export
 svn-export:
-	rm -rf build/tmp
+	@rm -rf build/tmp
 	@mkdir -p build/tmp
 	svn export . build/tmp/sunuo-$(VERSION)-src
 
@@ -176,6 +176,7 @@ build/dist/sunuo-$(VERSION)-src.zip: svn-export
 	cp $(addprefix lib/,$(DISTDLL)) build/tmp/sunuo-$(VERSION)-src/lib/
 	@mkdir -p $(dir $@)
 	cd build/tmp && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-src
+	@rm -rf build/tmp
 
 # auto-download targets
 
