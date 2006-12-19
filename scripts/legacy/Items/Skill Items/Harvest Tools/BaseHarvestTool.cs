@@ -8,7 +8,7 @@ using Server.ContextMenus;
 
 namespace Server.Items
 {
-	interface IUsesRemaining
+	public interface IUsesRemaining
 	{
 		int UsesRemaining{ get; set; }
 		bool ShowUsesRemaining{ get; set; }
