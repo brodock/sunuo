@@ -9,11 +9,10 @@ namespace Server
 {
 	public class AOS
 	{
-		private const bool Enabled = true;
+		private static readonly bool Enabled = Core.AOS;
 
 		public static void Configure()
 		{
-			Core.AOS = Enabled;
 			Mobile.InsuranceEnabled = Enabled;
 			ObjectPropertyList.Enabled = Enabled;
 			Mobile.VisibleDamageType = Enabled ? VisibleDamageType.Related : VisibleDamageType.None;
