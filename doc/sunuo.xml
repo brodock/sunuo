@@ -109,6 +109,12 @@
         CPU, the first script compilation can take 15 minutes or
         longer.
       </para>
+
+      <para>
+        The first account created gets administrator privileges.
+        Therefore make sure that auto-accounting is enabled during
+        installation.
+      </para>
     </section>
 
     <section id="migrating_from_runuo">
