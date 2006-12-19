@@ -80,8 +80,8 @@
       <para>
         SunUO uses the data files from the original Ultima Online to
         calculate its world.  Copy the whole UO directory to your
-        SunUO server, e.g. <filename>/opt/games/uo</filename>.  On the
-        first startup, SunUO will ask you to enter this directory.
+        SunUO server, e.g. <filename>/opt/games/uo</filename>.  On
+        Windows, SunUO should be able auto-detect an UO client.
       </para>
     </section>
 
