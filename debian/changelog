@@ -66,6 +66,7 @@ sunuo (0.3.2) unstable; urgency=low
     - make IUsesRemaining public
     - removed scripts:
       - Misc/AccountPrompt.cs
+      - Misc/WebStatus.cs
     - restart server after [ConvertPlayers
   * extended API for optimization
     - Mobile: added AggressorsOrNull, FindAggressorByAttacker(),
