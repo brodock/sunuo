@@ -9,10 +9,10 @@ namespace Server.Misc
 {
 	public class IPLimiter
 	{
-		public static bool Enabled = true;
+		public static readonly bool Enabled = Core.Config.Login.MaxLoginsPerIP > 0;
 		public static bool SocketBlock = true; // true to block at connection, false to block at login request
 
-		public const int MaxAddresses = 10;
+		public static readonly int MaxAddresses = Core.Config.Login.MaxLoginsPerIP;
 
 		public static bool Verify( IPAddress ourAddress )
 		{
