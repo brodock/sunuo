@@ -39,9 +39,6 @@ namespace Server
 			Console.WriteLine("  on {0}, runtime {1}",
 							  Environment.OSVersion, Environment.Version);
 
-			if ((int)Environment.OSVersion.Platform == 128)
-				Console.WriteLine("Please make sure you have Mono 1.1.7 or newer! (mono -V)");
-
 			Console.WriteLine();
 
 			/* parse command line */
