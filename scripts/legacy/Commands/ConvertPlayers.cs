@@ -55,10 +55,9 @@ namespace Server.Scripts.Commands
 				NetState.ProcessDisposedQueue();
 				World.Save();
 			
-				log.Info(String.Format("{0} players have been converted to PlayerMobile.  Please restart the server.",
-									   count));
-				while ( true )
-					Console.ReadLine();
+				log.InfoFormat("{0} players have been converted to PlayerMobile.  Restarting the server.",
+							   count);
+				Core.Shutdown(true);
 			}
 			else
 			{
