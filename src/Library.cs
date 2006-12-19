@@ -164,7 +164,7 @@ namespace Server {
 			if (initialized)
 				throw new ApplicationException("already initialized");
 
-			InvokeAll("Initialized");
+			InvokeAll("Initialize");
 
 			initialized = true;
 		}
