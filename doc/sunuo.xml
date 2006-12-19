@@ -43,10 +43,7 @@
         </listitem>
         <listitem>
           <para>
-            the <filename>*.mul</filename> files and
-            <filename>multi.idx</filename> from an <ulink
-            url="http://38.119.37.21/L?T=H&amp;ST=L&amp;PID=0054000025&amp;source=00001&amp;gameid=2008">Ultima
-            Online client installation</ulink>
+            an Ultima Online client
           </para>
         </listitem>
         <listitem>
@@ -88,16 +85,10 @@
     <section id="uo_data_files">
       <title>Installing the UO data files</title>
       <para>
-        SunUO needs the <filename>*.mul</filename> and
-        <filename>multi.idx</filename> data files from the UO
-        client. Copy them onto your hard disk,
-        e.g. <filename>/opt/uoclient</filename>. On the first startup,
-        SunUO will ask you to enter this directory.
-      </para>
-
-      <para>
-        By the way, the UO client installer works wonderfully with
-        Wine!
+        SunUO uses the data files from the original Ultima Online to
+        calculate its world.  Copy the whole UO directory to your
+        SunUO server, e.g. <filename>/opt/games/uo</filename>.  On the
+        first startup, SunUO will ask you to enter this directory.
       </para>
     </section>
 
