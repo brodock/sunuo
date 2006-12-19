@@ -48,13 +48,6 @@
         </listitem>
         <listitem>
           <para>
-            <ulink
-              url="http://www.runuo.com/downloads/files/runuo-releases/RunUO-1.0.0.zip">RunUO
-              1.0.0 binary distribution</ulink>
-          </para>
-        </listitem>
-        <listitem>
-          <para>
             <ulink url="http://www.sunuo.org/">SunUO binary
               distribution</ulink>
           </para>
@@ -94,18 +87,23 @@
 
     <section id="installing_new_server">
       <title>Installing a new server</title>
+
       <para>
-        Unzip RunUO 1.0.0 and SunUO, and copy
-        <filename>SunUO.exe</filename> to the RunUO directory:
+        Unzip the SunUO binary zip file.
       </para>
-      <programlisting>cd /opt
-unzip RunUO-1.0.0.zip
-mv "RunUO 1.0" sunuo
-unzip /tmp/sunuo-0.3.0-bin.zip
-cp sunuo-0.3.0-bin/SunUO.exe* sunuo-0.3.0-bin/*.dll sunuo/
-cp sunuo-0.3.0-bin/ZLib.cs sunuo/Scripts/Misc/
-cd sunuo
-mono SunUO.exe</programlisting>
+
+      <para>
+        Edit the file <filename>conf/sunuo.xml</filename> and set your
+        preferences.  You might want to set the location of the UO
+        client (element <varname>data-path</varname>).
+      </para>
+
+      <para>
+        If everything is set up, you can start your new SunUO server
+        by running <filename>SunUO.exe</filename> (or better
+        <filename>./sunuo.sh</filename> if you're on Linux).
+      </para>
+
       <para>
         If you have got less than 512 MB of physical memory or a slow
         CPU, the first script compilation can take 15 minutes or
@@ -118,15 +116,35 @@ mono SunUO.exe</programlisting>
       <important>
         Don't forget to back up your old server!
       </important>
-      <para>
-        Shut down RunUO. Copy the file <filename>SunUO.exe</filename>
-        to your RunUO directory and run it.
-      </para>
-      <para>
-        Now it is time to enable the <link
-          linkend="working_around_runuo_bugs">RunUO bug
-          workarounds</link>.
-      </para>
+      <orderedlist>
+        <listitem>
+          <para>
+            Shut down RunUO.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Unpack the SunUO binary zip file somewhere, and copy all
+            files from the base directory plus the
+            <filename>etc</filename> directory into the old RunUO
+            directory.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Read the section <link
+            linkend="working_around_runuo_bugs">Working around RunUO
+            bugs</link> carefully.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Start SunUO by running <filename>SunUO.exe</filename> (or
+            better <filename>./sunuo.sh</filename> if you're on
+            Linux).
+          </para>
+        </listitem>
+      </orderedlist>
     </section>
 
     <section id="compiling">
