@@ -38,8 +38,7 @@
         <listitem>
           <para>
             Microsoft .NET or <ulink
-              url="http://www.mono-project.org/">Mono 1.1.7</ulink> or
-              later
+              url="http://www.mono-project.org/">Mono 1.2</ulink>
           </para>
         </listitem>
         <listitem>
@@ -69,61 +68,20 @@
     <section id="installing_mono">
       <title>Installing Mono</title>
       <para>
-        SunUO requires Mono; please use the most recent version.
-        Older versions than 1.1.7 are far too buggy.  1.1.13.2 has
-        proven to be very stable.  Some linux distributions don't have
-        Mono yet. Manual installation is not hard; you need:
+        SunUO requires Mono; please use the most recent version
+        available.  Most current Linux distributions come with Mono
+        nowadays.  On Debian Etch, the following procedure will
+        install Mono:
       </para>
-      <itemizedlist>
-        <listitem>
-          <para>gcc 3.3 or newer</para>
-        </listitem>
-        <listitem>
-          <para>GNU make</para>
-        </listitem>
-        <listitem>
-          <para>glib 2.0 (development files)</para>
-        </listitem>
-        <listitem>
-          <para>libjpeg (development files)</para>
-        </listitem>
-        <listitem>
-          <para>libpng (development files)</para>
-        </listitem>
-        <listitem>
-          <para>wget</para>
-        </listitem>
-      </itemizedlist>
+      <programlisting>apt-get install mono mono-mcs libmono-winforms1.0-cil</programlisting>
       <para>
-        On Debian, the following command installs everything you need:
+        I have been told that you can do the following on Fedora:
       </para>
-      <programlisting>apt-get install gcc make libglib2.0-dev libjpeg62-dev libpng12-dev wget</programlisting>
+      <programlisting>yum install mono</programlisting>
       <para>
-        First, let's install <filename>libgdiplus</filename>:
-      </para>
-      <programlisting>wget http://go-mono.com/sources/libgdiplus-1.1/libgdiplus-1.1.13.2.tar.gz
-tar xzf libgdiplus-1.1.8.tar.gz
-cd libgdiplus-1.1.8
-./configure --prefix=/usr/local
-make
-make install
-ldconfig</programlisting>
-      <para>
-        The Mono installation can now be performed:
-      </para>
-      <programlisting>wget http://www.go-mono.com/sources/mono-1.1/mono-1.1.13.2.tar.gz
-tar xzf mono-1.1.8.tar.gz
-cd mono-1.1.8
-./configure --prefix=/usr/local
-make
-make install</programlisting>
-      <note>
-        Mono compilation can take a while to finish.
-      </note>
-      <para>
-        If nothing went wrong, Mono is now installed in
-        <filename>/usr/local/bin/mono</filename>, and is ready to
-        power SunUO.
+        Also ensure that the Mono C# Compiler
+        (<filename>mcs</filename>) is installed, SunUO needs it to
+        compile scripts.
       </para>
     </section>
 
