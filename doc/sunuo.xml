@@ -269,6 +269,14 @@
             </thead>
             <tbody>
               <row>
+                <entry>multi-threading</entry>
+                <entry>
+                  enable the multi threaded world save; this gives a
+                  significant speed boost if you have more than one
+                  CPU core
+                </entry>
+              </row>
+              <row>
                 <entry>manual-gc</entry>
                 <entry>
                   run the CLI's garbage collector manually after world
@@ -364,22 +372,6 @@
 
     <section id="config_tricks">
       <title>Tricks</title>
-
-      <section id="multithreading">
-        <title>Multithreading</title>
-        <para>
-          If you have multiple CPUs (SMP), you can take advantage of
-          that by using multithreaded programs. SunUO is based on
-          RunUO, which is unfortunately not a thread safe code
-          base. However, during world save, it is possible to enable
-          multithreading:
-        </para>
-        <programlisting>&lt;sunuo-config&gt;
-  &lt;global&gt;
-    &lt;multi-threading value="on"/&gt;
-  &lt;/global&gt;
-&lt;/sunuo-config&gt;</programlisting>
-      </section>
 
       <section id="login_server">
         <title>Separating login server from shard server</title>
