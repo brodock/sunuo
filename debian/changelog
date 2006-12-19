@@ -30,6 +30,7 @@ sunuo (0.3.2) unstable; urgency=low
     - display "SunUO" in UOGInfo packet
     - use Config.ConfigDirectory, Config.BackupDirectory
     - get IPLimiter config from Config.Login
+    - get AccountHandler.MaxAccountsPerIP from Config.Login
     - don't read data-path from stdin
     - removed DataPath.CustomPath
     - don't try to dns-resolve hostname, just use LocalEndPoint

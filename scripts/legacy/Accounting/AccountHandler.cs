@@ -12,8 +12,8 @@ namespace Server.Misc
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		private static int MaxAccountsPerIP = 1;
-		private static bool AutoAccountCreation = true;
+		private static readonly int MaxAccountsPerIP = Core.Config.Login.MaxCreatedAccountsPerIP;
+		private static readonly bool AutoAccountCreation = Core.Config.Login.AutoCreateAccounts;
 		private static bool RestrictDeletion = true;
 		private static TimeSpan DeleteDelay = TimeSpan.FromDays( 7.0 );
 
