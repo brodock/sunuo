@@ -339,6 +339,46 @@
         </table>
       </section>
 
+      <section id="config_accounting">
+        <title>Accounting</title>
+
+        <section id="auto_create_accounts">
+          <title>Disable auto-accounting</title>
+
+          <para>
+            By default, everybody can create new accounts by just
+            typing a new user name at login.  To disable this,
+            configure:
+          </para>
+
+          <programlisting>&lt;sunuo-config&gt;
+  &lt;login&gt;
+    &lt;auto-create-accounts value="no"/&gt;
+  &lt;/login&gt;
+&lt;/sunuo-config&gt;</programlisting>
+        </section>
+
+        <section id="max_logins_per_ip">
+          <title>Limit number of logins per IP</title>
+
+          <programlisting>&lt;sunuo-config&gt;
+  &lt;login&gt;
+    &lt;max-logins-per-ip value="2"/&gt;
+  &lt;/login&gt;
+&lt;/sunuo-config&gt;</programlisting>
+        </section>
+
+        <section id="max_created_accounts_per_ip">
+          <title>Limit number of account creations per IP</title>
+
+          <programlisting>&lt;sunuo-config&gt;
+  &lt;login&gt;
+    &lt;max-created-accounts-per-ip value="1"/&gt;
+  &lt;/login&gt;
+&lt;/sunuo-config&gt;</programlisting>
+        </section>
+      </section>
+
       <section id="config_encryption">
         <title>Encryption</title>
         <para>
