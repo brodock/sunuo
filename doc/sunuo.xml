@@ -396,8 +396,11 @@
       <title>Working around RunUO bugs</title>
       <anchor id="working_around_runuo_bugs"/>
       <para>
-        Many scripts are written in a non-portable way, or just
-        buggy. This section is a collection of workarounds.
+        Many of the original RunUO scripts are written in a
+        non-portable way, or just buggy.  This section is a collection
+        of workarounds.  You do not need to read this section if you
+        did not upgrade from RunUO, since the SunUO scripts have been
+        corrected.
       </para>
 
       <section id="bugged_restart">
