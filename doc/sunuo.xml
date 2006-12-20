@@ -100,8 +100,9 @@
 
       <para>
         If everything is set up, you can start your new SunUO server
-        by running <filename>SunUO.exe</filename> (or better
-        <filename>./sunuo.sh</filename> if you're on Linux).
+        by running <filename>run.bat</filename> (Windows) or
+        <filename>./run.sh</filename> (all other operating systems,
+        including Linux).
       </para>
 
       <para>
@@ -145,9 +146,9 @@
         </listitem>
         <listitem>
           <para>
-            Start SunUO by running <filename>SunUO.exe</filename> (or
-            better <filename>./sunuo.sh</filename> if you're on
-            Linux).
+            Start SunUO by running <filename>run.bat</filename> (Windows) or
+            <filename>./run.sh</filename> (all other operating systems,
+            including Linux).
           </para>
         </listitem>
       </orderedlist>

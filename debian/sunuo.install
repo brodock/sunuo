@@ -1,6 +1,6 @@
 conf/sunuo.xml etc/sunuo/skel
 conf/SunUO.exe.config etc/sunuo/skel
 build/SunUO.exe{,.mdb} usr/share/sunuo
-sunuo.sh usr/share/sunuo/libexec
-debian/bin/wrapper sunuo.sh usr/share/sunuo
+run.sh usr/share/sunuo/libexec
+debian/bin/wrapper usr/share/sunuo
 debian/bin/sunuo-control usr/sbin

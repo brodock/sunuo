@@ -329,7 +329,7 @@ namespace Server
 				/* the environment variable SUNUO_EXIT specifies which
 				   exit code expresses "we're exiting and don't want
 				   to be restarted"; at the same time, we know we've
-				   been started from sunuo.sh */
+				   been started from run.sh */
 				string value = Environment.GetEnvironmentVariable("SUNUO_EXIT");
 				if (value != null)
 					sunuo_exit = Int32.Parse(value);

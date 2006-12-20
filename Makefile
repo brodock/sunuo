@@ -58,7 +58,7 @@ clean:
 
 install: all
 	install -d -m 0755 $(SUNUO_BASE) $(SUNUO_BASE)/etc $(SUNUO_BASE)/local $(SUNUO_BASE)/local/lib
-	install -m 0755 sunuo.sh build/SunUO.exe $(SUNUO_BASE)/
+	install -m 0755 run.sh build/SunUO.exe $(SUNUO_BASE)/
 	test -f build/SunUO.exe.mdb && install -m 0644 build/SunUO.exe.mdb $(SUNUO_BASE)/
 	test -f $(SUNUO_BASE)/SunUO.exe.config || install -m 0644 conf/SunUO.exe.config $(SUNUO_BASE)/
 	test -f $(SUNUO_BASE)/SunLogin.exe.config || install -m 0644 conf/SunLogin.exe.config $(SUNUO_BASE)/
@@ -125,7 +125,7 @@ $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
-$(DISTDIR)/sunuo.sh $(DISTDIR)/sunuo.bat: $(DISTDIR)/%: %
+$(DISTDIR)/run.sh $(DISTDIR)/run.bat: $(DISTDIR)/%: %
 	@mkdir -p $(dir $@)
 	install -m 0755 $< $@
 
@@ -165,7 +165,7 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config sunuo.sh sunuo.bat sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) bin/w32/zlib.dll) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config run.sh run.bat sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) bin/w32/zlib.dll) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
