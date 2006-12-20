@@ -97,7 +97,7 @@ sunuo (0.4.0) unstable; urgency=low
   * sunuo-control: append output to console.log; start new session
   * added wrappers for Mono and Windows
 
- --
+ -- Max Kellermann <max@duempel.org>  Wed, 20 Dec 2006 21:20:03 +0100
 
 sunuo (0.3.1) unstable; urgency=low
 
