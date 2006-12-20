@@ -23,6 +23,8 @@
   <global>
     <multi-threading value="off" />
     <feature name="manual-gc" />
+    <!--<feature name="multi-threading" />-->
+    <!--<feature name="age-of-shadows" />-->
   </global>
   <network>
     <bind port="2593"/>
