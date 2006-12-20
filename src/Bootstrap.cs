@@ -41,6 +41,18 @@ namespace Server
 
 			Console.WriteLine();
 
+			#if MONO
+			if ((int)Environment.OSVersion.Platform != 128) {
+				Console.WriteLine("WARNING: This is the Mono optimized binary, and it will probably crash on Windows!");
+				Console.WriteLine();
+			}
+			#else
+			if ((int)Environment.OSVersion.Platform == 128) {
+				Console.WriteLine("WARNING: This is the Windows optimized binary, and you're running Mono.");
+				Console.WriteLine();
+			}
+			#endif
+
 			/* parse command line */
 
 			bool repair = false, service = false, profiling = false;

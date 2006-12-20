@@ -19,6 +19,20 @@
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
+# copy SunUO.exe from bin/
+
+if ! [ -f SunUO.exe ]; then
+    if [ -f bin/mono/SunUO.exe ]; then
+        cp -v bin/mono/SunUO.exe .
+        if [ -f bin/mono/SunUO.exe.mdb ]; then
+            cp -v bin/mono/SunUO.exe.mdb .
+        fi
+    elif [ -f bin/w32/SunUO.exe ]; then
+        cp -v bin/w32/SunUO.exe .
+        rm -f SunUO.exe.mdb
+    fi
+fi
+
 # a few checks
 
 if ! [ -f SunUO.exe ]; then

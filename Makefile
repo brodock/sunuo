@@ -116,10 +116,10 @@ $(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
-$(DISTDIR)/SunUO.exe $(DISTDIR)/SunLogin.exe $(DISTDIR)/UOGQuery.exe: $(DISTDIR)/%: build/%
+$(DISTDIR)/bin/mono/SunUO.exe: $(DISTDIR)/bin/mono/%: build/%
 	@mkdir -p $(dir $@)
-	test -f $<.mdb && cp $<.mdb $(DISTDIR)/
-	cp $(CP_FLAGS) $< $(DISTDIR)/
+	test -f $<.mdb && cp $(CP_FLAGS) $<.mdb $@.mdb
+	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
 	@mkdir -p $(dir $@)
@@ -161,7 +161,7 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,SunUO.exe SunUO.exe.config SunLogin.exe SunLogin.exe.config UOGQuery.exe sunuo.sh sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL)) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config sunuo.sh sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL)) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
