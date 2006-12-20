@@ -145,6 +145,10 @@ $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
+$(DISTDIR)/bin/w32/zlib.dll: $(DISTDIR)/bin/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
 .PHONY: export-scripts export-data export-saves
 
 export-scripts:
@@ -161,7 +165,7 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config sunuo.sh sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL)) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config sunuo.sh sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) bin/w32/zlib.dll) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
@@ -172,8 +176,9 @@ svn-export:
 	svn export . build/tmp/sunuo-$(VERSION)-src
 
 build/dist/sunuo-$(VERSION)-src.zip: svn-export
-	@mkdir -p build/tmp/sunuo-$(VERSION)-src/lib
+	@mkdir -p build/tmp/sunuo-$(VERSION)-src/lib/w32
 	cp $(addprefix lib/,$(DISTDLL)) build/tmp/sunuo-$(VERSION)-src/lib/
+	cp lib/w32/zlib.dll build/tmp/sunuo-$(VERSION)-src/lib/w32/
 	@mkdir -p $(dir $@)
 	cd build/tmp && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)-src
 	@rm -rf build/tmp
@@ -221,6 +226,18 @@ lib/log4net.dll: download/incubating-log4net-1.2.10.zip
 $(addprefix build/,$(DISTDLL)): build/%: lib/%
 	mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
+
+download/zlib123-dll.zip:
+	@mkdir -p $(dir $@)
+	wget http://www.gzip.org/zlib/zlib123-dll.zip -O $@.tmp
+	mv $@.tmp $@
+
+lib/w32/zlib.dll: download/zlib123-dll.zip
+	rm -rf build/tmp && mkdir -p build/tmp
+	unzip -q -d build/tmp $<
+	@mkdir -p $(dir $@)
+	cp build/tmp/zlib1.dll $@
+	rm -rf build/tmp
 
 endif
 
