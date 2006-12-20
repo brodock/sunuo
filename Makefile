@@ -44,6 +44,10 @@ else
 LOG4NET_DEPS := build/log4net.dll
 endif
 
+ifeq ($(PORTABLE),1)
+DIST_FILES += bin/w32/SunUO.exe bin/w32/zlib.dll
+endif
+
 .PHONY: all core debian-all clean install
 
 all: core build/SunLogin.exe build/UOGQuery.exe $(SCRIPTS_DLL)
@@ -145,9 +149,21 @@ $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
+ifeq ($(PORTABLE),1)
+
+build/w32/SunUO.exe:
+	@mkdir -p $(dir $@)
+	scp dafoe:s/sunuo/build/SunUO.{exe,pdb} $(dir $@)
+
+$(DISTDIR)/bin/w32/SunUO.exe: build/w32/SunUO.exe
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) build/w32/SunUO.exe build/w32/SunUO.pdb $(dir $@)
+
 $(DISTDIR)/bin/w32/zlib.dll: $(DISTDIR)/bin/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
+
+endif
 
 .PHONY: export-scripts export-data export-saves
 
@@ -165,7 +181,7 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config run.sh run.bat sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) bin/w32/zlib.dll) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config run.sh run.bat sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) $(DIST_FILES)) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
