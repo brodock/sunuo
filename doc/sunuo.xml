@@ -330,6 +330,13 @@
                 </entry>
               </row>
               <row>
+                <entry>test-center</entry>
+                <entry>
+                  enable test center rules, i.e. players can set stats
+                  and skills with the "set" command
+                </entry>
+              </row>
+              <row>
                 <entry>allow-docgen</entry>
                 <entry>
                   enable the [docgen command
