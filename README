@@ -1,7 +1,7 @@
 SunUO README
 ============
 
-(c) 2005 Max Kellermann <max@duempel.org>
+(c) 2005-2006 Max Kellermann <max@duempel.org>
 
 $Id$
 
@@ -27,6 +27,16 @@ Most of the documentation has moved to another file written in
 DocBook. There is an online version:
 
  http://www.sunuo.org/doc/sunuo.html
+
+
+For the impatient
+-----------------
+
+1. unpack the SunUO binary zip file
+
+2. edit "etc/sunuo.xml" and enter the correct UO client data path
+
+3. start "run.bat" (Windows/.NET) or "run.sh" (Linux/Mono)
 
 
 Legal
