@@ -453,10 +453,19 @@ namespace Server.Mobiles
 
 			m_End = Core.Now + delay;
 
-			if ( m_Timer != null )
-				m_Timer.Stop();
 
-			m_Timer = new InternalTimer( this, delay );
+			if (m_Timer == null) {
+				m_Timer = new InternalTimer(this, delay);
+			} else {
+				m_Timer.Stop();
+				m_Timer.Delay = delay;
+			}
+
+			if (IsFull)
+				m_Timer.Priority = TimerPriority.FiveSeconds;
+			else
+				m_Timer.Priority = TimerPriority.OneSecond;
+
 			m_Timer.Start();
 		}
 
@@ -466,11 +475,6 @@ namespace Server.Mobiles
 
 			public InternalTimer( Spawner spawner, TimeSpan delay ) : base( delay )
 			{
-				if ( spawner.IsFull )
-					Priority = TimerPriority.FiveSeconds;
-				else
-					Priority = TimerPriority.OneSecond;
-
 				m_Spawner = spawner;
 			}
 
