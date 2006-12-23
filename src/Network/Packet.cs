@@ -31,7 +31,6 @@ namespace Server.Network
 		byte[] Compile(bool compress);
 	}
 
-
 	public abstract class Packet : IPacket
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -47,12 +46,7 @@ namespace Server.Network
 
 		public Packet( int packetID )
 		{
-			m_PacketID = packetID;
-
-			PacketProfile prof = PacketProfile.GetOutgoingProfile( (byte)packetID );
-
-			if ( prof != null )
-				prof.RegConstruct();
+			Initialize(packetID, 0);
 		}
 
 		public void EnsureCapacity( int length )
@@ -64,16 +58,31 @@ namespace Server.Network
 
 		public Packet( int packetID, int length )
 		{
+			Initialize(packetID, length);
+		}
+
+		protected void Initialize(int packetID, int length) {
 			m_PacketID = packetID;
 			m_Length = length;
 
-			m_Stream = PacketWriter.CreateInstance( length );// new PacketWriter( length );
-			m_Stream.Write( (byte) packetID );
+			if (m_Length > 0) {
+				m_Stream = PacketWriter.CreateInstance(length);
+				m_Stream.Write((byte)packetID);
+			}
 
 			PacketProfile prof = PacketProfile.GetOutgoingProfile( (byte)packetID );
 
 			if ( prof != null )
 				prof.RegConstruct();
+		}
+
+		protected void Clear() {
+			m_CompiledBuffer = null;
+
+			if (m_Stream != null) {
+				PacketWriter.ReleaseInstance(m_Stream);
+				m_Stream = null;
+			}
 		}
 
 		public PacketWriter UnderlyingStream
