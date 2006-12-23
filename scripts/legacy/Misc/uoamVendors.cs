@@ -268,8 +268,7 @@ namespace Server
 					MakeSpawner( types, x, y, Map.Malas );
 					break;
 				default:
-					log.Warn(String.Format("UOAM Vendor Parser: unknown map {0}",
-										   map));
+					log.WarnFormat("UOAM Vendor Parser: unknown map {0}", map);
 					break;
 			}
 		}
