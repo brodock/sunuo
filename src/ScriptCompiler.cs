@@ -58,7 +58,8 @@ namespace Server
 			get
 			{
 				ArrayList assemblies = new ArrayList(libraries.Count);
-				foreach (Library l in libraries) {
+				for (int i = libraries.Count - 1; i >= 0; --i) {
+					Library l = (Library)libraries[i];
 					assemblies.Add(l.Assembly);
 				}
 				return (Assembly[])assemblies.ToArray(typeof(Assembly));
