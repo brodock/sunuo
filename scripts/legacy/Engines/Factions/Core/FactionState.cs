@@ -24,7 +24,7 @@ namespace Server.Factions
 			{
 				for ( int i = 0; i < m_LastBroadcasts.Length; ++i )
 				{
-					if ( DateTime.Now >= (m_LastBroadcasts[i] + BroadcastPeriod) )
+					if ( Core.Now >= (m_LastBroadcasts[i] + BroadcastPeriod) )
 						return true;
 				}
 
@@ -36,9 +36,9 @@ namespace Server.Factions
 		{
 			for ( int i = 0; i < m_LastBroadcasts.Length; ++i )
 			{
-				if ( DateTime.Now >= (m_LastBroadcasts[i] + BroadcastPeriod) )
+				if ( Core.Now >= (m_LastBroadcasts[i] + BroadcastPeriod) )
 				{
-					m_LastBroadcasts[i] = DateTime.Now;
+					m_LastBroadcasts[i] = Core.Now;
 					break;
 				}
 			}

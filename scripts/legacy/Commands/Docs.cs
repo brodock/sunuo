@@ -25,11 +25,11 @@ namespace Server.Scripts.Commands
 		{
 			World.Broadcast( 0x35, true, "Documentation is being generated, please wait." );
 
-			DateTime startTime = DateTime.Now;
+			DateTime startTime = Core.Now;
 
 			Document();
 
-			DateTime endTime = DateTime.Now;
+			DateTime endTime = Core.Now;
 
 			World.Broadcast( 0x35, true, "Documentation has been completed. The entire process took {0:F1} seconds.", (endTime - startTime).TotalSeconds );
 		}

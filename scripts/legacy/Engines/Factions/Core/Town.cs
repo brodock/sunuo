@@ -65,7 +65,7 @@ namespace Server.Factions
 
 		public bool TaxChangeReady
 		{
-			get{ return ( m_State.LastTaxChange + TaxChangePeriod ) < DateTime.Now; }
+			get{ return ( m_State.LastTaxChange + TaxChangePeriod ) < Core.Now; }
 		}
 
 		public static Town FromRegion( Region reg )
@@ -222,7 +222,7 @@ namespace Server.Factions
 
 		public void CheckIncome()
 		{
-			if ( (LastIncome + IncomePeriod) > DateTime.Now || Owner == null )
+			if ( (LastIncome + IncomePeriod) > Core.Now || Owner == null )
 				return;
 
 			ProcessIncome();
@@ -230,7 +230,7 @@ namespace Server.Factions
 
 		public void ProcessIncome()
 		{
-			LastIncome = DateTime.Now;
+			LastIncome = Core.Now;
 
 			int flow = NetCashFlow;
 
@@ -442,7 +442,7 @@ namespace Server.Factions
 				return;
 
 			if ( m_State.Owner == null ) // going from unowned to owned
-				LastIncome = DateTime.Now;
+				LastIncome = Core.Now;
 			else if ( f == null ) // going from owned to unowned
 				LastIncome = DateTime.MinValue;
 			// otherwise changing hands, income timer doesn't change

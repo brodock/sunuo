@@ -94,7 +94,7 @@ namespace Server.SkillHandlers
 					}
 					else if ( m_Creature != creature )
 					{
-						from.NextSkillTime = DateTime.Now + TimeSpan.FromSeconds( 10.0 );
+						from.NextSkillTime = Core.Now + TimeSpan.FromSeconds( 10.0 );
 
 						double diff = ((m_Instrument.GetDifficultyFor( m_Creature ) + m_Instrument.GetDifficultyFor( creature )) * 0.5) - 5.0;
 						double music = from.Skills[SkillName.Musicianship].Value;

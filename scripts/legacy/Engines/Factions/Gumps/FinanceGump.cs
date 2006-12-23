@@ -209,7 +209,7 @@ namespace Server.Factions
 
 							if ( m_From.AccessLevel == AccessLevel.Player && !m_Town.TaxChangeReady )
 							{
-								TimeSpan remaining = DateTime.Now - ( m_Town.LastTaxChange + Town.TaxChangePeriod );
+								TimeSpan remaining = Core.Now - ( m_Town.LastTaxChange + Town.TaxChangePeriod );
 
 								if ( remaining.TotalMinutes < 4 )
 									m_From.SendLocalizedMessage( 1042165 ); // You must wait a short while before changing prices again.
@@ -227,7 +227,7 @@ namespace Server.Factions
 								m_Town.Tax = newTax;
 
 								if ( m_From.AccessLevel == AccessLevel.Player )
-									m_Town.LastTaxChange = DateTime.Now;
+									m_Town.LastTaxChange = Core.Now;
 							}
 
 							break;

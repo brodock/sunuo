@@ -23,7 +23,7 @@ namespace Server.Accounting
 		public string Content
 		{
 			get{ return m_Content; }
-			set{ m_Content = value; m_LastModified = DateTime.Now; }
+			set{ m_Content = value; m_LastModified = Core.Now; }
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Server.Accounting
 		{
 			m_AddedBy = addedBy;
 			m_Content = content;
-			m_LastModified = DateTime.Now;
+			m_LastModified = Core.Now;
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Server.Accounting
 		public AccountComment( XmlElement node )
 		{
 			m_AddedBy = Accounts.GetAttribute( node, "addedBy", "empty" );
-			m_LastModified = Accounts.GetDateTime( Accounts.GetAttribute( node, "lastModified" ), DateTime.Now );
+			m_LastModified = Accounts.GetDateTime( Accounts.GetAttribute( node, "lastModified" ), Core.Now );
 			m_Content = Accounts.GetText( node, "" );
 		}
 

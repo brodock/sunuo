@@ -428,7 +428,7 @@ namespace Server.Factions
 			if ( pl == null || !pl.IsLeaving )
 				return false;
 
-			if ( (pl.Leaving + LeavePeriod) >= DateTime.Now )
+			if ( (pl.Leaving + LeavePeriod) >= Core.Now )
 				return false;
 
 			mob.SendLocalizedMessage( 1005163 ); // You have now quit your faction
@@ -745,12 +745,12 @@ namespace Server.Factions
 			{
 				Sigil sigil = sigils[i];
 
-				if ( !sigil.IsBeingCorrupted && sigil.GraceStart != DateTime.MinValue && (sigil.GraceStart + Sigil.CorruptionGrace) < DateTime.Now )
+				if ( !sigil.IsBeingCorrupted && sigil.GraceStart != DateTime.MinValue && (sigil.GraceStart + Sigil.CorruptionGrace) < Core.Now )
 				{
 					if ( sigil.LastMonolith is StrongholdMonolith )
 					{
 						sigil.Corrupting = sigil.LastMonolith.Faction;
-						sigil.CorruptionStart = DateTime.Now;
+						sigil.CorruptionStart = Core.Now;
 					}
 					else
 					{
@@ -763,19 +763,19 @@ namespace Server.Factions
 
 				if ( sigil.LastMonolith == null || sigil.LastMonolith.Sigil == null )
 				{
-					if ( (sigil.LastStolen + Sigil.ReturnPeriod) < DateTime.Now )
+					if ( (sigil.LastStolen + Sigil.ReturnPeriod) < Core.Now )
 						sigil.ReturnHome();
 				}
 				else
 				{
-					if ( sigil.IsBeingCorrupted && (sigil.CorruptionStart + Sigil.CorruptionPeriod) < DateTime.Now )
+					if ( sigil.IsBeingCorrupted && (sigil.CorruptionStart + Sigil.CorruptionPeriod) < Core.Now )
 					{
 						sigil.Corrupted = sigil.Corrupting;
 						sigil.Corrupting = null;
 						sigil.CorruptionStart = DateTime.MinValue;
 						sigil.GraceStart = DateTime.MinValue;
 					}
-					else if ( sigil.IsPurifying && (sigil.PurificationStart + Sigil.PurificationPeriod) < DateTime.Now )
+					else if ( sigil.IsPurifying && (sigil.PurificationStart + Sigil.PurificationPeriod) < Core.Now )
 					{
 						sigil.PurificationStart = DateTime.MinValue;
 						sigil.Corrupted = null;

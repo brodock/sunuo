@@ -55,7 +55,7 @@ namespace Server.Items
 		{
 			m_Owner = owner;
 			m_Level = level;
-			m_DeleteTime = DateTime.Now + TimeSpan.FromHours( 3.0 );
+			m_DeleteTime = Core.Now + TimeSpan.FromHours( 3.0 );
 
 			m_Temporary = temporary;
 			m_Guardians = new ArrayList();
@@ -486,7 +486,7 @@ namespace Server.Items
 		{
 			private Item m_Item;
 
-			public DeleteTimer( Item item, DateTime time ) : base( time - DateTime.Now )
+			public DeleteTimer( Item item, DateTime time ) : base( time - Core.Now )
 			{
 				m_Item = item;
 				Priority = TimerPriority.OneMinute;

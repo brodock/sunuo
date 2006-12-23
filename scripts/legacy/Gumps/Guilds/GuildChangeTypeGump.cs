@@ -53,7 +53,7 @@ namespace Server.Gumps
 			{
 				m_Mobile.SendLocalizedMessage( 1010405 ); // You cannot change guild types while in a Faction!
 			}
-			else if ( m_Guild.TypeLastChange.AddDays( 7 ) > DateTime.Now )
+			else if ( m_Guild.TypeLastChange.AddDays( 7 ) > Core.Now )
 			{
 				m_Mobile.SendLocalizedMessage( 1005292 ); // Your guild type will be changed in one week.
 			}

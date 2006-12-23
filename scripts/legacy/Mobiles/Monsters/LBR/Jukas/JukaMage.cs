@@ -64,7 +64,7 @@ namespace Server.Mobiles
 
 			PackItem( new ArcaneGem() );
 
-			m_NextAbilityTime = DateTime.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 2, 5 ) );
+			m_NextAbilityTime = Core.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 2, 5 ) );
 		}
 
 		public override void GenerateLoot()
@@ -101,7 +101,7 @@ namespace Server.Mobiles
 
 		public override void OnThink()
 		{
-			if ( DateTime.Now >= m_NextAbilityTime )
+			if ( Core.Now >= m_NextAbilityTime )
 			{
 				JukaLord toBuff = null;
 
@@ -118,7 +118,7 @@ namespace Server.Mobiles
 				{
 					if ( CanBeBeneficial( toBuff ) && toBuff.BeginAction( typeof( JukaMage ) ) )
 					{
-						m_NextAbilityTime = DateTime.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 30, 60 ) );
+						m_NextAbilityTime = Core.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 30, 60 ) );
 
 						toBuff.Say( true, "Give me the power to destroy my enemies!" );
 						this.Say( true, "Fight well my lord!" );
@@ -161,7 +161,7 @@ namespace Server.Mobiles
 				}
 				else
 				{
-					m_NextAbilityTime = DateTime.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 2, 5 ) );
+					m_NextAbilityTime = Core.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 2, 5 ) );
 				}
 			}
 

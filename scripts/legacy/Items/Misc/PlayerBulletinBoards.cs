@@ -249,7 +249,7 @@ namespace Server.Items
 
 				if ( text.Length > 0 )
 				{
-					PlayerBBMessage message = new PlayerBBMessage( DateTime.Now, from, text );
+					PlayerBBMessage message = new PlayerBBMessage( Core.Now, from, text );
 
 					if ( m_Greeting )
 					{

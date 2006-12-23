@@ -58,7 +58,7 @@ namespace Server.Guilds
 
 			m_Members = new ArrayList();
 
-			m_LastFealty = DateTime.Now;
+			m_LastFealty = Core.Now;
 
 			m_Name = name;
 			m_Abbreviation = abbreviation;
@@ -74,7 +74,7 @@ namespace Server.Guilds
 
 		public override void Serialize( GenericWriter writer )
 		{
-			if ( this.LastFealty+TimeSpan.FromDays( 1.0 ) < DateTime.Now )
+			if ( this.LastFealty+TimeSpan.FromDays( 1.0 ) < Core.Now )
 				this.CalculateGuildmaster();
 			
 			writer.Write( (int) 4 );//version
@@ -344,7 +344,7 @@ namespace Server.Guilds
 				GuildMessage( 1018015, winner.Name ); // Guild Message: Guildmaster changed to:
 
 			m_Leader = winner;
-			m_LastFealty = DateTime.Now;
+			m_LastFealty = Core.Now;
 		}
 
 		[CommandProperty( AccessLevel.GameMaster )]
@@ -442,7 +442,7 @@ namespace Server.Guilds
 				if ( m_Type != value )
 				{
 					m_Type = value;
-					m_TypeLastChange = DateTime.Now;
+					m_TypeLastChange = Core.Now;
 
 					InvalidateMemberProperties();
 				}

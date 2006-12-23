@@ -46,7 +46,7 @@ namespace Server.Mobiles
 
 			//PackNecroScroll( 12 ); // Vampiric Embrace
 
-			m_NextAbilityTime = DateTime.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 2, 5 ) );
+			m_NextAbilityTime = Core.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 2, 5 ) );
 		}
 
 		public override void GenerateLoot()
@@ -175,13 +175,13 @@ namespace Server.Mobiles
 
 		public override void OnThink()
 		{
-			if ( DateTime.Now >= m_NextAbilityTime )
+			if ( Core.Now >= m_NextAbilityTime )
 			{
 				Mobile combatant = this.Combatant;
 
 				if ( combatant != null && combatant.Map == this.Map && combatant.InRange( this, 12 ) )
 				{
-					m_NextAbilityTime = DateTime.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 10, 15 ) );
+					m_NextAbilityTime = Core.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 10, 15 ) );
 
 					int ability = Utility.Random( 4 );
 

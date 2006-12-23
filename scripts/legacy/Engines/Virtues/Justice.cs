@@ -171,12 +171,12 @@ namespace Server
 
 			try
 			{
-				if ( (pm.LastJusticeLoss + LossDelay) < DateTime.Now )
+				if ( (pm.LastJusticeLoss + LossDelay) < Core.Now )
 				{
 					if ( VirtueHelper.Atrophy( from, VirtueName.Justice ) )
 						from.SendLocalizedMessage( 1049373 ); // You have lost some Justice.
 
-					pm.LastJusticeLoss = DateTime.Now;
+					pm.LastJusticeLoss = Core.Now;
 				}
 			}
 			catch

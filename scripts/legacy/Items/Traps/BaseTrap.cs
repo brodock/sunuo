@@ -45,15 +45,15 @@ namespace Server.Items
 			if ( m.Location == oldLocation )
 				return;
 
-			if ( CheckRange( m.Location, oldLocation, 0 ) && DateTime.Now >= m_NextActiveTrigger )
+			if ( CheckRange( m.Location, oldLocation, 0 ) && Core.Now >= m_NextActiveTrigger )
 			{
-				m_NextActiveTrigger = m_NextPassiveTrigger = DateTime.Now + ResetDelay;
+				m_NextActiveTrigger = m_NextPassiveTrigger = Core.Now + ResetDelay;
 
 				OnTrigger( m );
 			}
-			else if ( PassivelyTriggered && CheckRange( m.Location, oldLocation, PassiveTriggerRange ) && DateTime.Now >= m_NextPassiveTrigger )
+			else if ( PassivelyTriggered && CheckRange( m.Location, oldLocation, PassiveTriggerRange ) && Core.Now >= m_NextPassiveTrigger )
 			{
-				m_NextPassiveTrigger = DateTime.Now + PassiveTriggerDelay;
+				m_NextPassiveTrigger = Core.Now + PassiveTriggerDelay;
 
 				OnTrigger( m );
 			}

@@ -101,14 +101,14 @@ namespace Server.Spells.Necromancy
 			{
 				m_Caster = caster;
 				m_Target = target;
-				m_End = DateTime.Now + delay;
+				m_End = Core.Now + delay;
 
 				Priority = TimerPriority.TwoFiftyMS;
 			}
 
 			protected override void OnTick()
 			{
-				if ( m_Caster.Deleted || m_Target.Deleted || !m_Caster.Alive || !m_Target.Alive || DateTime.Now >= m_End )
+				if ( m_Caster.Deleted || m_Target.Deleted || !m_Caster.Alive || !m_Target.Alive || Core.Now >= m_End )
 				{
 					m_Caster.SendLocalizedMessage( 1061620 ); // Your Blood Oath has been broken.
 					m_Target.SendLocalizedMessage( 1061620 ); // Your Blood Oath has been broken.

@@ -31,10 +31,10 @@ namespace Server
 
 			try
 			{
-				if ( (pm.LastCompassionLoss + LossDelay) < DateTime.Now )
+				if ( (pm.LastCompassionLoss + LossDelay) < Core.Now )
 				{
 					VirtueHelper.Atrophy( from, VirtueName.Compassion );
-					pm.LastCompassionLoss = DateTime.Now;
+					pm.LastCompassionLoss = Core.Now;
 				}
 			}
 			catch

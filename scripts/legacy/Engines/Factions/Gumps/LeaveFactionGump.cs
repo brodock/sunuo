@@ -46,7 +46,7 @@ namespace Server.Factions
 
 						if ( pl != null )
 						{
-							pl.Leaving = DateTime.Now;
+							pl.Leaving = Core.Now;
 
 							if ( Faction.LeavePeriod == TimeSpan.FromDays( 7.0 ) )
 								m_From.SendLocalizedMessage( 1005065 ); // You will be removed from the faction in 7 days
@@ -69,7 +69,7 @@ namespace Server.Factions
 
 							if ( pl != null )
 							{
-								pl.Leaving = DateTime.Now;
+								pl.Leaving = Core.Now;
 
 								if ( Faction.LeavePeriod == TimeSpan.FromDays( 7.0 ) )
 									mob.SendLocalizedMessage( 1005060 ); // Your guild will quit the faction in 7 days

@@ -92,7 +92,7 @@ namespace Server.Items
 			{
 				AggressorInfo info = (AggressorInfo)m.Aggressed[i];
 
-				if ( DateTime.Now - info.LastCombatTime < time )
+				if ( Core.Now - info.LastCombatTime < time )
 					return true;
 			}
 
@@ -101,7 +101,7 @@ namespace Server.Items
 
 		private bool CheckUse( Mobile from )
 		{
-			DateTime now = DateTime.Now;
+			DateTime now = Core.Now;
 
 			if ( this.Deleted || !this.IsAccessibleTo( from ) )
 			{
@@ -511,7 +511,7 @@ namespace Server.Items
 				fromSkill.Base = skillValue;
 				m_Stone.SkillValue = 0.0;
 
-				m_Stone.NextUse = DateTime.Now + UseDelay;
+				m_Stone.NextUse = Core.Now + UseDelay;
 
 				from.SendLocalizedMessage( 1070713 ); // You have successfully absorbed the Soulstone's skill points.
 

@@ -219,12 +219,12 @@ namespace Server.Menus.Questions
 			public CloseTimer( Mobile m ) : base( TimeSpan.Zero, TimeSpan.FromSeconds( 1.0 ) )
 			{
 				m_Mobile = m;
-				m_End = DateTime.Now + TimeSpan.FromMinutes( 3.0 );
+				m_End = Core.Now + TimeSpan.FromMinutes( 3.0 );
 			}
 
 			protected override void OnTick()
 			{
-				if ( m_Mobile.NetState == null || DateTime.Now > m_End )
+				if ( m_Mobile.NetState == null || Core.Now > m_End )
 				{
 					m_Mobile.Frozen = false;
 					m_Mobile.CloseGump( typeof( StuckMenu ) );
@@ -250,12 +250,12 @@ namespace Server.Menus.Questions
 
 				m_Mobile = mobile;
 				m_Destination = destination;
-				m_End = DateTime.Now + delay;
+				m_End = Core.Now + delay;
 			}
 
 			protected override void OnTick()
 			{
-				if ( DateTime.Now < m_End )
+				if ( Core.Now < m_End )
 				{
 					m_Mobile.Frozen = true;
 				}

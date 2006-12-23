@@ -84,12 +84,12 @@ namespace Server.Scripts.Commands
 				return;
 			}
 
-			DateTime time = DateTime.Now;
+			DateTime time = Core.Now;
 
 			int built = BuildObjects( from, type, start, end, args, props, packs );
 
 			if ( built > 0 )
-				from.SendMessage( "{0} object{1} generated in {2:F1} seconds.", built, built != 1 ? "s" : "", (DateTime.Now - time).TotalSeconds );
+				from.SendMessage( "{0} object{1} generated in {2:F1} seconds.", built, built != 1 ? "s" : "", (Core.Now - time).TotalSeconds );
 			else
 				SendUsage( type, from );
 		}

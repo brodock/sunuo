@@ -93,7 +93,7 @@ namespace Server.Spells.Fifth
 			{
 				from.SendLocalizedMessage( 501943 ); // Target cannot be seen. Try again.
 				from.Target = new InternalTarget( m_Owner );
-				from.Target.BeginTimeout( from, TimeoutTime - DateTime.Now );
+				from.Target.BeginTimeout( from, TimeoutTime - Core.Now );
 				m_Owner = null;
 			}
 

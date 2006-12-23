@@ -61,7 +61,7 @@ namespace Server.Items
 
 		public static bool CheckTime( DateTime time, TimeSpan range )
 		{
-			return (time + range) < DateTime.Now;
+			return (time + range) < Core.Now;
 		}
 
 		public static string FormatTS( TimeSpan ts )
@@ -176,7 +176,7 @@ namespace Server.Items
 		public void PostMessage( Mobile from, BulletinMessage thread, string subject, string[] lines )
 		{
 			if ( thread != null )
-				thread.LastPostTime = DateTime.Now;
+				thread.LastPostTime = Core.Now;
 
 			AddItem( new BulletinMessage( from, thread, subject, lines ) );
 		}
@@ -356,7 +356,7 @@ namespace Server.Items
 
 			m_Poster = poster;
 			m_Subject = subject;
-			m_Time = DateTime.Now;
+			m_Time = Core.Now;
 			m_LastPostTime = m_Time;
 			m_Thread = thread;
 			m_PostedName = m_Poster.Name;

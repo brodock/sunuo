@@ -55,10 +55,10 @@ namespace Server.Mobiles
 		{
 			base.OnThink();
 
-			if ( DateTime.Now < m_NextPickup )
+			if ( Core.Now < m_NextPickup )
 				return;
 
-			m_NextPickup = DateTime.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 5, 10 ) );
+			m_NextPickup = Core.Now + TimeSpan.FromSeconds( Utility.RandomMinMax( 5, 10 ) );
 
 			Container pack = this.Backpack;
 
@@ -85,7 +85,7 @@ namespace Server.Mobiles
 				bool rejected;
 				LRReason reject;
 
-				NextActionTime = DateTime.Now;
+				NextActionTime = Core.Now;
 
 				Lift( item, item.Amount, out rejected, out reject );
 

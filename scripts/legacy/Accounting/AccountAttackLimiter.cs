@@ -38,7 +38,7 @@ namespace Server.Accounting
 			if ( accessLog == null )
 				return true;
 
-			return ( DateTime.Now >= (accessLog.LastAccessTime + ComputeThrottle( accessLog.Counts )) );
+			return ( Core.Now >= (accessLog.LastAccessTime + ComputeThrottle( accessLog.Counts )) );
 		}
 
 		private static ArrayList m_List = new ArrayList();
@@ -118,7 +118,7 @@ namespace Server.Accounting
 
 		public bool HasExpired
 		{
-			get{ return ( DateTime.Now >= ( m_LastAccessTime + TimeSpan.FromHours( 1.0 ) ) ); }
+			get{ return ( Core.Now >= ( m_LastAccessTime + TimeSpan.FromHours( 1.0 ) ) ); }
 		}
 
 		public int Counts
@@ -129,7 +129,7 @@ namespace Server.Accounting
 
 		public void RefreshAccessTime()
 		{
-			m_LastAccessTime = DateTime.Now;
+			m_LastAccessTime = Core.Now;
 		}
 
 		public InvalidAccountAccessLog( IPAddress address )

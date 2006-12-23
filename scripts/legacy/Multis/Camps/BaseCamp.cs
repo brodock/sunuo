@@ -45,7 +45,7 @@ namespace Server.Multis
 				m_DecayTimer.Stop();
 
 			if ( setDecayTime )
-				m_DecayTime = DateTime.Now + DecayDelay;
+				m_DecayTime = Core.Now + DecayDelay;
 
 			m_DecayTimer = Timer.DelayCall( DecayDelay, new TimerCallback( Delete ) );
 		}

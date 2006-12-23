@@ -98,7 +98,7 @@ namespace Server.Engines.Help
 			{
 				SpeechLogEntry entry = (SpeechLogEntry) m_Queue.Peek();
 
-				if ( DateTime.Now - entry.Created > EntryDuration )
+				if ( Core.Now - entry.Created > EntryDuration )
 					m_Queue.Dequeue();
 				else
 					break;
@@ -130,7 +130,7 @@ namespace Server.Engines.Help
 		{
 			m_From = from;
 			m_Speech = speech;
-			m_Created = DateTime.Now;
+			m_Created = Core.Now;
 		}
 	}
 }

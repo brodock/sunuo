@@ -578,7 +578,7 @@ namespace Server.Items
 				}
 			}
 
-			from.NextCombatTime = DateTime.Now + GetDelay( from );
+			from.NextCombatTime = Core.Now + GetDelay( from );
 
 			if ( UseSkillMod && m_AccuracyLevel != WeaponAccuracyLevel.Regular )
 			{
@@ -631,7 +631,7 @@ namespace Server.Items
 				m.RemoveStatMod( modName + "Int" );
 
 				if ( weapon != null )
-					m.NextCombatTime = DateTime.Now + weapon.GetDelay( m );
+					m.NextCombatTime = Core.Now + weapon.GetDelay( m );
 
 				if ( UseSkillMod && m_SkillMod != null )
 				{

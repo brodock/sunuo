@@ -327,10 +327,10 @@ namespace Server.Misc
 
 		public static void GainStat( Mobile from, Stat stat )
 		{
-			if ( (from.LastStatGain + m_StatGainDelay) >= DateTime.Now )
+			if ( (from.LastStatGain + m_StatGainDelay) >= Core.Now )
 				return;
 
-			from.LastStatGain = DateTime.Now;
+			from.LastStatGain = Core.Now;
 
 			bool atrophy = ( (from.RawStatTotal / (double)from.StatCap) >= Utility.RandomDouble() );
 

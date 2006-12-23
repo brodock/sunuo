@@ -231,7 +231,7 @@ namespace Server.Factions
 		private void BeginCorrupting( Faction faction )
 		{
 			m_Corrupting = faction;
-			m_CorruptionStart = DateTime.Now;
+			m_CorruptionStart = Core.Now;
 		}
 
 		private void ClearCorrupting()
@@ -248,7 +248,7 @@ namespace Server.Factions
 				if ( !IsBeingCorrupted )
 					return TimeSpan.Zero;
 
-				TimeSpan ts = ( m_CorruptionStart + CorruptionPeriod ) - DateTime.Now;
+				TimeSpan ts = ( m_CorruptionStart + CorruptionPeriod ) - Core.Now;
 
 				if ( ts < TimeSpan.Zero )
 					ts = TimeSpan.Zero;
@@ -317,7 +317,7 @@ namespace Server.Factions
 							if ( m_Corrupted != newController )
 								BeginCorrupting( newController );
 						}
-						else if ( m_GraceStart > DateTime.MinValue && (m_GraceStart + CorruptionGrace) < DateTime.Now )
+						else if ( m_GraceStart > DateTime.MinValue && (m_GraceStart + CorruptionGrace) < Core.Now )
 						{
 							if ( m_Corrupted != newController )
 								BeginCorrupting( newController ); // grace time over, reset period
@@ -332,7 +332,7 @@ namespace Server.Factions
 						}
 						else if ( m_GraceStart == DateTime.MinValue )
 						{
-							m_GraceStart = DateTime.Now;
+							m_GraceStart = Core.Now;
 						}
 
 						m_PurificationStart = DateTime.MinValue;
@@ -354,7 +354,7 @@ namespace Server.Factions
 						m.Sigil = this;
 
 						m_Corrupting = null;
-						m_PurificationStart = DateTime.Now;
+						m_PurificationStart = Core.Now;
 						m_CorruptionStart = DateTime.MinValue;
 
 						m_Town.Capture( m_Corrupted );

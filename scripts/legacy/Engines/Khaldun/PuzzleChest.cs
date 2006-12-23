@@ -274,7 +274,7 @@ namespace Server.Items
 			}
 			else
 			{
-				m_Guesses[m] = new PuzzleChestSolutionAndTime( DateTime.Now, solution );
+				m_Guesses[m] = new PuzzleChestSolutionAndTime( Core.Now, solution );
 
 				m.SendGump( new StatusGump( correctCylinders, correctColors ) );
 
@@ -667,7 +667,7 @@ namespace Server.Items
 
 			foreach ( DictionaryEntry entry in m_Guesses )
 			{
-				if ( DateTime.Now - ((PuzzleChestSolutionAndTime)entry.Value).When > CleanupTime )
+				if ( Core.Now - ((PuzzleChestSolutionAndTime)entry.Value).When > CleanupTime )
 					toDelete.Add( entry.Key );
 			}
 

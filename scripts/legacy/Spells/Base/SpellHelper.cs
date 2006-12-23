@@ -126,7 +126,7 @@ namespace Server.Spells
 			IList list = m.AggressedOrNull;
 			for (int i = 0; list != null && i < list.Count; ++i) {
 				AggressorInfo info = (AggressorInfo)list[i];
-				if ( info.Defender.Player && (DateTime.Now - info.LastCombatTime) < CombatHeatDelay )
+				if ( info.Defender.Player && (Core.Now - info.LastCombatTime) < CombatHeatDelay )
 					return true;
 			}
 
@@ -137,7 +137,7 @@ namespace Server.Spells
 				{
 					AggressorInfo info = (AggressorInfo)list[i];
 
-					if ( info.Attacker.Player && (DateTime.Now - info.LastCombatTime) < CombatHeatDelay )
+					if ( info.Attacker.Player && (Core.Now - info.LastCombatTime) < CombatHeatDelay )
 						return true;
 				}
 			}

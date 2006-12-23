@@ -34,7 +34,7 @@ namespace Server.Misc
 			if ( acct == null )
 				return;
 
-			DateTime now = DateTime.Now;
+			DateTime now = Core.Now;
 
 			for ( int i = 0; i < m_Givers.Count; ++i )
 			{

@@ -179,7 +179,7 @@ namespace Server.Misc
 					state.Send( new DeleteResult( DeleteResultType.CharBeingPlayed ) );
 					state.Send( new CharacterListUpdate( acct ) );
 				}
-				else if ( RestrictDeletion && DateTime.Now < (m.CreationTime + DeleteDelay) )
+				else if ( RestrictDeletion && Core.Now < (m.CreationTime + DeleteDelay) )
 				{
 					state.Send( new DeleteResult( DeleteResultType.CharTooYoung ) );
 					state.Send( new CharacterListUpdate( acct ) );

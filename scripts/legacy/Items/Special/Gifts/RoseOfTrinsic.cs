@@ -84,7 +84,7 @@ namespace Server.Items
 			m_SpawnTimer = new SpawnTimer( this, delay );
 			m_SpawnTimer.Start();
 
-			m_NextSpawnTime = DateTime.Now + delay;
+			m_NextSpawnTime = Core.Now + delay;
 		}
 
 		private void StopSpawnTimer()
@@ -156,7 +156,7 @@ namespace Server.Items
 			m_Level = (SecureLevel) reader.ReadEncodedInt();
 
 			if ( m_Petals < 10 )
-				StartSpawnTimer( m_NextSpawnTime - DateTime.Now );
+				StartSpawnTimer( m_NextSpawnTime - Core.Now );
 		}
 	}
 

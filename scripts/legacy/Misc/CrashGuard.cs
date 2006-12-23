@@ -185,7 +185,7 @@ namespace Server.Misc
 					op.WriteLine( "SunUO Version {0}.{1}.{3}, Build {2}", ver.Major, ver.Minor, ver.Revision, ver.Build );
 					op.WriteLine( "Operating System: {0}", Environment.OSVersion );
 					op.WriteLine( ".NET Framework: {0}", Environment.Version );
-					op.WriteLine( "Time: {0}", DateTime.Now );
+					op.WriteLine( "Time: {0}", Core.Now );
 
 					try { op.WriteLine( "Mobiles: {0}", World.Mobiles.Count ); }
 					catch {}
@@ -244,7 +244,7 @@ namespace Server.Misc
 
 		private static string GetTimeStamp()
 		{
-			DateTime now = DateTime.Now;
+			DateTime now = Core.Now;
 
 			return String.Format( "{0}-{1}-{2}-{3}-{4}-{5}",
 					now.Day,

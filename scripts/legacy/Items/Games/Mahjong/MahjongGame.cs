@@ -88,7 +88,7 @@ namespace Server.Engines.Mahjong
 			m_WallBreakIndicator = new MahjongWallBreakIndicator( this, new Point2D( 335, 335 ) );
 			m_Dices = new MahjongDices( this );
 			m_Players = new MahjongPlayers( this, MaxPlayers, BaseScore );
-			m_LastReset = DateTime.Now;
+			m_LastReset = Core.Now;
 			m_Level = SecureLevel.CoOwners;
 		}
 
@@ -188,10 +188,10 @@ namespace Server.Engines.Mahjong
 
 		public void ResetGame( Mobile from )
 		{
-			if ( DateTime.Now - m_LastReset < TimeSpan.FromSeconds( 5.0 ) )
+			if ( Core.Now - m_LastReset < TimeSpan.FromSeconds( 5.0 ) )
 				return;
 
-			m_LastReset = DateTime.Now;
+			m_LastReset = Core.Now;
 
 			if ( from != null )
 				m_Players.SendLocalizedMessage( 1062771, from.Name ); // ~1_name~ has reset the game.
@@ -206,10 +206,10 @@ namespace Server.Engines.Mahjong
 
 		public void ResetWalls( Mobile from )
 		{
-			if ( DateTime.Now - m_LastReset < TimeSpan.FromSeconds( 5.0 ) )
+			if ( Core.Now - m_LastReset < TimeSpan.FromSeconds( 5.0 ) )
 				return;
 
-			m_LastReset = DateTime.Now;
+			m_LastReset = Core.Now;
 
 			BuildWalls();
 
@@ -291,7 +291,7 @@ namespace Server.Engines.Mahjong
 					m_ShowScores = reader.ReadBool();
 					m_SpectatorVision = reader.ReadBool();
 
-					m_LastReset = DateTime.Now;
+					m_LastReset = Core.Now;
 
 					break;
 				}

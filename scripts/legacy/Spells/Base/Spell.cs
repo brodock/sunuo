@@ -351,7 +351,7 @@ namespace Server.Spells
 				if ( Core.AOS && m_Caster.Player && type == DisturbType.Hurt )
 					DoHurtFizzle();
 
-				m_Caster.NextSpellTime = DateTime.Now + GetDisturbRecovery();
+				m_Caster.NextSpellTime = Core.Now + GetDisturbRecovery();
 			}
 			else if ( m_State == SpellState.Sequencing )
 			{
@@ -403,7 +403,7 @@ namespace Server.Spells
 
 		public bool Cast()
 		{
-			m_StartCastTime = DateTime.Now;
+			m_StartCastTime = Core.Now;
 
 			if ( Core.AOS && m_Caster.Spell is Spell && ((Spell)m_Caster.Spell).State == SpellState.Sequencing )
 				((Spell)m_Caster.Spell).Disturb( DisturbType.NewCast );
@@ -424,7 +424,7 @@ namespace Server.Spells
 			{
 				m_Caster.SendLocalizedMessage( 502643 ); // You can not cast a spell while frozen.
 			}
-			else if ( CheckNextSpellTime && DateTime.Now < m_Caster.NextSpellTime )
+			else if ( CheckNextSpellTime && Core.Now < m_Caster.NextSpellTime )
 			{
 				m_Caster.SendLocalizedMessage( 502644 ); // You must wait for that spell to have an effect.
 			}
@@ -547,7 +547,7 @@ namespace Server.Spells
 			if ( Core.AOS )
 				return TimeSpan.Zero;
 
-			double delay = 1.0 - Math.Sqrt( (DateTime.Now - m_StartCastTime).TotalSeconds / GetCastDelay().TotalSeconds );
+			double delay = 1.0 - Math.Sqrt( (Core.Now - m_StartCastTime).TotalSeconds / GetCastDelay().TotalSeconds );
 
 			if ( delay < 0.2 )
 				delay = 0.2;
@@ -801,7 +801,7 @@ namespace Server.Spells
 					m_Spell.m_CastTimer = null;
 					m_Spell.m_Caster.OnSpellCast( m_Spell );
 					m_Spell.m_Caster.Region.OnSpellCast( m_Spell.m_Caster, m_Spell );
-					m_Spell.m_Caster.NextSpellTime = DateTime.Now + m_Spell.GetCastRecovery();// Spell.NextSpellDelay;
+					m_Spell.m_Caster.NextSpellTime = Core.Now + m_Spell.GetCastRecovery();// Spell.NextSpellDelay;
 
 					Target originalTarget = m_Spell.m_Caster.Target;
 

@@ -36,7 +36,7 @@ namespace Server
 
 			try
 			{
-				if ( (pm.LastSacrificeLoss + LossDelay) < DateTime.Now )
+				if ( (pm.LastSacrificeLoss + LossDelay) < Core.Now )
 				{
 					if ( VirtueHelper.Atrophy( from, VirtueName.Sacrifice ) )
 						from.SendLocalizedMessage( 1052041 ); // You have lost some Sacrifice.
@@ -53,7 +53,7 @@ namespace Server
 						resurrects = 1;
 
 					pm.AvailableResurrects = resurrects;
-					pm.LastSacrificeLoss = DateTime.Now;
+					pm.LastSacrificeLoss = Core.Now;
 				}
 			}
 			catch
@@ -142,7 +142,7 @@ namespace Server
 			{
 				from.SendLocalizedMessage( 1052017 ); // You do not have enough fame to sacrifice.
 			}
-			else if ( DateTime.Now < (pm.LastSacrificeGain + GainDelay) )
+			else if ( Core.Now < (pm.LastSacrificeGain + GainDelay) )
 			{
 				from.SendLocalizedMessage( 1052016 ); // You must wait approximately one day before sacrificing again.
 			}
@@ -159,7 +159,7 @@ namespace Server
 
 				Timer.DelayCall( TimeSpan.FromSeconds( 1.0 ), new TimerCallback( targ.Delete ) );
 
-				pm.LastSacrificeGain = DateTime.Now;
+				pm.LastSacrificeGain = Core.Now;
 
 				bool gainedPath = false;
 

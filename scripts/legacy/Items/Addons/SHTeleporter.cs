@@ -138,11 +138,11 @@ namespace Server.Items
 		{
 			World.Broadcast( 0x35, true, "Solen hives teleporters are being generated, please wait." );
 
-			DateTime startTime = DateTime.Now;
+			DateTime startTime = Core.Now;
 
 			int count = new SHTeleporterCreator().CreateSHTeleporters();
 
-			DateTime endTime = DateTime.Now;
+			DateTime endTime = Core.Now;
 
 			World.Broadcast( 0x35, true, "{0} solen hives teleporters have been created. The entire process took {1:F1} seconds.", count, (endTime - startTime).TotalSeconds );
 		}

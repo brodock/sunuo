@@ -42,7 +42,7 @@ namespace Server.Engines.Harvest
 
 		public void CheckRespawn()
 		{
-			if ( m_Current == m_Maximum || m_NextRespawn > DateTime.Now )
+			if ( m_Current == m_Maximum || m_NextRespawn > Core.Now )
 				return;
 
 			m_Current = m_Maximum;
@@ -60,7 +60,7 @@ namespace Server.Engines.Harvest
 				double rnd = Utility.RandomDouble();
 
 				m_Current = m_Maximum - amount;
-				m_NextRespawn = DateTime.Now + TimeSpan.FromMinutes( min + (rnd * (max - min)) );
+				m_NextRespawn = Core.Now + TimeSpan.FromMinutes( min + (rnd * (max - min)) );
 			}
 			else
 			{

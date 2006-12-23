@@ -2662,10 +2662,10 @@ namespace Server.Mobiles
 				// I'll add it later
 				//
 				/*
-				if (m_bDetectHidden && DateTime.Now > m_NextDetectHidden)
+				if (m_bDetectHidden && Core.Now > m_NextDetectHidden)
 				{
 					m_Owner.DetectHiden();
-					m_NextDetectHidden = DateTime.Now + TimeSpan.FromSeconds( 0.2 * (double)(150-m_Owner.m_Mobile.Int) );
+					m_NextDetectHidden = Core.Now + TimeSpan.FromSeconds( 0.2 * (double)(150-m_Owner.m_Mobile.Int) );
 				}
 				else
 				{

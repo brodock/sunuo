@@ -42,7 +42,7 @@ namespace Server.SkillHandlers
 			{
 				m_From = from;
 				m_Creature = creature;
-				m_EndTime = DateTime.Now + duration;
+				m_EndTime = Core.Now + duration;
 				m_Scalar = scalar;
 				m_Mods = mods;
 
@@ -99,7 +99,7 @@ namespace Server.SkillHandlers
 			Mobile from = info.m_From;
 			Mobile targ = info.m_Creature;
 
-			if ( DateTime.Now >= info.m_EndTime || targ.Deleted || from.Map != targ.Map || targ.GetDistanceToSqrt( from ) > 16 )
+			if ( Core.Now >= info.m_EndTime || targ.Deleted || from.Map != targ.Map || targ.GetDistanceToSqrt( from ) > 16 )
 			{
 				if ( info.m_Timer != null )
 					info.m_Timer.Stop();

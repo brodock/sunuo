@@ -110,7 +110,7 @@ namespace Server.Spells.Sixth
 				m_Timer = new InternalTimer( this, duration );
 				m_Timer.Start();
 
-				m_End = DateTime.Now + duration;
+				m_End = Core.Now + duration;
 			}
 
 			public override void OnAfterDelete()
@@ -148,7 +148,7 @@ namespace Server.Spells.Sixth
 						m_Caster = reader.ReadMobile();
 						m_End = reader.ReadDeltaTime();
 
-						m_Timer = new InternalTimer( this, m_End - DateTime.Now );
+						m_Timer = new InternalTimer( this, m_End - Core.Now );
 						m_Timer.Start();
 
 						break;
