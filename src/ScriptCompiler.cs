@@ -638,7 +638,8 @@ namespace Server
 
 		public static Type FindTypeByFullName( string fullName, bool ignoreCase )
 		{
-			foreach (Library l in libraries) {
+			for (int i = libraries.Count - 1; i >= 0; --i) {
+				Library l = (Library)libraries[i];
 				Type type = GetTypeCache(l.Assembly).GetTypeByFullName(fullName, ignoreCase);
 				if (type != null)
 					return type;
@@ -654,7 +655,8 @@ namespace Server
 
 		public static Type FindTypeByName( string name, bool ignoreCase )
 		{
-			foreach (Library l in libraries) {
+			for (int i = libraries.Count - 1; i >= 0; --i) {
+				Library l = (Library)libraries[i];
 				Type type = GetTypeCache(l.Assembly).GetTypeByName(name, ignoreCase);
 				if (type != null)
 					return type;
