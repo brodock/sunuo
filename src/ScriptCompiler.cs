@@ -53,6 +53,7 @@ namespace Server
 			return null;
 		}
 
+		[Obsolete]
 		public static Assembly[] Assemblies
 		{
 			get

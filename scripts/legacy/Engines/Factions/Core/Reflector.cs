@@ -90,13 +90,8 @@ namespace Server.Factions
 			m_Factions = new FactionCollection();
 			m_Towns = new TownCollection();
 
-			Assembly[] asms = ScriptCompiler.Assemblies;
-
-			for ( int i = 0; i < asms.Length; ++i )
-			{
-				Assembly asm = asms[i];
-				TypeCache tc = ScriptCompiler.GetTypeCache( asm );
-				Type[] types = tc.Types;
+			foreach (Library l in ScriptCompiler.Libraries) {
+				Type[] types = l.TypeCache.Types;
 
 				for ( int j = 0; j < types.Length; ++j )
 				{
