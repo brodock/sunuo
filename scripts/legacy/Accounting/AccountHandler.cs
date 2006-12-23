@@ -186,7 +186,7 @@ namespace Server.Misc
 				}
 				else
 				{
-					log.Info(String.Format("Client: {0}: Deleting character {1} (0x{2:X})", state, index, m.Serial.Value));
+					log.InfoFormat("Client: {0}: Deleting character {1} (0x{2:X})", state, index, m.Serial.Value);
 
 					acct.Comments.Add( new AccountComment( "System", String.Format( "Character #{0} {1} deleted by {2}", index+1, m, state ) ) );
 
@@ -224,13 +224,13 @@ namespace Server.Misc
 
 					if (MaxAccountsPerIP > 0 && count >= MaxAccountsPerIP)
 					{
-						log.Info(String.Format("Login: {0}: Account '{1}' not created, ip already has {2} account{3}.", state, un, MaxAccountsPerIP, MaxAccountsPerIP == 1 ? "" : "s"));
+						log.InfoFormat("Login: {0}: Account '{1}' not created, ip already has {2} account{3}.", state, un, MaxAccountsPerIP, MaxAccountsPerIP == 1 ? "" : "s");
 						return null;
 					}
 				}
 			}
 
-			log.Info(String.Format("Login: {0}: Creating new account '{1}'", state, un));
+			log.InfoFormat("Login: {0}: Creating new account '{1}'", state, un);
 			return Accounts.AddAccount( un, pw );
 		}
 
@@ -241,7 +241,7 @@ namespace Server.Misc
 				e.Accepted = false;
 				e.RejectReason = ALRReason.InUse;
 
-				log.Info(String.Format("Login: {0}: Past IP limit threshold", e.State));
+				log.InfoFormat("Login: {0}: Past IP limit threshold", e.State);
 
 				return;
 			}
@@ -264,28 +264,28 @@ namespace Server.Misc
 				}
 				else
 				{
-					log.Warn(String.Format("Login: {0}: Invalid username '{1}'", e.State, un));
+					log.WarnFormat("Login: {0}: Invalid username '{1}'", e.State, un);
 					e.RejectReason = ALRReason.Invalid;
 				}
 			}
 			else if ( !acct.HasAccess( e.State ) )
 			{
-				log.Error(String.Format("Login: {0}: Access denied for '{1}'", e.State, un));
+				log.ErrorFormat("Login: {0}: Access denied for '{1}'", e.State, un);
 				e.RejectReason = ( m_LockdownLevel > AccessLevel.Player ? ALRReason.BadComm : ALRReason.BadPass );
 			}
 			else if ( !acct.CheckPassword( pw ) )
 			{
-				log.Error(String.Format("Login: {0}: Invalid password for '{1}'", e.State, un));
+				log.ErrorFormat("Login: {0}: Invalid password for '{1}'", e.State, un);
 				e.RejectReason = ALRReason.BadPass;
 			}
 			else if ( acct.Banned )
 			{
-				log.Error(String.Format("Login: {0}: Banned account '{1}'", e.State, un));
+				log.ErrorFormat("Login: {0}: Banned account '{1}'", e.State, un);
 				e.RejectReason = ALRReason.Blocked;
 			}
 			else
 			{
-				log.Info(String.Format("Login: {0}: Valid credentials for '{1}'", e.State, un));
+				log.InfoFormat("Login: {0}: Valid credentials for '{1}'", e.State, un);
 				e.State.Account = acct;
 				e.Accepted = true;
 
@@ -302,7 +302,7 @@ namespace Server.Misc
 			{
 				e.Accepted = false;
 
-				log.Warn(String.Format("Login: {0}: Past IP limit threshold", e.State));
+				log.WarnFormat("Login: {0}: Past IP limit threshold", e.State);
 
 				return;
 			}
@@ -318,24 +318,24 @@ namespace Server.Misc
 			}
 			else if ( !acct.HasAccess( e.State ) )
 			{
-				log.Error(String.Format("Login: {0}: Access denied for '{1}'", e.State, un));
+				log.ErrorFormat("Login: {0}: Access denied for '{1}'", e.State, un);
 				e.Accepted = false;
 			}
 			else if ( !acct.CheckPassword( pw ) )
 			{
-				log.Error(String.Format("Login: {0}: Invalid password for '{1}'", e.State, un));
+				log.ErrorFormat("Login: {0}: Invalid password for '{1}'", e.State, un);
 				e.Accepted = false;
 			}
 			else if ( acct.Banned )
 			{
-				log.Error(String.Format("Login: {0}: Banned account '{1}'", e.State, un));
+				log.ErrorFormat("Login: {0}: Banned account '{1}'", e.State, un);
 				e.Accepted = false;
 			}
 			else
 			{
 				acct.LogAccess( e.State );
 
-				log.Info(String.Format("Login: {0}: Account '{1}' at character list", e.State, un));
+				log.InfoFormat("Login: {0}: Account '{1}' at character list", e.State, un);
 				e.State.Account = acct;
 				e.Accepted = true;
 				e.CityInfo = StartingCities;

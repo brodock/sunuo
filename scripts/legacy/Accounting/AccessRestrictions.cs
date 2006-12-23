@@ -24,13 +24,13 @@ namespace Server
 
 				if ( Firewall.IsBlocked( ip ) )
 				{
-					log.Error(String.Format("Client: {0}: Firewall blocked connection attempt.", ip));
+					log.ErrorFormat("Client: {0}: Firewall blocked connection attempt.", ip);
 					e.AllowConnection = false;
 					return;
 				}
 				else if ( IPLimiter.SocketBlock && !IPLimiter.Verify( ip ) )
 				{
-					log.Error(String.Format("Client: {0}: Past IP limit threshold", ip));
+					log.ErrorFormat("Client: {0}: Past IP limit threshold", ip);
 	
 					e.AllowConnection = false;
 					return;
