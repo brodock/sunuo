@@ -451,7 +451,7 @@ namespace Server.Network
 				return;
 
 			PacketProfile prof = PacketProfile.GetOutgoingProfile( (byte)p.PacketID );
-			DateTime start = ( prof == null ? DateTime.MinValue : DateTime.Now );
+			DateTime start = ( prof == null ? DateTime.MinValue : DateTime.UtcNow );
 
 			byte[] buffer = p.Compile( m_CompressionEnabled );
 
@@ -489,7 +489,7 @@ namespace Server.Network
 				}
 
 				if ( prof != null )
-					prof.Record( length, DateTime.Now - start );
+					prof.Record( length, DateTime.UtcNow - start );
 			}
 			else
 			{

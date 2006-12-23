@@ -446,7 +446,7 @@ namespace Server
 
 				while ( !Core.Closing )
 				{
-					now = DateTime.Now;
+					now = DateTime.UtcNow;
 					/*ProcessAddQueue();
 					ProcessRemoveQueue();
 					ProcessPriorityQueue();*/
@@ -502,7 +502,7 @@ namespace Server
 
 					/* sleep until there is a signal or until the next
 					   timer must be activated */
-					now = DateTime.Now;
+					now = DateTime.UtcNow;
 
 					TimeSpan sleep = earliest <= now
 						? TimeSpan.FromMilliseconds(10)
@@ -556,14 +556,14 @@ namespace Server
 					TimerProfile prof = t.GetProfile();
 
 					if ( prof != null )
-						start = DateTime.Now;
+						start = DateTime.UtcNow;
 
 					t.OnTick();
 					t.m_Queued = false;
 					++index;
 
 					if ( prof != null )
-						prof.RegTicked( DateTime.Now - start );
+						prof.RegTicked( DateTime.UtcNow - start );
 
 					/*if ( saves == World.m_Saves && DateTime.Now >= breakTime )
 					{

@@ -83,9 +83,9 @@ namespace Server
 				m_Profiling = value;
 
 				if ( m_ProfileStart > DateTime.MinValue )
-					m_ProfileTime += DateTime.Now - m_ProfileStart;
+					m_ProfileTime += DateTime.UtcNow - m_ProfileStart;
 
-				m_ProfileStart = ( m_Profiling ? DateTime.Now : DateTime.MinValue );
+				m_ProfileStart = ( m_Profiling ? DateTime.UtcNow : DateTime.MinValue );
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace Server
 			get
 			{
 				if ( m_ProfileStart > DateTime.MinValue )
-					return m_ProfileTime + (DateTime.Now - m_ProfileStart);
+					return m_ProfileTime + (DateTime.UtcNow - m_ProfileStart);
 
 				return m_ProfileTime;
 			}
@@ -231,7 +231,7 @@ namespace Server
 		}
 
 		/* current time */
-		private static DateTime m_Now = DateTime.Now;
+		private static DateTime m_Now = DateTime.UtcNow;
 		public static DateTime Now {
 			get {
 				return m_Now;
@@ -257,7 +257,7 @@ namespace Server
 
 		private static void ClockProfile(MainProfile.TimerId id) {
 			DateTime prev = m_Now;
-			m_Now = DateTime.Now;
+			m_Now = DateTime.UtcNow;
 
 			TimeSpan diff = m_Now - prev;
 			m_TotalProfile.Add(id, diff);
@@ -352,13 +352,13 @@ namespace Server
 		}
 
 		private static void Run() {
-			m_Now = DateTime.Now;
+			m_Now = DateTime.UtcNow;
 			m_TotalProfile = new MainProfile(m_Now);
 			m_CurrentProfile = new MainProfile(m_Now);
 
 			while ( !m_Closing )
 			{
-				m_Now = DateTime.Now;
+				m_Now = DateTime.UtcNow;
 
 				/* wait until event happens */
 

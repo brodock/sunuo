@@ -134,7 +134,7 @@ namespace Server
 		}
 
 		/* current time */
-		private static DateTime m_Now = DateTime.Now;
+		private static DateTime m_Now = DateTime.UtcNow;
 		public static DateTime Now {
 			get {
 				return m_Now;
@@ -261,7 +261,7 @@ namespace Server
 				while ( !m_Closing )
 				{
 					m_Signal.WaitOne();
-					m_Now = DateTime.Now;
+					m_Now = DateTime.UtcNow;
 
 					Timer.Slice();
 					m_MessagePump.Slice();
