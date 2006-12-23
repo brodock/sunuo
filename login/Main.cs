@@ -133,6 +133,14 @@ namespace Server
 			get { return config; }
 		}
 
+		/* current time */
+		private static DateTime m_Now = DateTime.Now;
+		public static DateTime Now {
+			get {
+				return m_Now;
+			}
+		}
+
 		private static void CurrentDomain_UnhandledException( object sender, UnhandledExceptionEventArgs e )
 		{
 			if (e.IsTerminating)
@@ -253,6 +261,7 @@ namespace Server
 				while ( !m_Closing )
 				{
 					m_Signal.WaitOne();
+					m_Now = DateTime.Now;
 
 					Timer.Slice();
 					m_MessagePump.Slice();

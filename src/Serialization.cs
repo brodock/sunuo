@@ -290,7 +290,7 @@ namespace Server
 		public override void WriteDeltaTime( DateTime value )
 		{
 			long ticks = value.Ticks;
-			long now = DateTime.Now.Ticks;
+			long now = Core.Now.Ticks;
 
 			TimeSpan d;
 
@@ -610,7 +610,7 @@ namespace Server
 		public override DateTime ReadDeltaTime()
 		{
 			long ticks = m_File.ReadInt64();
-			long now = DateTime.Now.Ticks;
+			long now = Core.Now.Ticks;
 
 			if ( ticks > 0 && (ticks+now) < 0 )
 				return DateTime.MaxValue;
@@ -978,7 +978,7 @@ namespace Server
 		public override void WriteDeltaTime( DateTime value )
 		{
 			long ticks = value.Ticks;
-			long now = DateTime.Now.Ticks;
+			long now = Core.Now.Ticks;
 
 			TimeSpan d;
 

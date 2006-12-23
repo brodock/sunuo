@@ -32,7 +32,7 @@ namespace Server.Admin
 			string outStr;
 			if ( m_NewLine )
 			{
-				outStr = String.Format( "[{0}]: {1}", DateTime.Now.ToString( DateFormat ), str );
+				outStr = String.Format( "[{0}]: {1}", Core.Now.ToString( DateFormat ), str );
 				m_NewLine = false;
 			}
 			else
@@ -53,7 +53,7 @@ namespace Server.Admin
 			if ( m_NewLine )
 			{
 				string outStr;
-				outStr = String.Format( "[{0}]: {1}", DateTime.Now.ToString( DateFormat ), ch );
+				outStr = String.Format( "[{0}]: {1}", Core.Now.ToString( DateFormat ), ch );
 
 				m_ConsoleData.Append( outStr );
 
@@ -78,7 +78,7 @@ namespace Server.Admin
 		{
 			string outStr;
 			if ( m_NewLine )
-				outStr = String.Format( "[{0}]: {1}{2}", DateTime.Now.ToString( DateFormat ), line, Console.Out.NewLine );
+				outStr = String.Format( "[{0}]: {1}{2}", Core.Now.ToString( DateFormat ), line, Console.Out.NewLine );
 			else
 				outStr = String.Format( "{0}{1}", line, Console.Out.NewLine );
 
@@ -101,7 +101,7 @@ namespace Server.Admin
 			}
 			else if ( cmd == 0xFF )
 			{
-				string statStr = String.Format( ", Name={0}, Age={1}, Clients={2}, Items={3}, Chars={4}, Mem={5}K", Server.Misc.ServerList.ServerName, (int)(DateTime.Now-Server.Items.Clock.ServerStart).TotalHours, NetState.Instances.Count, World.Items.Count, World.Mobiles.Count, (int)(System.GC.GetTotalMemory(false)/1024) );
+				string statStr = String.Format( ", Name={0}, Age={1}, Clients={2}, Items={3}, Chars={4}, Mem={5}K", Server.Misc.ServerList.ServerName, (int)(Core.Now-Server.Items.Clock.ServerStart).TotalHours, NetState.Instances.Count, World.Items.Count, World.Mobiles.Count, (int)(System.GC.GetTotalMemory(false)/1024) );
 				state.Send( new UOGInfo( statStr ) );
 				state.Dispose();
 			}
@@ -169,7 +169,7 @@ namespace Server.Admin
 									   user, state));
 				state.Account = a;
 				a.LogAccess( state );
-				a.LastLogin = DateTime.Now;
+				a.LastLogin = Core.Now;
 
 				state.Send( new Login( LoginResponse.OK ) );
 				state.Send( Compress( new ConsoleData( m_ConsoleData.ToString() ) ) );

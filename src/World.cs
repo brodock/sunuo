@@ -1175,7 +1175,7 @@ namespace Server
 
 				if ( m is IVendor )
 				{
-					if ( ((IVendor)m).LastRestock + ((IVendor)m).RestockDelay < DateTime.Now )
+					if ( ((IVendor)m).LastRestock + ((IVendor)m).RestockDelay < Core.Now )
 						restock.Add( m );
 				}
 
@@ -1190,7 +1190,7 @@ namespace Server
 			{
 				IVendor vend = (IVendor)restock[i];
 				vend.Restock();
-				vend.LastRestock = DateTime.Now;
+				vend.LastRestock = Core.Now;
 			}
 
 			idx.Close();
@@ -1232,7 +1232,7 @@ namespace Server
 			idx.Write( (int) m_Items.Count );
 			foreach ( Item item in m_Items.Values )
 			{
-				if ( item.Decays && item.Parent == null && item.Map != Map.Internal && (item.LastMoved + item.DecayTime) <= DateTime.Now )
+				if ( item.Decays && item.Parent == null && item.Map != Map.Internal && (item.LastMoved + item.DecayTime) <= Core.Now )
 					decaying.Add( item );
 
 				long start = bin.Position;
