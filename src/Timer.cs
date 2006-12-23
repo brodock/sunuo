@@ -372,7 +372,7 @@ namespace Server
 				Change( t, -1, false );
 			}
 
-			private static void ProcessChangeQueue()
+			private static void ProcessChangeQueue(DateTime now)
 			{
 				while ( m_ChangeQueue.Count > 0 )
 				{
@@ -385,7 +385,7 @@ namespace Server
 
 					if ( tce.m_IsAdd )
 					{
-						timer.m_Next = DateTime.Now + timer.m_Delay;
+						timer.m_Next = now + timer.m_Delay;
 						timer.m_Index = 0;
 					}
 
@@ -446,16 +446,16 @@ namespace Server
 
 				while ( !Core.Closing )
 				{
+					now = DateTime.Now;
 					/*ProcessAddQueue();
 					ProcessRemoveQueue();
 					ProcessPriorityQueue();*/
-					ProcessChangeQueue();
+					ProcessChangeQueue(now);
 
 					bool queued = false;
 
 					for (i=0;i<m_Timers.Length;i++)
 					{
-						now = DateTime.Now;
 						if ( now < m_NextPriorities[i] )
 							break;
 
