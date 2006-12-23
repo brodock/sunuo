@@ -316,7 +316,8 @@ namespace Server
 
 				public void Free()
 				{
-					//m_InstancePool.Enqueue( this );
+					m_Timer = null;
+					m_InstancePool.Enqueue( this );
 				}
 
 				private static Queue m_InstancePool = new Queue();

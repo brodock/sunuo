@@ -6,6 +6,7 @@ sunuo (0.4.1) unstable; urgency=low
       time zone lookups
     - reuse timer in spawner engine
     - early return when HarrowerTentacles have no drain targets
+    - reuse TimerChangeEntry objects
   * lock m_Accounts in Accounting.Accounts
   * obsolete APIs
     - ScriptCompiler.Assemblies
