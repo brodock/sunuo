@@ -797,10 +797,10 @@ namespace Server.Network
 
 				if ( ns.m_Account != null )
 					log.InfoFormat("Client: {0}: Disconnected. [{1} Online] [{2}]",
-								   ns, m_Instances.Count, ns.m_Account);
+								   ns, m_Instances.Count - 1, ns.m_Account);
 				else
 					log.InfoFormat("Client: {0}: Disconnected. [{1} Online]",
-								   ns, m_Instances.Count);
+								   ns, m_Instances.Count - 1);
 
 				Mobile m = ns.m_Mobile;
 

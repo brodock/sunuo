@@ -1,5 +1,6 @@
 sunuo (0.4.1) unstable; urgency=low
 
+  * show correct client number in disconnect message
   * continued memory optimizations
     - eliminated most DateTime.Now calls
     - all other DateTime.Now calls are converted to DateTime.UtcNow to avoid
