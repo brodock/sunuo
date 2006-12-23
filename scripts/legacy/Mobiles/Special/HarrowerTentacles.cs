@@ -182,6 +182,9 @@ namespace Server.Mobiles
 						m_ToDrain.Add( m );
 				}
 
+				if (m_ToDrain.Count == 0)
+					return;
+
 				foreach ( Mobile m in m_ToDrain )
 				{
 					m_Owner.DoHarmful( m );
