@@ -189,6 +189,8 @@ namespace Server.Accounting
 					log.Error("Account instance load failed", e);
 				}
 			}
+
+			log.Info("loaded {0} accounts", m_Accounts.Count);
 		}
 	}
 }
