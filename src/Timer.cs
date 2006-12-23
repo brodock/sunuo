@@ -238,7 +238,7 @@ namespace Server
 		{
 			private static AutoResetEvent m_Signal = new AutoResetEvent(false);
 
-			private static Queue m_ChangeQueue = Queue.Synchronized( new Queue() );
+			private static Queue m_ChangeQueue = new Queue();
 
 			private static DateTime[] m_NextPriorities = new DateTime[8];
 			private static TimeSpan[] m_PriorityDelays = new TimeSpan[8]
@@ -353,7 +353,9 @@ namespace Server
 
 			public static void Change( Timer t, int newIndex, bool isAdd )
 			{
-				m_ChangeQueue.Enqueue( TimerChangeEntry.GetInstance( t, newIndex, isAdd ) );
+				TimerChangeEntry entry = TimerChangeEntry.GetInstance(t, newIndex, isAdd);
+				lock (m_ChangeQueue.SyncRoot)
+					m_ChangeQueue.Enqueue(entry);
 				m_Signal.Set();
 			}
 
@@ -450,7 +452,8 @@ namespace Server
 					/*ProcessAddQueue();
 					ProcessRemoveQueue();
 					ProcessPriorityQueue();*/
-					ProcessChangeQueue(now);
+					lock (m_ChangeQueue.SyncRoot)
+						ProcessChangeQueue(now);
 
 					bool queued = false;
 

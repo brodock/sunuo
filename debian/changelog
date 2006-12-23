@@ -8,6 +8,7 @@ sunuo (0.4.1) unstable; urgency=low
     - early return when HarrowerTentacles have no drain targets
     - reuse TimerChangeEntry objects
   * lock m_Accounts in Accounting.Accounts
+  * manual synchronization of TimerThread.m_ChangeQueue
   * obsolete APIs
     - ScriptCompiler.Assemblies
 
