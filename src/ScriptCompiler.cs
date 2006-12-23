@@ -641,7 +641,7 @@ namespace Server
 		{
 			for (int i = libraries.Count - 1; i >= 0; --i) {
 				Library l = (Library)libraries[i];
-				Type type = GetTypeCache(l.Assembly).GetTypeByFullName(fullName, ignoreCase);
+				Type type = l.TypeCache.GetTypeByFullName(fullName, ignoreCase);
 				if (type != null)
 					return type;
 			}
@@ -658,7 +658,7 @@ namespace Server
 		{
 			for (int i = libraries.Count - 1; i >= 0; --i) {
 				Library l = (Library)libraries[i];
-				Type type = GetTypeCache(l.Assembly).GetTypeByName(name, ignoreCase);
+				Type type = l.TypeCache.GetTypeByName(name, ignoreCase);
 				if (type != null)
 					return type;
 			}
