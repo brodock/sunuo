@@ -6118,12 +6118,12 @@ namespace Server
 			}
 		}
 
-		public bool Send( Packet p )
+		public bool Send( IPacket p )
 		{
 			return Send( p, false );
 		}
 
-		public bool Send( Packet p, bool throwOnOffline )
+		public bool Send( IPacket p, bool throwOnOffline )
 		{
 			if ( m_NetState != null )
 			{

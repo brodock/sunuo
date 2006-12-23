@@ -445,7 +445,7 @@ namespace Server.Network
 				m_CreatedCallback( this );
 		}
 
-		public void Send( Packet p )
+		public void Send( IPacket p )
 		{
 			if ( m_Socket == null || m_BlockAllPackets )
 				return;

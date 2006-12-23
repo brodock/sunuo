@@ -25,8 +25,14 @@ using System.IO;
 
 namespace Server.Network
 {
+	public interface IPacket
+	{
+		int PacketID { get; }
+		byte[] Compile(bool compress);
+	}
 
-	public abstract class Packet
+
+	public abstract class Packet : IPacket
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

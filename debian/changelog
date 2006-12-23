@@ -1,5 +1,6 @@
 sunuo (0.4.1) unstable; urgency=low
 
+  * added interface IPacket, implemented by class Packet
   * show correct client number in disconnect message
   * continued memory optimizations
     - eliminated most DateTime.Now calls

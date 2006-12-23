@@ -351,7 +351,7 @@ namespace Server
 			//SendPacket( from.Location, from.Map, new MovingParticleEffect( from, to, itemID, speed, duration, fixedDirection, explodes, hue, renderMode, effect, explodeEffect, explodeSound, unknown ) );
 		}
 
-		public static void SendPacket( Point3D origin, Map map, Packet p )
+		public static void SendPacket( Point3D origin, Map map, IPacket p )
 		{
 			if ( map != null )
 			{
@@ -368,7 +368,7 @@ namespace Server
 			}
 		}
 
-		public static void SendPacket( IPoint3D origin, Map map, Packet p )
+		public static void SendPacket( IPoint3D origin, Map map, IPacket p )
 		{
 			if ( map != null )
 			{
