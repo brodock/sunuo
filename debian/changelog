@@ -2,6 +2,7 @@ sunuo (0.4.1) unstable; urgency=low
 
   * continued memory optimizations
     - eliminated most DateTime.Now calls in the scripts
+  * lock m_Accounts in Accounting.Accounts
 
  --
 

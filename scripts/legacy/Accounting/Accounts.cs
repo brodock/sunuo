@@ -31,18 +31,22 @@ namespace Server.Accounting
 
 		public static Account GetAccount( string username )
 		{
-			return m_Accounts[username] as Account;
+			lock (m_Accounts.SyncRoot) {
+				return m_Accounts[username] as Account;
+			}
 		}
 
 		public static Account AddAccount( string user, string pass )
 		{
-			Account a = new Account( user, pass );
-			if ( m_Accounts.Count == 0 )
-				a.AccessLevel = AccessLevel.Administrator;
+			lock (m_Accounts.SyncRoot) {
+				Account a = new Account( user, pass );
+				if ( m_Accounts.Count == 0 )
+					a.AccessLevel = AccessLevel.Administrator;
 
-			m_Accounts[a.Username] = a;
+				m_Accounts[a.Username] = a;
 
-			return a;
+				return a;
+			}
 		}
 
 		public static int GetInt32( string intString, int defaultValue )
