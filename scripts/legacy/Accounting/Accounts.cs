@@ -190,7 +190,7 @@ namespace Server.Accounting
 				}
 			}
 
-			log.Info("loaded {0} accounts", m_Accounts.Count);
+			log.InfoFormat("loaded {0} accounts", m_Accounts.Count);
 		}
 	}
 }
