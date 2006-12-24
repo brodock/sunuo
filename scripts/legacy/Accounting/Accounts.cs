@@ -175,8 +175,10 @@ namespace Server.Accounting
 			while (true) {
 				if (reader.NodeType != XmlNodeType.Element ||
 					reader.Name != "account") {
-					reader.Read();
-					continue;
+					if (reader.Read())
+						continue;
+					else
+						break;
 				}
 
 				XmlElement account = (XmlElement)doc.ReadNode(reader);
