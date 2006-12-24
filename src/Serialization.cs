@@ -161,7 +161,6 @@ namespace Server
 			{
 				m_File.Write( m_Buffer, 0, m_Index );
 				m_Position += m_Index;
-				m_Position += m_Index;
 				m_Index = 0;
 			}
 		}
@@ -398,13 +397,11 @@ namespace Server
 		public override void Write( double value )
 		{
 			Write(BitConverter.GetBytes(value));
-			m_Position += 8;
 		}
 
 		public override void Write( float value )
 		{
 			Write(BitConverter.GetBytes(value));
-			m_Position += 4;
 		}
 
 		private char[] m_SingleCharBuffer = new char[1];
