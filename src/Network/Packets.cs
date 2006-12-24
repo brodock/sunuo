@@ -1818,10 +1818,18 @@ namespace Server.Network
 		}
 	}
 
-	public sealed class MobileMoving : Packet
+	public sealed class MobileMoving : CompatPacket
 	{
-		public MobileMoving( Mobile m, int noto/*Mobile beholder, Mobile beheld*/ ) : base( 0x77, 17 )
+		private const int PACKET_ID = 0x77;
+		private const int LENGTH = 17;
+
+		public MobileMoving(Mobile m, int noto)
+			: base(PACKET_ID, LENGTH)
 		{
+			Write(Packet.UnderlyingStream, m, noto);
+		}
+
+		private static void Write(PacketWriter m_Stream, Mobile m, int noto) {
 			Point3D loc = m.Location;
 
 			int hue = m.Hue;
@@ -1838,6 +1846,12 @@ namespace Server.Network
 			m_Stream.Write( (short) hue );
 			m_Stream.Write( (byte) m.GetPacketFlags() );
 			m_Stream.Write( (byte) noto );//Notoriety.Compute( beholder, beheld ) );
+		}
+
+		public static IRecyclablePacket GetInstance(Mobile m, int noto) {
+			GenericPacket packet = GenericPacket.GetInstance(PACKET_ID, LENGTH);
+			Write(packet.UnderlyingStream, m, noto);
+			return packet;
 		}
 	}
 

@@ -2832,7 +2832,7 @@ namespace Server
 			return true;
 		}
 
-		private static MobileMoving[] m_MovingPacketCache = new MobileMoving[8];
+		private static IRecyclablePacket[] m_MovingPacketCache = new IRecyclablePacket[8];
 
 		private bool m_Pushing;
 
@@ -3081,7 +3081,7 @@ namespace Server
 
 			if ( m_Map != null )
 			{
-				MobileMoving[] cache = m_MovingPacketCache;
+				IRecyclablePacket[] cache = m_MovingPacketCache;
 
 				for ( int i = 0; i < cache.Length; ++i )
 					cache[i] = null;
@@ -3120,10 +3120,10 @@ namespace Server
 						if ( ns != null && Utility.InUpdateRange( m_Location, m.m_Location ) && m.CanSee( this ) )
 						{
 							int noto = Notoriety.Compute( m, this );
-							MobileMoving p = cache[noto];
+							IRecyclablePacket p = cache[noto];
 
 							if ( p == null )
-								p = cache[noto] = new MobileMoving( this, noto );
+								p = cache[noto] = MobileMoving.GetInstance(this, noto);
 
 							ns.Send( p );
 						}
@@ -3138,6 +3138,13 @@ namespace Server
 
 				if ( m_MoveList.Count > 0 )
 					m_MoveList.Clear();
+
+				for (int i = 0; i < cache.Length; ++i) {
+					if (cache[i] != null) {
+						cache[i].Dispose();
+						cache[i] = null;
+					}
+				}
 			}
 
 			return true;
@@ -9289,7 +9296,7 @@ namespace Server
 				sendPrivateStats = true;
 			}
 
-			MobileMoving[] cache = m_MovingPacketCache;
+			IRecyclablePacket[] cache = m_MovingPacketCache;
 
 			if ( sendMoving || sendNonlocalMoving )
 			{
@@ -9315,7 +9322,9 @@ namespace Server
 				{
 					int noto = Notoriety.Compute( m, m );
 
-					ourState.Send( cache[noto] = new MobileMoving( m, noto ) );
+					using (IRecyclablePacket packet = MobileMoving.GetInstance(m, noto)) {
+						ourState.Send(packet);
+					}
 				}
 
 				if ( sendPublicStats || sendPrivateStats )
@@ -9393,10 +9402,10 @@ namespace Server
 						{
 							int noto = Notoriety.Compute( beholder, m );
 
-							MobileMoving p = cache[noto];
+							IRecyclablePacket p = cache[noto];
 
 							if ( p == null )
-								cache[noto] = p = new MobileMoving( m, noto );
+								cache[noto] = p = MobileMoving.GetInstance(m, noto);
 
 							state.Send( p );
 						}
@@ -9432,6 +9441,13 @@ namespace Server
 				}
 
 				eable.Free();
+
+				for (int i = 0; i < cache.Length; ++i) {
+					if (cache[i] != null) {
+						cache[i].Dispose();
+						cache[i] = null;
+					}
+				}
 			}
 		}
 
