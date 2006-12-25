@@ -164,8 +164,8 @@ namespace Server.Engines.Chat
 				}
 				else
 				{
-					log.Warn(String.Format("Client: {0}: Unknown chat action 0x{1:X}: {2}",
-										   state, actionID, param));
+					log.WarnFormat("Client: {0}: Unknown chat action 0x{1:X}: {2}",
+								   state, actionID, param);
 				}
 			}
 			catch ( Exception e )

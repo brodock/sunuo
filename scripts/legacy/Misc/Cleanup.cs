@@ -102,11 +102,11 @@ namespace Server.Misc
 			if ( items.Count > 0 )
 			{
 				if ( boxes > 0 )
-					log.Warn(String.Format("Cleanup: Detected {0} inaccessible items, including {1} bank boxes, removing..",
-										   items.Count, boxes));
+					log.WarnFormat("Cleanup: Detected {0} inaccessible items, including {1} bank boxes, removing..",
+								   items.Count, boxes);
 				else
-					log.Warn(String.Format("Cleanup: Detected {0} inaccessible items, removing..",
-										   items.Count));
+					log.WarnFormat("Cleanup: Detected {0} inaccessible items, removing..",
+								   items.Count);
 
 				for ( int i = 0; i < items.Count; ++i )
 					((Item)items[i]).Delete();

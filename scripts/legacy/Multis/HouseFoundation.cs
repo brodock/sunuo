@@ -2121,7 +2121,7 @@ namespace Server.Multis
 
 				if ( ce != ZLibError.Z_OK )
 				{
-					log.Error(String.Format("ZLib error: {0} (#{1})", ce, (int)ce));
+					log.ErrorFormat("ZLib error: {0} (#{1})", ce, (int)ce);
 					deflatedLength = 0;
 					size = 0;
 				}
@@ -2155,7 +2155,7 @@ namespace Server.Multis
 
 				if ( ce != ZLibError.Z_OK )
 				{
-					log.Error(String.Format("ZLib error: {0} (#{1})", ce, (int)ce));
+					log.ErrorFormat("ZLib error: {0} (#{1})", ce, (int)ce);
 					deflatedLength = 0;
 					size = 0;
 				}

@@ -601,7 +601,7 @@ namespace Server.Misc
 
 			if ( newChar == null )
 			{
-				log.Error(String.Format("Login: {0}: Character creation failed, account full", args.State));
+				log.ErrorFormat("Login: {0}: Character creation failed, account full", args.State);
 				return;
 			}
 
@@ -659,12 +659,12 @@ namespace Server.Misc
 
 			newChar.MoveToWorld( city.Location, city.Map );
 
-			log.Info(String.Format("Login: {0}: New character being created (account={1})",
-								   args.State, ((Account)args.Account).Username));
-			log.Info(String.Format(" - Character: {0} (serial={1})",
-								   newChar.Name, newChar.Serial));
-			log.Info(String.Format(" - Started: {0} {1} in {2}",
-								   city.City, city.Location, city.Map.ToString()));
+			log.InfoFormat("Login: {0}: New character being created (account={1})",
+						   args.State, ((Account)args.Account).Username);
+			log.InfoFormat(" - Character: {0} (serial={1})",
+						   newChar.Name, newChar.Serial);
+			log.InfoFormat(" - Started: {0} {1} in {2}",
+						   city.City, city.Location, city.Map.ToString());
 
 			new WelcomeTimer( newChar ).Start();
 		}

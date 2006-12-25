@@ -159,8 +159,8 @@ namespace Server
 			}
 			catch ( Exception e )
 			{
-				log.Warn(String.Format("{0}: Pathing error from {1} to {2}",
-									   e.GetType().Name, start, goal));
+				log.WarnFormat("{0}: Pathing error from {1} to {2}",
+							   e.GetType().Name, start, goal);
 			}
 		}
 	}

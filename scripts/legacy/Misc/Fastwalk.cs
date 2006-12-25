@@ -28,8 +28,8 @@ namespace Server.Misc
 		public static void OnFastWalk( FastWalkEventArgs e )
 		{
 			e.Blocked = true;//disallow this fastwalk
-			log.Warn(String.Format("Client: {0}: Fast movement detected (name={1})",
-								   e.NetState, e.NetState.Mobile.Name));
+			log.WarnFormat("Client: {0}: Fast movement detected (name={1})",
+						   e.NetState, e.NetState.Mobile.Name);
 		}
 	}
 }

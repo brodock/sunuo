@@ -84,7 +84,7 @@ namespace Server.Items
 		{
 			if ( m_Owner != null && m_House != null && !m_House.IsCoOwner( m_Owner ) )
 			{
-				log.Warn(String.Format("Destroying strongbox of {0}", m_Owner.Name));
+				log.WarnFormat("Destroying strongbox of {0}", m_Owner.Name);
 				Destroy();
 			}
 		}

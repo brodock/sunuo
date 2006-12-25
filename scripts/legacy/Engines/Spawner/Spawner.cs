@@ -720,8 +720,8 @@ namespace Server.Mobiles
 			{
 				try
 				{
-					log.Warn(String.Format("{0} bad spawns detected, logged: 'badspawn.log'",
-										   m_List.Count));
+					log.WarnFormat("{0} bad spawns detected, logged: 'badspawn.log'",
+								   m_List.Count);
 
 					using ( StreamWriter op = new StreamWriter( "badspawn.log", true ) )
 					{
