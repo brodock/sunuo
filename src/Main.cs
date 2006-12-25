@@ -234,24 +234,14 @@ namespace Server
 			{
 				m_Crashed = true;
 
-				bool close = false;
-
 				try
 				{
 					CrashedEventArgs args = new CrashedEventArgs( e.ExceptionObject as Exception );
 
 					EventSink.InvokeCrashed( args );
-
-					close = args.Close;
 				}
 				catch
 				{
-				}
-
-				if ( !close && !m_Service )
-				{
-					Console.WriteLine( "This exception is fatal, press return to exit" );
-					Console.ReadLine();
 				}
 
 				m_Closing = true;

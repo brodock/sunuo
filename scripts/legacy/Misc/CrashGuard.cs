@@ -13,7 +13,6 @@ namespace Server.Misc
 	{
 		private static bool Enabled = true;
 		private static bool SaveBackup = true;
-		private static bool RestartServer = true;
 		private static bool GenerateReport = true;
 
 		public static void Initialize()
@@ -29,11 +28,6 @@ namespace Server.Misc
 
 			if ( GenerateReport )
 				GenerateCrashReport( e );
-
-			if ( Core.Service )
-				e.Close = true;
-			else if ( RestartServer )
-				Restart( e );
 		}
 
 		private static void SendEmail( string filePath )
@@ -53,23 +47,6 @@ namespace Server.Misc
 				Console.WriteLine( "done" );
 			else
 				Console.WriteLine( "failed" );
-		}
-
-		private static void Restart( CrashedEventArgs e )
-		{
-			Console.Write( "Crash: Restarting..." );
-
-			try
-			{
-				Process.Start( Core.ExePath );
-				Console.WriteLine( "done" );
-
-				e.Close = true;
-			}
-			catch
-			{
-				Console.WriteLine( "failed" );
-			}
 		}
 
 		private static void CreateDirectory( string path )

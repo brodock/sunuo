@@ -484,6 +484,7 @@ namespace Server
 		private bool m_Close;
 
 		public Exception Exception{ get{ return m_Exception; } }
+		[Obsolete]
 		public bool Close{ get{ return m_Close; } set{ m_Close = value; } }
 
 		public CrashedEventArgs( Exception e )

@@ -14,6 +14,7 @@ sunuo (0.4.2) unstable; urgency=low
   * obsolete APIs
     - Core.ExePath
     - ScriptCompiler.Assemblies
+    - CrashedEventArgs.Close
   * moved filesystem paths from Core to Core.Config
     - LogDirectory
     - CacheDirectory
