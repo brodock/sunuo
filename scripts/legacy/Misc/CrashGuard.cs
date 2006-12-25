@@ -55,26 +55,6 @@ namespace Server.Misc
 				Console.WriteLine( "failed" );
 		}
 
-		private static string GetRoot()
-		{
-			try
-			{
-				return Path.GetDirectoryName( Environment.GetCommandLineArgs()[0] );
-			}
-			catch
-			{
-				return "";
-			}
-		}
-
-		private static string Combine( string path1, string path2 )
-		{
-			if ( path1 == "" )
-				return path2;
-
-			return Path.Combine( path1, path2 );
-		}
-
 		private static void Restart( CrashedEventArgs e )
 		{
 			Console.Write( "Crash: Restarting..." );
@@ -100,13 +80,13 @@ namespace Server.Misc
 
 		private static void CreateDirectory( string path1, string path2 )
 		{
-			CreateDirectory( Combine( path1, path2 ) );
+			CreateDirectory( Path.Combine( path1, path2 ) );
 		}
 
 		private static void CopyFile( string rootOrigin, string rootBackup, string path )
 		{
-			string originPath = Combine( rootOrigin, path );
-			string backupPath = Combine( rootBackup, path );
+			string originPath = Path.Combine( rootOrigin, path );
+			string backupPath = Path.Combine( rootBackup, path );
 
 			try
 			{
@@ -169,9 +149,8 @@ namespace Server.Misc
 			{
 				string timeStamp = GetTimeStamp();
 				string fileName = String.Format( "Crash {0}.log", timeStamp );
-
-				string root = GetRoot();
-				string filePath = Combine( root, fileName );
+				string filePath = Path.Combine(Core.Config.LogDirectory,
+											   fileName);
 
 				using ( StreamWriter op = new StreamWriter( filePath ) )
 				{
