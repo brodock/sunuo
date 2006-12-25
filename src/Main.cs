@@ -197,13 +197,6 @@ namespace Server
 			}
 		}
 
-		public static DirectoryInfo LocalDirectoryInfo {
-			get {
-				return BaseDirectoryInfo
-					.CreateSubdirectory("local");
-			}
-		}
-
 		public static Config.Root Config {
 			get { return config; }
 		}

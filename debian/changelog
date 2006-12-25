@@ -16,6 +16,7 @@ sunuo (0.4.2) unstable; urgency=low
   * moved filesystem paths from Core to Core.Config
     - LogDirectory
     - CacheDirectory
+  * removed Core.LocalDirectoryInfo
 
  --
 
