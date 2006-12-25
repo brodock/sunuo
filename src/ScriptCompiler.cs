@@ -361,7 +361,7 @@ namespace Server
 				return true;
 			}
 
-			DirectoryInfo cache = Core.CacheDirectoryInfo
+			DirectoryInfo cache = new DirectoryInfo(Core.Config.CacheDirectory)
 				.CreateSubdirectory("lib")
 				.CreateSubdirectory(libConfig.Name);
 
