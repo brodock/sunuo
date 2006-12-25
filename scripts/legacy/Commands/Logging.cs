@@ -7,6 +7,7 @@ namespace Server.Scripts.Commands
 {
 	public class CommandLogging
 	{
+		private static string m_Directory;
 		private static StreamWriter m_Output;
 		private static bool m_Enabled = true;
 
@@ -18,17 +19,15 @@ namespace Server.Scripts.Commands
 		{
 			EventSink.Command += new CommandEventHandler( EventSink_Command );
 
-			if ( !Directory.Exists( "Logs" ) )
-				Directory.CreateDirectory( "Logs" );
-
-			string directory = "Logs/Commands";
-
-			if ( !Directory.Exists( directory ) )
-				Directory.CreateDirectory( directory );
+			m_Directory = Path.Combine(Core.Config.LogDirectory, "Commands");
+			if (!Directory.Exists(m_Directory))
+				Directory.CreateDirectory(m_Directory);
 
 			try
 			{
-				m_Output = new StreamWriter( Path.Combine( directory, String.Format( "{0}.log", Core.Now.ToLongDateString() ) ), true );
+				string name = String.Format("{0}.log", Core.Now.ToLongDateString());
+				string path = Path.Combine(m_Directory, name);
+				m_Output = new StreamWriter(path, true);
 
 				m_Output.AutoFlush = true;
 
@@ -76,16 +75,16 @@ namespace Server.Scripts.Commands
 			{
 				m_Output.WriteLine( "{0}: {1}: {2}", Core.Now, from.NetState, text );
 
-				string path = Core.BaseDirectory;
-
 				Account acct = from.Account as Account;
 
 				string name = ( acct == null ? from.Name : acct.Username );
 
-				AppendPath( ref path, "Logs" );
-				AppendPath( ref path, "Commands" );
-				AppendPath( ref path, from.AccessLevel.ToString() );
-				path = Path.Combine( path, String.Format( "{0}.log", name ) );
+				string access_level_dir = Path.Combine(m_Directory, from.AccessLevel.ToString());
+				if (!Directory.Exists(access_level_dir))
+					Directory.CreateDirectory(access_level_dir);
+
+				string path = Path.Combine(access_level_dir,
+										   String.Format("{0}.log", name));
 
 				using ( StreamWriter sw = new StreamWriter( path, true ) )
 					sw.WriteLine( "{0}: {1}: {2}", Core.Now, from.NetState, text );
@@ -96,14 +95,6 @@ namespace Server.Scripts.Commands
 		}
 
 		private static char[] m_NotSafe = new char[]{ '\\', '/', ':', '*', '?', '"', '<', '>', '|' };
-
-		public static void AppendPath( ref string path, string toAppend )
-		{
-			path = Path.Combine( path, toAppend );
-
-			if ( !Directory.Exists( path ) )
-				Directory.CreateDirectory( path );
-		}
 
 		public static string Safe( string ip )
 		{
