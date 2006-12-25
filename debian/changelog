@@ -1,10 +1,8 @@
-sunuo (0.4.1) unstable; urgency=low
+sunuo (0.4.2) unstable; urgency=low
 
   * added interface IPacket, implemented by class Packet
   * implemented abstract packet recycler code
     - recycle MobileMoving
-  * fixed account database corruption bug
-  * show correct client number in disconnect message
   * continued memory optimizations
     - eliminated most DateTime.Now calls
     - all other DateTime.Now calls are converted to DateTime.UtcNow to avoid
@@ -12,12 +10,19 @@ sunuo (0.4.1) unstable; urgency=low
     - reuse timer in spawner engine
     - early return when HarrowerTentacles have no drain targets
     - reuse TimerChangeEntry objects
-  * lock m_Accounts in Accounting.Accounts
   * manual synchronization of TimerThread.m_ChangeQueue
   * obsolete APIs
     - ScriptCompiler.Assemblies
 
  --
+
+sunuo (0.4.1) unstable; urgency=low
+
+  * lock m_Accounts in Accounting.Accounts
+  * fixed account database corruption bug
+  * show correct client number in disconnect message
+
+ -- Max Kellermann <max@duempel.org>  Mon, 25 Dec 2006 01:46:23 +0100
 
 sunuo (0.4.0) unstable; urgency=low
 
