@@ -10,6 +10,7 @@ sunuo (0.4.2) unstable; urgency=low
     - reuse timer in spawner engine
     - early return when HarrowerTentacles have no drain targets
     - reuse TimerChangeEntry objects
+    - NameList: trim strings in initialization, not on every request
   * manual synchronization of TimerThread.m_ChangeQueue
   * obsolete APIs
     - Core.ExePath

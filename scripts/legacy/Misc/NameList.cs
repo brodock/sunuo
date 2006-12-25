@@ -20,12 +20,14 @@ namespace Server
 		{
 			m_Type = type;
 			m_List = xml.InnerText.Split( ',' );
+			for (int i = m_List.Length - 1; i >= 0; --i)
+				m_List[i] = m_List[i].Trim();
 		}
 
 		public string GetRandomName()
 		{
 			if ( m_List.Length > 0 )
-				return m_List[Utility.Random( m_List.Length )].Trim();
+				return m_List[Utility.Random( m_List.Length )];
 
 			return "";
 		}
