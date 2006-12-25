@@ -114,17 +114,6 @@ namespace Server
 			if ( e.IsTerminating )
 			{
 				m_Crashed = true;
-
-				try
-				{
-					CrashedEventArgs args = new CrashedEventArgs( e.ExceptionObject as Exception );
-
-					EventSink.InvokeCrashed( args );
-				}
-				catch
-				{
-				}
-
 				m_Closing = true;
 			}
 		}

@@ -19,6 +19,7 @@ sunuo (0.4.2) unstable; urgency=low
     - LogDirectory
     - CacheDirectory
   * removed Core.LocalDirectoryInfo, Core.BaseDirectoryInfo
+  * login: removed EventSink.Crashed
 
  --
 

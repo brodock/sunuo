@@ -32,7 +32,6 @@ using Server.Network;
 namespace Server
 {
 	public delegate void ServerListEventHandler( ServerListEventArgs e );
-	public delegate void CrashedEventHandler( CrashedEventArgs e );
 	public delegate void ShutdownEventHandler( ShutdownEventArgs e );
 	public delegate void SocketConnectEventHandler( SocketConnectEventArgs e );
 	public delegate void AccountLoginEventHandler( AccountLoginEventArgs e );
@@ -99,20 +98,6 @@ namespace Server
 		}
 	}
 
-	public class CrashedEventArgs : EventArgs
-	{
-		private Exception m_Exception;
-		private bool m_Close;
-
-		public Exception Exception{ get{ return m_Exception; } }
-		public bool Close{ get{ return m_Close; } set{ m_Close = value; } }
-
-		public CrashedEventArgs( Exception e )
-		{
-			m_Exception = e;
-		}
-	}
-
 	public class ServerListEventArgs : EventArgs
 	{
 		private NetState m_State;
@@ -146,7 +131,6 @@ namespace Server
 	public class EventSink
 	{
 		public static event ServerListEventHandler ServerList;
-		public static event CrashedEventHandler Crashed;
 		public static event ShutdownEventHandler Shutdown;
 		public static event SocketConnectEventHandler SocketConnect;
 		public static event AccountLoginEventHandler AccountLogin;
@@ -177,12 +161,6 @@ namespace Server
 				Shutdown( e );
 		}
 
-		public static void InvokeCrashed( CrashedEventArgs e )
-		{
-			if ( Crashed != null )
-				Crashed( e );
-		}
-
 		public static void InvokeServerList( ServerListEventArgs e )
 		{
 			if ( ServerList != null )
@@ -192,7 +170,6 @@ namespace Server
 		public static void Reset()
 		{
 			ServerList = null;
-			Crashed = null;
 			Shutdown = null;
 			SocketConnect = null;
 			AccountLogin = null;
