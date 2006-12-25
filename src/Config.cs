@@ -440,7 +440,7 @@ namespace Server.Config {
 		private string serverName;
 		private Features m_Features = new Features();
 		private string m_BaseDirectory, m_ConfigDirectory,
-			m_SaveDirectory, m_BackupDirectory;
+			m_SaveDirectory, m_BackupDirectory, m_LogDirectory;
 		private ArrayList m_DataDirectories;
 		private Hashtable libraryConfig = new Hashtable();
 		private Network m_Network;
@@ -452,6 +452,10 @@ namespace Server.Config {
 			m_ConfigDirectory = Path.Combine(m_BaseDirectory, "Data");
 			m_SaveDirectory = Path.Combine(m_BaseDirectory, "Saves");
 			m_BackupDirectory = Path.Combine(m_BaseDirectory, "Backups");
+
+			DirectoryInfo base_dir = new DirectoryInfo(m_BaseDirectory);
+			DirectoryInfo var_dir = base_dir.CreateSubdirectory("var");
+			m_LogDirectory = var_dir.CreateSubdirectory("log").FullName;
 
 			filename = _filename;
 
@@ -489,6 +493,10 @@ namespace Server.Config {
 
 		public string BackupDirectory {
 			get { return m_BackupDirectory; }
+		}
+
+		public string LogDirectory {
+			get { return m_LogDirectory; }
 		}
 
 		public ArrayList DataDirectories {
@@ -667,6 +675,10 @@ namespace Server.Config {
 					case "data-path":
 						if (Directory.Exists(path))
 							m_DataDirectories.Add(path);
+						break;
+
+					case "log-dir":
+						m_LogDirectory = path;
 						break;
 
 					default:

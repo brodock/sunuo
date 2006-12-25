@@ -13,6 +13,8 @@ sunuo (0.4.2) unstable; urgency=low
   * manual synchronization of TimerThread.m_ChangeQueue
   * obsolete APIs
     - ScriptCompiler.Assemblies
+  * moved filesystem paths from Core to Core.Config
+    - LogDirectory
 
  --
 

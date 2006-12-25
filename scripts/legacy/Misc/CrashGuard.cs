@@ -124,11 +124,9 @@ namespace Server.Misc
 
 			try
 			{
-				string timeStamp = GetTimeStamp();
-
-				string root = GetRoot();
-				string rootBackup = Combine( root, String.Format( "Backups/Crashed/{0}/", timeStamp ) );
-				string rootOrigin = Combine( root, String.Format( "Saves/" ) );
+				string crashedDir = Path.Combine(Core.Config.BackupDirectory, "Crashed");
+				string rootBackup = Path.Combine(crashedDir, GetTimeStamp());
+				string rootOrigin = Core.Config.SaveDirectory;
 
 				// Create new directories
 				CreateDirectory( rootBackup );

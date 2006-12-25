@@ -207,14 +207,6 @@ namespace Server
 			}
 		}
 
-		public static DirectoryInfo LogDirectoryInfo {
-			get {
-				return BaseDirectoryInfo
-					.CreateSubdirectory("var")
-					.CreateSubdirectory("log");
-			}
-		}
-
 		public static DirectoryInfo CacheDirectoryInfo {
 			get {
 				if (m_CacheDirectoryInfo == null)
@@ -415,7 +407,7 @@ namespace Server
 
 			/* redirect Console to file in service mode */
 			if (m_Service) {
-				string filename = Path.Combine(LogDirectoryInfo.FullName, "console.log");
+				string filename = Path.Combine(Config.LogDirectory, "console.log");
 				FileStream stream = new FileStream(filename, FileMode.Create,
 												   FileAccess.Write, FileShare.Read);
 				StreamWriter writer = new StreamWriter(stream);
