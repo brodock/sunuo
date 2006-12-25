@@ -71,6 +71,7 @@ namespace Server
 			m_Signal.Set();
 		}
 
+		[Obsolete]
 		public static string ExePath
 		{
 			get
@@ -82,6 +83,7 @@ namespace Server
 			}
 		}
 
+		[Obsolete]
 		public static string BaseDirectory
 		{
 			get
@@ -180,8 +182,8 @@ namespace Server
 			if ( m_Thread != null )
 				m_Thread.Name = "Core Thread";
 
-			if ( BaseDirectory.Length > 0 )
-				Directory.SetCurrentDirectory( BaseDirectory );
+			if (config.BaseDirectory.Length > 0)
+				Directory.SetCurrentDirectory(config.BaseDirectory);
 
 			Timer.TimerThread ttObj = new Timer.TimerThread();
 			timerThread = new Thread( new ThreadStart( ttObj.TimerMain ) );

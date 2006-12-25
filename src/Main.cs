@@ -168,6 +168,7 @@ namespace Server
 			}
 		}
 
+		[Obsolete]
 		public static string ExePath
 		{
 			get
@@ -179,6 +180,7 @@ namespace Server
 			}
 		}
 
+		[Obsolete]
 		public static string BaseDirectory
 		{
 			get
