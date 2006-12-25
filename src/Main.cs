@@ -45,7 +45,6 @@ namespace Server
 
 		private static bool m_Crashed;
 		private static Thread timerThread;
-		private static DirectoryInfo m_BaseDirectoryInfo;
 		private static string m_ExePath;
 		private static Assembly m_Assembly;
 		private static Process m_Process;
@@ -185,15 +184,6 @@ namespace Server
 			get
 			{
 				return Config.BaseDirectory;
-			}
-		}
-
-		public static DirectoryInfo BaseDirectoryInfo {
-			get {
-				if (m_BaseDirectoryInfo == null)
-					m_BaseDirectoryInfo = new DirectoryInfo(BaseDirectory);
-
-				return m_BaseDirectoryInfo;
 			}
 		}
 
