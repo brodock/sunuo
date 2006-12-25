@@ -46,7 +46,6 @@ namespace Server
 		private static bool m_Crashed;
 		private static Thread timerThread;
 		private static DirectoryInfo m_BaseDirectoryInfo;
-		private static DirectoryInfo m_CacheDirectoryInfo;
 		private static string m_ExePath;
 		private static Assembly m_Assembly;
 		private static Process m_Process;
@@ -202,17 +201,6 @@ namespace Server
 			get {
 				return BaseDirectoryInfo
 					.CreateSubdirectory("local");
-			}
-		}
-
-		public static DirectoryInfo CacheDirectoryInfo {
-			get {
-				if (m_CacheDirectoryInfo == null)
-					m_CacheDirectoryInfo = BaseDirectoryInfo
-						.CreateSubdirectory("var")
-						.CreateSubdirectory("cache");
-
-				return m_CacheDirectoryInfo;
 			}
 		}
 

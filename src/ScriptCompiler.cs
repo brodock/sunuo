@@ -575,7 +575,7 @@ namespace Server
 			}
 
 			/* delete unused cache directories */
-			DirectoryInfo cacheDir = Core.CacheDirectoryInfo
+			DirectoryInfo cacheDir = new DirectoryInfo(Core.Config.CacheDirectory)
 				.CreateSubdirectory("lib");
 			foreach (DirectoryInfo sub in cacheDir.GetDirectories()) {
 				string libName = sub.Name.ToLower();
