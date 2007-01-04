@@ -23,7 +23,7 @@ sunuo (0.4.2) unstable; urgency=low
   * removed Core.LocalDirectoryInfo, Core.BaseDirectoryInfo
   * login: removed EventSink.Crashed
 
- --
+ -- Max Kellermann <max@duempel.org>  Fri,  5 Jan 2007 00:53:42 +0100
 
 sunuo (0.4.1) unstable; urgency=low
 
