@@ -176,14 +176,44 @@
   <chapter id="upgrading">
     <title>Upgrading</title>
 
-    <para>
-      Before you upgrade SunUO, back up your whole shard.  Delete
-      <filename>SunUO.exe</filename> and the <filename>bin</filename>
-      directory.  Then copy <filename>*.dll</filename>,
-      <filename>run.sh</filename>, <filename>run.bat</filename> and
-      the <filename>bin</filename> directory from the SunUO zip file
-      to your shard's base directory.
-    </para>
+    <important>
+      Don't forget to back up your old server!
+    </important>
+
+    <orderedlist>
+      <listitem>
+        <para>
+          Shut down SunUO.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Delete <filename>SunUO.exe</filename> and the directory
+          <filename>bin</filename>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Unpack the SunUO binary zip file somewhere.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Copy the files <filename>run.bat</filename>,
+          <filename>run.sh</filename> and the directory
+          <filename>bin</filename> to your SunUO base directory.  You
+          should also copy the external libraries
+          (<filename>*.dll</filename>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Start SunUO by running <filename>run.bat</filename>
+          (Windows) or <filename>./run.sh</filename> (all other
+          operating systems, including Linux).
+        </para>
+      </listitem>
+    </orderedlist>
 
     <para>
       The rest of this chapter describes other actions required for a
