@@ -133,8 +133,8 @@
           <para>
             Unpack the SunUO binary zip file somewhere, and copy all
             files from the base directory plus the
-            <filename>etc</filename> directory into the old RunUO
-            directory.
+            <filename>etc</filename> and <filename>bin</filename>
+            directory into the old RunUO directory.
           </para>
         </listitem>
         <listitem>
