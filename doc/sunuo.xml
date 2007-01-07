@@ -421,6 +421,21 @@
         </section>
       </section>
 
+      <section id="config_autosave">
+        <title>Automatic saving</title>
+        <para>
+          By default, SunUO saves the world every 15 minutes.  You can
+          customize this setting; the following example saves every 60
+          minutes:
+        </para>
+
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;global&gt;
+    &lt;save-interval&gt;60&lt;/save-interval/&gt;
+  &lt;/global&gt;
+&lt;/sunuo-config&gt;</programlisting>
+      </section>
+
       <section id="config_encryption">
         <title>Encryption</title>
         <para>
