@@ -438,7 +438,7 @@ namespace Server.Config {
 		private string filename;
 		private XmlDocument document;
 		private string serverName;
-		private TimeSpan m_SaveInterval;
+		private TimeSpan m_SaveInterval = TimeSpan.FromMinutes(15);
 		private Features m_Features = new Features();
 		private string m_BaseDirectory, m_ConfigDirectory,
 			m_SaveDirectory, m_BackupDirectory, m_LogDirectory,
