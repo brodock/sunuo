@@ -278,6 +278,29 @@
         </para>
       </section>
 
+      <section id="config_serverlist">
+        <title>Server list</title>
+
+        <para>
+          The default server list only includes this one server
+          itself.  To create a custom server list, add a
+          <varname>server-list</varname> section:
+        </para>
+
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;server-list&gt;
+    &lt;game-server&gt;
+      &lt;name&gt;Our first server&lt;/name&gt;
+      &lt;address&gt;1.2.3.4:2593&lt;/address&gt;
+    &lt;/game-server&gt;
+    &lt;game-server&gt;
+      &lt;name&gt;The second server&lt;/name&gt;
+      &lt;address&gt;5.6.7.8:2594&lt;/address&gt;
+    &lt;/game-server&gt;
+  &lt;/server-list&gt;
+&lt;/sunuo-config&gt;</programlisting>
+      </section>
+
       <section id="config_features">
         <title>Features</title>
         <para>
@@ -491,6 +514,34 @@
           on different machines. This is safe, because both check the
           password independently. It is however important that the
           account databases on both servers are the same.
+        </para>
+      </section>
+
+      <section id="dnat">
+        <title>SunUO behind a NATted private network</title>
+
+        <para>
+          If your SunUO server has a private IP address and it is
+          being accessed via DNAT (sometimes called "port
+          forwarding"), the default server list is incorrect.  In this
+          case, you have to explicitly specify a custom server list
+          (as <link linkend="config_serverlist">described
+          above</link>):
+        </para>
+
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;server-list&gt;
+    &lt;game-server&gt;
+      &lt;name&gt;DSL shard&lt;/name&gt;
+      &lt;address&gt;dsl-shard.dyndns.org&lt;/address&gt;
+    &lt;/game-server&gt;
+  &lt;/server-list&gt;
+&lt;/sunuo-config&gt;</programlisting>
+
+        <para>
+          Note that SunUO resolves the host name during server bootup,
+          so if you have a dynamic IP, you probably have to restart
+          the shard after every DSL reconnect.
         </para>
       </section>
     </section>
