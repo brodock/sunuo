@@ -438,6 +438,7 @@ namespace Server.Config {
 		private string filename;
 		private XmlDocument document;
 		private string serverName;
+		private static double saveInterval;
 		private Features m_Features = new Features();
 		private string m_BaseDirectory, m_ConfigDirectory,
 			m_SaveDirectory, m_BackupDirectory, m_LogDirectory,
@@ -471,6 +472,10 @@ namespace Server.Config {
 
 		public string ServerName {
 			get { return serverName; }
+		}
+
+		public static double SaveInterval {
+			get { return saveInterval; }
 		}
 
 		public Features Features {
@@ -650,6 +655,17 @@ namespace Server.Config {
 					case "feature":
 						m_Features[el.GetAttribute("name")]
 							= Parser.ParseBool(el.GetAttribute("value"), true);
+						break;
+
+					case "save-interval":
+						double si = Convert.ToDouble( el.GetAttribute("value") );
+						if(si == 0.0) {
+							log.WarnFormat("Invalid value of save-interval, setting it to default");
+						}
+						else {
+							saveInterval = si;
+							log.InfoFormat("Setting custom world save interval to {0} minutes", saveInterval);
+						}
 						break;
 
 					default:
