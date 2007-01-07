@@ -438,7 +438,7 @@ namespace Server.Config {
 		private string filename;
 		private XmlDocument document;
 		private string serverName;
-		private double saveInterval;
+		private TimeSpan m_SaveInterval;
 		private Features m_Features = new Features();
 		private string m_BaseDirectory, m_ConfigDirectory,
 			m_SaveDirectory, m_BackupDirectory, m_LogDirectory,
@@ -474,8 +474,8 @@ namespace Server.Config {
 			get { return serverName; }
 		}
 
-		public double SaveInterval {
-			get { return saveInterval; }
+		public TimeSpan SaveInterval {
+			get { return m_SaveInterval; }
 		}
 
 		public Features Features {
@@ -663,8 +663,8 @@ namespace Server.Config {
 							log.WarnFormat("Invalid value of save-interval, setting it to default");
 						}
 						else {
-							saveInterval = si;
-							log.InfoFormat("Setting custom world save interval to {0} minutes", saveInterval);
+							m_SaveInterval = TimeSpan.FromMinutes(si);
+							log.InfoFormat("Setting custom world save interval to {0} minutes", si);
 						}
 						break;
 
