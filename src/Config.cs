@@ -438,7 +438,7 @@ namespace Server.Config {
 		private string filename;
 		private XmlDocument document;
 		private string serverName;
-		private static double saveInterval;
+		private double saveInterval;
 		private Features m_Features = new Features();
 		private string m_BaseDirectory, m_ConfigDirectory,
 			m_SaveDirectory, m_BackupDirectory, m_LogDirectory,
@@ -474,7 +474,7 @@ namespace Server.Config {
 			get { return serverName; }
 		}
 
-		public static double SaveInterval {
+		public double SaveInterval {
 			get { return saveInterval; }
 		}
 

@@ -6,7 +6,7 @@ namespace Server.Misc
 {
 	public class AutoSave : Timer
 	{
-		private static TimeSpan m_Delay = TimeSpan.FromMinutes( Config.Root.SaveInterval );
+		private static TimeSpan m_Delay = TimeSpan.FromMinutes( Core.Config.SaveInterval );
 		private static TimeSpan m_Warning = TimeSpan.Zero;
 		//private static TimeSpan m_Warning = TimeSpan.FromSeconds( 15.0 );
 
