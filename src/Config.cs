@@ -659,7 +659,7 @@ namespace Server.Config {
 
 					case "save-interval":
 						double si = Convert.ToDouble( el.GetAttribute("value") );
-						if(si <= 0.1) {
+						if(si <= 1.0) {
 							log.WarnFormat("Invalid value of save-interval, setting it to default");
 						}
 						else {
