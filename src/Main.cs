@@ -381,9 +381,6 @@ namespace Server
 
 			if ( m_Thread != null )
 				m_Thread.Name = "Core Thread";
-
-			if ( BaseDirectory.Length > 0 )
-				Directory.SetCurrentDirectory( BaseDirectory );
 		}
 
 		public static void Start(bool repair) {
