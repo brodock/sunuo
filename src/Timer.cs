@@ -316,7 +316,9 @@ namespace Server
 				public void Free()
 				{
 					m_Timer = null;
-					m_InstancePool.Enqueue( this );
+
+					lock(m_InstancePool)
+						m_InstancePool.Enqueue(this);
 				}
 
 				private static Queue m_InstancePool = new Queue();
@@ -325,25 +327,17 @@ namespace Server
 				{
 					TimerChangeEntry e;
 
-					if ( m_InstancePool.Count > 0 )
-					{
-						e = (TimerChangeEntry)m_InstancePool.Dequeue();
-
-						if ( e == null )
-							e = new TimerChangeEntry( t, newIndex, isAdd );
-						else
-						{
+					lock(m_InstancePool) {
+						if (m_InstancePool.Count > 0) {
+							e = (TimerChangeEntry)m_InstancePool.Dequeue();
 							e.m_Timer = t;
 							e.m_NewIndex = newIndex;
 							e.m_IsAdd = isAdd;
+							return e;
 						}
 					}
-					else
-					{
-						e = new TimerChangeEntry( t, newIndex, isAdd );
-					}
 
-					return e;
+					return new TimerChangeEntry(t, newIndex, isAdd);
 				}
 			}
 
