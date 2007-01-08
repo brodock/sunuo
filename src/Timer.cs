@@ -317,7 +317,7 @@ namespace Server
 				{
 					m_Timer = null;
 
-					lock(m_InstancePool)
+					lock (m_InstancePool.SyncRoot)
 						m_InstancePool.Enqueue(this);
 				}
 
@@ -327,7 +327,7 @@ namespace Server
 				{
 					TimerChangeEntry e;
 
-					lock(m_InstancePool) {
+					lock (m_InstancePool.SyncRoot) {
 						if (m_InstancePool.Count > 0) {
 							e = (TimerChangeEntry)m_InstancePool.Dequeue();
 							e.m_Timer = t;
