@@ -3206,7 +3206,7 @@ namespace Server.Network
 				m_Stream.WriteAsciiFixed( si.Name, 32 );
 				m_Stream.Write( (byte) si.FullPercent );
 				m_Stream.Write( (sbyte) si.TimeZone );
-				m_Stream.Write( (int) si.Address.Address.Address );
+				m_Stream.Write(si.Address.Address.GetAddressBytes(), 0, 4);
 			}
 		}
 	}
@@ -3243,13 +3243,7 @@ namespace Server.Network
 
 		public PlayServerAck( ServerInfo si ) : base( 0x8C, 11 )
 		{
-			int addr = (int)si.Address.Address.Address;
-
-			m_Stream.Write( (byte) addr );
-			m_Stream.Write( (byte)(addr >> 8) );
-			m_Stream.Write( (byte)(addr >> 16) );
-			m_Stream.Write( (byte)(addr >> 24) );
-
+			m_Stream.Write(si.Address.Address.GetAddressBytes(), 0, 4);
 			m_Stream.Write( (short) si.Address.Port );
 			m_Stream.Write( (int) m_AuthID );
 		}

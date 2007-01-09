@@ -6,6 +6,8 @@ sunuo (0.4.3) unstable; urgency=low
   * manual locking
     - TimerChangeEntry.m_InstancePool
     - NetState.m_Disposed
+  * fixed C# compiler warnings
+    - use IPAddress.GetAddressBytes() instead of IPAddress.Address
 
  --
 
