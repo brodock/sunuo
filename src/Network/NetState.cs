@@ -751,7 +751,8 @@ namespace Server.Network
 			m_OnSend = null;
 			m_Running = false;
 
-			m_Disposed.Enqueue( this );
+			lock (m_Disposed)
+				m_Disposed.Enqueue(this);
 
 			if ( /*!flush &&*/ !m_SendQueue.IsEmpty )
 			{
@@ -783,9 +784,9 @@ namespace Server.Network
 			}
 		}
 
-		private static Queue m_Disposed = Queue.Synchronized( new Queue() );
+		private static Queue m_Disposed = new Queue();
 
-		public static void ProcessDisposedQueue()
+		public static void ProcessDisposedQueue2()
 		{
 			int breakout = 0;
 
@@ -819,6 +820,12 @@ namespace Server.Network
 
 				m_Instances.Remove( ns );
 			}
+		}
+
+		public static void ProcessDisposedQueue()
+		{
+			lock (m_Disposed)
+				ProcessDisposedQueue2();
 		}
 
 		public bool Running

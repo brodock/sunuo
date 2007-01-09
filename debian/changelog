@@ -3,7 +3,9 @@ sunuo (0.4.3) unstable; urgency=low
   * make automatic world save interval configurable, patch by Maik Greubel
   * documentation updates
     - server-list configuration
-  * lock TimerChangeEntry.m_InstancePool
+  * manual locking
+    - TimerChangeEntry.m_InstancePool
+    - NetState.m_Disposed
 
  --
 
