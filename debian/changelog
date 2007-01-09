@@ -10,6 +10,7 @@ sunuo (0.4.3) unstable; urgency=low
     - use IPAddress.GetAddressBytes() instead of IPAddress.Address
     - use ScriptCompiler.Libraries instead of ScriptCompiler.Assemblies
     - don't set Listener.Port in Misc/ServerList.cs
+    - ignore local port in Encryption
 
  --
 

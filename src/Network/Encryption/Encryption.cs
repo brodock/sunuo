@@ -119,14 +119,6 @@ namespace Server.Network.Encryption
 				return;
 			}
 
-			// If the client did not connect on the game server port,
-			// it's not our business to handle encryption for it
-			if (((IPEndPoint)from.Socket.LocalEndPoint).Port != Listener.Port) 
-			{
-				m_Encryption = new NoEncryption();
-				return;
-			}
-
 			// For simplicities sake, enqueue what we just received as long as we're not initialized
 			m_Buffer.Enqueue(buffer, 0, length);
 			// Clear the array
