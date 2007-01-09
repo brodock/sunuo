@@ -42,8 +42,6 @@ namespace Server.Misc
 
 		public static void Initialize()
 		{
-			Listener.Port = 2593;
-
 			EventSink.ServerList += new ServerListEventHandler( EventSink_ServerList );
 		}
 
