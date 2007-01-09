@@ -134,18 +134,13 @@ namespace Server.Gumps
 		public static ArrayList Match( string match )
 		{
 			ArrayList results = new ArrayList();
-			Type[] types;
 
-			Assembly[] asms = ScriptCompiler.Assemblies;
-
-			for ( int i = 0; i < asms.Length; ++i )
+			Library[] libs = ScriptCompiler.Libraries;
+			for (int i = 0; i < libs.Length; ++i)
 			{
-				types = ScriptCompiler.GetTypeCache( asms[i] ).Types;
+				Type[] types = libs[i].Types;
 				Match( match, types, results );
 			}
-
-			types = ScriptCompiler.GetTypeCache( Core.Assembly ).Types;
-			Match( match, types, results );
 
 			results.Sort( new TypeNameComparer() );
 

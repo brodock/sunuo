@@ -152,10 +152,9 @@ namespace Server.Custom
 		{
 			ArrayList types = new ArrayList();
 
-			AddTypes( Core.Assembly, types );
-
-			for ( int i = 0; i < ScriptCompiler.Assemblies.Length; ++i )
-				AddTypes( ScriptCompiler.Assemblies[i], types );
+			Library[] libs = ScriptCompiler.Libraries;
+			for (int i = 0; i < libs.Length; ++i)
+				AddTypes(libs[i], types);
 
 			m_RootItems = Load( types, Path.Combine(Core.Config.ConfigDirectory, "items.cfg") );
 			m_RootMobiles = Load( types, Path.Combine(Core.Config.ConfigDirectory, "mobiles.cfg") );
@@ -192,9 +191,9 @@ namespace Server.Custom
 			return ( ctor != null && ctor.IsDefined( typeofConstructable, false ) );
 		}
 
-		private static void AddTypes( Assembly asm, ArrayList types )
+		private static void AddTypes(Library lib, ArrayList types)
 		{
-			Type[] allTypes = asm.GetTypes();
+			Type[] allTypes = lib.Types;
 
 			for ( int i = 0; i < allTypes.Length; ++i )
 			{

@@ -8,6 +8,7 @@ sunuo (0.4.3) unstable; urgency=low
     - NetState.m_Disposed
   * fixed C# compiler warnings
     - use IPAddress.GetAddressBytes() instead of IPAddress.Address
+    - use ScriptCompiler.Libraries instead of ScriptCompiler.Assemblies
     - don't set Listener.Port in Misc/ServerList.cs
 
  --
