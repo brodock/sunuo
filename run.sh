@@ -53,10 +53,25 @@ unset DISPLAY XAUTHORITY
 
 export SUNUO_EXIT=99
 
+# install traps for clean shutdown
+
+function on_exit() {
+    if [ -n "$SUNUO_PID" ]; then
+        echo "Killing SunUO process (pid $SUNUO_PID)"
+        kill -TERM "$SUNUO_PID"
+    fi
+}
+
+trap on_exit EXIT
+
 # our main loop
 while :; do
     # start SunUO.exe
-    ${MONO:-mono} ${MONO_OPTS:---server --debug -O=all,-shared} SunUO.exe "$@"
+    ${MONO:-mono} ${MONO_OPTS:---server --debug -O=all,-shared} SunUO.exe "$@" &
+    SUNUO_PID=$!
+    wait
+    unset SUNUO_PID
+
     STATUS=$?
     echo "SunUO.exe exited with status $STATUS" >&2
 
