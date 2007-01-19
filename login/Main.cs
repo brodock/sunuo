@@ -140,7 +140,7 @@ namespace Server
 				EventSink.InvokeShutdown( new ShutdownEventArgs() );
 
 			if (timerThread != null && timerThread.IsAlive) {
-				TimerThread.WakeUp();
+				Timer.TimerThread.WakeUp();
 				timerThread.Join();
 			}
 
