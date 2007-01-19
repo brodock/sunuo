@@ -345,12 +345,16 @@ namespace Server
 			{
 			}
 
+			public static void WakeUp() {
+				m_Signal.Set();
+			}
+
 			public static void Change( Timer t, int newIndex, bool isAdd )
 			{
 				TimerChangeEntry entry = TimerChangeEntry.GetInstance(t, newIndex, isAdd);
 				lock (m_ChangeQueue.SyncRoot)
 					m_ChangeQueue.Enqueue(entry);
-				m_Signal.Set();
+				WakeUp();
 			}
 
 			public static void AddTimer( Timer t )

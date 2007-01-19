@@ -271,8 +271,11 @@ namespace Server
 			if ( !m_Crashed )
 				EventSink.InvokeShutdown( new ShutdownEventArgs() );
 
-			if (timerThread != null && timerThread.IsAlive)
+			if (timerThread != null && timerThread.IsAlive) {
+				TimerThread.WakeUp();
 				timerThread.Join();
+			}
+
 			log.Info( "done" );
 		}
 
