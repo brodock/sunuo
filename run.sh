@@ -70,9 +70,9 @@ while :; do
     ${MONO:-mono} ${MONO_OPTS:---server --debug -O=all,-shared} SunUO.exe "$@" &
     SUNUO_PID=$!
     wait
+    STATUS=$?
     unset SUNUO_PID
 
-    STATUS=$?
     echo "SunUO.exe exited with status $STATUS" >&2
 
     # exit status 99 means "really exit, do not restart"
