@@ -264,7 +264,7 @@ namespace Server.Config {
 	public class Login {
 		private bool ignoreAuthID, autoCreateAccounts;
 		private string accountDatabase;
-		private int maxCreatedAccountsPerIP, maxLoginsPerIP;
+		private int maxCreatedAccountsPerIP, maxLoginsPerIP, maxCharactersPerAccount;
 		private Hashtable superClients = new Hashtable();
 
 		public Login() {
@@ -277,6 +277,7 @@ namespace Server.Config {
 
 			maxCreatedAccountsPerIP = Parser.GetElementInt(el, "max-created-accounts-per-ip", 0);
 			maxLoginsPerIP = Parser.GetElementInt(el, "max-logins-per-ip", 0);
+			maxCharactersPerAccount = Parser.GetElementInt(el, "max-chars-per-account", 5);
 
 			foreach (XmlElement priv in el.GetElementsByTagName("super-client")) {
 				string ip = priv.InnerText;
@@ -307,6 +308,10 @@ namespace Server.Config {
 
 		public int MaxLoginsPerIP {
 		    get { return maxLoginsPerIP; }
+		}
+
+		public int MaxCharactersPerAccount {
+			get { return maxCharactersPerAccount; }
 		}
 
 		public bool IsSuperClient(string ip) {

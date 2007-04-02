@@ -1,6 +1,7 @@
 sunuo (0.4.4) unstable; urgency=low
 
   * wake up TimerThread during shutdown
+  * make Account.Limit configurable (patch by Maik Greubel)
   * run.sh: kill SunUO process on exit
   * enable the .NET server GC by default (hint from Kai Sassmannshausen)
 

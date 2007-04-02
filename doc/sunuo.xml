@@ -442,6 +442,16 @@
   &lt;/login&gt;
 &lt;/sunuo-config&gt;</programlisting>
         </section>
+
+        <section id="max_chars_per_account">
+          <title>Limit number of characters a user can create</title>
+
+          <programlisting>&lt;sunuo-config&gt;
+  &lt;login&gt;
+    &lt;max-chars-per-account value="3"/&gt;
+  &lt;/login&gt;
+&lt;/sunuo-config&gt;</programlisting>
+        </section>
       </section>
 
       <section id="config_autosave">

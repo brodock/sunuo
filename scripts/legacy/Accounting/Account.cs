@@ -1022,7 +1022,9 @@ namespace Server.Accounting
 		/// </summary>
 		public int Limit
 		{
-			get{ return 5; }
+			get {
+				return Core.Config.Login.MaxCharactersPerAccount;
+			}
 		}
 
 		/// <summary>
