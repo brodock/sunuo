@@ -2231,6 +2231,40 @@ namespace Server.Network
 			return !m_ClientVerification;
 		}
 
+		private static void GameLoginInternal(NetState state, string username, string password)
+		{
+			GameLoginEventArgs e = new GameLoginEventArgs( state, username, password );
+
+			try {
+				EventSink.InvokeGameLogin(e);
+			} catch (Exception ex) {
+				log.Fatal(String.Format("Exception disarmed in GameLogin {0}",
+										username), ex);
+			}
+
+			if ( e.Accepted )
+			{
+				if (state.Account == null) {
+					log.ErrorFormat("BUG: GameLogin state.Account==null (username {0})",
+									username);
+					state.Dispose();
+					return;
+				}
+
+				state.CityInfo = e.CityInfo;
+				state.CompressionEnabled = true;
+
+				if ( Core.AOS )
+					state.Send( SupportedFeatures.Instantiate( state.Account ) );
+
+				state.Send( new CharacterList( state.Account, state.CityInfo ) );
+			}
+			else
+			{
+				state.Dispose();
+			}
+		}
+
 		public static void GameLogin( NetState state, PacketReader pvSrc )
 		{
 			if ( state.SentFirstPacket )
@@ -2268,36 +2302,7 @@ namespace Server.Network
 			string username = pvSrc.ReadString( 30 );
 			string password = pvSrc.ReadString( 30 );
 
-			GameLoginEventArgs e = new GameLoginEventArgs( state, username, password );
-
-			try {
-				EventSink.InvokeGameLogin(e);
-			} catch (Exception ex) {
-				log.Fatal(String.Format("Exception disarmed in GameLogin {0}",
-										username), ex);
-			}
-
-			if ( e.Accepted )
-			{
-				if (state.Account == null) {
-					log.ErrorFormat("BUG: GameLogin state.Account==null (username {0})",
-									username);
-					state.Dispose();
-					return;
-				}
-
-				state.CityInfo = e.CityInfo;
-				state.CompressionEnabled = true;
-
-				if ( Core.AOS )
-					state.Send( SupportedFeatures.Instantiate( state.Account ) );
-
-				state.Send( new CharacterList( state.Account, state.CityInfo ) );
-			}
-			else
-			{
-				state.Dispose();
-			}
+			GameLoginInternal(state, username, password);
 		}
 
 		public static void PlayServer( NetState state, PacketReader pvSrc )
