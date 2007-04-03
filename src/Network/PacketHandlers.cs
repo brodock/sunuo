@@ -2231,7 +2231,8 @@ namespace Server.Network
 			return !m_ClientVerification;
 		}
 
-		private static void GameLoginInternal(NetState state, string username, string password)
+		private static void GameLoginInternal(NetState state, string username, string password,
+											  bool compressionEnabled)
 		{
 			GameLoginEventArgs e = new GameLoginEventArgs( state, username, password );
 
@@ -2252,7 +2253,7 @@ namespace Server.Network
 				}
 
 				state.CityInfo = e.CityInfo;
-				state.CompressionEnabled = true;
+				state.CompressionEnabled = compressionEnabled;
 
 				if ( Core.AOS )
 					state.Send( SupportedFeatures.Instantiate( state.Account ) );
@@ -2302,7 +2303,7 @@ namespace Server.Network
 			string username = pvSrc.ReadString( 30 );
 			string password = pvSrc.ReadString( 30 );
 
-			GameLoginInternal(state, username, password);
+			GameLoginInternal(state, username, password, true);
 		}
 
 		public static void PlayServer( NetState state, PacketReader pvSrc )
@@ -2318,6 +2319,18 @@ namespace Server.Network
 			else
 			{
 				ServerInfo si = info[index];
+
+				if (state.Username != null && state.Password != null &&
+					Core.Config.Features["quick-local-connect"] &&
+					si.Address.ToString() == state.Socket.LocalEndPoint.ToString()) {
+					/* local connect to this game server which is
+					   login server at the same time: re-use this
+					   connection, emulate a GameLogin packet */
+					GameLoginInternal(state, state.Username, state.Password, false);
+					return;
+				}
+
+				// send relay packet to client
 
 				state.m_AuthID = PlayServerAck.m_AuthID = GenerateAuthID();
 
@@ -2346,6 +2359,13 @@ namespace Server.Network
 			} catch (Exception ex) {
 				log.Fatal(String.Format("Exception disarmed in AccountLogin {0}",
 										username), ex);
+			}
+
+			if (e.Accepted && Core.Config.Features["quick-local-connect"]) {
+				/* we have to remember username+password, because it
+				   is required to emulate a GameLogin packet */
+				state.Username = username;
+				state.Password = password;
 			}
 
 			if ( e.Accepted )

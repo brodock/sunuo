@@ -2,6 +2,8 @@ sunuo (0.4.4) unstable; urgency=low
 
   * wake up TimerThread during shutdown
   * make Account.Limit configurable (patch by Maik Greubel)
+  * new feature "quick-local-connect": do not send relay packets, re-use
+    the login connection for gameplay
   * run.sh: kill SunUO process on exit
   * enable the .NET server GC by default (hint from Kai Sassmannshausen)
 

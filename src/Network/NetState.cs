@@ -61,6 +61,7 @@ namespace Server.Network
 		private AsyncCallback m_OnReceive, m_OnSend;
 		private MessagePump m_MessagePump;
 		private ServerInfo[] m_ServerInfo;
+		private string m_Username, m_Password;
 		private IAccount m_Account;
 		private Mobile m_Mobile;
 		private CityInfo[] m_CityInfo;
@@ -385,6 +386,16 @@ namespace Server.Network
 			{
 				m_ServerInfo = value;
 			}
+		}
+
+		public string Username {
+			get { return m_Username; }
+			set { m_Username = value; }
+		}
+
+		public string Password {
+			get { return m_Password; }
+			set { m_Password = value; }
 		}
 
 		public IAccount Account

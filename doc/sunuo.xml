@@ -349,6 +349,17 @@
                 </entry>
               </row>
               <row>
+                <entry>quick-local-connect</entry>
+                <entry>
+                  do not use two separate connections for login and
+                  game play.  As a side effect due to a protocol
+                  limitation, compression is permanently disabled.
+                  Enable this feature if your SunUO server is behind a
+                  DNAT gateway.  The game server should be configured
+                  with its internal IP.
+                </entry>
+              </row>
+              <row>
                 <entry>disable-tile-patch</entry>
                 <entry>
                   don't load <filename>mapdif*.mul</filename>,
