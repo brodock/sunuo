@@ -27,7 +27,7 @@ DISTDIR = build/sunuo-$(VERSION)
 DISTDLL = MySql.Data.dll
 DIST_FILES = bin/mono/log4net.dll bin/mono/Npgsql.dll
 
-MCS_FLAGS += -define:MONO -debug -lib:build
+MCS_FLAGS += -define:MONO -debug -lib:lib
 CP_FLAGS = -lf
 
 SUNUO_SOURCES := $(shell find src -name "*.cs" )
@@ -42,7 +42,7 @@ export MONO_PATH := .
 ifeq ($(DEBIAN),1)
 export MONO_PATH := $(MONO_PATH):/usr/lib/cli/log4net-1.2
 else
-LOG4NET_DEPS := build/log4net.dll
+LOG4NET_DEPS := lib/log4net.dll
 endif
 
 ifeq ($(PORTABLE),1)
