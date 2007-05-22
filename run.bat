@@ -30,13 +30,13 @@ GOTO END
 IF EXIST SunUO.exe GOTO AFTER_COPY_SUNUO
 ECHO Copying SunUO.exe and SunUO.pdb from bin\w32
 
-COPY /y bin\w32\SunUO.exe
+COPY /y bin\w32\*.dll .
 IF ERRORLEVEL 1 GOTO COPY_FAILED
 
 COPY /y bin\w32\SunUO.pdb
 IF ERRORLEVEL 1 GOTO COPY_FAILED
 
-COPY /y bin\w32\*.dll .
+COPY /y bin\w32\SunUO.exe
 IF ERRORLEVEL 1 GOTO COPY_FAILED
 
 :AFTER_COPY_SUNUO
