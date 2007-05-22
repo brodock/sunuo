@@ -8,6 +8,7 @@ sunuo (0.4.4) unstable; urgency=low
   * run.sh: don't fall back to w32 binary
   * enable the .NET server GC by default (hint from Kai Sassmannshausen)
   * upgraded Npgsql.dll to 1.0
+  * ship the 64 bit / .NET 2.0 binaries for Windows
 
  --
 

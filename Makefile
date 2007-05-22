@@ -47,6 +47,7 @@ endif
 
 ifeq ($(PORTABLE),1)
 DIST_FILES += bin/w32/SunUO.exe bin/w32/zlib.dll bin/w32/log4net.dll bin/w32/Npgsql.dll
+DIST_FILES += bin/w64/SunUO.exe bin/w64/zlib.dll bin/w64/log4net.dll bin/w64/Npgsql.dll
 endif
 
 .PHONY: all core debian-all clean install
@@ -164,6 +165,10 @@ build/w32/SunUO.exe:
 	@mkdir -p $(dir $@)
 	scp tiger:svn/sunuo/build/32/SunUO.{exe,pdb} $(dir $@)
 
+build/w64/SunUO.exe:
+	@mkdir -p $(dir $@)
+	scp tiger:svn/sunuo/build/64/SunUO.{exe,pdb} $(dir $@)
+
 $(DISTDIR)/bin/w32/SunUO.exe: build/w32/SunUO.exe
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) build/w32/SunUO.exe build/w32/SunUO.pdb $(dir $@)
@@ -177,6 +182,22 @@ $(DISTDIR)/bin/w32/Npgsql.dll: $(DISTDIR)/bin/%: lib/%
 	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/bin/w32/log4net.dll: $(DISTDIR)/bin/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
+$(DISTDIR)/bin/w64/SunUO.exe: build/w64/SunUO.exe
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) build/w64/SunUO.exe build/w64/SunUO.pdb $(dir $@)
+
+$(DISTDIR)/bin/w64/zlib.dll: $(DISTDIR)/bin/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
+$(DISTDIR)/bin/w64/Npgsql.dll: $(DISTDIR)/bin/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
+$(DISTDIR)/bin/w64/log4net.dll: $(DISTDIR)/bin/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
@@ -261,17 +282,25 @@ lib/w32/Npgsql.dll: download/Npgsql1.0-bin-ms1.1.tar.bz2
 	cp build/tmp/Npgsql1.0/Npgsql/bin/ms1.1/Npgsql.dll lib/w32/
 	rm -rf build/tmp
 
+lib/w64/Npgsql.dll: download/Npgsql1.0-bin-ms2.0.tar.bz2
+	rm -rf build/tmp && mkdir -p build/tmp
+	tar xzfC $< build/tmp
+	@mkdir -p lib/w64
+	cp build/tmp/Npgsql1.0/Npgsql/bin/ms2.0/Npgsql.dll lib/w64/
+	rm -rf build/tmp
+
 download/incubating-log4net-1.2.10.zip:
 	@mkdir -p $(dir $@)
 	wget http://cvs.apache.org/dist/incubator/log4net/1.2.10/incubating-log4net-1.2.10.zip -O $@.tmp
 	mv $@.tmp $@
 
-lib/log4net.dll lib/w32/log4net.dll: download/incubating-log4net-1.2.10.zip
+lib/log4net.dll lib/w32/log4net.dll lib/w64/log4net.dll: download/incubating-log4net-1.2.10.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
 	@mkdir -p lib/w32
 	cp build/tmp/log4net-1.2.10/bin/mono/1.0/release/log4net.dll lib/
 	cp build/tmp/log4net-1.2.10/bin/net/1.1/release/log4net.dll lib/w32
+	cp build/tmp/log4net-1.2.10/bin/net/2.0/release/log4net.dll lib/w64
 	rm -rf build/tmp
 
 $(addprefix build/,$(DISTDLL)): build/%: lib/%
@@ -288,6 +317,18 @@ lib/w32/zlib.dll: download/zlib123-dll.zip
 	unzip -q -d build/tmp $<
 	@mkdir -p $(dir $@)
 	cp build/tmp/zlib1.dll $@
+	rm -rf build/tmp
+
+download/zlib123dllx64.zip:
+	@mkdir -p $(dir $@)
+	wget http://www.winimage.com/zLibDll/zlib123dllx64.zip -O $@.tmp
+	mv $@.tmp $@
+
+lib/w64/zlib.dll: download/zlib123dllx64.zip
+	rm -rf build/tmp && mkdir -p build/tmp
+	unzip -q -d build/tmp $<
+	@mkdir -p $(dir $@)
+	cp build/tmp/dll_x64/zlibwapi.lib $@
 	rm -rf build/tmp
 
 endif

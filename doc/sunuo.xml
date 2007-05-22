@@ -100,7 +100,8 @@
 
       <para>
         If everything is set up, you can start your new SunUO server
-        by running <filename>run.bat</filename> (Windows) or
+        by running <filename>run.bat</filename> or
+        <filename>run64.bat</filename> (Windows 32/64 bit) or
         <filename>./run.sh</filename> (all other operating systems,
         including Linux).
       </para>
@@ -203,7 +204,7 @@
       </listitem>
       <listitem>
         <para>
-          Copy the files <filename>run.bat</filename>,
+          Copy the files <filename>run*.bat</filename>,
           <filename>run.sh</filename> and the directory
           <filename>bin</filename> to your SunUO base directory.  You
           should also copy the external libraries
@@ -212,9 +213,10 @@
       </listitem>
       <listitem>
         <para>
-          Start SunUO by running <filename>run.bat</filename>
-          (Windows) or <filename>./run.sh</filename> (all other
-          operating systems, including Linux).
+          Start SunUO by running <filename>run.bat</filename> or
+          <filename>run64.bat</filename> (Windows 32/64 bit) or
+          <filename>./run.sh</filename> (all other operating systems,
+          including Linux).
         </para>
       </listitem>
     </orderedlist>
