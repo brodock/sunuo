@@ -24,8 +24,8 @@ SUNUO_BASE = $(HOME)/dl/runuo
 
 VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
 DISTDIR = build/sunuo-$(VERSION)
-DISTDLL = MySql.Data.dll log4net.dll
-DIST_FILES = bin/mono/Npgsql.dll
+DISTDLL = MySql.Data.dll
+DIST_FILES = bin/mono/log4net.dll bin/mono/Npgsql.dll
 
 MCS_FLAGS += -define:MONO -debug -lib:build
 CP_FLAGS = -lf
@@ -46,7 +46,7 @@ LOG4NET_DEPS := build/log4net.dll
 endif
 
 ifeq ($(PORTABLE),1)
-DIST_FILES += bin/w32/SunUO.exe bin/w32/zlib.dll bin/w32/Npgsql.dll
+DIST_FILES += bin/w32/SunUO.exe bin/w32/zlib.dll bin/w32/log4net.dll bin/w32/Npgsql.dll
 endif
 
 .PHONY: all core debian-all clean install
@@ -154,6 +154,10 @@ $(DISTDIR)/bin/mono/Npgsql.dll: $(DISTDIR)/bin/mono/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
+$(DISTDIR)/bin/mono/log4net.dll: $(DISTDIR)/bin/mono/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
 ifeq ($(PORTABLE),1)
 
 build/w32/SunUO.exe:
@@ -169,6 +173,10 @@ $(DISTDIR)/bin/w32/zlib.dll: $(DISTDIR)/bin/%: lib/%
 	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/bin/w32/Npgsql.dll: $(DISTDIR)/bin/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
+$(DISTDIR)/bin/w32/log4net.dll: $(DISTDIR)/bin/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
@@ -258,11 +266,12 @@ download/incubating-log4net-1.2.10.zip:
 	wget http://cvs.apache.org/dist/incubator/log4net/1.2.10/incubating-log4net-1.2.10.zip -O $@.tmp
 	mv $@.tmp $@
 
-lib/log4net.dll: download/incubating-log4net-1.2.10.zip
+lib/log4net.dll lib/w32/log4net.dll: download/incubating-log4net-1.2.10.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
-	@mkdir -p lib
+	@mkdir -p lib/w32
 	cp build/tmp/log4net-1.2.10/bin/mono/1.0/release/log4net.dll lib/
+	cp build/tmp/log4net-1.2.10/bin/net/1.1/release/log4net.dll lib/w32
 	rm -rf build/tmp
 
 $(addprefix build/,$(DISTDLL)): build/%: lib/%
