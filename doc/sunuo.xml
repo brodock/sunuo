@@ -121,7 +121,9 @@
     <section id="migrating_from_runuo">
       <title>Upgrading a shard from RunUO</title>
       <important>
-        Don't forget to back up your old server!
+        <para>
+          Don't forget to back up your old server!
+        </para>
       </important>
       <orderedlist>
         <listitem>
@@ -177,7 +179,9 @@
     <title>Upgrading</title>
 
     <important>
-      Don't forget to back up your old server!
+      <para>
+        Don't forget to back up your old server!
+      </para>
     </important>
 
     <orderedlist>
