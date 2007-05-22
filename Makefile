@@ -242,14 +242,14 @@ build/dist/sunuo-$(VERSION)-src.zip: svn-export
 ifneq ($(DEBIAN),1)
 
 download/mysql-connector-net-1.0.7-noinstall.zip:
-	@mkdir -p download
+	@mkdir -p $(dir $@)
 	wget http://sunsite.informatik.rwth-aachen.de/mysql/Downloads/Connector-Net/mysql-connector-net-1.0.7-noinstall.zip -O $@.tmp
 	mv $@.tmp $@
 
 lib/MySql.Data.dll: download/mysql-connector-net-1.0.7-noinstall.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
-	@mkdir -p lib
+	@mkdir -p $(dir $@)
 	cp build/tmp/bin/mono-1.0/release/MySql.Data.dll lib/
 	rm -rf build/tmp
 
@@ -271,21 +271,21 @@ download/Npgsql1.0-bin-ms2.0.tar.bz2:
 lib/Npgsql.dll: download/Npgsql1.0-bin-mono1.1.tar.bz2
 	rm -rf build/tmp && mkdir -p build/tmp
 	tar xjfC $< build/tmp
-	@mkdir -p lib
+	@mkdir -p $(dir $@)
 	cp build/tmp/Npgsql1.0/Npgsql/bin/mono1.1/Npgsql.dll lib/
 	rm -rf build/tmp
 
 lib/w32/Npgsql.dll: download/Npgsql1.0-bin-ms1.1.tar.bz2
 	rm -rf build/tmp && mkdir -p build/tmp
 	tar xjfC $< build/tmp
-	@mkdir -p lib/w32
+	@mkdir -p $(dir $@)
 	cp build/tmp/Npgsql1.0/Npgsql/bin/ms1.1/Npgsql.dll lib/w32/
 	rm -rf build/tmp
 
 lib/w64/Npgsql.dll: download/Npgsql1.0-bin-ms2.0.tar.bz2
 	rm -rf build/tmp && mkdir -p build/tmp
 	tar xzfC $< build/tmp
-	@mkdir -p lib/w64
+	@mkdir -p $(dir $@)
 	cp build/tmp/Npgsql1.0/Npgsql/bin/ms2.0/Npgsql.dll lib/w64/
 	rm -rf build/tmp
 
@@ -297,14 +297,14 @@ download/incubating-log4net-1.2.10.zip:
 lib/log4net.dll lib/w32/log4net.dll lib/w64/log4net.dll: download/incubating-log4net-1.2.10.zip
 	rm -rf build/tmp && mkdir -p build/tmp
 	unzip -q -d build/tmp $<
-	@mkdir -p lib/w32
+	@mkdir -p lib/w32 lib/w64
 	cp build/tmp/log4net-1.2.10/bin/mono/1.0/release/log4net.dll lib/
 	cp build/tmp/log4net-1.2.10/bin/net/1.1/release/log4net.dll lib/w32
 	cp build/tmp/log4net-1.2.10/bin/net/2.0/release/log4net.dll lib/w64
 	rm -rf build/tmp
 
 $(addprefix build/,$(DISTDLL)): build/%: lib/%
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
 download/zlib123-dll.zip:
