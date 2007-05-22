@@ -162,7 +162,7 @@ ifeq ($(PORTABLE),1)
 
 build/w32/SunUO.exe:
 	@mkdir -p $(dir $@)
-	scp dafoe:s/sunuo/build/SunUO.{exe,pdb} $(dir $@)
+	scp tiger:svn/sunuo/build/32/SunUO.{exe,pdb} $(dir $@)
 
 $(DISTDIR)/bin/w32/SunUO.exe: build/w32/SunUO.exe
 	@mkdir -p $(dir $@)
