@@ -24,7 +24,8 @@ SUNUO_BASE = $(HOME)/dl/runuo
 
 VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
 DISTDIR = build/sunuo-$(VERSION)
-DISTDLL = MySql.Data.dll Npgsql.dll log4net.dll
+DISTDLL = MySql.Data.dll log4net.dll
+DIST_FILES = bin/mono/Npgsql.dll
 
 MCS_FLAGS += -define:MONO -debug -lib:build
 CP_FLAGS = -lf
@@ -45,7 +46,7 @@ LOG4NET_DEPS := build/log4net.dll
 endif
 
 ifeq ($(PORTABLE),1)
-DIST_FILES += bin/w32/SunUO.exe bin/w32/zlib.dll
+DIST_FILES += bin/w32/SunUO.exe bin/w32/zlib.dll bin/w32/Npgsql.dll
 endif
 
 .PHONY: all core debian-all clean install
@@ -149,6 +150,10 @@ $(addprefix $(DISTDIR)/,$(DISTDLL)): $(DISTDIR)/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
+$(DISTDIR)/bin/mono/Npgsql.dll: $(DISTDIR)/bin/mono/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
 ifeq ($(PORTABLE),1)
 
 build/w32/SunUO.exe:
@@ -160,6 +165,10 @@ $(DISTDIR)/bin/w32/SunUO.exe: build/w32/SunUO.exe
 	cp $(CP_FLAGS) build/w32/SunUO.exe build/w32/SunUO.pdb $(dir $@)
 
 $(DISTDIR)/bin/w32/zlib.dll: $(DISTDIR)/bin/%: lib/%
+	@mkdir -p $(dir $@)
+	cp $(CP_FLAGS) $< $@
+
+$(DISTDIR)/bin/w32/Npgsql.dll: $(DISTDIR)/bin/%: lib/%
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
@@ -215,16 +224,33 @@ lib/MySql.Data.dll: download/mysql-connector-net-1.0.7-noinstall.zip
 	cp build/tmp/bin/mono-1.0/release/MySql.Data.dll lib/
 	rm -rf build/tmp
 
-download/Npgsql1.0beta1-bin.tar.bz2:
+download/Npgsql1.0-bin-mono1.1.tar.bz2:
 	@mkdir -p $(dir $@)
-	wget http://pgfoundry.org/frs/download.php/531/Npgsql1.0beta1-bin.tar.bz2 -O $@.tmp
+	wget http://pgfoundry.org/frs/download.php/1099/Npgsql1.0-bin-mono1.1.tar.bz2 -O $@.tmp
 	mv $@.tmp $@
 
-lib/Npgsql.dll: download/Npgsql1.0beta1-bin.tar.bz2
+download/Npgsql1.0-bin-ms1.1.tar.bz2:
+	@mkdir -p $(dir $@)
+	wget http://pgfoundry.org/frs/download.php/1105/Npgsql1.0-bin-ms1.1.tar.bz2 -O $@.tmp
+	mv $@.tmp $@
+
+download/Npgsql1.0-bin-ms2.0.tar.bz2:
+	@mkdir -p $(dir $@)
+	wget http://pgfoundry.org/frs/download.php/1109/Npgsql1.0-bin-ms2.0.tar.bz2 -O $@.tmp
+	mv $@.tmp $@
+
+lib/Npgsql.dll: download/Npgsql1.0-bin-mono1.1.tar.bz2
 	rm -rf build/tmp && mkdir -p build/tmp
 	tar xjfC $< build/tmp
 	@mkdir -p lib
-	cp build/tmp/Npgsql/bin/mono/Npgsql.dll lib/
+	cp build/tmp/Npgsql1.0/Npgsql/bin/mono1.1/Npgsql.dll lib/
+	rm -rf build/tmp
+
+lib/w32/Npgsql.dll: download/Npgsql1.0-bin-ms1.1.tar.bz2
+	rm -rf build/tmp && mkdir -p build/tmp
+	tar xjfC $< build/tmp
+	@mkdir -p lib/w32
+	cp build/tmp/Npgsql1.0/Npgsql/bin/ms1.1/Npgsql.dll lib/w32/
 	rm -rf build/tmp
 
 download/incubating-log4net-1.2.10.zip:

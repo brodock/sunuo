@@ -3,7 +3,7 @@
 #  SunUO
 #  $Id$
 #
-#  (c) 2006 Max Kellermann <max@duempel.org>
+#  (c) 2006-2007 Max Kellermann <max@duempel.org>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ if ! [ -f SunUO.exe ]; then
         if [ -f bin/mono/SunUO.exe.mdb ]; then
             cp -v bin/mono/SunUO.exe.mdb .
         fi
+        cp -v bin/mono/*.dll .
     fi
 fi
 

@@ -3,7 +3,7 @@ REM
 REM  SunUO
 REM  $Id$
 REM
-REM  (c) 2006 Max Kellermann <max@duempel.org>
+REM  (c) 2006-2007 Max Kellermann <max@duempel.org>
 REM
 REM   This program is free software; you can redistribute it and/or modify
 REM   it under the terms of the GNU General Public License as published by
@@ -36,15 +36,10 @@ IF ERRORLEVEL 1 GOTO COPY_FAILED
 COPY bin\w32\SunUO.pdb
 IF ERRORLEVEL 1 GOTO COPY_FAILED
 
-:AFTER_COPY_SUNUO
-
-IF EXIST zlib.dll GOTO AFTER_COPY_ZLIB
-ECHO Copying zlib.dll from bin\w32
-
-COPY bin\w32\zlib.dll
+COPY bin\w32\*.dll .
 IF ERRORLEVEL 1 GOTO COPY_FAILED
 
-:AFTER_COPY_ZLIB
+:AFTER_COPY_SUNUO
 
 set SUNUO_EXIT=99
 
