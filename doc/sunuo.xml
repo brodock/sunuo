@@ -32,7 +32,7 @@
       <itemizedlist>
         <listitem>
           <para>
-            512 MB memory
+            512 MB memory for a small shard
           </para>
         </listitem>
         <listitem>
@@ -53,6 +53,16 @@
           </para>
         </listitem>
       </itemizedlist>
+
+      <para>
+        Experience has shown that CPU power is not that important.
+        Even a huge shard will not load a consumer-grade Pentium IV
+        more than 10%.  Memory is much more important; for a big
+        shard, you should consider using a 64 bit operating system,
+        since you cannot make a process larger than 3 GB with a 32 bit
+        operating system.  A quick hard disk can accelerate world
+        saves.
+      </para>
     </section>
 
     <section id="installing_mono">
