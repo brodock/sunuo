@@ -337,8 +337,8 @@ endif
 
 .PHONY: docs
 docs: doc/sunuo.html
-doc/sunuo.html: doc/sunuo.xml /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/xhtml/docbook.xsl
-	xsltproc -o $@ /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/xhtml/docbook.xsl $<
+doc/sunuo.html: doc/sunuo.xml
+	xmlto -v -o $(dir $@) xhtml-nochunks $<
 
 $(DISTDIR)/sunuo.html: doc/sunuo.html
 	cp $(CP_FLAGS) $< $@

@@ -3,7 +3,7 @@ Section: games
 Priority: optional
 Maintainer: Max Kellermann <max@duempel.org>
 Standards-Version: 3.7.2
-Build-Depends: debhelper (>= 5), cli-common (>= 0.4.6), mono-mcs (>= 1.2.2), libmono-winforms1.0-cil, liblog4net1.2-cil (>= 1.2.8), xsltproc, docbook-xsl
+Build-Depends: debhelper (>= 5), cli-common (>= 0.4.6), mono-mcs (>= 1.2.2), libmono-winforms1.0-cil, liblog4net1.2-cil (>= 1.2.8), xmlto (>= 0.0.18)
 
 Package: sunuo
 Architecture: all
