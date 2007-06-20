@@ -107,7 +107,7 @@
       <para>
         Edit the file <filename>conf/sunuo.xml</filename> and set your
         preferences.  You might want to set the location of the UO
-        client (element <varname>data-path</varname>).
+        client (<link linkend="config_data_path">element <varname>data-path</varname></link>).
       </para>
 
       <para>
@@ -266,6 +266,21 @@
         this is limited currently, because compatibility with RunUO is
         important. SunUO creates this file on its first run.
       </para>
+
+      <section id="config_data_path">
+        <title>UO client directory</title>
+        <para>
+          You have to tell SunUO where you have installed the UO
+          client.  Enter the absolute path in the element
+          <varname>data-path</varname>:
+        </para>
+
+        <programlisting>&lt;sunuo-config&gt;
+  &lt;locations&gt;
+    &lt;data-path&gt;/usr/local/games/uo&lt;/data-path&gt;
+  &lt;/locations&gt;
+&lt;/sunuo-config&gt;</programlisting>
+      </section>
 
       <section id="config_net">
         <title>Networking</title>
