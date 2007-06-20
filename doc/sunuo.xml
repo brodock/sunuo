@@ -58,10 +58,12 @@
     <section id="installing_mono">
       <title>Installing Mono</title>
       <para>
-        SunUO requires Mono; please use the most recent version
-        available.  Most current Linux distributions come with Mono
-        nowadays.  On Debian Etch, the following procedure will
-        install Mono:
+        SunUO requires a .NET 1.1 runtime.  On Windows, you can get
+        Microsoft's .NET Framework via Windows Update.  On other
+        operating systems like Linux, you have to use Mono instead;
+        please use the most recent version available.  Most current
+        Linux distributions come with Mono nowadays.  On Debian Etch,
+        the following procedure will install Mono:
       </para>
       <programlisting>apt-get install mono mono-mcs libmono-winforms1.0-cil</programlisting>
       <para>
