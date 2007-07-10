@@ -3,7 +3,7 @@
  *                            -------------------
  *   begin                : May 1, 2002
  *   copyright            : (C) The RunUO Software Team
- *                          (C) 2005 Max Kellermann <max@duempel.org>
+ *                          (C) 2005-2007 Max Kellermann <max@duempel.org>
  *   email                : max@duempel.org
  *
  *   $Id$
@@ -35,7 +35,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Max Kellermann <max@duempel.org> http://max.kellermann.name/")]
 [assembly: AssemblyProduct("SunUO http://www.sunuo.org/")]
-[assembly: AssemblyCopyright("(c) 2005-2006 Max Kellermann <max@duempel.org>")]
+[assembly: AssemblyCopyright("(c) 2005-2007 Max Kellermann <max@duempel.org>")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
@@ -50,7 +50,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.4.0.4")]
+[assembly: AssemblyVersion("0.4.0.5")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
