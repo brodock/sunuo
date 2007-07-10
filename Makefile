@@ -37,7 +37,7 @@ SUNLOGIN_SOURCES += src/Network/MessagePump.cs src/Network/ByteQueue.cs src/Netw
 SCRIPTS = legacy reports remote-admin myrunuo profiler
 SCRIPTS_DLL = $(patsubst %,build/scripts/%.dll,$(SCRIPTS))
 
-export MONO_PATH := .
+export MONO_PATH := .:lib
 
 ifeq ($(DEBIAN),1)
 export MONO_PATH := $(MONO_PATH):/usr/lib/cli/log4net-1.2

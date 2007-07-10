@@ -1,6 +1,6 @@
 sunuo (0.4.5) unstable; urgency=low
 
-  * 
+  * Makefile: add "./lib/" to MONO_PATH
 
  --
 
