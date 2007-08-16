@@ -238,6 +238,19 @@
       smooth upgrade.
     </para>
 
+    <section id="upgrading_to_0_5_0">
+      <title>Upgrading to 0.5.0</title>
+      <para>
+        SunUO 0.5.0 adds support for the UO client version 6.  This
+        patch requires several script changes.  The following scripts
+        have been changed for this:
+      </para>
+
+      <programlisting>Items/Misc/BulletinBoards.cs
+Items/Skill Items/Magical/Spellbook.cs
+Mobiles/Vendors/BaseVendor.cs</programlisting>
+    </section>
+
     <section id="upgrading_to_0_3_0">
       <title>Upgrading to 0.3.0</title>
       <para>
