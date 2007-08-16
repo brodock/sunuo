@@ -2637,7 +2637,6 @@ namespace Server
 				{
 					if ( (flags & ItemDelta.Update) != 0 )
 					{
-						Packet p = null;
 						Point3D worldLoc = GetWorldLocation();
 
 						Mobile rootParent = contParent.RootParent as Mobile;
@@ -2651,10 +2650,10 @@ namespace Server
 							{
 								if ( rootParent.CanSee( this ) && rootParent.InRange( worldLoc, GetUpdateRange( rootParent ) ) )
 								{
-									if ( p == null )
-										p = new ContainerContentUpdate( this );
-
-									ns.Send( p );
+									if ( ns.IsPost6017 )
+										ns.Send( new ContainerContentUpdate6017( this ) );
+									else
+										ns.Send( new ContainerContentUpdate( this ) );
 
 									if ( ObjectPropertyList.Enabled )
 										ns.Send( OPLPacket );
@@ -2688,10 +2687,10 @@ namespace Server
 									{
 										if ( tradeRecip.CanSee( this ) && tradeRecip.InRange( worldLoc, GetUpdateRange( tradeRecip ) ) )
 										{
-											if ( p == null )
-												p = new ContainerContentUpdate( this );
-
-											ns.Send( p );
+											if ( ns.IsPost6017 )
+												ns.Send( new ContainerContentUpdate6017( this ) );
+											else
+												ns.Send( new ContainerContentUpdate( this ) );
 
 											if ( ObjectPropertyList.Enabled )
 												ns.Send( OPLPacket );
@@ -2727,10 +2726,10 @@ namespace Server
 									{
 										if ( mob.CanSee( this ) )
 										{
-											if ( p == null )
-												p = new ContainerContentUpdate( this );
-
-											ns.Send( p );
+											if ( ns.IsPost6017 )
+												ns.Send( new ContainerContentUpdate6017( this ) );
+											else
+												ns.Send( new ContainerContentUpdate( this ) );
 
 											if ( ObjectPropertyList.Enabled )
 												ns.Send( OPLPacket );
@@ -2771,13 +2770,15 @@ namespace Server
 							{
 								if ( p == null )
 								{
-									if ( m_Parent is Item )
-										p = new ContainerContentUpdate( this );
-									else if ( m_Parent is Mobile )
-										p = new EquipUpdate( this );
+									if ( m_Parent is Item ) {
+										if ( state.IsPost6017 )
+											state.Send( new ContainerContentUpdate6017( this ) );
+										else
+											state.Send( new ContainerContentUpdate( this ) );
+									} else if ( m_Parent is Mobile ) {
+										state.Send( new EquipUpdate( this ) );
+									}
 								}
-
-								state.Send( p );
 
 								if ( ObjectPropertyList.Enabled )
 									state.Send( OPLPacket );

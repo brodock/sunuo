@@ -1405,7 +1405,11 @@ namespace Server.Items
 			}
 
 			to.Send( new ContainerDisplay( this ) );
-			to.Send( new ContainerContent( to, this ) );
+
+			if ( to.NetState != null && to.NetState.IsPost6017 )
+				to.Send( new ContainerContent6017( to, this ) );
+			else
+				to.Send( new ContainerContent( to, this ) );
 
 			if ( ObjectPropertyList.Enabled )
 			{

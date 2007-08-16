@@ -1,5 +1,7 @@
 sunuo (0.4.5) unstable; urgency=low
 
+  * support client version 6 and newer (merge from RunUO 2.0 subversion
+    repository, revisions 188, 193, 194, 197)
   * Makefile: add "./lib/" to MONO_PATH
 
  --

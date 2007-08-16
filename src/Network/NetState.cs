@@ -138,6 +138,21 @@ namespace Server.Network
 			set
 			{
 				m_Version = value;
+
+				if ( value >= m_Version6017 )
+					m_Post6017 = true;
+				else
+					m_Post6017 = false;
+			}
+		}
+
+		private static ClientVersion m_Version6017 = new ClientVersion( "6.0.1.7" );
+
+		private bool m_Post6017;
+
+		public bool IsPost6017 {
+			get { 
+				return m_Post6017; 
 			}
 		}
 
@@ -454,6 +469,14 @@ namespace Server.Network
 
 			if ( m_CreatedCallback != null )
 				m_CreatedCallback( this );
+		}
+
+		public PacketHandler GetHandler( int packetID )
+		{
+			if ( IsPost6017 )
+				return PacketHandlers.Get6017Handler( packetID );
+			else
+				return PacketHandlers.GetHandler( packetID );
 		}
 
 		public void Send( IPacket p )

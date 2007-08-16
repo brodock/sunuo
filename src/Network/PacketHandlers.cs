@@ -60,6 +60,7 @@ namespace Server.Network
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		private static PacketHandler[] m_Handlers;
+		private static PacketHandler[] m_6017Handlers;
 
 		private static PacketHandler[] m_ExtendedHandlersLow;
 		private static Hashtable m_ExtendedHandlersHigh;
@@ -75,6 +76,7 @@ namespace Server.Network
 		static PacketHandlers()
 		{
 			m_Handlers = new PacketHandler[0x100];
+			m_6017Handlers = new PacketHandler[0x100];
 
 			m_ExtendedHandlersLow = new PacketHandler[0x100];
 			m_ExtendedHandlersHigh = new Hashtable();
@@ -134,7 +136,7 @@ namespace Server.Network
 			Register( 0xB6,   9,  true, new OnPacketReceive( ObjectHelpRequest ) );
 			Register( 0xB8,   0,  true, new OnPacketReceive( ProfileReq ) );
 			Register( 0xBB,   9, false, new OnPacketReceive( AccountID ) );
-			Register( 0xBD,   0,  true, new OnPacketReceive( ClientVersion ) );
+			Register( 0xBD,   0, false, new OnPacketReceive( ClientVersion ) );
 			Register( 0xBE,   0,  true, new OnPacketReceive( AssistVersion ) );
 			Register( 0xBF,   0, false, new OnPacketReceive( ExtendedCommand ) );
 			Register( 0xC2,   0,  true, new OnPacketReceive( UnicodePromptResponse ) );
@@ -146,6 +148,8 @@ namespace Server.Network
 			Register( 0xD1,   2,  true, new OnPacketReceive( LogoutReq ) );
 			Register( 0xD6,   0,  true, new OnPacketReceive( BatchQueryProperties ) );
 			Register( 0xD7,   0,  true, new OnPacketReceive( EncodedCommand ) );
+
+			Register6017( 0x08, 15, true, new OnPacketReceive( DropReq6017 ) );
 
 			RegisterExtended( 0x05, false, new OnPacketReceive( ScreenSize ) );
 			RegisterExtended( 0x06,  true, new OnPacketReceive( PartyMessage ) );
@@ -171,6 +175,19 @@ namespace Server.Network
 		public static void Register( int packetID, int length, bool ingame, OnPacketReceive onReceive )
 		{
 			m_Handlers[packetID] = new PacketHandler( packetID, length, ingame, onReceive );
+
+			if ( m_6017Handlers[packetID] == null )
+				m_6017Handlers[packetID] = new PacketHandler( packetID, length, ingame, onReceive );
+		}
+
+		public static void Register6017( int packetID, int length, bool ingame, OnPacketReceive onReceive )
+		{
+			m_6017Handlers[packetID] = new PacketHandler( packetID, length, ingame, onReceive );
+		}
+
+		public static PacketHandler Get6017Handler( int packetID )
+		{
+			return m_6017Handlers[packetID];
 		}
 
 		public static void RegisterExtended( int packetID, bool ingame, OnPacketReceive onReceive )
@@ -1053,6 +1070,27 @@ namespace Server.Network
 			} else {
 				from.Drop(loc);
 			}
+		}
+
+		public static void DropReq6017( NetState state, PacketReader pvSrc )
+		{
+			pvSrc.ReadInt32(); // serial, ignored
+			int x = pvSrc.ReadInt16();
+			int y = pvSrc.ReadInt16();
+			int z = pvSrc.ReadSByte();
+			pvSrc.ReadByte(); // Grid Location?
+			Serial dest = pvSrc.ReadInt32();
+
+			Point3D loc = new Point3D( x, y, z );
+
+			Mobile from = state.Mobile;
+
+			if ( dest.IsMobile )
+				from.Drop( World.FindMobile( dest ), loc );
+			else if ( dest.IsItem )
+				from.Drop( World.FindItem( dest ), loc );
+			else
+				from.Drop( loc );
 		}
 
 		public static void ConfigurationFile( NetState state, PacketReader pvSrc )
@@ -1953,6 +1991,30 @@ namespace Server.Network
 			}
 		}
 
+		private class LoginTimer : Timer
+		{
+			private NetState m_State;
+			private Mobile m_Mobile;
+
+			public LoginTimer( NetState state, Mobile m ) : base( TimeSpan.FromSeconds( 1.0 ), TimeSpan.FromSeconds( 1.0 ) )
+			{
+				m_State = state;
+				m_Mobile = m;
+			}
+
+			protected override void OnTick()
+			{
+				if ( m_State == null )
+					Stop();
+				if ( m_State.Version != null )
+				{
+					m_State.BlockAllPackets = false;
+					DoLogin( m_State, m_Mobile );
+					Stop();
+				}
+			}
+		}
+
 		public static void PlayCharacter( NetState state, PacketReader pvSrc )
 		{
 			pvSrc.ReadInt32(); // 0xEDEDEDED
@@ -2000,6 +2062,8 @@ namespace Server.Network
 
 					NetState.ProcessDisposedQueue();
 
+					state.Send( new ClientVersionReq() );
+
 					state.BlockAllPackets = true;
 
 					state.Flags = flags;
@@ -2007,8 +2071,7 @@ namespace Server.Network
 					state.Mobile = m;
 					m.NetState = state;
 
-					state.BlockAllPackets = false;
-					DoLogin( state, m );
+					new LoginTimer( state, m ).Start();
 				}
 			}
 		}
@@ -2137,6 +2200,8 @@ namespace Server.Network
 					hairValf, hairHuef,
 					prof );
 
+				state.Send( new ClientVersionReq() );
+
 				state.BlockAllPackets = true;
 
 				try {
@@ -2152,9 +2217,7 @@ namespace Server.Network
 				{
 					state.Mobile = m;
 					m.NetState = state;
-
-					state.BlockAllPackets = false;
-					DoLogin( state, m );
+					new LoginTimer( state, m ).Start();
 				}
 				else
 				{

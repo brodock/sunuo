@@ -47,6 +47,7 @@ namespace Server.Network
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		private static PacketHandler[] m_Handlers;
+		private static PacketHandler[] m_6017Handlers;
 
 		private static PacketHandler[] m_ExtendedHandlersLow;
 		private static Hashtable m_ExtendedHandlersHigh;
@@ -59,6 +60,7 @@ namespace Server.Network
 		static PacketHandlers()
 		{
 			m_Handlers = new PacketHandler[0x100];
+			m_6017Handlers = new PacketHandler[0x100];
 
 			m_ExtendedHandlersLow = new PacketHandler[0x100];
 			m_ExtendedHandlersHigh = new Hashtable();
@@ -77,6 +79,19 @@ namespace Server.Network
 		public static void Register( int packetID, int length, bool ingame, OnPacketReceive onReceive )
 		{
 			m_Handlers[packetID] = new PacketHandler( packetID, length, ingame, onReceive );
+
+			if ( m_6017Handlers[packetID] == null )
+				m_6017Handlers[packetID] = new PacketHandler( packetID, length, ingame, onReceive );
+		}
+
+		public static void Register6017( int packetID, int length, bool ingame, OnPacketReceive onReceive )
+		{
+			m_6017Handlers[packetID] = new PacketHandler( packetID, length, ingame, onReceive );
+		}
+
+		public static PacketHandler Get6017Handler( int packetID )
+		{
+			return m_6017Handlers[packetID];
 		}
 
 		public static void RegisterExtended( int packetID, bool ingame, OnPacketReceive onReceive )

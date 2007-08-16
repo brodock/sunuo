@@ -382,8 +382,14 @@ namespace Server.Items
 			}
 			else if ( Parent is Item )
 			{
+				if ( to.NetState == null )
+					return;
+
 				// What will happen if the client doesn't know about our parent?
-				to.Send( new ContainerContentUpdate( this ) );
+				if ( to.NetState.IsPost6017 )
+					to.Send( new ContainerContentUpdate6017( this ) );
+				else
+					to.Send( new ContainerContentUpdate( this ) );
 			}
 			else if ( Parent is Mobile )
 			{
@@ -393,10 +399,23 @@ namespace Server.Items
 
 			to.Send( new DisplaySpellbook( this ) );
 
-			if ( Core.AOS && to.NetState != null && to.NetState.Version != null && to.NetState.Version >= Version_400a )
-				to.Send( new NewSpellbookContent( this, ItemID, BookOffset + 1, m_Content ) );
-			else
-				to.Send( new SpellbookContent( m_Count, BookOffset + 1, m_Content, this ) );
+			if ( to.NetState == null )
+				return;
+
+			if ( Core.AOS ) {
+				if ( to.NetState.Version != null && to.NetState.Version >= Version_400a ) {
+					to.Send( new NewSpellbookContent( this, ItemID, BookOffset + 1, m_Content ) );
+				} else {
+					to.Send( new SpellbookContent( m_Count, BookOffset + 1, m_Content, this ) );
+				}
+			}
+			else {
+				if ( to.NetState.IsPost6017 ) {
+					to.Send( new SpellbookContent6017( m_Count, BookOffset + 1, m_Content, this ) );
+				} else {
+					to.Send( new SpellbookContent( m_Count, BookOffset + 1, m_Content, this ) );
+				}
+			}
 		}
 
 		public override bool DisplayLootType{ get{ return Core.AOS; } }
