@@ -131,7 +131,7 @@ $(DISTDIR)/SunUO.exe.config: conf/SunUO.exe.config
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
-$(DISTDIR)/run.sh $(DISTDIR)/run.bat: $(DISTDIR)/%: %
+$(DISTDIR)/run.sh $(DISTDIR)/run.bat $(DISTDIR)/run64.bat: $(DISTDIR)/%: %
 	@mkdir -p $(dir $@)
 	install -m 0755 $< $@
 
