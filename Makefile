@@ -219,7 +219,7 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config run.sh run.bat sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) $(DIST_FILES)) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config run.sh run.bat run64.bat sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) $(DIST_FILES)) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
