@@ -32,6 +32,19 @@ namespace Server.Spells.Sixth
 			{
 				Caster.SendLocalizedMessage( 500237 ); // Target can not be seen.
 			}
+
+			else if (Caster.AccessLevel == AccessLevel.Player && m.AccessLevel > AccessLevel.Player)
+			{
+				Caster.SendMessage("You can not cast this spell on a staff member.");
+				return;
+			}
+
+			else if (m is Server.Mobiles.PlayerVendor)
+			{
+				Caster.SendMessage("You can not cast this spell on a player vendor.");
+				return;
+			}
+
 			else if ( CheckBSequence( m ) )
 			{
 				SpellHelper.Turn( Caster, m );

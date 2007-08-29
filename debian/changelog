@@ -1,6 +1,9 @@
 sunuo (0.5.1) unstable; urgency=low
 
-  * 
+  * impose restrictions on the invisibility spell (patch from Kai
+    Sassmannshausen):
+    - don't allow players to hide staff members
+    - player vendors cannot be invisible
 
  --
 
