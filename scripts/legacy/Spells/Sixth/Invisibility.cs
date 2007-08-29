@@ -36,13 +36,11 @@ namespace Server.Spells.Sixth
 			else if (Caster.AccessLevel == AccessLevel.Player && m.AccessLevel > AccessLevel.Player)
 			{
 				Caster.SendMessage("You can not cast this spell on a staff member.");
-				return;
 			}
 
 			else if (m is Server.Mobiles.PlayerVendor)
 			{
 				Caster.SendMessage("You can not cast this spell on a player vendor.");
-				return;
 			}
 
 			else if ( CheckBSequence( m ) )
