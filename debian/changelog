@@ -4,6 +4,8 @@ sunuo (0.5.1) unstable; urgency=low
     Sassmannshausen):
     - don't allow players to hide staff members
     - player vendors cannot be invisible
+  * don't let customers buy items which have already been removed from the
+    player vendor (patch from Kai Sassmannshausen)
 
  --
 
