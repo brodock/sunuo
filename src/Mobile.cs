@@ -3409,7 +3409,7 @@ namespace Server
 
 			if ( holding != null )
 			{
-				if ( !holding.Deleted && holding.Map == Map.Internal )
+				if ( !holding.Deleted && holding.HeldBy == this && holding.Map == Map.Internal )
 					AddToBackpack( holding );
 
 				Holding = null;
@@ -4189,10 +4189,11 @@ namespace Server
 			Mobile from = this;
 			Item item = from.Holding;
 
-			if ( item == null )
+			from.Holding = null;
+
+			if ( item == null || item.HeldBy != from || item.Map != Map.Internal )
 				return false;
 
-			from.Holding = null;
 			bool bounced = true;
 
 			item.SetLastMoved();
@@ -4215,10 +4216,11 @@ namespace Server
 			Mobile from = this;
 			Item item = from.Holding;
 
-			if ( item == null )
+			from.Holding = null;
+
+			if ( item == null || item.HeldBy != from || item.Map != Map.Internal )
 				return false;
 
-			from.Holding = null;
 			bool bounced = true;
 
 			item.SetLastMoved();
@@ -4241,10 +4243,11 @@ namespace Server
 			Mobile from = this;
 			Item item = from.Holding;
 
-			if ( item == null )
+			from.Holding = null;
+
+			if ( item == null || item.HeldBy != from || item.Map != Map.Internal )
 				return false;
 
-			from.Holding = null;
 			bool bounced = true;
 
 			item.SetLastMoved();
