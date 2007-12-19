@@ -6,6 +6,8 @@ sunuo (0.5.1) unstable; urgency=low
     - player vendors cannot be invisible
   * don't let customers buy items which have already been removed from the
     player vendor (patch from Kai Sassmannshausen)
+  * support client version 6.0.5.0 (merge from RunUO 2.0 subversion
+    repository, revisions 266)
 
  --
 
