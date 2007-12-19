@@ -20,7 +20,7 @@ sunuo (0.5.0) unstable; urgency=low
   * Makefile: add "./lib/" to MONO_PATH
   * Makefile: include "run64.bat" in distribution
 
- -- Max Kellermann <mk@cm4all.com>  Mon, 20 Aug 2007 17:58:50 +0200
+ -- Max Kellermann <max@duempel.org>  Mon, 20 Aug 2007 17:58:50 +0200
 
 sunuo (0.4.4) unstable; urgency=low
 
@@ -35,7 +35,7 @@ sunuo (0.4.4) unstable; urgency=low
   * ship the 64 bit / .NET 2.0 binaries for Windows
   * use xmlto instead of xsltproc + docbook-xsl
 
- -- Max Kellermann <mk@cm4all.com>  Wed, 20 Jun 2007 11:46:41 +0200
+ -- Max Kellermann <max@duempel.org>  Wed, 20 Jun 2007 11:46:41 +0200
 
 sunuo (0.4.3) unstable; urgency=low
 
