@@ -16,7 +16,7 @@ sunuo (0.5.1) unstable; urgency=low
     repository, revisions 266)
   * use .NET 2.0 for 32 bit build in the binary distribution
 
- --
+ -- Max Kellermann <max@duempel.org>  Tue, 25 Dec 2007 12:04:09 +0100
 
 sunuo (0.5.0) unstable; urgency=low
 
