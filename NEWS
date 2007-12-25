@@ -1,4 +1,437 @@
-SunUO NEWS
-==========
+sunuo (0.5.1) unstable; urgency=low
 
-This file has been moved to debian/changelog.
+  * impose restrictions on the invisibility spell (patch from Kai
+    Sassmannshausen):
+    - don't allow players to hide staff members
+    - player vendors cannot be invisible
+  * don't let customers buy items which have already been removed from the
+    player vendor (patch from Kai Sassmannshausen)
+  * no effects on hidden staff (merge from RunUO 2.0 subversion
+    repository, revisions 156)
+  * don't let scissors cut locked down items (merge from RunUO 2.0
+    subversion repository, revisions 191)
+  * fixed drop exploit (merge from RunUO 2.0 subversion repository,
+    revisions 233)
+  * support client version 6.0.5.0 (merge from RunUO 2.0 subversion
+    repository, revisions 266)
+
+ --
+
+sunuo (0.5.0) unstable; urgency=low
+
+  * support client version 6 and newer (merge from RunUO 2.0 subversion
+    repository, revisions 188, 193, 194, 197)
+  * Makefile: add "./lib/" to MONO_PATH
+  * Makefile: include "run64.bat" in distribution
+
+ -- Max Kellermann <max@duempel.org>  Mon, 20 Aug 2007 17:58:50 +0200
+
+sunuo (0.4.4) unstable; urgency=low
+
+  * wake up TimerThread during shutdown
+  * make Account.Limit configurable (patch by Maik Greubel)
+  * new feature "quick-local-connect": do not send relay packets, re-use
+    the login connection for gameplay
+  * run.sh: kill SunUO process on exit
+  * run.sh: don't fall back to w32 binary
+  * enable the .NET server GC by default (hint from Kai Sassmannshausen)
+  * upgraded Npgsql.dll to 1.0
+  * ship the 64 bit / .NET 2.0 binaries for Windows
+  * use xmlto instead of xsltproc + docbook-xsl
+
+ -- Max Kellermann <max@duempel.org>  Wed, 20 Jun 2007 11:46:41 +0200
+
+sunuo (0.4.3) unstable; urgency=low
+
+  * make automatic world save interval configurable, patch by Maik Greubel
+  * documentation updates
+    - server-list configuration
+  * manual locking
+    - TimerChangeEntry.m_InstancePool
+    - NetState.m_Disposed
+  * fixed C# compiler warnings
+    - use IPAddress.GetAddressBytes() instead of IPAddress.Address
+    - use ScriptCompiler.Libraries instead of ScriptCompiler.Assemblies
+    - don't set Listener.Port in Misc/ServerList.cs
+    - ignore local port in Encryption
+
+ -- Max Kellermann <max@duempel.org>  Tue,  9 Jan 2007 09:14:50 +0100
+
+sunuo (0.4.2) unstable; urgency=low
+
+  * added interface IPacket, implemented by class Packet
+  * implemented abstract packet recycler code
+    - recycle MobileMoving
+  * continued memory optimizations
+    - eliminated most DateTime.Now calls
+    - all other DateTime.Now calls are converted to DateTime.UtcNow to avoid
+      time zone lookups
+    - reuse timer in spawner engine
+    - early return when HarrowerTentacles have no drain targets
+    - reuse TimerChangeEntry objects
+    - NameList: trim strings in initialization, not on every request
+  * manual synchronization of TimerThread.m_ChangeQueue
+  * obsolete APIs
+    - Core.ExePath
+    - Core.BaseDirectory
+    - ScriptCompiler.Assemblies
+    - CrashedEventArgs.Close
+  * moved filesystem paths from Core to Core.Config
+    - LogDirectory
+    - CacheDirectory
+  * removed Core.LocalDirectoryInfo, Core.BaseDirectoryInfo
+  * login: removed EventSink.Crashed
+
+ -- Max Kellermann <max@duempel.org>  Fri,  5 Jan 2007 00:53:42 +0100
+
+sunuo (0.4.1) unstable; urgency=low
+
+  * lock m_Accounts in Accounting.Accounts
+  * fixed account database corruption bug
+  * show correct client number in disconnect message
+
+ -- Max Kellermann <max@duempel.org>  Mon, 25 Dec 2006 01:46:23 +0100
+
+sunuo (0.4.0) unstable; urgency=low
+
+  * implemented a main loop profiler
+  * refuse to load objects with serial -1
+  * transactional world save
+  * non-interactive world repair
+  * reserve 10% space in mobile/item hash tables
+  * script debugging is always enabled
+  * explicit TileData initialization
+  * added Config.Network
+    - configure Listeners
+  * Listener.Slice() returns null when idle
+  * ScriptCompiler ignores control directories of common revision control
+    systems
+  * bugfix in Mobile.cs: send poison message only for standard poisons
+    (patch from Kai Sassmannshausen)
+  * login: optionally limit the number of account creations per IP (patch
+    from Patrick Reinhardt)
+  * disable some of the string.Intern() calls because they were poisoning
+    the intern tables
+  * synchronize NetState.FinishDispose()
+  * implemented feature "manual-gc" for manual garbage collection
+  * parsing boolean values from the configuration file is now strict
+  * enable AutoAccountCreation by default
+  * added legacy scripts
+    - use log4net for logging
+    - removed Address from ServerList
+    - default to server list from Config.GameServerListConfig
+    - get server name from Config.ServerName
+    - make backup path portable
+    - display "SunUO" in UOGInfo packet
+    - use Config.ConfigDirectory, Config.BackupDirectory
+    - get IPLimiter config from Config.Login
+    - get AccountHandler.MaxAccountsPerIP from Config.Login
+    - don't read data-path from stdin
+    - removed DataPath.CustomPath
+    - don't try to dns-resolve hostname, just use LocalEndPoint
+    - test center switch is feature "test-center"
+    - launch www.sunuo.org instead of www.runuo.com
+    - disambiguate Math.Floor() call
+    - fixed compiler warnings
+    - Multis.MovingCrate: check ReadItem() result
+    - initialize BaseCreature.m_arSpellAttack and m_arSpellDefense on demand
+    - don't allocate an empty array for empty book pages
+    - create on demand:
+      - PlayerMobile.m_VisList
+      - PlayerMobile.m_PermaFlags
+      - PlayerMobile.m_JusticeProtectors
+      - PlayerMobile.m_AntiMacroTable
+      - PlayerMobile.m_Aggressors
+      - PlayerMobile.m_Aggressed
+      - BaseCreature.m_Owners
+      - GenericBuyInfo.Name
+      - GenericBuyInfo.DisplayCache.m_Table
+      - GenericBuyInfo.DisplayCache.m_Mobiles
+      - GenericSellInfo.m_Table
+      - BaseWeapon: m_AosAttributes, m_AosWeaponAttributes
+      - BaseArmor: m_AosAttributes, m_AosArmorAttributes, m_AosSkillBonuses
+      - BaseClothing: m_AosAttributes, m_AosClothingAttributes,
+        m_AosSkillBonuses, m_AosResistances
+      - Guild.m_Allies, Guild.m_Enemies, Guild.m_WarDeclarations,
+        Guild.m_WarInvitations, Guild.m_AllyDeclarations,
+        Guild.m_AllyInvitations, Guild.m_Candidates, Guild.m_Accepted
+      - Account.m_Comments, Account.m_Tags
+    - use XmlReader instead of XmlDocument.Load() to parse the accounts file
+    - use DateTime.Now cache
+    - removed from Notoriety: CheckAggressor(), CheckAggressed()
+    - [docgen is disabled by default
+    - make IUsesRemaining public
+    - removed scripts:
+      - Misc/AccountPrompt.cs
+      - Misc/WebStatus.cs
+    - restart server after [ConvertPlayers
+  * extended API for optimization
+    - Mobile: added AggressorsOrNull, FindAggressorByAttacker(),
+      FindAggressorByDefender(), AggressedOrNull, FindAggressedByAttacker(),
+      FindAggressedByDefender(), Peaceful
+    - Mobile.Stabled: HasStabled(), AddStabled(), RemoveStabled(),
+      StabledOrNull
+    - Mobile.VisibilityList: ClearVisibilityList()
+    - Mobile.PermaFlags: HasPermaFlags(), IsPermaFlaggedTo()
+  * gameplay related bugfixes
+    - blank keys should not be able to unlock doors with KeyValue 0 (patch
+      from Kai Sassmannshausen)
+    - check CanBeHarmful() in WhirlwindAttack
+    - fixed PlayerVendor cash bug, thanks to pmb
+  * moved into separate script libraries:
+    - Engines.MyRunUO
+    - Engines.Reports
+    - Engines.RemoteAdmin
+  * upgraded log4net to 1.2.10
+  * use log4net from Debian package
+  * don't link core and scripts with mysql and postgresql drivers
+  * imported RunUO data and saves directory
+  * run SunUO in a loop
+    - added Core.Shutdown() supporting the environment variable SUNUO_EXIT
+  * sunuo-control: append output to console.log; start new session
+  * added wrappers for Mono and Windows
+
+ -- Max Kellermann <max@duempel.org>  Wed, 20 Dec 2006 21:20:03 +0100
+
+sunuo (0.3.1) unstable; urgency=low
+
+  * optimizations in the serialization code
+    - cache position in BinaryFileWriter
+    - sealed the serialization classes
+    - enlarged BinaryFileWriter's buffer to 32kB
+  * removed BinaryFileWriter.UnderlyingStream
+  * BinaryFileWriter.Flush() is private
+  * Mobile: better SkillMod==null handling
+
+ -- Max Kellermann <max@duempel.org>  Wed,  8 Feb 2006 23:26:45 +0100
+
+sunuo (0.3.0) unstable; urgency=low
+
+  * distribute log4net.dll
+  * removed the --logfile option
+  * use log4net in exception handlers and more
+  * load legacy scripts from local/src and local/lib if present
+  * moved main BaseDirectory declaration to Config
+  * configure config file and base directory on the command line
+  * command line arguments are no longer case insensitive
+  * understand "--debug", "--profile", "--service"
+  * added directories to Config:
+    - ConfigDirectory = BaseDirectory + "/Data"
+    - SaveDirectory = BaseDirectory + "/Saves"
+    - BackupDirectory = BaseDirectory + "/Backup"
+  * moved bootstrapping code to Bootstrap.cs
+  * change to base directory
+  * GameServerListConfig.GameServers returns IList
+  * removed zlib workaround which should be in scripts
+  * MultiConOut is a dummy now that log4net is being used
+  * disable console in service mode
+  * added Config.Features
+    - disable-context-menus
+    - prefer-ascii
+    - delocalize
+    - oldschool
+    - disable-tile-patch
+    - age-of-shadows, samurai-empire
+  * support StringQuery
+  * Config.MultiThreading renamed to Config.Features["multi-threading"]
+  * moved config classes to namespace Server.Config
+  * Config.GameServerList implements IEnumerable
+  * all unsafe code replaced with managed implementations
+  * added property Mobile.LastCombatTime
+  * added interface IGold
+  * optimized memory allocations during world load
+  * cache DateTime.Now
+  * don't allocate an ArrayList when empty:
+    - Mobile.SkillMods
+    - Mobile.StatMods
+    - Mobile.Stabled
+    - Mobile.Virtues
+  * don't allocate empty Skill objects
+  * added GenericReader.ReadMobileListOrNull()
+  * use string.Intern() in BinaryFileReader.ReadString()
+  * use AutoResetEvent to notify Timer and main loop
+  * Gump.GetTypeID() uses ToInt64()
+  * encryption is disabled by default
+  * login: use proprietary timestamp format for now
+  * login: initialize all columns
+  * login: print name of failed game server
+  * login: log account creation
+  * login: initialize new account with Flags=0
+  * login: support the "young" flag
+  * login: reject empty username or password
+  * login: optionally hide game servers which are down
+  * debian: symlink base/Data to /etc/sunuo
+  * debian: symlink base/var/log to /var/log/sunuo
+  * debian: install SunUO.exe.config in /etc/sunuo/
+  * debian: install third party libraries in /usr/share/sunuo/
+  * debian: start SunUO in service mode
+  * debian: support multiple shards
+  * debian: recommend runuo-skeleton and sunuo-legacy-scripts
+  * debian: removed runuo-installer
+
+ -- Max Kellermann <max@duempel.org>  Sun,  5 Feb 2006 21:02:13 +0100
+
+sunuo (0.2.3) unstable; urgency=low
+
+  * explicitly ignore HardwareInfo packets
+
+ -- Max Kellermann <max@duempel.org>  Mon, 19 Dec 2005 16:25:41 +0100
+
+sunuo (0.2.2) unstable; urgency=low
+
+  * don't use nested Makefiles
+  * distribute Mysql.Data.dll and Npgsql.dll
+  * SunLogin responds to UOG queries
+
+ -- Max Kellermann <max@duempel.org>  Mon, 19 Dec 2005 15:59:06 +0100
+
+sunuo (0.2.1) unstable; urgency=low
+
+  * ignore misconfiguration in Scripts/Misc/DataPath.cs, just like RunUO
+    does
+  * implemented a stripped down SunUO server as login server, with account
+    database in ODBC
+  * ExtendedCommand does its own in-game check, removed requirement
+  * added ExtendedCommand 0x5555 which will serve as container for our
+    protocol extensions
+  * configuration option for "super clients"
+  * login server can send auth ID to game servers
+
+ -- Max Kellermann <max@duempel.org>  Fri, 16 Dec 2005 15:51:13 +0100
+
+sunuo (0.2.0) unstable; urgency=low
+
+  * make NetState.PacketEncoder non-static (patch from Sebastian Hartte)
+  * added RunUO-Encryption-2.1.zip to core (from Sebastian Hartte)
+  * fixed remote vulnerability in Network/PacketHandlers.cs, thanks to
+    Barakat for reporting that
+  * show a clear message when MCS is not installed
+
+ -- Max Kellermann <max@duempel.org>  Tue, 29 Nov 2005 15:45:18 +0100
+
+sunuo (0.1.9) unstable; urgency=low
+
+  * created debian package (not yet done)
+  * fixed typo in Config.cs which disabled <ignore-type/>
+  * write etc/sunuo.xml only if it did not exist
+  * fixed NullReferenceException in overlay error handler
+  * home page changed to http://www.sunuo.org/
+  * the mailing list is now hosted on BerliOS
+  * added option to disable a script library
+  * added option to set the C# compiler's warning level
+  * fixed NullReferenceException in binary library loader
+  * library names are case insensitive
+  * added the --logfile option
+
+ -- Max Kellermann <max@duempel.org>  Thu, 30 Jun 2005 23:55:12 +0200
+
+sunuo (0.1.8) unstable; urgency=low
+
+  * more NetStat.Dispose() tweaks:
+    - a second Dispose() call continues with FinishDispose()
+    - call FinishDispose() in CheckAlive()
+  * remove duplicate data directories
+  * replaced World.MultiProcessor by Core.Config.MultiThreading
+  * added configuration file option for Core.Config.MultiThreading
+
+ -- Max Kellermann <max@duempel.org>  Tue, 10 May 2005 00:23:05 +0200
+
+sunuo (0.1.7) unstable; urgency=low
+
+  * wait for send transfers to be finished before killing the connection
+    in NetState.Dispose()
+  * added test program "UOGQuery" which queries the UOGateway status of a
+    freeshard
+  * Mono 1.1.7 is now recommended
+  * moved documentation to doc/sunuo.xml in DocBook format
+
+ -- Max Kellermann <max@duempel.org>  Sun,  8 May 2005 22:37:47 +0200
+
+sunuo (0.1.6) unstable; urgency=low
+
+  * introduce the "path" element in the library configuration, allowing
+    the administrator to specify arbitrary source paths
+  * dependencies for libraries
+  * overlays for libraries
+
+ -- Max Kellermann <max@duempel.org>  Thu,  5 May 2005 21:14:32 +0200
+
+sunuo (0.1.5) unstable; urgency=low
+
+  * now really fixed a null cast in ScriptCompiler.CheckStamps()
+
+ -- Max Kellermann <max@duempel.org>  Thu, 10 Mar 2005 21:48:12 +0100
+
+sunuo (0.1.4) unstable; urgency=low
+
+  * fixed a lot of C# compiler warnings
+  * workaround for the RunUO faction bug: Reflection.cs assumes
+    alphabetically sorted directory entries; ScriptCompiler.cs now sorts
+    filenames before passing them to the compiler
+  * fixed a null cast in ScriptCompiler.CheckStamps()
+
+ -- Max Kellermann <max@duempel.org>  Thu,  3 Mar 2005 21:04:41 +0100
+
+sunuo (0.1.3) unstable; urgency=low
+
+  * work around mono-mcs 1.1.4 bug #72771: "Response file specified
+    multiple times"
+  * removed "/debug /optimize" parameters from ScriptCompiler
+  * added a hack to work around the zlib portability bugs in the scripts
+
+ -- Max Kellermann <max@duempel.org>  Sun, 20 Feb 2005 19:53:46 +0100
+
+sunuo (0.1.2) unstable; urgency=low
+
+  * another Mono bug workaround: pointer increments are 8 byte aligned,
+    although Pack=1 is specified in the structure
+  * exit on compiler error, don't allow the user to retry compilation
+  * added BINFMT_MISC instructions, thanks to Wulf Krueger
+  * added Mono 1.1 installation instructions
+
+ -- Max Kellermann <max@duempel.org>  Wed, 16 Feb 2005 23:20:34 +0100
+
+sunuo (0.1.1) unstable; urgency=low
+
+  * show operating system and runtime version in start banner
+  * removed several compatibility fixes for old pre-0.1.0 versions of
+    SunUO
+  * recompile libraries automatically when a file has been changed,
+    deleted or added added
+  * added documentation for [restart workaround
+
+ -- Max Kellermann <max@duempel.org>  Mon, 14 Feb 2005 22:40:42 +0100
+
+sunuo (0.1.0) unstable; urgency=low
+
+  * imported RunUO 1.0.0 sources, fork is called SunUO 0.1.0
+  * wrote Makefile
+  * some minor mono-mcs compilation fixes
+  * replaced the overcomplex mono-compatibility unsafe code in
+    TileMatrix.cs and TileMatrixPatch.cs by a simple Marshal.Copy
+  * repaired pointer arithmetic in Serialization.cs and TileMatrix.cs
+  * pass script file names in a temporary files, to go around the
+    "argument too long" limitation on most POSIX systems
+  * moved the World.Load() call from ScriptCompiler to Main
+  * ScriptCompiler.m_Assemblies converted to ArrayList
+  * removed method TileMatrix.Force(), which was good for nothing
+  * added Core.BaseDirectoryInfo, Core.CacheDirectoryInfo,
+    Core.LocalDirectoryInfo
+  * support for multiple script libraries in ./local/src/ and
+    ./local/lib/, every one of them is built into a separate DLL
+  * log to ./var/log/console.log instead of ./Logs/Console.log
+  * implemented a lot of exception handlers in Network/PacketHandlers.cs,
+    Item.cs and Mobile.cs, to prevent the server from crashing when an
+    exception in a script occurs
+  * catch exceptions from Core.VerifySerialization(); dump
+    LoaderExceptions
+  * ignore case on data file names
+  * implemented the configuration file "./etc/sunuo.xml", class
+    Server.Config
+  * added source and type ignores in LibraryConfig
+  * wrap a script library in the new Library class
+  * World.Load() dumps exceptions
+  * added option to ignore AuthID
+  * use string.Intern() to save memory
+
+ -- Max Kellermann <max@duempel.org>  Sat,  5 Feb 2005 01:55:03 +0100
