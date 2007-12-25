@@ -1891,7 +1891,9 @@ namespace Server.Network
 
 		public static void ClientVersion( NetState state, PacketReader pvSrc )
 		{
-			CV version = state.Version = new CV( pvSrc.ReadString() );
+			string versionString = pvSrc.ReadString();
+			log.DebugFormat("{0}: client version {1}", state, versionString);
+			CV version = state.Version = new CV(versionString);
 
 			string kickMessage = null;
 
