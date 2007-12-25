@@ -22,7 +22,7 @@ MCS := mcs
 
 SUNUO_BASE = $(HOME)/dl/runuo
 
-VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' debian/changelog |head -1)
+VERSION := $(shell perl -ne 'print "$$1\n" if /^sunuo \((.*?)\)/' NEWS |head -1)
 DISTDIR = build/sunuo-$(VERSION)
 DISTDLL = MySql.Data.dll
 DIST_FILES = bin/mono/log4net.dll bin/mono/Npgsql.dll
@@ -118,7 +118,7 @@ build/scripts/profiler.dll: build/SunUO.exe build/scripts/legacy.dll
 .PHONY: dist
 dist: build/dist/sunuo-$(VERSION).zip build/dist/sunuo-$(VERSION)-src.zip
 
-$(addprefix $(DISTDIR)/,COPYING AUTHORS README): $(DISTDIR)/%: %
+$(addprefix $(DISTDIR)/,COPYING AUTHORS README NEWS): $(DISTDIR)/%: %
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
@@ -140,10 +140,6 @@ $(DISTDIR)/etc/sunuo.xml: conf/sunuo.xml
 	cp $(CP_FLAGS) $< $@
 
 $(DISTDIR)/SunLogin.exe.config: conf/SunLogin.exe.config
-	@mkdir -p $(dir $@)
-	cp $(CP_FLAGS) $< $@
-
-$(DISTDIR)/changelog: debian/changelog
 	@mkdir -p $(dir $@)
 	cp $(CP_FLAGS) $< $@
 
@@ -219,7 +215,7 @@ export-saves:
 	rm -rf $(DISTDIR)/Saves
 	svn export saves $(DISTDIR)/Saves
 
-build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config run.sh run.bat run64.bat sunuo.html COPYING AUTHORS README changelog etc/sunuo.xml $(DISTDLL) $(DIST_FILES)) export-scripts export-data export-saves
+build/dist/sunuo-$(VERSION).zip: $(addprefix $(DISTDIR)/,bin/mono/SunUO.exe SunUO.exe.config run.sh run.bat run64.bat sunuo.html COPYING AUTHORS README NEWS etc/sunuo.xml $(DISTDLL) $(DIST_FILES)) export-scripts export-data export-saves
 	@mkdir -p $(dir $@)
 	cd build && fakeroot zip -q -r $(shell pwd)/$@ sunuo-$(VERSION)
 
@@ -357,10 +353,10 @@ release: all docs
 	cd /tmp/sunuo && fakeroot tar cjf sunuo-$(VERSION).tar.bz2 sunuo-$(VERSION)
 	mkdir -p /tmp/sunuo/sunuo-$(VERSION)-bin
 	cp AUTHORS COPYING NEWS README doc/sunuo.html /tmp/sunuo/sunuo-$(VERSION)-bin
-	cp debian/changelog /tmp/sunuo/sunuo-$(VERSION)-bin/changelog
+	cp NEWS /tmp/sunuo/sunuo-$(VERSION)-bin/NEWS
 	cp src/SunUO.exe util/UOGQuery.exe /tmp/sunuo/sunuo-$(VERSION)-bin
 	cd /tmp/sunuo && fakeroot zip -qr sunuo-$(VERSION)-bin.zip sunuo-$(VERSION)-bin
 
 upload: docs
-	scp README NEWS debian/changelog doc/sunuo.html max@swift:/var/www/gzipped/download/sunuo/doc/
+	scp README NEWS doc/sunuo.html max@swift:/var/www/gzipped/download/sunuo/doc/
 	ssh max@swift chmod a+rX -R /var/www/gzipped/download/sunuo/doc/
