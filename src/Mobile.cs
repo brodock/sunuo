@@ -6245,6 +6245,11 @@ namespace Server
 
 		public bool HasGump( Type type, bool throwOnOffline )
 		{
+			return FindGump(type, throwOnOffline) != null;
+		}
+
+		private Gump FindGump( Type type, bool throwOnOffline )
+		{
 			NetState ns = m_NetState;
 
 			if ( ns != null )
@@ -6253,9 +6258,10 @@ namespace Server
 				GumpCollection gumps = ns.Gumps;
 
 				for ( int i = 0; !contains && i < gumps.Count; ++i )
-					contains = ( gumps[i].GetType() == type );
+					if ( gumps[i].GetType() == type )
+						return gumps[i];
 
-				return contains;
+				return null;
 			}
 			else if ( throwOnOffline )
 			{
@@ -6263,7 +6269,7 @@ namespace Server
 			}
 			else
 			{
-				return false;
+				return null;
 			}
 		}
 
