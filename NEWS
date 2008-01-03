@@ -1,6 +1,6 @@
 sunuo (0.5.2) unstable; urgency=low
 
-  * 
+  * use .NET 2.0 for the windows build
 
  --
 

@@ -1,7 +1,7 @@
 @ECHO OFF
 
-set FRAMEWORK=%windir%\Microsoft.NET\Framework\v1.1.4322
-REM set FRAMEWORK=%windir%\Microsoft.NET\Framework64\v2.0.50727
+REM set FRAMEWORK=%windir%\Microsoft.NET\Framework\v1.1.4322
+set FRAMEWORK=%windir%\Microsoft.NET\Framework64\v2.0.50727
 
 mkdir build
 
