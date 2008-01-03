@@ -334,12 +334,24 @@ namespace Server.Network
 			}
 		}
 
+		public void RemoveGump( Gump gump )
+		{
+			if ( m_Gumps != null )
+				m_Gumps.Remove( gump );
+		}
+
 		public void RemoveGump( int index )
 		{
 			if ( m_Gumps == null )
 				return;
 
 			m_Gumps.RemoveAt( index );
+		}
+
+		public void ClearGumps()
+		{
+			if ( m_Gumps != null )
+				m_Gumps.Clear();
 		}
 
 		public void AddStringQuery( StringQuery sq )

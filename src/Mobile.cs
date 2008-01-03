@@ -6195,8 +6195,11 @@ namespace Server
 		{
 			if ( m_NetState != null )
 			{
-				if ( HasGump( type ) )
-					m_NetState.Send( new CloseGump( Gump.GetTypeID( type ), buttonID ) );
+				Gump gump = FindGump(type, throwOnOffline);
+				if (gump != null) {
+					m_NetState.Send(new CloseGump(gump.TypeID, buttonID));
+					m_NetState.RemoveGump(gump);
+				}
 
 				return true;
 			}
@@ -6221,10 +6224,12 @@ namespace Server
 
 			if ( ns != null )
 			{
-				GumpCollection gumps = ns.Gumps;
+				ArrayList gumps = new ArrayList(ns.Gumps);
+
+				ns.ClearGumps();
 
 				for ( int i = 0; i < gumps.Count; ++i )
-					ns.Send( new CloseGump( gumps[i].TypeID, 0 ) );
+					ns.Send(new CloseGump(((Gump)gumps[i]).TypeID, 0));
 
 				return true;
 			}
