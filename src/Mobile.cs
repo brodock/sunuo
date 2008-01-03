@@ -6248,6 +6248,11 @@ namespace Server
 			return FindGump(type, throwOnOffline) != null;
 		}
 
+		private Gump FindGump(Type type)
+		{
+			return FindGump(type, false);
+		}
+
 		private Gump FindGump( Type type, bool throwOnOffline )
 		{
 			NetState ns = m_NetState;
