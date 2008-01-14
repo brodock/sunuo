@@ -2,6 +2,8 @@ sunuo (0.5.2) unstable; urgency=low
 
   * when closing gumps, use the correct type id and remove gump from the
     internal gump list (patch from Defiance)
+  * second fix for the PlayerVendor cash bug, perform checked addition to
+    detect integer overflows (patch from Patrick Reinhardt)
   * use .NET 2.0 for the windows build
 
  --

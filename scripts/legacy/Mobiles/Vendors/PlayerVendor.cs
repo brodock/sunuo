@@ -578,7 +578,7 @@ namespace Server.Mobiles
 					try {
 						foreach ( VendorItem vi in m_SellItems.Values )
 						{
-							total += checked(vi.Price);
+							checked { total += vi.Price; }
 						}
 					} catch (OverflowException) {
 						/* don't let players provoke an integer overflow */
@@ -605,7 +605,7 @@ namespace Server.Mobiles
 					try {
 						foreach ( VendorItem vi in m_SellItems.Values )
 						{
-							total += checked(vi.Price);
+							checked { total += vi.Price; }
 						}
 					} catch (OverflowException) {
 						/* don't let players provoke an integer overflow */
