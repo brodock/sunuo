@@ -172,8 +172,7 @@
     <section id="compiling">
       <title>Compiling SunUO from the sources</title>
       <para>
-        If you are on Unix with Mono, edit the file config.mk and
-        change the paths. Then type:
+        Type:
       </para>
       <programlisting>make</programlisting>
       <para>
