@@ -287,7 +287,7 @@ lib/w64/Npgsql.dll: download/Npgsql1.0-bin-ms2.0.tar.bz2
 
 download/incubating-log4net-1.2.10.zip:
 	@mkdir -p $(dir $@)
-	wget http://cvs.apache.org/dist/incubator/log4net/1.2.10/incubating-log4net-1.2.10.zip -O $@.tmp
+	wget http://archive.apache.org/dist/incubator/log4net/1.2.10/incubating-log4net-1.2.10.zip -O $@.tmp
 	mv $@.tmp $@
 
 lib/log4net.dll lib/w32/log4net.dll lib/w64/log4net.dll: download/incubating-log4net-1.2.10.zip
