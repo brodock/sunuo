@@ -6264,10 +6264,9 @@ namespace Server
 
 			if ( ns != null )
 			{
-				bool contains = false;
 				GumpCollection gumps = ns.Gumps;
 
-				for ( int i = 0; !contains && i < gumps.Count; ++i )
+				for ( int i = 0; i < gumps.Count; ++i )
 					if ( gumps[i].GetType() == type )
 						return gumps[i];
 
