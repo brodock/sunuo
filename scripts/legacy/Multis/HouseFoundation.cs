@@ -831,7 +831,7 @@ namespace Server.Multis
 
 		public void EndConfirmCommit( Mobile from )
 		{
-			if (Deleted)
+			if (Deleted || DesignContext.Find(from) == null)
 				return;
 
 			int oldPrice = Price;
